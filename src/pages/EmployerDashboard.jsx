@@ -1,0 +1,53 @@
+import { useAuth } from '../contexts/AuthContext';
+import styles from './Dashboard.module.css';
+
+function EmployerDashboard() {
+  const { user, logout } = useAuth();
+  
+  return (
+    <div className={styles.dashboard}>
+      <header className={styles.header}>
+        <div className={styles.headerContent}>
+          <h1 className={styles.logo}>RYZE Recruiting</h1>
+          <div className={styles.userInfo}>
+            <span className={styles.userName}>
+              {user?.full_name || 'Employer'}
+            </span>
+            <button className={styles.logoutButton} onClick={logout}>
+              Logout
+            </button>
+          </div>
+        </div>
+      </header>
+      
+      <main className={styles.main}>
+        <div className={styles.welcomeSection}>
+          <h2 className={styles.welcomeTitle}>
+            💼 Employer Dashboard
+          </h2>
+          <p className={styles.welcomeText}>
+            Welcome back, {user?.full_name}!
+          </p>
+        </div>
+        
+        <div className={styles.comingSoon}>
+          <div className={styles.comingSoonCard}>
+            <h3>🚀 Coming Soon</h3>
+            <ul className={styles.featureList}>
+              <li>Post job openings</li>
+              <li>Search candidate database</li>
+              <li>Manage applications</li>
+              <li>Message candidates</li>
+              <li>Analytics & reporting</li>
+            </ul>
+            <p className={styles.note}>
+              We're working hard to bring you the best recruiting platform!
+            </p>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+export default EmployerDashboard;
