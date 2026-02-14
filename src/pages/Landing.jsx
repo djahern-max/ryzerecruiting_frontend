@@ -18,7 +18,7 @@ function Landing() {
   }, [user, navigate]);
 
   return (
-    <div className={`${styles.page} ryzeGridBg`}>
+    <div className={`${styles.page} ryzeBannerBg`}>
       <header className={styles.header}>
         <div className={`ryzeContainer ${styles.headerInner}`}>
           <div className={styles.brand}>
