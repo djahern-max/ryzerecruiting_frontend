@@ -7,7 +7,6 @@ function Landing() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  // Redirect if already logged in
   useEffect(() => {
     if (user) {
       if (user.user_type === "employer") {
@@ -19,14 +18,14 @@ function Landing() {
   }, [user, navigate]);
 
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} ryzeGridBg`}>
       <header className={styles.header}>
         <div className={`ryzeContainer ${styles.headerInner}`}>
           <div className={styles.brand}>
             <span className={styles.brandText}>RYZE Recruiting</span>
           </div>
 
-          <nav className={styles.nav}>
+          <nav className={styles.nav} aria-label="Primary">
             <button
               className={styles.navLink}
               onClick={() => navigate("/auth?type=employer")}
@@ -43,7 +42,7 @@ function Landing() {
         </div>
       </header>
 
-      <main className={styles.main}>
+      <main className={`ryzeContainer ${styles.main}`}>
         <section className={styles.hero}>
           <h1 className={styles.title}>
             Strategic Hiring for{" "}
@@ -56,7 +55,8 @@ function Landing() {
             We connect companies with talent that drives growth.
           </p>
 
-          <div className={styles.linksRow}>
+          {/* Hide these on mobile (non-functional, clutter) */}
+          <div className={styles.linksRow} aria-hidden="true">
             <span className="ryzeUnderlineLink">Accounting</span>
             <span className="ryzeUnderlineLink">Finance</span>
             <span className="ryzeUnderlineLink">Talent strategy</span>
@@ -68,7 +68,7 @@ function Landing() {
               <div className={styles.ctaLabel}>Employers</div>
               <h3 className={styles.ctaTitle}>Post Your Position</h3>
               <p className={styles.ctaText}>
-                Connect with vetted accounting and finance professionals ready to drive your business forward.
+                Connect with vetted accounting &amp; finance professionals.
               </p>
               <button
                 className={`ryzeBtn ryzeBtnPrimary ${styles.ctaButton}`}
@@ -82,7 +82,7 @@ function Landing() {
               <div className={styles.ctaLabel}>Candidates</div>
               <h3 className={styles.ctaTitle}>Find Your Next Role</h3>
               <p className={styles.ctaText}>
-                Discover opportunities with companies that value your expertise and career growth.
+                Discover opportunities aligned with your expertise.
               </p>
               <button
                 className={`ryzeBtn ryzeBtnPrimary ${styles.ctaButton}`}
