@@ -22,8 +22,9 @@ function CandidateDashboard() {
       
       <main className={styles.main}>
         <div className={styles.welcomeSection}>
+          <div className={styles.userTypeBadge}>Candidate</div>
           <h2 className={styles.welcomeTitle}>
-            👤 Candidate Dashboard
+            Dashboard
           </h2>
           <p className={styles.welcomeText}>
             Welcome back, {user?.full_name}!
@@ -32,7 +33,7 @@ function CandidateDashboard() {
         
         <div className={styles.comingSoon}>
           <div className={styles.comingSoonCard}>
-            <h3>🚀 Coming Soon</h3>
+            <h3>Coming Soon</h3>
             <ul className={styles.featureList}>
               <li>Browse job listings</li>
               <li>Apply to positions</li>

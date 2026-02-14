@@ -3,17 +3,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--bg-50);
   padding: 2rem;
 }
 
 .authContainer {
   background: white;
-  border-radius: 16px;
+  border-radius: var(--radius);
   padding: 3rem;
   max-width: 450px;
   width: 100%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-200);
 }
 
 .authHeader {
@@ -22,30 +23,38 @@
 }
 
 .logo {
-  color: #667eea;
+  color: var(--brand-700);
   font-size: 1.8rem;
-  font-weight: 700;
+  font-weight: 800;
   margin: 0 0 1rem 0;
   cursor: pointer;
-  letter-spacing: 1px;
+  letter-spacing: -0.3px;
+  transition: color 150ms ease;
+}
+
+.logo:hover {
+  color: var(--brand-800);
 }
 
 .authTitle {
-  color: #333;
+  color: var(--text-900);
   font-size: 1.8rem;
   margin: 0 0 1rem 0;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -0.3px;
 }
 
 .userTypeBadge {
   display: inline-block;
-  background: #f0f0f0;
-  color: #667eea;
+  background: rgba(28, 102, 214, 0.08);
+  color: var(--brand-700);
   padding: 0.5rem 1.5rem;
   border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 700;
   margin: 0;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
 }
 
 .error {
@@ -71,48 +80,60 @@
 }
 
 .formGroup label {
-  color: #333;
+  color: var(--text-900);
   font-weight: 600;
   font-size: 0.9rem;
 }
 
 .formGroup input {
   padding: 0.875rem;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border-200);
   border-radius: 8px;
   font-size: 1rem;
-  transition: all 0.3s ease;
+  transition: all 180ms ease;
+  font-family: var(--font-sans);
+  color: var(--text-900);
 }
 
 .formGroup input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--brand-700);
+  box-shadow: 0 0 0 3px rgba(28, 102, 214, 0.1);
+}
+
+.formGroup input::placeholder {
+  color: var(--text-500);
 }
 
 .helpText {
-  color: #666;
+  color: var(--text-500);
   font-size: 0.85rem;
   margin-top: -0.25rem;
 }
 
 .submitButton {
-  background: #667eea;
+  background: var(--brand-800);
   color: white;
   border: none;
   padding: 1rem;
   font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 8px;
+  font-weight: 700;
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 180ms ease;
   margin-top: 0.5rem;
+  font-family: var(--font-sans);
+  box-shadow: var(--shadow-sm);
 }
 
 .submitButton:hover:not(:disabled) {
-  background: #5568d3;
+  background: var(--brand-700);
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: var(--shadow-md);
+}
+
+.submitButton:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .submitButton:disabled {
@@ -126,38 +147,46 @@
 }
 
 .authFooter p {
-  color: #666;
+  color: var(--text-500);
   margin-bottom: 1rem;
 }
 
 .toggleButton {
   background: none;
   border: none;
-  color: #667eea;
+  color: var(--brand-700);
   font-weight: 600;
   cursor: pointer;
   text-decoration: underline;
   padding: 0;
+  font-family: var(--font-sans);
+  transition: color 150ms ease;
 }
 
 .toggleButton:hover {
-  color: #5568d3;
+  color: var(--brand-800);
 }
 
 .backButton {
   background: none;
   border: none;
-  color: #999;
+  color: var(--text-500);
   cursor: pointer;
   font-size: 0.9rem;
   padding: 0.5rem;
+  font-family: var(--font-sans);
+  transition: color 150ms ease;
 }
 
 .backButton:hover {
-  color: #667eea;
+  color: var(--brand-700);
 }
 
 @media (max-width: 640px) {
+  .authPage {
+    padding: 1rem;
+  }
+
   .authContainer {
     padding: 2rem 1.5rem;
   }

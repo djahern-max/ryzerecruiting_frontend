@@ -1,13 +1,13 @@
 .dashboard {
   min-height: 100vh;
-  background: #f5f7fa;
+  background: var(--bg-50);
 }
 
 .header {
   background: white;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--border-200);
   padding: 1rem 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .headerContent {
@@ -19,11 +19,11 @@
 }
 
 .logo {
-  color: #667eea;
+  color: var(--brand-700);
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 800;
   margin: 0;
-  letter-spacing: 1px;
+  letter-spacing: -0.3px;
 }
 
 .userInfo {
@@ -33,24 +33,31 @@
 }
 
 .userName {
-  color: #333;
+  color: var(--text-900);
   font-weight: 600;
 }
 
 .logoutButton {
   background: none;
-  border: 2px solid #667eea;
-  color: #667eea;
+  border: 2px solid var(--brand-700);
+  color: var(--brand-700);
   padding: 0.5rem 1.5rem;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  transition: all 0.3s ease;
+  font-family: var(--font-sans);
+  transition: all 180ms ease;
 }
 
 .logoutButton:hover {
-  background: #667eea;
+  background: var(--brand-700);
   color: white;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.logoutButton:active {
+  transform: translateY(0);
 }
 
 .main {
@@ -64,16 +71,30 @@
   margin-bottom: 3rem;
 }
 
+.userTypeBadge {
+  display: inline-block;
+  background: rgba(28, 102, 214, 0.08);
+  color: var(--brand-700);
+  padding: 0.5rem 1.25rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  margin: 0 0 1rem 0;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
 .welcomeTitle {
   font-size: 2.5rem;
-  color: #333;
+  color: var(--text-900);
   margin: 0 0 0.5rem 0;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
 .welcomeText {
   font-size: 1.2rem;
-  color: #666;
+  color: var(--text-500);
   margin: 0;
 }
 
@@ -85,18 +106,21 @@
 
 .comingSoonCard {
   background: white;
-  border-radius: 12px;
+  border-radius: var(--radius);
   padding: 3rem;
   max-width: 600px;
   width: 100%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
   text-align: center;
+  border: 1px solid var(--border-200);
 }
 
 .comingSoonCard h3 {
   font-size: 2rem;
-  color: #333;
+  color: var(--text-900);
   margin: 0 0 2rem 0;
+  font-weight: 800;
+  letter-spacing: -0.3px;
 }
 
 .featureList {
@@ -109,15 +133,21 @@
 .featureList li {
   padding: 1rem;
   margin: 0.5rem 0;
-  background: #f8f9fa;
+  background: var(--bg-50);
   border-radius: 8px;
-  color: #555;
-  font-size: 1.1rem;
-  border-left: 4px solid #667eea;
+  color: var(--text-700);
+  font-size: 1.05rem;
+  border-left: 4px solid var(--brand-700);
+  transition: all 150ms ease;
+}
+
+.featureList li:hover {
+  background: var(--bg-100);
+  transform: translateX(4px);
 }
 
 .note {
-  color: #999;
+  color: var(--text-500);
   font-style: italic;
   margin: 0;
 }
@@ -138,5 +168,9 @@
   
   .comingSoonCard {
     padding: 2rem 1.5rem;
+  }
+
+  .featureList li {
+    font-size: 0.95rem;
   }
 }

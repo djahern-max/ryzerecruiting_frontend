@@ -51,7 +51,7 @@ function Auth() {
             {isLogin ? 'Welcome Back' : 'Create Account'}
           </h2>
           <p className={styles.userTypeBadge}>
-            {userType === 'employer' ? '💼 Employer' : '👤 Candidate'}
+            {userType === 'employer' ? 'Employer' : 'Candidate'}
           </p>
         </div>
         

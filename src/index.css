@@ -1,17 +1,141 @@
-* {
+/* src/index.css or src/theme.css */
+/* Design inspiration: RYZE Recruiting LinkedIn banner (blue/gray, clean, executive) */
+
+:root {
+  /* Brand Colors - Based on the banner */
+  --brand-700: #0b4db3;
+  /* strong headline blue */
+  --brand-800: #083a8a;
+  /* CTA / darker blue */
+  --brand-600: #1c66d6;
+  /* hover/link accent */
+
+  /* Neutrals */
+  --text-900: #0f172a;
+  /* near-black, slightly bluer */
+  --text-700: #334155;
+  /* slate */
+  --text-500: #64748b;
+  /* muted */
+
+  --bg-50: #f8fafc;
+  /* page background */
+  --bg-100: #f1f5f9;
+  /* subtle panels */
+  --border-200: #e2e8f0;
+  /* borders */
+
+  /* Layout */
+  --container: 1120px;
+  --radius: 14px;
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --h1: clamp(2.2rem, 4vw, 3.5rem);
+  --h2: clamp(1.6rem, 2.6vw, 2.2rem);
+  --p: 1.05rem;
+
+  /* Effects */
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 10px 25px rgba(15, 23, 42, 0.1), 0 4px 12px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 20px 40px rgba(15, 23, 42, 0.12), 0 8px 16px rgba(15, 23, 42, 0.08);
+}
+
+/* Reset */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+}
+
+/* Basic page defaults */
+html,
+body {
+  height: 100%;
   margin: 0;
   padding: 0;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-sans);
+  color: var(--text-900);
+  background: var(--bg-50);
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#root {
-  min-height: 100vh;
+/* Container helper */
+.ryzeContainer {
+  width: min(var(--container), calc(100% - 40px));
+  margin: 0 auto;
+}
+
+/* Buttons */
+.ryzeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 12px 20px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  transition: all 180ms ease;
+}
+
+.ryzeBtnPrimary {
+  background: var(--brand-800);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.ryzeBtnPrimary:hover {
+  background: var(--brand-700);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.ryzeBtnPrimary:active {
+  transform: translateY(0);
+}
+
+/* Underline links like the category tags */
+.ryzeUnderlineLink {
+  color: var(--text-900);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--text-700);
+  text-underline-offset: 6px;
+  font-weight: 500;
+  transition: all 150ms ease;
+  cursor: pointer;
+}
+
+.ryzeUnderlineLink:hover {
+  color: var(--brand-700);
+  text-decoration-color: var(--brand-700);
+}
+
+/* Typography helpers */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  line-height: 1.2;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
 }
