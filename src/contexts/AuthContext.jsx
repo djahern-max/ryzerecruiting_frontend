@@ -1,84 +1,105 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import styles from './Auth.module.css';
+import { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
-function OAuthCallback() {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const [error, setError] = useState('');
+const AuthContext = createContext();
+
+const API_URL = import.meta.env.PROD
+  ? 'https://api.ryzerecruiting.com'
+  : 'http://localhost:8000';
+
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = searchParams.get('token');
-    const errorParam = searchParams.get('error');
-
-    if (errorParam) {
-      setError(errorParam);
-      setTimeout(() => navigate('/auth'), 3000);
-      return;
-    }
-
+    // Check for stored token on mount
+    const token = localStorage.getItem('token');
     if (token) {
-      // Store token and redirect based on user
-      localStorage.setItem('token', token);
-
-      // Fetch user data to determine redirect
-      const API_URL = import.meta.env.PROD
-        ? 'https://api.ryzerecruiting.com'
-        : 'http://localhost:8000';
-
-      fetch(`${API_URL}/api/auth/me`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-        .then(res => res.json())
-        .then(userData => {
-          if (userData.user_type === 'employer') {
-            window.location.href = '/employer/dashboard';
-          } else {
-            window.location.href = '/candidate/dashboard';
-          }
-        })
-        .catch(err => {
-          console.error('Failed to fetch user:', err);
-          navigate('/auth');
-        });
+      fetchUser(token);
     } else {
-      setError('No token received');
-      setTimeout(() => navigate('/auth'), 3000);
+      setLoading(false);
     }
-  }, [searchParams, navigate]);
+  }, []);
 
-  if (error) {
-    return (
-      <div className={styles.authPage}>
-        <div className={styles.authContainer}>
-          <div className={styles.authHeader}>
-            <h1 className={styles.logo}>RYZE Recruiting</h1>
-            <h2 className={styles.authTitle}>Authentication Error</h2>
-          </div>
-          <div className={styles.error}>
-            {error}
-          </div>
-          <p style={{ textAlign: 'center', color: 'var(--text-500)' }}>
-            Redirecting to login...
-          </p>
-        </div>
-      </div>
-    );
+  async function fetchUser(token) {
+    try {
+      const response = await axios.get(`${API_URL}/api/auth/me`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUser(response.data);
+    } catch (error) {
+      console.error('Failed to fetch user:', error);
+      localStorage.removeItem('token');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function login(email, password) {
+    try {
+      const response = await axios.post(`${API_URL}/api/auth/login`, {
+        email,
+        password
+      });
+
+      const { access_token, user: userData } = response.data;
+      localStorage.setItem('token', access_token);
+      setUser(userData);
+
+      // Redirect based on user type
+      if (userData.user_type === 'employer') {
+        window.location.href = '/employer/dashboard';
+      } else {
+        window.location.href = '/candidate/dashboard';
+      }
+
+      return { success: true };
+    } catch (error) {
+      console.error('Login failed:', error);
+      return {
+        success: false,
+        error: error.response?.data?.detail || 'Login failed'
+      };
+    }
+  }
+
+  async function register(email, password, fullName, userType) {
+    try {
+      const response = await axios.post(`${API_URL}/api/auth/register`, {
+        email,
+        password,
+        full_name: fullName,
+        user_type: userType
+      });
+
+      // Auto-login after registration
+      return await login(email, password);
+    } catch (error) {
+      console.error('Registration failed:', error);
+      return {
+        success: false,
+        error: error.response?.data?.detail || 'Registration failed'
+      };
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem('token');
+    setUser(null);
+    window.location.href = '/';
   }
 
   return (
-    <div className={styles.authPage}>
-      <div className={styles.authContainer}>
-        <div className={styles.authHeader}>
-          <h1 className={styles.logo}>RYZE Recruiting</h1>
-          <h2 className={styles.authTitle}>Completing Sign In...</h2>
-        </div>
-        <p style={{ textAlign: 'center', color: 'var(--text-500)' }}>
-          Please wait while we complete your authentication.
-        </p>
-      </div>
-    </div>
+    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+      {children}
+    </AuthContext.Provider>
   );
 }
 
-export default OAuthCallback;
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
+  return context;
+}
