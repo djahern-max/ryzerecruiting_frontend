@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { useEffect } from 'react';   // 👈 ADD THIS
+import { useEffect } from 'react';
 import Landing from './pages/Landing';
 import Auth from './pages/Auth';
+import OAuthCallback from './pages/OAuthCallback';
+import CompleteOAuthSignup from './pages/CompleteOAuthSignup';
 import EmployerDashboard from './pages/EmployerDashboard';
 import CandidateDashboard from './pages/CandidateDashboard';
 import PrivacyPolicy from './pages/PrivacyPolicy';
@@ -50,6 +52,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/auth/callback" element={<OAuthCallback />} />
+          <Route path="/auth/complete-signup" element={<CompleteOAuthSignup />} />
 
           {/* Legal Pages */}
           <Route path="/privacy" element={<PrivacyPolicy />} />
