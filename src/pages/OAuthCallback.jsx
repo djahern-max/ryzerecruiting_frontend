@@ -36,9 +36,9 @@ function OAuthCallback() {
                 .then(res => res.json())
                 .then(userData => {
                     if (userData.user_type === 'employer') {
-                        navigate('/employer/dashboard');
+                        window.location.href = '/employer/dashboard';
                     } else {
-                        navigate('/candidate/dashboard');
+                        window.location.href = '/candidate/dashboard';
                     }
                 })
                 .catch(err => {

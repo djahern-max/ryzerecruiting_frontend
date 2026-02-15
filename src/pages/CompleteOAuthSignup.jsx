@@ -48,11 +48,12 @@ function CompleteOAuthSignup() {
             const { access_token, user } = response.data;
             localStorage.setItem('token', access_token);
 
-            // Redirect based on user type
+            // Redirect based on user type with full page reload
+            // This ensures AuthContext fetches the user data
             if (user.user_type === 'employer') {
-                navigate('/employer/dashboard');
+                window.location.href = '/employer/dashboard';
             } else {
-                navigate('/candidate/dashboard');
+                window.location.href = '/candidate/dashboard';
             }
         } catch (err) {
             setError(err.response?.data?.detail || 'Failed to complete signup');
