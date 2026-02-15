@@ -1,4 +1,4 @@
-/*src/pages/CompleteOAuthSignup.jsx*/
+/*src/pages/CompleteOAuthSignup.jsx */
 
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
@@ -60,6 +60,10 @@ function CompleteOAuthSignup() {
         }
     }
 
+    function handleBackToLogin() {
+        navigate('/auth');
+    }
+
     return (
         <div className={styles.authPage}>
             <div className={styles.authContainer}>
@@ -74,79 +78,90 @@ function CompleteOAuthSignup() {
                 {error && (
                     <div className={styles.error}>
                         {error}
+                        {error.includes('already registered') && (
+                            <button
+                                onClick={handleBackToLogin}
+                                className={styles.submitButton}
+                                style={{ marginTop: '1rem', width: '100%' }}
+                            >
+                                Back to Login
+                            </button>
+                        )}
                     </div>
                 )}
 
-                <form className={styles.authForm} onSubmit={handleSubmit}>
-                    <div className={styles.formGroup}>
-                        <label>I am a...</label>
-                        <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-                            <label
-                                style={{
-                                    flex: 1,
-                                    cursor: 'pointer',
-                                    padding: '1rem',
-                                    border: `2px solid ${userType === 'candidate' ? 'var(--brand-700)' : 'var(--border-200)'}`,
-                                    borderRadius: '10px',
-                                    textAlign: 'center',
-                                    transition: 'all 180ms ease',
-                                    background: userType === 'candidate' ? 'rgba(28, 102, 214, 0.05)' : 'white'
-                                }}
-                            >
-                                <input
-                                    type="radio"
-                                    name="userType"
-                                    value="candidate"
-                                    checked={userType === 'candidate'}
-                                    onChange={(e) => setUserType(e.target.value)}
-                                    style={{ display: 'none' }}
-                                />
-                                <div style={{ fontWeight: 600, color: 'var(--text-900)' }}>
-                                    Candidate
-                                </div>
-                                <div style={{ fontSize: '0.85rem', color: 'var(--text-500)', marginTop: '0.25rem' }}>
-                                    Looking for a job
-                                </div>
-                            </label>
+                {!error.includes('already registered') && (
+                    <form className={styles.authForm} onSubmit={handleSubmit}>
+                        <div className={styles.formGroup}>
+                            <label>I am a...</label>
+                            <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+                                <label
+                                    style={{
+                                        flex: 1,
+                                        cursor: 'pointer',
+                                        padding: '1rem',
+                                        border: `2px solid ${userType === 'candidate' ? 'var(--brand-700)' : 'var(--border-200)'}`,
+                                        borderRadius: '10px',
+                                        textAlign: 'center',
+                                        transition: 'all 180ms ease',
+                                        background: userType === 'candidate' ? 'rgba(28, 102, 214, 0.05)' : 'white'
+                                    }}
+                                >
+                                    <input
+                                        type="radio"
+                                        name="userType"
+                                        value="candidate"
+                                        checked={userType === 'candidate'}
+                                        onChange={(e) => setUserType(e.target.value)}
+                                        style={{ display: 'none' }}
+                                    />
+                                    <div style={{ fontWeight: 600, color: 'var(--text-900)' }}>
+                                        Candidate
+                                    </div>
+                                    <div style={{ fontSize: '0.85rem', color: 'var(--text-500)', marginTop: '0.25rem' }}>
+                                        Looking for a job
+                                    </div>
+                                </label>
 
-                            <label
-                                style={{
-                                    flex: 1,
-                                    cursor: 'pointer',
-                                    padding: '1rem',
-                                    border: `2px solid ${userType === 'employer' ? 'var(--brand-700)' : 'var(--border-200)'}`,
-                                    borderRadius: '10px',
-                                    textAlign: 'center',
-                                    transition: 'all 180ms ease',
-                                    background: userType === 'employer' ? 'rgba(28, 102, 214, 0.05)' : 'white'
-                                }}
-                            >
-                                <input
-                                    type="radio"
-                                    name="userType"
-                                    value="employer"
-                                    checked={userType === 'employer'}
-                                    onChange={(e) => setUserType(e.target.value)}
-                                    style={{ display: 'none' }}
-                                />
-                                <div style={{ fontWeight: 600, color: 'var(--text-900)' }}>
-                                    Employer
-                                </div>
-                                <div style={{ fontSize: '0.85rem', color: 'var(--text-500)', marginTop: '0.25rem' }}>
-                                    Hiring talent
-                                </div>
-                            </label>
+                                <label
+                                    style={{
+                                        flex: 1,
+                                        cursor: 'pointer',
+                                        padding: '1rem',
+                                        border: `2px solid ${userType === 'employer' ? 'var(--brand-700)' : 'var(--border-200)'}`,
+                                        borderRadius: '10px',
+                                        textAlign: 'center',
+                                        transition: 'all 180ms ease',
+                                        background: userType === 'employer' ? 'rgba(28, 102, 214, 0.05)' : 'white'
+                                    }}
+                                >
+                                    <input
+                                        type="radio"
+                                        name="userType"
+                                        value="employer"
+                                        checked={userType === 'employer'}
+                                        onChange={(e) => setUserType(e.target.value)}
+                                        style={{ display: 'none' }}
+                                    />
+                                    <div style={{ fontWeight: 600, color: 'var(--text-900)' }}>
+                                        Employer
+                                    </div>
+                                    <div style={{ fontSize: '0.85rem', color: 'var(--text-500)', marginTop: '0.25rem' }}>
+                                        Hiring talent
+                                    </div>
+                                </label>
+                            </div>
                         </div>
-                    </div>
 
-                    <button
-                        type="submit"
-                        className={styles.submitButton}
-                        disabled={loading || !userType}
-                    >
-                        {loading ? 'Please wait...' : 'Complete Sign Up'}
-                    </button>
-                </form>
+                        <button
+                            type="submit"
+                            className={styles.submitButton}
+                            disabled={loading || !userType}
+                        >
+                            {loading ? 'Please wait...' : 'Complete Sign Up'}
+                        </button>
+                    </form>
+                )}
             </div>
         </div>
     );
