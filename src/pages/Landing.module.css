@@ -1,62 +1,15 @@
+/*src/pages/Landing.module.css*/
 .page {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: rgba(248, 250, 252, 0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-200);
-  box-shadow: var(--shadow-sm);
-}
-
-.headerInner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 0;
-}
-
-.brandText {
-  font-weight: 900;
-  font-size: 1.05rem;
-  letter-spacing: -0.3px;
-  color: var(--text-900);
-}
-
-.nav {
-  display: flex;
-  gap: 10px;
-}
-
-.navLink {
-  background: white;
-  border: 1px solid var(--border-200);
-  color: var(--text-700);
-  padding: 10px 14px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 0.92rem;
-  transition: all 150ms ease;
-  white-space: nowrap;
-}
-
-.navLink:hover {
-  border-color: var(--brand-700);
-  color: var(--brand-700);
-  box-shadow: var(--shadow-sm);
-  transform: translateY(-1px);
-}
-
 .main {
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .hero {
@@ -79,7 +32,7 @@
 }
 
 .titleEmphasis {
-  color: var(--brand-700);
+  color: var(--brand-800);
   font-weight: 900;
 }
 
@@ -125,7 +78,7 @@
 .ctaCard:hover {
   transform: translateY(-4px);
   box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
-  border-color: var(--brand-700);
+  border-color: var(--brand-800);
 }
 
 .ctaLabel {
@@ -134,9 +87,9 @@
   font-weight: 900;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  color: var(--brand-700);
-  background: color-mix(in srgb, var(--brand-700) 10%, white);
-  border: 1px solid color-mix(in srgb, var(--brand-700) 22%, white);
+  color: var(--brand-800);
+  background: color-mix(in srgb, var(--brand-800) 10%, white);
+  border: 1px solid color-mix(in srgb, var(--brand-800) 22%, white);
   padding: 6px 12px;
   border-radius: 8px;
   align-self: flex-start;
@@ -187,30 +140,6 @@
 
 /* Mobile */
 @media (max-width: 520px) {
-  .headerInner {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    padding: 12px 0;
-  }
-
-  .brandText {
-    font-size: 1.1rem;
-    text-align: left;
-  }
-
-  .nav {
-    width: 100%;
-    gap: 10px;
-  }
-
-  .navLink {
-    flex: 1;
-    width: 100%;
-    padding: 12px 12px;
-    font-size: 0.92rem;
-  }
-
   .hero {
     padding: 28px 0 20px 0;
   }
@@ -235,7 +164,7 @@
     box-shadow: var(--shadow-sm);
   }
 
-  /* No hover lift on mobile (reduces “jumpy” feel) */
+  /* No hover lift on mobile (reduces "jumpy" feel) */
   .ctaCard:hover {
     transform: none;
     box-shadow: var(--shadow-sm);

@@ -2,8 +2,7 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  background: rgba(248, 250, 252, 0.92);
-  backdrop-filter: blur(12px);
+  background: white;
   border-bottom: 1px solid var(--border-200);
   box-shadow: var(--shadow-sm);
 }
@@ -29,14 +28,14 @@
 }
 
 .brand:focus {
-  outline: 2px solid var(--brand-700);
+  outline: 2px solid var(--brand-800);
   outline-offset: 4px;
   border-radius: 8px;
 }
 
 .logo {
-  height: 32px;
-  width: 32px;
+  height: 40px;
+  width: auto;
   object-fit: contain;
 }
 
@@ -44,12 +43,11 @@
   font-weight: 900;
   font-size: 1.05rem;
   letter-spacing: -0.3px;
-  color: var(--text-900);
 }
 
 .brandRyze {
-  color: var(--brand-600);
-  /* Lighter blue */
+  color: var(--text-900);
+  /* Black */
 }
 
 .brandRecruiting {
@@ -77,8 +75,8 @@
 }
 
 .navLink:hover {
-  border-color: var(--brand-700);
-  color: var(--brand-700);
+  border-color: var(--brand-800);
+  color: var(--brand-800);
   box-shadow: var(--shadow-sm);
   transform: translateY(-1px);
 }
@@ -104,8 +102,7 @@
   }
 
   .logo {
-    height: 28px;
-    width: 28px;
+    height: 32px;
   }
 
   .brandText {

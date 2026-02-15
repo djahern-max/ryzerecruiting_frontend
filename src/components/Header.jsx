@@ -1,3 +1,4 @@
+/*src/components/Header.jsx*/
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import logo from "../assets/RYZE_LOGO.png";

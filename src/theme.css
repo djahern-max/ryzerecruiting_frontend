@@ -1,82 +1,46 @@
 /* =====================================================
-   RYZE Recruiting Design System + Theme Presets
+   RYZE Recruiting Design System
    ===================================================== */
 
-/* ---------- Theme Presets (switch via data-theme) ---------- */
+/* ---------- Theme: Professional LinkedIn Style ---------- */
+:root {
+    /* LinkedIn-inspired Palette */
+    --linkedin-blue: #0a66c2;
+    --deep-blue: #004182;
+    --light-blue: #dbe7f2;
+    --accent-blue: #57a0d3;
 
-:root,
-:root[data-theme="blue"] {
-    --brand-700: #0b4db3;
-    --brand-800: #083a8a;
-    --brand-600: #1c66d6;
+    /* Map to design system tokens */
+    --brand-800: var(--linkedin-blue);
+    /* Primary buttons */
+    --brand-700: var(--deep-blue);
+    /* Hover states / headlines */
+    --brand-600: var(--accent-blue);
+    /* Light accent / links */
 
-    --bg-50: #f8fafc;
-    --bg-100: #f1f5f9;
-}
-
-:root[data-theme="teal"] {
-    --brand-700: #0f766e;
-    --brand-800: #115e59;
-    --brand-600: #14b8a6;
-
-    --bg-50: #f8fafc;
-    --bg-100: #f1f5f9;
-}
-
-:root[data-theme="navyGold"] {
-    --brand-700: #1e3a8a;
-    /* navy */
-    --brand-800: #172554;
-    /* deep navy */
-    --brand-600: #d4a106;
-    /* gold accent */
-
-    --bg-50: #fbfbfd;
-    --bg-100: #f3f4f6;
-}
-
-:root[data-theme="forest"] {
-    --brand-700: #166534;
-    --brand-800: #14532d;
-    --brand-600: #22c55e;
-
-    --bg-50: #f7faf7;
-    --bg-100: #eef7ee;
-}
-
-:root[data-theme="electric"] {
-    --brand-700: #2563eb;
-    --brand-800: #1e40af;
-    --brand-600: #60a5fa;
-
-    --bg-50: #f8fafc;
-    --bg-100: #f1f5f9;
+    /* Backgrounds - Facebook style */
+    --bg-50: #f0f2f5;
+    --bg-100: #e4e6eb;
 }
 
 /* ---------- Shared tokens (do NOT vary by theme) ---------- */
-
 :root {
     --text-900: #111827;
     --text-700: #334155;
     --text-500: #64748b;
     --border-200: #e2e8f0;
-
     --container: 1120px;
     --radius: 14px;
-
     --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
         Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-
     --h1: clamp(2.2rem, 3.8vw, 3.4rem);
     --h2: clamp(1.6rem, 2.6vw, 2.2rem);
     --p: 1.05rem;
-
     --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
     --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.12);
 }
 
 /* ---------- Base page defaults ---------- */
-
 html,
 body {
     height: 100%;
@@ -90,7 +54,6 @@ body {
 }
 
 /* ---------- Helpers ---------- */
-
 .ryzeGridBg {
     background:
         linear-gradient(to right, rgba(148, 163, 184, 0.15) 1px, transparent 1px),
@@ -98,8 +61,6 @@ body {
     background-size: 80px 80px;
     background-position: center;
 }
-
-
 
 .ryzeContainer {
     width: min(var(--container), calc(100% - 40px));

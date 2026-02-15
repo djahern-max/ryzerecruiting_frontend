@@ -1,6 +1,8 @@
+/*src/pages/Landing.jsx*/
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useEffect } from "react";
+import Header from "../components/Header";
 import styles from "./Landing.module.css";
 
 function Landing() {
@@ -19,28 +21,7 @@ function Landing() {
 
   return (
     <div className={`${styles.page} ryzeBannerBg`}>
-      <header className={styles.header}>
-        <div className={`ryzeContainer ${styles.headerInner}`}>
-          <div className={styles.brand}>
-            <span className={styles.brandText}>RYZE Recruiting</span>
-          </div>
-
-          <nav className={styles.nav} aria-label="Primary">
-            <button
-              className={styles.navLink}
-              onClick={() => navigate("/auth?type=employer")}
-            >
-              For Employers
-            </button>
-            <button
-              className={styles.navLink}
-              onClick={() => navigate("/auth?type=candidate")}
-            >
-              For Candidates
-            </button>
-          </nav>
-        </div>
-      </header>
+      <Header variant="landing" showNav={true} />
 
       <main className={`ryzeContainer ${styles.main}`}>
         <section className={styles.hero}>
