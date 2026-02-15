@@ -43,18 +43,18 @@
   font-weight: 900;
   font-size: 1.25rem;
   letter-spacing: -0.5px;
-  color: #004182;
-  /* Dark navy blue - matches your dashboard */
+  color: var(--brand-800);
+  /* Navy blue from theme */
 }
 
 .brandRyze {
-  color: #004182;
-  /* Dark navy blue */
+  color: var(--brand-800);
+  /* Navy blue from theme */
 }
 
 .brandRecruiting {
-  color: #004182;
-  /* Dark navy blue */
+  color: var(--brand-800);
+  /* Navy blue from theme */
 }
 
 .nav {
@@ -77,14 +77,15 @@
 }
 
 .navLink:hover {
-  border-color: var(--brand-800);
-  color: var(--brand-800);
+  border-color: var(--brand-700);
+  color: var(--brand-700);
+  background: var(--bg-50);
   box-shadow: var(--shadow-sm);
   transform: translateY(-1px);
 }
 
 .userInfo {
-  color: var(--text-600);
+  color: var(--text-500);
   font-size: 0.92rem;
   font-weight: 500;
   padding: 0 8px;

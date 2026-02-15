@@ -2,25 +2,35 @@
    RYZE Recruiting Design System
    ===================================================== */
 
-/* ---------- Theme: Professional LinkedIn Style ---------- */
+/* ---------- Theme: Professional Blue ---------- */
 :root {
-    /* LinkedIn-inspired Palette */
+    /* RYZE Brand Palette - matching dashboard */
+    --navy-blue: #004182;
+    /* Main brand color - "RYZE Recruiting" */
     --linkedin-blue: #0a66c2;
-    --deep-blue: #004182;
+    /* Buttons and accents */
+    --royal-blue: #1c66d6;
+    /* Badges and highlights */
     --light-blue: #dbe7f2;
+    /* Light backgrounds */
     --accent-blue: #57a0d3;
+    /* Hover states */
 
     /* Map to design system tokens */
-    --brand-800: var(--linkedin-blue);
-    /* Primary buttons */
-    --brand-700: var(--deep-blue);
-    /* Hover states / headlines */
-    --brand-600: var(--accent-blue);
-    /* Light accent / links */
+    --brand-800: var(--navy-blue);
+    /* Primary brand - headers, logos */
+    --brand-700: var(--royal-blue);
+    /* Badges, borders, buttons */
+    --brand-600: var(--linkedin-blue);
+    /* Hover states, links */
+    --brand-500: var(--accent-blue);
+    /* Light accents */
 
-    /* Backgrounds - Facebook style */
+    /* Backgrounds */
     --bg-50: #f0f2f5;
+    /* Page background */
     --bg-100: #e4e6eb;
+    /* Card/section backgrounds */
 }
 
 /* ---------- Shared tokens (do NOT vary by theme) ---------- */
@@ -83,7 +93,7 @@ body {
 }
 
 .ryzeBtnPrimary {
-    background: var(--brand-800);
+    background: var(--brand-600);
     color: white;
     box-shadow: var(--shadow-sm);
 }
@@ -99,7 +109,7 @@ body {
     align-items: center;
     font-weight: 800;
     color: white;
-    background: var(--brand-800);
+    background: var(--brand-600);
     border-radius: 10px;
     padding: 10px 14px;
     box-shadow: var(--shadow-sm);
