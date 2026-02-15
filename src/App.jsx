@@ -5,6 +5,8 @@ import Landing from './pages/Landing';
 import Auth from './pages/Auth';
 import EmployerDashboard from './pages/EmployerDashboard';
 import CandidateDashboard from './pages/CandidateDashboard';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -48,6 +50,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />
+
+          {/* Legal Pages */}
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
+
           <Route
             path="/employer/dashboard"
             element={
