@@ -11,8 +11,15 @@ function OAuthCallback() {
     const [error, setError] = useState('');
 
     useEffect(() => {
+        console.log('OAuthCallback loaded');
+        console.log('Current URL:', window.location.href);
+        console.log('Search params:', searchParams.toString());
+
         const token = searchParams.get('token');
         const errorParam = searchParams.get('error');
+
+        console.log('Token from URL:', token);
+        console.log('Error from URL:', errorParam);
 
         if (errorParam) {
             setError(errorParam);
