@@ -1,3 +1,5 @@
+/* Header.module.css */
+
 .header {
   position: sticky;
   top: 0;
@@ -41,18 +43,20 @@
 
 .brandText {
   font-weight: 900;
-  font-size: 1.05rem;
-  letter-spacing: -0.3px;
+  font-size: 1.25rem;
+  letter-spacing: -0.5px;
+  color: #0A66C2;
+  /* LinkedIn blue - matches your dashboard */
 }
 
 .brandRyze {
-  color: var(--text-900);
-  /* Black */
+  color: #0A66C2;
+  /* LinkedIn blue */
 }
 
 .brandRecruiting {
-  color: var(--text-900);
-  /* Black */
+  color: #0A66C2;
+  /* LinkedIn blue */
 }
 
 .nav {
