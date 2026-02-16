@@ -1,10 +1,9 @@
 /*src/components/Header.jsx*/
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import logo from "../assets/RYZE_LOGO.png";
 import styles from "./Header.module.css";
 
-function Header({ variant = "landing", showNav = true }) {
+function Header() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
 
@@ -29,57 +28,22 @@ function Header({ variant = "landing", showNav = true }) {
 
   return (
     <header className={styles.header}>
-      <div className={`ryzeContainer ${styles.headerInner}`}>
-        <div className={styles.brand} onClick={handleLogoClick} role="button" tabIndex={0}>
-          <img src={logo} alt="RYZE Logo" className={styles.logo} />
-          <span className={styles.brandText}>
-            <span className={styles.brandRyze}>RYZE</span> <span className={styles.brandRecruiting}>Recruiting</span>
-          </span>
-        </div>
-
-        {showNav && (
-          <nav className={styles.nav} aria-label="Primary">
-            {variant === "landing" && (
-              <>
-                <button
-                  className={styles.navLink}
-                  onClick={() => navigate("/auth?type=employer")}
-                >
-                  For Employers
-                </button>
-                <button
-                  className={styles.navLink}
-                  onClick={() => navigate("/auth?type=candidate")}
-                >
-                  For Candidates
-                </button>
-              </>
-            )}
-
-            {variant === "dashboard" && user && (
-              <>
-                <span className={styles.userInfo}>
-                  {user.email}
-                </span>
-                <button
-                  className={styles.navLink}
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
-              </>
-            )}
-
-            {variant === "auth" && (
-              <button
-                className={styles.navLink}
-                onClick={() => navigate("/")}
-              >
-                ← Back to Home
+      <div className={styles.headerContent}>
+        <h1 className={styles.logo} onClick={handleLogoClick}>
+          RYZE Recruiting
+        </h1>
+        <div className={styles.userInfo}>
+          {user && (
+            <>
+              <span className={styles.userName}>
+                {user.full_name || user.email}
+              </span>
+              <button className={styles.logoutButton} onClick={handleLogout}>
+                Logout
               </button>
-            )}
-          </nav>
-        )}
+            </>
+          )}
+        </div>
       </div>
     </header>
   );

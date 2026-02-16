@@ -1,131 +1,80 @@
+/* src/components/Header.module.css */
 .header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
   background: white;
   border-bottom: 1px solid var(--border-200);
+  padding: 1rem 2rem;
   box-shadow: var(--shadow-sm);
 }
 
-.headerInner {
+.headerContent {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 16px 0;
-}
-
-.brand {
-  display: flex;
   align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  user-select: none;
-  transition: opacity 150ms ease;
-}
-
-.brand:hover {
-  opacity: 0.8;
-}
-
-.brand:focus {
-  outline: 2px solid var(--brand-800);
-  outline-offset: 4px;
-  border-radius: 8px;
 }
 
 .logo {
-  height: 40px;
-  width: auto;
-  object-fit: contain;
-}
-
-.brandText {
-  font-weight: 900;
-  font-size: 1.25rem;
-  letter-spacing: -0.5px;
-  color: var(--brand-800);
-  /* Navy blue from theme */
-}
-
-.brandRyze {
-  color: var(--brand-800);
-  /* Navy blue from theme */
-}
-
-.brandRecruiting {
-  color: var(--brand-800);
-  /* Navy blue from theme */
-}
-
-.nav {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.navLink {
-  background: white;
-  border: 1px solid var(--border-200);
-  color: var(--text-700);
-  padding: 10px 14px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 0.92rem;
-  transition: all 150ms ease;
-  white-space: nowrap;
-}
-
-.navLink:hover {
-  border-color: var(--brand-700);
   color: var(--brand-700);
-  background: var(--bg-50);
-  box-shadow: var(--shadow-sm);
-  transform: translateY(-1px);
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.3px;
+  cursor: pointer;
+  transition: color 150ms ease;
+}
+
+.logo:hover {
+  color: var(--brand-800);
 }
 
 .userInfo {
-  color: var(--text-500);
-  font-size: 0.92rem;
-  font-weight: 500;
-  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-/* Mobile */
-@media (max-width: 520px) {
-  .headerInner {
+.userName {
+  color: var(--text-900);
+  font-weight: 600;
+}
+
+.logoutButton {
+  background: none;
+  border: 2px solid var(--brand-700);
+  color: var(--brand-700);
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  transition: all 180ms ease;
+}
+
+.logoutButton:hover {
+  background: var(--brand-700);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.logoutButton:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .headerContent {
     flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    padding: 12px 0;
-  }
-
-  .brand {
-    justify-content: flex-start;
-  }
-
-  .logo {
-    height: 32px;
-  }
-
-  .brandText {
-    font-size: 1.1rem;
-  }
-
-  .nav {
-    width: 100%;
-    gap: 10px;
-  }
-
-  .navLink {
-    flex: 1;
-    width: 100%;
-    padding: 12px 12px;
-    font-size: 0.92rem;
+    gap: 1rem;
+    align-items: flex-start;
   }
 
   .userInfo {
-    display: none;
-    /* Hide email on mobile to save space */
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-size: 1.3rem;
   }
 }
