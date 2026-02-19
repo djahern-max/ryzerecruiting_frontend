@@ -46,8 +46,8 @@ export function AuthProvider({ children }) {
       localStorage.setItem('token', access_token);
       setUser(userData);
 
-      // Redirect based on user type
-      if (userData.user_type === 'employer') {
+      // ✅ Fix: compare uppercase to match backend enum values
+      if (userData.user_type === 'EMPLOYER') {
         window.location.href = '/employer/dashboard';
       } else {
         window.location.href = '/candidate/dashboard';
