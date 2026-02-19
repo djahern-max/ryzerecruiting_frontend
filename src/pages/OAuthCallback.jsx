@@ -1,25 +1,16 @@
 /* src/pages/OAuthCallback.jsx */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import styles from './Auth.module.css';
 
 function OAuthCallback() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const { setAuthToken } = useAuth();
     const [error, setError] = useState('');
 
     useEffect(() => {
-        console.log('OAuthCallback loaded');
-        console.log('Current URL:', window.location.href);
-        console.log('Search params:', searchParams.toString());
-
         const token = searchParams.get('token');
         const errorParam = searchParams.get('error');
-
-        console.log('Token from URL:', token);
-        console.log('Error from URL:', errorParam);
 
         if (errorParam) {
             setError(errorParam);
@@ -28,14 +19,12 @@ function OAuthCallback() {
         }
 
         if (token) {
-            // Store token and redirect based on user
             localStorage.setItem('token', token);
 
-            // Fetch user data to determine redirect
             fetch(
                 import.meta.env.PROD
-                    ? 'https://api.ryzerecruiting.com/api/me'
-                    : 'http://localhost:8000/api/me',
+                    ? 'https://api.ryzerecruiting.com/api/auth/me'  // ✅ fixed
+                    : 'http://localhost:8000/api/auth/me',
                 {
                     headers: { Authorization: `Bearer ${token}` }
                 }
@@ -56,7 +45,7 @@ function OAuthCallback() {
             setError('No token received');
             setTimeout(() => navigate('/auth'), 3000);
         }
-    }, [searchParams, navigate, setAuthToken]);
+    }, [searchParams, navigate]);
 
     if (error) {
         return (
@@ -66,9 +55,7 @@ function OAuthCallback() {
                         <h1 className={styles.logo}>RYZE Recruiting</h1>
                         <h2 className={styles.authTitle}>Authentication Error</h2>
                     </div>
-                    <div className={styles.error}>
-                        {error}
-                    </div>
+                    <div className={styles.error}>{error}</div>
                     <p style={{ textAlign: 'center', color: 'var(--text-500)' }}>
                         Redirecting to login...
                     </p>
