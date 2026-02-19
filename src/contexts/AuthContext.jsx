@@ -21,20 +21,28 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  async function fetchUser(token) {
+
+  async function fetchUser(token, shouldRedirect = false) {
     try {
       const response = await axios.get(`${API_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUser(response.data);
+
+      if (shouldRedirect) {
+        if (response.data.user_type === 'employer') {
+          window.location.href = '/employer/dashboard';
+        } else {
+          window.location.href = '/candidate/dashboard';
+        }
+      }
     } catch (error) {
       console.error('Failed to fetch user:', error);
       localStorage.removeItem('token');
     } finally {
       setLoading(false);
     }
-  }
-
+  } d
   async function login(email, password) {
     try {
       const response = await axios.post(`${API_URL}/api/auth/login`, {
@@ -52,6 +60,8 @@ export function AuthProvider({ children }) {
       } else {
         window.location.href = '/candidate/dashboard';
       }
+
+
 
       return { success: true };
     } catch (error) {
