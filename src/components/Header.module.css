@@ -15,7 +15,8 @@
 }
 
 .logo {
-  color: var(--brand-700);
+  color: var(--brand-800);
+  /* was --brand-700 */
   font-size: 1.5rem;
   font-weight: 800;
   margin: 0;
@@ -25,7 +26,8 @@
 }
 
 .logo:hover {
-  color: var(--brand-800);
+  color: var(--brand-700);
+  /* was --brand-800 — now correctly darkens on hover */
 }
 
 .userInfo {
@@ -41,8 +43,10 @@
 
 .logoutButton {
   background: none;
-  border: 2px solid var(--brand-700);
-  color: var(--brand-700);
+  border: 2px solid var(--brand-800);
+  /* was --brand-700 */
+  color: var(--brand-800);
+  /* was --brand-700 */
   padding: 0.5rem 1.5rem;
   border-radius: 8px;
   cursor: pointer;
@@ -53,6 +57,8 @@
 
 .logoutButton:hover {
   background: var(--brand-700);
+  /* dark navy fill on hover — correct */
+  border-color: var(--brand-700);
   color: white;
   transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
