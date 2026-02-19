@@ -42,7 +42,8 @@ export function AuthProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  } d
+  }                        // ← just the closing brace, no 'd'
+
   async function login(email, password) {
     try {
       const response = await axios.post(`${API_URL}/api/auth/login`, {
@@ -54,14 +55,11 @@ export function AuthProvider({ children }) {
       localStorage.setItem('token', access_token);
       setUser(userData);
 
-      // ✅ Fix: compare uppercase to match backend enum values
-      if (userData.user_type === 'EMPLOYER') {
+      if (userData.user_type === 'employer') {   // ✅ lowercase to match API
         window.location.href = '/employer/dashboard';
       } else {
         window.location.href = '/candidate/dashboard';
       }
-
-
 
       return { success: true };
     } catch (error) {
