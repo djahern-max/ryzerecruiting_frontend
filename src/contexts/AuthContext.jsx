@@ -3,16 +3,13 @@ import axios from 'axios';
 
 const AuthContext = createContext();
 
-const API_URL = import.meta.env.PROD
-  ? 'https://api.ryzerecruiting.com'
-  : 'http://localhost:8000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for stored token on mount
     const token = localStorage.getItem('token');
     if (token) {
       fetchUser(token);
@@ -20,7 +17,6 @@ export function AuthProvider({ children }) {
       setLoading(false);
     }
   }, []);
-
 
   async function fetchUser(token, shouldRedirect = false) {
     try {
@@ -42,7 +38,7 @@ export function AuthProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  }                        // ← just the closing brace, no 'd'
+  }
 
   async function login(email, password) {
     try {
@@ -55,7 +51,7 @@ export function AuthProvider({ children }) {
       localStorage.setItem('token', access_token);
       setUser(userData);
 
-      if (userData.user_type === 'employer') {   // ✅ lowercase to match API
+      if (userData.user_type === 'employer') {
         window.location.href = '/employer/dashboard';
       } else {
         window.location.href = '/candidate/dashboard';
@@ -73,14 +69,13 @@ export function AuthProvider({ children }) {
 
   async function register(email, password, fullName, userType) {
     try {
-      const response = await axios.post(`${API_URL}/api/auth/register`, {
+      await axios.post(`${API_URL}/api/auth/register`, {
         email,
         password,
         full_name: fullName,
         user_type: userType
       });
 
-      // Auto-login after registration
       return await login(email, password);
     } catch (error) {
       console.error('Registration failed:', error);

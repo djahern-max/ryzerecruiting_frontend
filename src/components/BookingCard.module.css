@@ -45,11 +45,9 @@
   font-size: 0.875rem;
   font-weight: 600;
   color: #1a2e44;
-}
-
-.optional {
-  font-weight: 400;
-  color: #8fa3b8;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .input,
@@ -104,6 +102,24 @@
   background: #004182;
   border-color: #004182;
   color: #ffffff;
+}
+
+/* Info button */
+.infoBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b9bbf;
+  font-size: 1rem;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.15s;
+  display: inline-flex;
+  align-items: center;
+}
+
+.infoBtn:hover {
+  color: #004182;
 }
 
 /* Submit */
@@ -176,4 +192,69 @@
   color: #5a7290 !important;
   font-size: 0.875rem !important;
   margin-top: 0.75rem !important;
+}
+
+/* ─── Modal ─────────────────────────────────────────────────────────────── */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: modalIn 0.2s ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modalClose {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: #8fa3b8;
+  cursor: pointer;
+  padding: 0.25rem;
+  line-height: 1;
+  transition: color 0.15s;
+}
+
+.modalClose:hover {
+  color: #1a2e44;
+}
+
+.modalTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #004182;
+  margin: 0 0 1rem;
+}
+
+.modalText {
+  font-size: 0.925rem;
+  color: #3d5a73;
+  line-height: 1.6;
+  margin: 0 0 0.75rem;
+}
+
+.modalText:last-child {
+  margin-bottom: 0;
 }
