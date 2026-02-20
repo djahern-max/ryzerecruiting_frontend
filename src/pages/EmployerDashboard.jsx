@@ -1,5 +1,6 @@
 import { useAuth } from '../contexts/AuthContext';
 import styles from './Dashboard.module.css';
+import BookingCard from '../components/BookingCard';
 
 function EmployerDashboard() {
   const { user, logout } = useAuth();
@@ -30,6 +31,8 @@ function EmployerDashboard() {
             Welcome back, {user?.full_name}!
           </p>
         </div>
+
+        <BookingCard />
         
         <div className={styles.comingSoon}>
           <div className={styles.comingSoonCard}>
