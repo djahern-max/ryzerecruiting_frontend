@@ -23,13 +23,16 @@ function OAuthCallback() {
 
             fetch(
                 import.meta.env.PROD
-                    ? 'https://api.ryzerecruiting.com/api/auth/me'  // ✅ fixed
+                    ? 'https://api.ryzerecruiting.com/api/auth/me'
                     : 'http://localhost:8000/api/auth/me',
                 {
                     headers: { Authorization: `Bearer ${token}` }
                 }
             )
-                .then(res => res.json())
+                .then(res => {
+                    if (!res.ok) throw new Error(`Auth failed: ${res.status}`); // 👈 added
+                    return res.json();
+                })
                 .then(userData => {
                     if (userData.user_type === 'employer') {
                         window.location.href = '/employer/dashboard';
@@ -39,6 +42,7 @@ function OAuthCallback() {
                 })
                 .catch(err => {
                     console.error('Failed to fetch user:', err);
+                    localStorage.removeItem('token'); // 👈 added
                     navigate('/auth');
                 });
         } else {
