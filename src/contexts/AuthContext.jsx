@@ -1,9 +1,16 @@
+// src/contexts/AuthContext.jsx
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 const AuthContext = createContext();
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+function getRedirectPath(user) {
+  if (user.is_superuser) return '/admin';
+  if (user.user_type === 'employer') return '/employer/dashboard';
+  return '/candidate/dashboard';
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -26,11 +33,7 @@ export function AuthProvider({ children }) {
       setUser(response.data);
 
       if (shouldRedirect) {
-        if (response.data.user_type === 'employer') {
-          window.location.href = '/employer/dashboard';
-        } else {
-          window.location.href = '/candidate/dashboard';
-        }
+        window.location.href = getRedirectPath(response.data);
       }
     } catch (error) {
       console.error('Failed to fetch user:', error);
@@ -50,12 +53,7 @@ export function AuthProvider({ children }) {
       const { access_token, user: userData } = response.data;
       localStorage.setItem('token', access_token);
       setUser(userData);
-
-      if (userData.user_type === 'employer') {
-        window.location.href = '/employer/dashboard';
-      } else {
-        window.location.href = '/candidate/dashboard';
-      }
+      window.location.href = getRedirectPath(userData);
 
       return { success: true };
     } catch (error) {
