@@ -74,16 +74,20 @@ export function AuthProvider({ children }) {
         email,
         password,
         full_name: fullName,
-        user_type: userType
+        user_type: userType.toUpperCase()
       });
 
       return await login(email, password);
     } catch (error) {
       console.error('Registration failed:', error);
-      return {
-        success: false,
-        error: error.response?.data?.detail || 'Registration failed'
-      };
+      const detail = error.response?.data?.detail;
+
+      const message = Array.isArray(detail)
+        ? detail[0]?.msg || 'Invalid input'
+        : typeof detail === 'string'
+          ? detail
+          : 'Registration failed';
+      return { success: false, error: message };
     }
   }
 
