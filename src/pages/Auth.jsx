@@ -1,3 +1,4 @@
+/* src/pages/Auth.jsx */
 import { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -45,13 +46,11 @@ function Auth() {
   }
 
   function handleGoogleLogin() {
-    // Store user type preference before redirecting
     sessionStorage.setItem('oauth_user_type', userType);
     window.location.href = `${API_URL}/api/auth/oauth/google`;
   }
 
   function handleLinkedInLogin() {
-    // Store user type preference before redirecting
     sessionStorage.setItem('oauth_user_type', userType);
     window.location.href = `${API_URL}/api/auth/oauth/linkedin`;
   }

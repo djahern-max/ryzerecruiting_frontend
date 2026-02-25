@@ -11,10 +11,9 @@ function Landing() {
 
   useEffect(() => {
     if (user) {
-      // Admin users go directly to the admin dashboard — never to employer/candidate routes
-      if (user.user_type === "admin") {
+      if (user.user_type === "ADMIN") {
         navigate("/admin");
-      } else if (user.user_type === "employer") {
+      } else if (user.user_type === "EMPLOYER") {
         navigate("/employer/dashboard");
       } else {
         navigate("/candidate/dashboard");
@@ -39,7 +38,6 @@ function Landing() {
             We connect companies with talent that drives growth.
           </p>
 
-          {/* Hide these on mobile (non-functional, clutter) */}
           <div className={styles.linksRow} aria-hidden="true">
             <span className="ryzeUnderlineLink">Accounting</span>
             <span className="ryzeUnderlineLink">Finance</span>
@@ -80,13 +78,7 @@ function Landing() {
 
         <footer className={styles.footer}>
           <p>© 2026 RYZE Recruiting. All rights reserved.</p>
-          {/* Discreet admin access link — not styled to stand out to regular users */}
-          <a
-            href="/admin/login"
-            className={styles.adminAccess}
-            tabIndex={-1}
-            aria-hidden="true"
-          >
+          <a href="/admin/login" className={styles.adminAccess}>
             Admin
           </a>
         </footer>

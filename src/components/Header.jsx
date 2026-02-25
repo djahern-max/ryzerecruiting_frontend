@@ -1,4 +1,4 @@
-/*src/components/Header.jsx*/
+/* src/components/Header.jsx */
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import styles from "./Header.module.css";
@@ -14,14 +14,14 @@ function Header() {
 
   const handleLogoClick = () => {
     if (user) {
-      // Navigate to appropriate dashboard if logged in
-      if (user.user_type === "employer") {
+      if (user.user_type === "ADMIN") {
+        navigate("/admin");
+      } else if (user.user_type === "EMPLOYER") {
         navigate("/employer/dashboard");
       } else {
         navigate("/candidate/dashboard");
       }
     } else {
-      // Navigate to landing if not logged in
       navigate("/");
     }
   };

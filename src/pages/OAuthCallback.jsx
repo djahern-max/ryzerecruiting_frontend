@@ -30,11 +30,13 @@ function OAuthCallback() {
                 }
             )
                 .then(res => {
-                    if (!res.ok) throw new Error(`Auth failed: ${res.status}`); // 👈 added
+                    if (!res.ok) throw new Error(`Auth failed: ${res.status}`);
                     return res.json();
                 })
                 .then(userData => {
-                    if (userData.user_type === 'employer') {
+                    if (userData.user_type === 'ADMIN') {
+                        window.location.href = '/admin';
+                    } else if (userData.user_type === 'EMPLOYER') {
                         window.location.href = '/employer/dashboard';
                     } else {
                         window.location.href = '/candidate/dashboard';
@@ -42,7 +44,7 @@ function OAuthCallback() {
                 })
                 .catch(err => {
                     console.error('Failed to fetch user:', err);
-                    localStorage.removeItem('token'); // 👈 added
+                    localStorage.removeItem('token');
                     navigate('/auth');
                 });
         } else {

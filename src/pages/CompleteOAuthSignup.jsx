@@ -1,5 +1,4 @@
 /* src/pages/CompleteOAuthSignup.jsx */
-
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -22,7 +21,6 @@ function CompleteOAuthSignup() {
       navigate('/auth');
     }
 
-    // Check if user had a preference stored before OAuth redirect
     const storedType = sessionStorage.getItem('oauth_user_type');
     if (storedType) {
       setUserType(storedType);
@@ -48,10 +46,9 @@ function CompleteOAuthSignup() {
       const { access_token, user } = response.data;
       localStorage.setItem('token', access_token);
 
-      // Route based on user_type — admin check included for safety
-      if (user.user_type === 'admin') {
+      if (user.user_type === 'ADMIN') {
         window.location.href = '/admin';
-      } else if (user.user_type === 'employer') {
+      } else if (user.user_type === 'EMPLOYER') {
         window.location.href = '/employer/dashboard';
       } else {
         window.location.href = '/candidate/dashboard';
@@ -60,10 +57,6 @@ function CompleteOAuthSignup() {
       setError(err.response?.data?.detail || 'Failed to complete signup');
       setLoading(false);
     }
-  }
-
-  function handleBackToLogin() {
-    navigate('/auth');
   }
 
   return (
@@ -116,7 +109,7 @@ function CompleteOAuthSignup() {
         </form>
 
         <div className={styles.authFooter}>
-          <button className={styles.backButton} onClick={handleBackToLogin}>
+          <button className={styles.backButton} onClick={() => navigate('/auth')}>
             ← Back to login
           </button>
         </div>

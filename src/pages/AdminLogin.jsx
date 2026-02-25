@@ -13,13 +13,11 @@ function AdminLogin() {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  // If already logged in as admin, redirect to admin dashboard
   useEffect(() => {
     if (!loading && user) {
-      if (user.user_type === 'admin') {
+      if (user.user_type === 'ADMIN') {
         navigate('/admin');
       } else {
-        // Non-admin tried to access admin login — send them home
         navigate('/');
       }
     }
@@ -32,11 +30,9 @@ function AdminLogin() {
 
     try {
       const result = await login(email, password);
-
       if (!result.success) {
         setError(result.error || 'Login failed. Check your credentials.');
       }
-      // If success, AuthContext.login() calls getRedirectPath which sends admin to /admin
     } catch (err) {
       setError('An unexpected error occurred.');
     } finally {
@@ -49,7 +45,6 @@ function AdminLogin() {
   return (
     <div className={styles.page}>
       <div className={styles.card}>
-        {/* Logo */}
         <div className={styles.header}>
           <h1 className={styles.logo} onClick={() => navigate('/')}>
             RYZE Recruiting
