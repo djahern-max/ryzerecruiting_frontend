@@ -12,63 +12,33 @@ import AdminDashboard from './pages/AdminDashboard';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 
-const ADMIN_EMAIL = 'dane@ryzerecruiting.com';
+const loadingScreen = (
+  <div style={{
+    minHeight: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '1.2rem',
+    color: 'var(--brand-700)',
+    background: 'var(--bg-50)',
+    fontFamily: 'var(--font-sans)'
+  }}>
+    Loading...
+  </div>
+);
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '1.2rem',
-        color: 'var(--brand-700)',
-        background: 'var(--bg-50)',
-        fontFamily: 'var(--font-sans)'
-      }}>
-        Loading...
-      </div>
-    );
-  }
-
-  if (!user) {
-    return <Navigate to="/auth" />;
-  }
-
+  if (loading) return loadingScreen;
+  if (!user) return <Navigate to="/auth" />;
   return children;
 }
 
 function AdminRoute({ children }) {
   const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '1.2rem',
-        color: 'var(--brand-700)',
-        background: 'var(--bg-50)',
-        fontFamily: 'var(--font-sans)'
-      }}>
-        Loading...
-      </div>
-    );
-  }
-
-  if (!user) {
-    return <Navigate to="/auth" />;
-  }
-
-  if (user.email !== ADMIN_EMAIL) {
-    return <Navigate to="/" />;
-  }
-
+  if (loading) return loadingScreen;
+  if (!user) return <Navigate to="/auth" />;
+  if (!user.is_superuser) return <Navigate to="/" />;
   return children;
 }
 
@@ -107,7 +77,7 @@ function App() {
             }
           />
 
-          {/* Admin — only accessible to dane@ryzerecruiting.com */}
+          {/* Admin — only accessible to superusers */}
           <Route
             path="/admin"
             element={
@@ -117,7 +87,7 @@ function App() {
             }
           />
 
-          {/* Catch all - redirect to home */}
+          {/* Catch all */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>

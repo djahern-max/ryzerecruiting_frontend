@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Dashboard.module.css';
 import BookingCard from '../components/BookingCard';
 
-const ADMIN_EMAIL = 'dane@ryzerecruiting.com';
-
 function EmployerDashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -16,7 +14,7 @@ function EmployerDashboard() {
         <div className={styles.headerContent}>
           <h1 className={styles.logo}>RYZE Recruiting</h1>
           <div className={styles.userInfo}>
-            {user?.email === ADMIN_EMAIL && (
+            {user?.is_superuser && (
               <button
                 className={styles.adminLink}
                 onClick={() => navigate('/admin')}
@@ -37,9 +35,7 @@ function EmployerDashboard() {
       <main className={styles.main}>
         <div className={styles.welcomeSection}>
           <div className={styles.userTypeBadge}>Employer</div>
-          <h2 className={styles.welcomeTitle}>
-            Dashboard
-          </h2>
+          <h2 className={styles.welcomeTitle}>Dashboard</h2>
           <p className={styles.welcomeText}>
             Welcome back, {user?.full_name}!
           </p>
