@@ -161,6 +161,22 @@
   margin: 0;
 }
 
+.adminLink {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.adminLink:hover {
+  background: #fde68a;
+}
+
 @media (max-width: 768px) {
   .headerContent {
     flex-direction: column;

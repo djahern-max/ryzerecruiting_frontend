@@ -8,8 +8,11 @@ import OAuthCallback from './pages/OAuthCallback';
 import CompleteOAuthSignup from './pages/CompleteOAuthSignup';
 import EmployerDashboard from './pages/EmployerDashboard';
 import CandidateDashboard from './pages/CandidateDashboard';
+import AdminDashboard from './pages/AdminDashboard';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
+
+const ADMIN_EMAIL = 'dane@ryzerecruiting.com';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -38,12 +41,39 @@ function ProtectedRoute({ children }) {
   return children;
 }
 
-function App() {
+function AdminRoute({ children }) {
+  const { user, loading } = useAuth();
 
-  // 👇 ADD THIS BLOCK RIGHT HERE
+  if (loading) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '1.2rem',
+        color: 'var(--brand-700)',
+        background: 'var(--bg-50)',
+        fontFamily: 'var(--font-sans)'
+      }}>
+        Loading...
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/auth" />;
+  }
+
+  if (user.email !== ADMIN_EMAIL) {
+    return <Navigate to="/" />;
+  }
+
+  return children;
+}
+
+function App() {
   useEffect(() => {
-    // Change this to test themes:
-    // "blue" | "navyGold" | "teal" | "forest" | "electric"
     document.documentElement.setAttribute("data-theme", "blue");
   }, []);
 
@@ -76,6 +106,17 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* Admin — only accessible to dane@ryzerecruiting.com */}
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            }
+          />
+
           {/* Catch all - redirect to home */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

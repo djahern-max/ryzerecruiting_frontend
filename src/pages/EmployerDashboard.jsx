@@ -1,16 +1,29 @@
+/* src/pages/EmployerDashboard.jsx */
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import styles from './Dashboard.module.css';
 import BookingCard from '../components/BookingCard';
 
+const ADMIN_EMAIL = 'dane@ryzerecruiting.com';
+
 function EmployerDashboard() {
   const { user, logout } = useAuth();
-  
+  const navigate = useNavigate();
+
   return (
     <div className={styles.dashboard}>
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <h1 className={styles.logo}>RYZE Recruiting</h1>
           <div className={styles.userInfo}>
+            {user?.email === ADMIN_EMAIL && (
+              <button
+                className={styles.adminLink}
+                onClick={() => navigate('/admin')}
+              >
+                Admin Dashboard
+              </button>
+            )}
             <span className={styles.userName}>
               {user?.full_name || 'Employer'}
             </span>
@@ -20,7 +33,7 @@ function EmployerDashboard() {
           </div>
         </div>
       </header>
-      
+
       <main className={styles.main}>
         <div className={styles.welcomeSection}>
           <div className={styles.userTypeBadge}>Employer</div>
@@ -33,7 +46,7 @@ function EmployerDashboard() {
         </div>
 
         <BookingCard />
-        
+
         <div className={styles.comingSoon}>
           <div className={styles.comingSoonCard}>
             <h3>Coming Soon</h3>
