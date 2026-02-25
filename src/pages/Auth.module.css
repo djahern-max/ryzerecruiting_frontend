@@ -301,6 +301,45 @@
   margin-top: 2px;
 }
 
+.passwordRow {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passwordRow input {
+  width: 100%;
+  padding-right: 2.75rem;
+  /* space for the eye button */
+}
+
+.eyeButton {
+  position: absolute;
+  right: 10px;
+  height: 36px;
+  width: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  background: transparent;
+  color: var(--text-500);
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.eyeButton:hover {
+  color: var(--text-900);
+  background: var(--bg-50);
+}
+
+.errorText {
+  color: #c33;
+  font-size: 0.85rem;
+  margin-top: -0.25rem;
+}
+
 @media (max-width: 640px) {
   .authPage {
     padding: 1rem;
