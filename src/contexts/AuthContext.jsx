@@ -6,8 +6,13 @@ const AuthContext = createContext();
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
+/**
+ * Determines where to send a user after login based on their type.
+ * user_type === 'admin' takes priority — admins go directly to the admin dashboard.
+ * is_superuser is kept as a belt-and-suspenders check for the AdminRoute guard in App.jsx.
+ */
 function getRedirectPath(user) {
-  if (user.is_superuser) return '/admin';
+  if (user.user_type === 'admin') return '/admin';
   if (user.user_type === 'employer') return '/employer/dashboard';
   return '/candidate/dashboard';
 }

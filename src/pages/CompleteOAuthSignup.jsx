@@ -1,4 +1,4 @@
-/*src/pages/CompleteOAuthSignup.jsx */
+/* src/pages/CompleteOAuthSignup.jsx */
 
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
@@ -6,166 +6,123 @@ import axios from 'axios';
 import styles from './Auth.module.css';
 
 const API_URL = import.meta.env.PROD
-    ? 'https://api.ryzerecruiting.com'
-    : 'http://localhost:8000';
+  ? 'https://api.ryzerecruiting.com'
+  : 'http://localhost:8000';
 
 function CompleteOAuthSignup() {
-    const [searchParams] = useSearchParams();
-    const navigate = useNavigate();
-    const [userType, setUserType] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const tempToken = searchParams.get('temp_token');
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [userType, setUserType] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const tempToken = searchParams.get('temp_token');
 
-    useEffect(() => {
-        if (!tempToken) {
-            navigate('/auth');
-        }
-
-        // Check if user had a preference stored
-        const storedType = sessionStorage.getItem('oauth_user_type');
-        if (storedType) {
-            setUserType(storedType);
-            sessionStorage.removeItem('oauth_user_type');
-        }
-    }, [tempToken, navigate]);
-
-    async function handleSubmit(e) {
-        e.preventDefault();
-        if (!userType) {
-            setError('Please select your user type');
-            return;
-        }
-
-        setLoading(true);
-        setError('');
-
-        try {
-            const response = await axios.post(
-                `${API_URL}/api/auth/oauth/complete-signup?temp_token=${tempToken}&user_type=${userType}`
-            );
-
-            const { access_token, user } = response.data;
-            localStorage.setItem('token', access_token);
-
-            // Redirect based on user type with full page reload
-            // This ensures AuthContext fetches the user data
-            if (user.user_type === 'employer') {
-                window.location.href = '/employer/dashboard';
-            } else {
-                window.location.href = '/candidate/dashboard';
-            }
-        } catch (err) {
-            setError(err.response?.data?.detail || 'Failed to complete signup');
-            setLoading(false);
-        }
+  useEffect(() => {
+    if (!tempToken) {
+      navigate('/auth');
     }
 
-    function handleBackToLogin() {
-        navigate('/auth');
+    // Check if user had a preference stored before OAuth redirect
+    const storedType = sessionStorage.getItem('oauth_user_type');
+    if (storedType) {
+      setUserType(storedType);
+      sessionStorage.removeItem('oauth_user_type');
+    }
+  }, [tempToken, navigate]);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!userType) {
+      setError('Please select your account type');
+      return;
     }
 
-    return (
-        <div className={styles.authPage}>
-            <div className={styles.authContainer}>
-                <div className={styles.authHeader}>
-                    <h1 className={styles.logo}>RYZE Recruiting</h1>
-                    <h2 className={styles.authTitle}>Complete Your Sign Up</h2>
-                    <p style={{ color: 'var(--text-500)', marginTop: '0.5rem' }}>
-                        Please select your account type to continue
-                    </p>
-                </div>
+    setLoading(true);
+    setError('');
 
-                {error && (
-                    <div className={styles.error}>
-                        {error}
-                        {error.includes('already registered') && (
-                            <button
-                                onClick={handleBackToLogin}
-                                className={styles.submitButton}
-                                style={{ marginTop: '1rem', width: '100%' }}
-                            >
-                                Back to Login
-                            </button>
-                        )}
-                    </div>
-                )}
+    try {
+      const response = await axios.post(
+        `${API_URL}/api/auth/oauth/complete-signup?temp_token=${tempToken}&user_type=${userType}`
+      );
 
-                {!error.includes('already registered') && (
-                    <form className={styles.authForm} onSubmit={handleSubmit}>
-                        <div className={styles.formGroup}>
-                            <label>I am a...</label>
-                            <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-                                <label
-                                    style={{
-                                        flex: 1,
-                                        cursor: 'pointer',
-                                        padding: '1rem',
-                                        border: `2px solid ${userType === 'candidate' ? 'var(--brand-700)' : 'var(--border-200)'}`,
-                                        borderRadius: '10px',
-                                        textAlign: 'center',
-                                        transition: 'all 180ms ease',
-                                        background: userType === 'candidate' ? 'rgba(28, 102, 214, 0.05)' : 'white'
-                                    }}
-                                >
-                                    <input
-                                        type="radio"
-                                        name="userType"
-                                        value="candidate"
-                                        checked={userType === 'candidate'}
-                                        onChange={(e) => setUserType(e.target.value)}
-                                        style={{ display: 'none' }}
-                                    />
-                                    <div style={{ fontWeight: 600, color: 'var(--text-900)' }}>
-                                        Candidate
-                                    </div>
-                                    <div style={{ fontSize: '0.85rem', color: 'var(--text-500)', marginTop: '0.25rem' }}>
-                                        Looking for a job
-                                    </div>
-                                </label>
+      const { access_token, user } = response.data;
+      localStorage.setItem('token', access_token);
 
-                                <label
-                                    style={{
-                                        flex: 1,
-                                        cursor: 'pointer',
-                                        padding: '1rem',
-                                        border: `2px solid ${userType === 'employer' ? 'var(--brand-700)' : 'var(--border-200)'}`,
-                                        borderRadius: '10px',
-                                        textAlign: 'center',
-                                        transition: 'all 180ms ease',
-                                        background: userType === 'employer' ? 'rgba(28, 102, 214, 0.05)' : 'white'
-                                    }}
-                                >
-                                    <input
-                                        type="radio"
-                                        name="userType"
-                                        value="employer"
-                                        checked={userType === 'employer'}
-                                        onChange={(e) => setUserType(e.target.value)}
-                                        style={{ display: 'none' }}
-                                    />
-                                    <div style={{ fontWeight: 600, color: 'var(--text-900)' }}>
-                                        Employer
-                                    </div>
-                                    <div style={{ fontSize: '0.85rem', color: 'var(--text-500)', marginTop: '0.25rem' }}>
-                                        Hiring talent
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
+      // Route based on user_type — admin check included for safety
+      if (user.user_type === 'admin') {
+        window.location.href = '/admin';
+      } else if (user.user_type === 'employer') {
+        window.location.href = '/employer/dashboard';
+      } else {
+        window.location.href = '/candidate/dashboard';
+      }
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Failed to complete signup');
+      setLoading(false);
+    }
+  }
 
-                        <button
-                            type="submit"
-                            className={styles.submitButton}
-                            disabled={loading || !userType}
-                        >
-                            {loading ? 'Please wait...' : 'Complete Sign Up'}
-                        </button>
-                    </form>
-                )}
-            </div>
+  function handleBackToLogin() {
+    navigate('/auth');
+  }
+
+  return (
+    <div className={styles.authPage}>
+      <div className={styles.authContainer}>
+        <div className={styles.authHeader}>
+          <h1 className={styles.logo}>RYZE Recruiting</h1>
+          <h2 className={styles.authTitle}>Complete Your Sign Up</h2>
+          <p style={{ color: 'var(--text-500)', marginTop: '0.5rem' }}>
+            Please select your account type to continue
+          </p>
         </div>
-    );
+
+        {error && (
+          <div className={styles.error}>
+            {error}
+          </div>
+        )}
+
+        <form className={styles.authForm} onSubmit={handleSubmit}>
+          <div className={styles.userTypeSelection}>
+            <button
+              type="button"
+              className={`${styles.userTypeButton} ${userType === 'employer' ? styles.userTypeButtonActive : ''}`}
+              onClick={() => setUserType('employer')}
+            >
+              <span className={styles.userTypeIcon}>🏢</span>
+              <span className={styles.userTypeLabel}>Employer</span>
+              <span className={styles.userTypeDesc}>I'm hiring accounting & finance professionals</span>
+            </button>
+
+            <button
+              type="button"
+              className={`${styles.userTypeButton} ${userType === 'candidate' ? styles.userTypeButtonActive : ''}`}
+              onClick={() => setUserType('candidate')}
+            >
+              <span className={styles.userTypeIcon}>👤</span>
+              <span className={styles.userTypeLabel}>Candidate</span>
+              <span className={styles.userTypeDesc}>I'm looking for accounting & finance roles</span>
+            </button>
+          </div>
+
+          <button
+            type="submit"
+            className={styles.submitButton}
+            disabled={loading || !userType}
+          >
+            {loading ? 'Setting up your account…' : 'Continue →'}
+          </button>
+        </form>
+
+        <div className={styles.authFooter}>
+          <button className={styles.backButton} onClick={handleBackToLogin}>
+            ← Back to login
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default CompleteOAuthSignup;

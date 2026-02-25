@@ -1,12 +1,10 @@
 /* src/pages/EmployerDashboard.jsx */
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import styles from './Dashboard.module.css';
 import BookingCard from '../components/BookingCard';
 
 function EmployerDashboard() {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
 
   return (
     <div className={styles.dashboard}>
@@ -14,14 +12,6 @@ function EmployerDashboard() {
         <div className={styles.headerContent}>
           <h1 className={styles.logo}>RYZE Recruiting</h1>
           <div className={styles.userInfo}>
-            {user?.is_superuser && (
-              <button
-                className={styles.adminLink}
-                onClick={() => navigate('/admin')}
-              >
-                Admin Dashboard
-              </button>
-            )}
             <span className={styles.userName}>
               {user?.full_name || 'Employer'}
             </span>

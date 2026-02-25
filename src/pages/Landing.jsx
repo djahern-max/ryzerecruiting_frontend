@@ -1,4 +1,4 @@
-/*src/pages/Landing.jsx*/
+/* src/pages/Landing.jsx */
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useEffect } from "react";
@@ -11,7 +11,10 @@ function Landing() {
 
   useEffect(() => {
     if (user) {
-      if (user.user_type === "employer") {
+      // Admin users go directly to the admin dashboard — never to employer/candidate routes
+      if (user.user_type === "admin") {
+        navigate("/admin");
+      } else if (user.user_type === "employer") {
         navigate("/employer/dashboard");
       } else {
         navigate("/candidate/dashboard");
@@ -77,6 +80,15 @@ function Landing() {
 
         <footer className={styles.footer}>
           <p>© 2026 RYZE Recruiting. All rights reserved.</p>
+          {/* Discreet admin access link — not styled to stand out to regular users */}
+          <a
+            href="/admin/login"
+            className={styles.adminAccess}
+            tabIndex={-1}
+            aria-hidden="true"
+          >
+            Admin
+          </a>
         </footer>
       </main>
     </div>

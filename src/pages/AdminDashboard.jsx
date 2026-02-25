@@ -1,7 +1,6 @@
 /* src/pages/AdminDashboard.jsx */
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import styles from './AdminDashboard.module.css';
 
 const API_BASE = import.meta.env.PROD
@@ -22,7 +21,6 @@ const STATUS_COLORS = {
 
 function AdminDashboard() {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -112,12 +110,6 @@ function AdminDashboard() {
             <span className={styles.adminBadge}>Admin</span>
           </div>
           <div className={styles.headerRight}>
-            <button
-              className={styles.backButton}
-              onClick={() => navigate('/employer/dashboard')}
-            >
-              ← Dashboard
-            </button>
             <span className={styles.userName}>{user?.full_name}</span>
             <button className={styles.logoutButton} onClick={logout}>
               Logout
@@ -141,77 +133,62 @@ function AdminDashboard() {
             <span className={styles.statLabel}>Total Bookings</span>
           </div>
           <div className={styles.statCard}>
-            <span className={`${styles.statNumber} ${styles.statPending}`}>
-              {pending.length}
-            </span>
+            <span className={`${styles.statNumber} ${styles.statPending}`}>{pending.length}</span>
             <span className={styles.statLabel}>Pending</span>
           </div>
           <div className={styles.statCard}>
-            <span className={`${styles.statNumber} ${styles.statConfirmed}`}>
-              {confirmed.length}
-            </span>
+            <span className={`${styles.statNumber} ${styles.statConfirmed}`}>{confirmed.length}</span>
             <span className={styles.statLabel}>Confirmed</span>
           </div>
           <div className={styles.statCard}>
-            <span className={`${styles.statNumber} ${styles.statCancelled}`}>
-              {cancelled.length}
-            </span>
+            <span className={`${styles.statNumber} ${styles.statCancelled}`}>{cancelled.length}</span>
             <span className={styles.statLabel}>Cancelled</span>
           </div>
         </div>
 
-        {/* Content */}
-        {loading && (
-          <div className={styles.emptyState}>Loading bookings...</div>
-        )}
-
-        {error && (
-          <div className={styles.errorState}>Error: {error}</div>
-        )}
-
-        {!loading && !error && bookings.length === 0 && (
-          <div className={styles.emptyState}>
-            No bookings yet. They'll appear here when employers book calls.
-          </div>
-        )}
-
-        {!loading && !error && bookings.length > 0 && (
+        {/* Bookings Table */}
+        {loading ? (
+          <div className={styles.emptyState}>Loading bookings…</div>
+        ) : error ? (
+          <div className={styles.errorState}>{error}</div>
+        ) : bookings.length === 0 ? (
+          <div className={styles.emptyState}>No bookings yet.</div>
+        ) : (
           <div className={styles.tableWrapper}>
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Employer</th>
+                  <th>Name</th>
+                  <th>Email</th>
                   <th>Company</th>
                   <th>Date & Time</th>
-                  <th>Phone</th>
-                  <th>Notes</th>
+                  <th className={styles.phone}>Phone</th>
+                  <th className={styles.notes}>Notes</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {bookings.map(booking => (
-                  <tr key={booking.id} className={styles.row}>
+                  <tr key={booking.id}>
+                    <td className={styles.nameCell}>{booking.name}</td>
                     <td>
-                      <div className={styles.employerName}>
-                        {booking.employer_name}
-                      </div>
-                      <div className={styles.employerEmail}>
-                        {booking.employer_email}
-                      </div>
+                      <a href={`mailto:${booking.email}`} className={styles.emailLink}>
+                        {booking.email}
+                      </a>
                     </td>
                     <td>
-                      <div className={styles.companyName}>
-                        {booking.company_name || '—'}
-                      </div>
-                      {booking.website_url && (
+                      {booking.company && (
+                        <div className={styles.companyName}>{booking.company}</div>
+                      )}
+                      {booking.website && (
                         <a
-                          href={booking.website_url}
+                          href={booking.website.startsWith('http') ? booking.website : `https://${booking.website}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className={styles.websiteLink}
                         >
-                          {booking.website_url.replace(/^https?:\/\//, '')}
+                          {booking.website.replace(/^https?:\/\//, '')}
                         </a>
                       )}
                     </td>

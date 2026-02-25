@@ -127,6 +127,21 @@
   text-align: center;
 }
 
+/* Discreet admin link — intentionally low-visibility */
+.adminAccess {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  color: var(--text-300);
+  text-decoration: none;
+  transition: color 150ms ease;
+  letter-spacing: 0.3px;
+}
+
+.adminAccess:hover {
+  color: var(--text-500);
+}
+
 /* Tablet + down */
 @media (max-width: 860px) {
   .ctaRow {

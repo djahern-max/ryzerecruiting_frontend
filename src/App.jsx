@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { useEffect } from 'react';
 import Landing from './pages/Landing';
 import Auth from './pages/Auth';
+import AdminLogin from './pages/AdminLogin';
 import OAuthCallback from './pages/OAuthCallback';
 import CompleteOAuthSignup from './pages/CompleteOAuthSignup';
 import EmployerDashboard from './pages/EmployerDashboard';
@@ -34,11 +35,15 @@ function ProtectedRoute({ children }) {
   return children;
 }
 
+/**
+ * AdminRoute: Guards pages that only admin users (user_type === 'admin') can access.
+ * Uses both user_type and is_superuser as a double-check.
+ */
 function AdminRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading) return loadingScreen;
-  if (!user) return <Navigate to="/auth" />;
-  if (!user.is_superuser) return <Navigate to="/" />;
+  if (!user) return <Navigate to="/admin/login" />;
+  if (user.user_type !== 'admin' || !user.is_superuser) return <Navigate to="/" />;
   return children;
 }
 
@@ -51,15 +56,20 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          {/* Public routes */}
           <Route path="/" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/auth/callback" element={<OAuthCallback />} />
           <Route path="/auth/complete-signup" element={<CompleteOAuthSignup />} />
 
+          {/* Admin login — separate from public auth */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+
           {/* Legal Pages */}
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
 
+          {/* Employer dashboard */}
           <Route
             path="/employer/dashboard"
             element={
@@ -68,6 +78,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* Candidate dashboard */}
           <Route
             path="/candidate/dashboard"
             element={
@@ -77,7 +89,7 @@ function App() {
             }
           />
 
-          {/* Admin — only accessible to superusers */}
+          {/* Admin dashboard — only accessible to admin users */}
           <Route
             path="/admin"
             element={
