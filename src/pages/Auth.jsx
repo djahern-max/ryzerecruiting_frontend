@@ -39,7 +39,6 @@ function EyeIcon({ open }) {
 }
 
 function Auth() {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [userType, setUserType] = useState('');
 
