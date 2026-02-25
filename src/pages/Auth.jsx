@@ -1,6 +1,6 @@
 /* src/pages/Auth.jsx */
 import { useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import styles from './Auth.module.css';
 
@@ -41,7 +41,7 @@ function EyeIcon({ open }) {
 function Auth() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const userType = searchParams.get('type') || 'candidate';
+  const [userType, setUserType] = useState('');
 
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -59,6 +59,10 @@ function Auth() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
+    if (!isLogin && !userType) {
+      setError('Please select an account type');
+      return;
+    }
     setLoading(true);
 
     try {
@@ -105,9 +109,7 @@ function Auth() {
           <h2 className={styles.authTitle}>
             {isLogin ? 'Welcome Back' : 'Create Account'}
           </h2>
-          <p className={styles.userTypeBadge}>
-            {userType === 'employer' ? 'Employer' : 'Candidate'}
-          </p>
+
         </div>
 
         {error && <div className={styles.error}>{error}</div>}
@@ -154,15 +156,25 @@ function Auth() {
         <form className={styles.authForm} onSubmit={handleSubmit}>
           {!isLogin && (
             <div className={styles.formGroup}>
-              <label htmlFor="fullName">Full Name</label>
-              <input
-                id="fullName"
-                type="text"
-                placeholder="John Doe"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required
-              />
+              <label>Account Type</label>
+              <div className={styles.userTypeSelection}>
+                <button
+                  type="button"
+                  className={`${styles.userTypeButton} ${userType === 'EMPLOYER' ? styles.userTypeButtonActive : ''}`}
+                  onClick={() => setUserType('EMPLOYER')}
+                >
+                  <span className={styles.userTypeLabel}>Employer</span>
+                  <span className={styles.userTypeDesc}>I'm hiring accounting & finance professionals</span>
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.userTypeButton} ${userType === 'CANDIDATE' ? styles.userTypeButtonActive : ''}`}
+                  onClick={() => setUserType('CANDIDATE')}
+                >
+                  <span className={styles.userTypeLabel}>Candidate</span>
+                  <span className={styles.userTypeDesc}>I'm looking for accounting & finance roles</span>
+                </button>
+              </div>
             </div>
           )}
 

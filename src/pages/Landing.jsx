@@ -54,7 +54,7 @@ function Landing() {
               </p>
               <button
                 className={`ryzeBtn ryzeBtnPrimary ${styles.ctaButton}`}
-                onClick={() => navigate("/auth?type=employer")}
+                onClick={() => navigate("/auth")}
               >
                 Get Started →
               </button>
@@ -68,7 +68,7 @@ function Landing() {
               </p>
               <button
                 className={`ryzeBtn ryzeBtnPrimary ${styles.ctaButton}`}
-                onClick={() => navigate("/auth?type=candidate")}
+                onClick={() => navigate("/auth")}
               >
                 Explore Jobs →
               </button>
