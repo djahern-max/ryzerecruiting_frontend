@@ -80,8 +80,8 @@ function CompleteOAuthSignup() {
           <div className={styles.userTypeSelection}>
             <button
               type="button"
-              className={`${styles.userTypeButton} ${userType === 'employer' ? styles.userTypeButtonActive : ''}`}
-              onClick={() => setUserType('employer')}
+              className={`${styles.userTypeButton} ${userType === 'EMPLOYER' ? styles.userTypeButtonActive : ''}`}
+              onClick={() => setUserType('EMPLOYER')}
             >
               <span className={styles.userTypeIcon}>🏢</span>
               <span className={styles.userTypeLabel}>Employer</span>
@@ -90,8 +90,8 @@ function CompleteOAuthSignup() {
 
             <button
               type="button"
-              className={`${styles.userTypeButton} ${userType === 'candidate' ? styles.userTypeButtonActive : ''}`}
-              onClick={() => setUserType('candidate')}
+              className={`${styles.userTypeButton} ${userType === 'CANDIDATE' ? styles.userTypeButtonActive : ''}`}
+              onClick={() => setUserType('CANDIDATE')}
             >
               <span className={styles.userTypeIcon}>👤</span>
               <span className={styles.userTypeLabel}>Candidate</span>
