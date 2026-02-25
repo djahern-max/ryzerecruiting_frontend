@@ -58,13 +58,16 @@ export function AuthProvider({ children }) {
       return { success: true };
     } catch (error) {
       console.error('Login failed:', error);
-      return {
-        success: false,
-        error: error.response?.data?.detail || 'Login failed'
-      };
+      const detail = error.response?.data?.detail;
+      // FastAPI validation errors return an array — extract the first message
+      const message = Array.isArray(detail)
+        ? detail[0]?.msg || 'Invalid input'
+        : typeof detail === 'string'
+          ? detail
+          : 'Login failed';
+      return { success: false, error: message };
     }
   }
-
   async function register(email, password, fullName, userType) {
     try {
       await axios.post(`${API_URL}/api/auth/register`, {
