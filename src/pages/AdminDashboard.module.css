@@ -1,13 +1,13 @@
 /* src/pages/AdminDashboard.module.css */
 
-/* ── Layout ─────────────────────────────────────────── */
+/* ── Layout ──────────────────────────────────────────── */
 .page {
   min-height: 100vh;
   background: var(--bg-50);
   font-family: var(--font-sans);
 }
 
-/* ── Header ─────────────────────────────────────────── */
+/* ── Header ──────────────────────────────────────────── */
 .header {
   background: #ffffff;
   border-bottom: 1px solid var(--border-200);
@@ -57,23 +57,6 @@
   gap: 16px;
 }
 
-.backButton {
-  background: none;
-  border: 1px solid var(--border-200);
-  color: var(--text-700);
-  font-size: 13px;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 120ms ease, border-color 120ms ease;
-}
-
-.backButton:hover {
-  background: var(--bg-100);
-  border-color: var(--text-500);
-}
-
 .userName {
   font-size: 14px;
   color: var(--text-700);
@@ -88,6 +71,7 @@
   cursor: pointer;
   padding: 6px 10px;
   border-radius: 6px;
+  font-family: var(--font-sans);
   transition: color 120ms ease, background 120ms ease;
 }
 
@@ -100,24 +84,246 @@
 .main {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 24px;
+  padding: 2.5rem 1.5rem 4rem;
 }
 
-.pageHeader {
-  margin-bottom: 32px;
+/* ── Welcome Banner ──────────────────────────────────── */
+.welcomeBanner {
+  background: white;
+  border: 1px solid var(--border-200);
+  border-radius: var(--radius);
+  padding: 2rem 2.5rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
 }
 
-.pageTitle {
-  font-size: 1.8rem;
+.welcomeText {
+  flex: 1;
+}
+
+.badge {
+  display: inline-block;
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  color: #15803d;
+  padding: 0.3rem 1rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.welcomeTitle {
+  font-size: 1.75rem;
   font-weight: 800;
   color: var(--text-900);
-  margin: 0 0 6px 0;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.4px;
 }
 
-.pageSubtitle {
+.welcomeSub {
+  font-size: 1rem;
   color: var(--text-500);
-  font-size: 15px;
   margin: 0;
+  max-width: 480px;
+  line-height: 1.5;
+}
+
+.welcomeStats {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-shrink: 0;
+  background: var(--bg-50);
+  border: 1px solid var(--border-200);
+  border-radius: 12px;
+  padding: 1.25rem 1.75rem;
+}
+
+.welcomeStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.welcomeStatNumber {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-900);
+  line-height: 1;
+}
+
+.welcomeStatLabel {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.welcomeStatDivider {
+  width: 1px;
+  height: 36px;
+  background: var(--border-200);
+}
+
+.pendingColor {
+  color: #d97706;
+}
+
+.confirmedColor {
+  color: #16a34a;
+}
+
+/* ── Sections ────────────────────────────────────────── */
+.section {
+  margin-bottom: 3rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.sectionTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-700);
+  margin: 0 0 1.25rem;
+  letter-spacing: -0.1px;
+}
+
+/* When inside sectionHeader, remove the bottom margin */
+.sectionHeader .sectionTitle {
+  margin-bottom: 0.2rem;
+}
+
+.sectionSub {
+  font-size: 0.875rem;
+  color: var(--text-500);
+  margin: 0;
+}
+
+.liveBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  color: #15803d;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+}
+
+/* ── Feature Grid ────────────────────────────────────── */
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.featureCard {
+  background: white;
+  border: 1px solid var(--border-200);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: box-shadow 160ms ease, transform 160ms ease;
+}
+
+.featureCard:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.featureCardDisabled {
+  opacity: 0.75;
+}
+
+.featureCardDisabled:hover {
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.featureCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.featureIcon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.soonBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-500);
+  background: var(--bg-100);
+  border: 1px solid var(--border-200);
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+}
+
+.featureTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-900);
+  margin: 0;
+}
+
+.featureDesc {
+  font-size: 0.875rem;
+  color: var(--text-500);
+  margin: 0;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.featureBtn {
+  margin-top: 0.75rem;
+  align-self: flex-start;
+  background: none;
+  border: 1.5px solid var(--brand-800);
+  color: var(--brand-800);
+  border-radius: 8px;
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease;
+}
+
+.featureBtn:hover:not(:disabled) {
+  background: var(--brand-800);
+  color: white;
+}
+
+.featureBtn:disabled {
+  border-color: var(--border-200);
+  color: var(--text-500);
+  cursor: not-allowed;
 }
 
 /* ── Stats Row ───────────────────────────────────────── */
@@ -125,11 +331,11 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 1.25rem;
 }
 
 .statCard {
-  background: #ffffff;
+  background: white;
   border: 1px solid var(--border-200);
   border-radius: var(--radius);
   padding: 20px 24px;
@@ -166,7 +372,7 @@
 
 /* ── Table ───────────────────────────────────────────── */
 .tableWrapper {
-  background: #ffffff;
+  background: white;
   border: 1px solid var(--border-200);
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
@@ -216,15 +422,19 @@
 }
 
 /* ── Cell Styles ─────────────────────────────────────── */
-.employerName {
+.nameCell {
   font-weight: 600;
   color: var(--text-900);
-  margin-bottom: 2px;
 }
 
-.employerEmail {
-  font-size: 12px;
-  color: var(--text-500);
+.emailLink {
+  color: var(--brand-800);
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.emailLink:hover {
+  text-decoration: underline;
 }
 
 .companyName {
@@ -310,6 +520,7 @@
   border-radius: 6px;
   cursor: pointer;
   border: none;
+  font-family: var(--font-sans);
   transition: opacity 120ms ease, transform 120ms ease;
   white-space: nowrap;
 }
@@ -331,7 +542,7 @@
 }
 
 .cancelBtn {
-  background: #f1f5f9;
+  background: var(--bg-100);
   color: var(--text-700);
   border: 1px solid var(--border-200);
 }
@@ -358,7 +569,7 @@
   padding: 60px 24px;
   color: var(--text-500);
   font-size: 15px;
-  background: #ffffff;
+  background: white;
   border: 1px solid var(--border-200);
   border-radius: var(--radius);
 }
@@ -374,16 +585,42 @@
 }
 
 /* ── Responsive ──────────────────────────────────────── */
+@media (max-width: 900px) {
+  .featureGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
+  .welcomeBanner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .welcomeStats {
+    width: 100%;
+    justify-content: space-around;
+  }
+
   .statsRow {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .headerRight {
-    gap: 10px;
-  }
-
   .userName {
     display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .main {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .featureGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .welcomeTitle {
+    font-size: 1.4rem;
   }
 }

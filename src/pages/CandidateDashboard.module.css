@@ -1,0 +1,234 @@
+/* src/pages/CandidateDashboard.module.css */
+
+/* ── Page shell ──────────────────────────────────── */
+.page {
+    min-height: 100vh;
+    background: var(--bg-50);
+    font-family: var(--font-sans);
+}
+
+.main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+}
+
+/* ── Welcome Banner ──────────────────────────────── */
+.welcomeBanner {
+    background: white;
+    border: 1px solid var(--border-200);
+    border-radius: var(--radius);
+    padding: 2rem 2.5rem;
+    margin-bottom: 2.5rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.welcomeText {
+    flex: 1;
+}
+
+.badge {
+    display: inline-block;
+    background: color-mix(in srgb, var(--brand-800) 10%, white);
+    border: 1px solid color-mix(in srgb, var(--brand-800) 22%, white);
+    color: var(--brand-800);
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+.welcomeTitle {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-900);
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.4px;
+}
+
+.welcomeSub {
+    font-size: 1rem;
+    color: var(--text-500);
+    margin: 0;
+    max-width: 520px;
+    line-height: 1.5;
+}
+
+.welcomeActions {
+    flex-shrink: 0;
+}
+
+.bookingBtn {
+    background: var(--brand-800);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 160ms ease, transform 120ms ease, box-shadow 160ms ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.bookingBtn:hover {
+    background: var(--brand-700);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.bookingBtn:active {
+    transform: translateY(0);
+}
+
+/* ── Section ─────────────────────────────────────── */
+.section {
+    margin-top: 0;
+}
+
+.sectionTitle {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-700);
+    margin: 0 0 1.25rem;
+    letter-spacing: -0.1px;
+}
+
+/* ── Feature Grid ────────────────────────────────── */
+.featureGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+}
+
+.featureCard {
+    background: white;
+    border: 1px solid var(--border-200);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: box-shadow 160ms ease, transform 160ms ease;
+}
+
+.featureCard:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.featureCardDisabled {
+    opacity: 0.75;
+}
+
+.featureCardDisabled:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+}
+
+.featureCardTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+}
+
+.featureIcon {
+    font-size: 1.6rem;
+    line-height: 1;
+}
+
+.soonBadge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-500);
+    background: var(--bg-100);
+    border: 1px solid var(--border-200);
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+}
+
+.featureTitle {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-900);
+    margin: 0;
+}
+
+.featureDesc {
+    font-size: 0.875rem;
+    color: var(--text-500);
+    margin: 0;
+    line-height: 1.5;
+    flex: 1;
+}
+
+.featureBtn {
+    margin-top: 0.75rem;
+    align-self: flex-start;
+    background: none;
+    border: 1.5px solid var(--brand-800);
+    color: var(--brand-800);
+    border-radius: 8px;
+    padding: 0.45rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: background 140ms ease, color 140ms ease;
+}
+
+.featureBtn:hover:not(:disabled) {
+    background: var(--brand-800);
+    color: white;
+}
+
+.featureBtn:disabled {
+    border-color: var(--border-200);
+    color: var(--text-500);
+    cursor: not-allowed;
+}
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 900px) {
+    .featureGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .main {
+        padding: 1.5rem 1rem 3rem;
+    }
+
+    .welcomeBanner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.5rem;
+    }
+
+    .welcomeTitle {
+        font-size: 1.4rem;
+    }
+
+    .bookingBtn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .featureGrid {
+        grid-template-columns: 1fr;
+    }
+}
