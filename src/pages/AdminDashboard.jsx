@@ -34,7 +34,7 @@ function AdminDashboard() {
 
   async function fetchBookings() {
     try {
-      const token = localStorage.getItem('auth_token');
+      const token = localStorage.getItem('token');
       const res = await fetch(`${API_BASE}/api/bookings`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -51,7 +51,7 @@ function AdminDashboard() {
   async function updateStatus(bookingId, newStatus) {
     setUpdatingId(bookingId);
     try {
-      const token = localStorage.getItem('auth_token');
+      const token = localStorage.getItem('token');
       const res = await fetch(`${API_BASE}/api/bookings/${bookingId}/status`, {
         method: 'PATCH',
         headers: {
@@ -75,7 +75,7 @@ function AdminDashboard() {
   async function deleteBooking(bookingId) {
     if (!confirm('Are you sure you want to delete this booking?')) return;
     try {
-      const token = localStorage.getItem('auth_token');
+      const token = localStorage.getItem('token');
       const res = await fetch(`${API_BASE}/api/bookings/${bookingId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
