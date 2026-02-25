@@ -83,7 +83,7 @@ function CompleteOAuthSignup() {
               className={`${styles.userTypeButton} ${userType === 'EMPLOYER' ? styles.userTypeButtonActive : ''}`}
               onClick={() => setUserType('EMPLOYER')}
             >
-              <span className={styles.userTypeIcon}>🏢</span>
+
               <span className={styles.userTypeLabel}>Employer</span>
               <span className={styles.userTypeDesc}>I'm hiring accounting & finance professionals</span>
             </button>
@@ -93,7 +93,7 @@ function CompleteOAuthSignup() {
               className={`${styles.userTypeButton} ${userType === 'CANDIDATE' ? styles.userTypeButtonActive : ''}`}
               onClick={() => setUserType('CANDIDATE')}
             >
-              <span className={styles.userTypeIcon}>👤</span>
+
               <span className={styles.userTypeLabel}>Candidate</span>
               <span className={styles.userTypeDesc}>I'm looking for accounting & finance roles</span>
             </button>
