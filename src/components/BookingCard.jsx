@@ -1,3 +1,4 @@
+// src/components/BookingCard.jsx
 import { useState } from "react";
 import styles from "./BookingCard.module.css";
 import axios from "axios";
@@ -19,6 +20,24 @@ function formatPhone(value) {
   if (digits.length < 4) return digits;
   if (digits.length < 7) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
   return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
+
+function getAvailableSlots(selectedDate) {
+  if (!selectedDate) return TIME_SLOTS;
+  const now = new Date();
+  const selected = new Date(selectedDate + "T00:00:00");
+  const isToday = selected.toDateString() === now.toDateString();
+  if (!isToday) return TIME_SLOTS;
+
+  return TIME_SLOTS.filter((slot) => {
+    const [time, period] = slot.split(" ");
+    let [hours, minutes] = time.split(":").map(Number);
+    if (period === "PM" && hours !== 12) hours += 12;
+    if (period === "AM" && hours === 12) hours = 0;
+    const slotTime = new Date();
+    slotTime.setHours(hours, minutes, 0, 0);
+    return slotTime > now;
+  });
 }
 
 function InfoModal({ onClose }) {
@@ -48,12 +67,22 @@ export default function BookingCard() {
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [confirmed, setConfirmed] = useState(false);
+  const [booking, setBooking] = useState(null);  // stores full booking response
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
 
   function handlePhoneChange(e) {
     setPhone(formatPhone(e.target.value));
+  }
+
+  // Clear selected time slot if it's no longer available after date change
+  function handleDateChange(e) {
+    const newDate = e.target.value;
+    setDate(newDate);
+    const available = getAvailableSlots(newDate);
+    if (timeSlot && !available.includes(timeSlot)) {
+      setTimeSlot("");
+    }
   }
 
   async function handleSubmit(e) {
@@ -68,7 +97,7 @@ export default function BookingCard() {
     setSubmitting(true);
     try {
       const token = localStorage.getItem('token');
-      await axios.post(
+      const { data } = await axios.post(
         `${API_URL}/api/bookings`,
         {
           date,
@@ -80,7 +109,7 @@ export default function BookingCard() {
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setConfirmed(true);
+      setBooking(data);
     } catch (err) {
       setError(err.response?.data?.detail || "Something went wrong. Please try again.");
     } finally {
@@ -88,23 +117,35 @@ export default function BookingCard() {
     }
   }
 
-  if (confirmed) {
+  if (booking) {
     return (
       <div className={styles.card}>
         <div className={styles.confirmation}>
           <span className={styles.checkIcon}>✓</span>
           <h2>You're booked!</h2>
           <p>
-            Your intro call is set for <strong>{date}</strong> at{" "}
-            <strong>{timeSlot}</strong>.
+            Your intro call is set for <strong>{booking.date}</strong> at{" "}
+            <strong>{booking.time_slot} EST</strong>.
           </p>
           <p className={styles.confirmSub}>
             A confirmation email is on its way. We'll reach out if anything changes.
           </p>
+          {booking.meeting_url && (
+            <a
+              href={booking.meeting_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.meetingBtn}
+            >
+              Join Zoom Call →
+            </a>
+          )}
         </div>
       </div>
     );
   }
+
+  const availableSlots = getAvailableSlots(date);
 
   return (
     <>
@@ -127,7 +168,7 @@ export default function BookingCard() {
               type="date"
               min={todayString()}
               value={date}
-              onChange={(e) => setDate(e.target.value)}
+              onChange={handleDateChange}
               className={styles.input}
             />
           </div>
@@ -135,16 +176,20 @@ export default function BookingCard() {
           <div className={styles.field}>
             <label>Preferred Time</label>
             <div className={styles.timeGrid}>
-              {TIME_SLOTS.map((slot) => (
-                <button
-                  key={slot}
-                  type="button"
-                  className={`${styles.timeBtn} ${timeSlot === slot ? styles.timeBtnActive : ""}`}
-                  onClick={() => setTimeSlot(slot)}
-                >
-                  {slot}
-                </button>
-              ))}
+              {availableSlots.length === 0 ? (
+                <p className={styles.noSlots}>No remaining slots for today. Please select a future date.</p>
+              ) : (
+                availableSlots.map((slot) => (
+                  <button
+                    key={slot}
+                    type="button"
+                    className={`${styles.timeBtn} ${timeSlot === slot ? styles.timeBtnActive : ""}`}
+                    onClick={() => setTimeSlot(slot)}
+                  >
+                    {slot}
+                  </button>
+                ))
+              )}
             </div>
           </div>
 
