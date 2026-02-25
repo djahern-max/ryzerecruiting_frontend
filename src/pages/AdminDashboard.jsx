@@ -171,24 +171,25 @@ function AdminDashboard() {
               <tbody>
                 {bookings.map(booking => (
                   <tr key={booking.id}>
-                    <td className={styles.nameCell}>{booking.name}</td>
+                    <td className={styles.nameCell}>{booking.employer_name}</td>
                     <td>
-                      <a href={`mailto:${booking.email}`} className={styles.emailLink}>
-                        {booking.email}
+                      <a href={`mailto:${booking.employer_email}`} className={styles.emailLink}>
+                        {booking.employer_email}
                       </a>
                     </td>
                     <td>
-                      {booking.company && (
-                        <div className={styles.companyName}>{booking.company}</div>
+                      {booking.company_name && (
+                        <div className={styles.companyName}>{booking.company_name}</div>
                       )}
-                      {booking.website && (
+                      {booking.website_url && (
                         <a
-                          href={booking.website.startsWith('http') ? booking.website : `https://${booking.website}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={styles.websiteLink}
+                          href={
+                            booking.website_url.startsWith('http')
+                              ? booking.website_url
+                              : `https://${booking.website_url}`
+                          }
                         >
-                          {booking.website.replace(/^https?:\/\//, '')}
+                          {booking.website_url.replace(/^https?:\/\//, '')}
                         </a>
                       )}
                     </td>
