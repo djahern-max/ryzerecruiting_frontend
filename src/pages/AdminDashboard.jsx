@@ -122,7 +122,7 @@ function AdminDashboard() {
   }
 
   async function deleteBooking(bookingId) {
-    if (!confirm('Are you sure you want to delete this booking?')) return;
+    if (!window.confirm('Are you sure you want to delete this booking?')) return;
     try {
       const token = localStorage.getItem('token');
       const res = await fetch(`${API_BASE}/api/bookings/${bookingId}`, {
@@ -137,8 +137,7 @@ function AdminDashboard() {
   }
 
   function formatDate(dateStr) {
-    const [year, month, day] = dateStr.split('-');
-    const date = new Date(year, month - 1, day);
+    const date = new Date(dateStr);
     return date.toLocaleDateString('en-US', {
       weekday: 'short',
       month: 'short',
@@ -281,6 +280,7 @@ function AdminDashboard() {
                     <th>Date & Time</th>
                     <th>Phone</th>
                     <th>Notes</th>
+                    <th>Meeting</th>
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
@@ -336,8 +336,26 @@ function AdminDashboard() {
                         {booking.phone || '—'}
                       </td>
 
-                      <td className={styles.notes}>
-                        {booking.notes || '—'}
+                      <td>
+                        {booking.meeting_url ? (
+                          <a
+                            href={booking.meeting_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              color: '#0a66c2',
+                              fontWeight: 600,
+                              textDecoration: 'none',
+                              fontSize: '13px',
+                            }}
+                          >
+                            Join Zoom →
+                          </a>
+                        ) : (
+                          <span style={{ color: '#94a3b8', fontSize: '13px' }}>
+                            Pending
+                          </span>
+                        )}
                       </td>
 
                       <td>
