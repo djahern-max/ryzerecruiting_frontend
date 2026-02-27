@@ -5,7 +5,6 @@
   min-height: 100vh;
   background: var(--bg-50);
   font-family: var(--font-sans);
-  /* FIX: prevents horizontal wobble/overflow on mobile */
   overflow-x: hidden;
   max-width: 100vw;
 }
@@ -19,7 +18,6 @@
   top: 0;
   z-index: 100;
   box-shadow: var(--shadow-sm);
-  /* FIX: prevent header from causing overflow */
   width: 100%;
   box-sizing: border-box;
 }
@@ -79,7 +77,6 @@
   border-radius: 6px;
   font-family: var(--font-sans);
   transition: color 120ms ease, background 120ms ease;
-  /* FIX: make tap target larger on mobile */
   min-height: 36px;
 }
 
@@ -93,7 +90,6 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1.5rem 4rem;
-  /* FIX: box-sizing so padding doesn't add to width */
   box-sizing: border-box;
   width: 100%;
 }
@@ -110,12 +106,12 @@
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
+  box-sizing: border-box;
 }
 
 .welcomeText {
   flex: 1;
   min-width: 0;
-  /* FIX: allows flex child to shrink properly */
 }
 
 .badge {
@@ -192,6 +188,10 @@
 
 .confirmedColor {
   color: #16a34a;
+}
+
+.cancelledColor {
+  color: #dc2626;
 }
 
 /* ── Sections ────────────────────────────────────────── */
@@ -382,31 +382,31 @@
   font-weight: 500;
 }
 
-/* ── Table ───────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════
+   DESKTOP TABLE (visible ≥ 768px)
+   ══════════════════════════════════════════════════════ */
 .tableWrapper {
   background: white;
   border: 1px solid var(--border-200);
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
-  /* FIX: scroll only the table, not the whole page */
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  /* FIX: constrain to parent width */
   max-width: 100%;
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
-  /* FIX: allow table to scroll internally without bloating the page */
-  min-width: 700px;
+  font-size: 13px;
+  min-width: 680px;
+  table-layout: fixed;
 }
 
 .table thead tr {
   background: var(--bg-50);
-  border-bottom: 1px solid var(--border-200);
+  border-bottom: 2px solid var(--border-200);
 }
 
 .table th {
@@ -416,9 +416,53 @@
   font-weight: 700;
   color: var(--text-500);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+/* Fixed column widths so nothing shifts */
+.table th:nth-child(1) {
+  width: 13%;
+}
+
+/* Name */
+.table th:nth-child(2) {
+  width: 19%;
+}
+
+/* Email */
+.table th:nth-child(3) {
+  width: 16%;
+}
+
+/* Company */
+.table th:nth-child(4) {
+  width: 14%;
+}
+
+/* Date & Time */
+.table th:nth-child(5) {
+  width: 12%;
+}
+
+/* Phone */
+.table th:nth-child(6) {
+  width: 9%;
+}
+
+/* Meeting */
+.table th:nth-child(7) {
+  width: 9%;
+}
+
+/* Status */
+.table th:nth-child(8) {
+  width: 8%;
+}
+
+/* Actions */
 
 .row {
   border-bottom: 1px solid var(--border-200);
@@ -434,9 +478,11 @@
 }
 
 .table td {
-  padding: 12px 14px;
-  vertical-align: top;
+  padding: 13px 14px;
+  vertical-align: middle;
   color: var(--text-700);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ── Cell Styles ─────────────────────────────────────── */
@@ -460,7 +506,6 @@
   font-weight: 500;
   color: var(--text-900);
   margin-bottom: 2px;
-  white-space: nowrap;
 }
 
 .websiteLink {
@@ -468,6 +513,7 @@
   color: var(--brand-800);
   text-decoration: none;
   word-break: break-all;
+  display: block;
 }
 
 .websiteLink:hover {
@@ -482,17 +528,29 @@
 }
 
 .timeText {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-500);
   white-space: nowrap;
 }
 
 .phone {
   white-space: nowrap;
+  font-size: 13px;
 }
 
-.notes {
-  max-width: 180px;
+.zoomLink {
+  color: #0a66c2;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.zoomLink:hover {
+  text-decoration: underline;
+}
+
+.zoomPending {
   color: var(--text-500);
   font-size: 13px;
 }
@@ -528,7 +586,7 @@
   display: flex;
   gap: 6px;
   align-items: center;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
 }
 
 .confirmBtn,
@@ -583,6 +641,96 @@
   color: white;
 }
 
+/* ══════════════════════════════════════════════════════
+   MOBILE BOOKING CARDS (hidden ≥ 768px)
+   ══════════════════════════════════════════════════════ */
+.cardList {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bookingCard {
+  background: white;
+  border: 1px solid var(--border-200);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--border-200);
+  background: var(--bg-50);
+}
+
+.cardName {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-900);
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.cardField {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border-200);
+  border-right: 1px solid var(--border-200);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cardField:nth-child(even) {
+  border-right: none;
+}
+
+.cardField:nth-last-child(-n+2) {
+  border-bottom: none;
+}
+
+.cardLabel {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-500);
+}
+
+.cardValue {
+  font-size: 0.875rem;
+  color: var(--text-900);
+  font-weight: 500;
+}
+
+.cardFooter {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-50);
+  border-top: 1px solid var(--border-200);
+}
+
+.cardFooter .actions {
+  width: 100%;
+}
+
+.cardFooter .confirmBtn,
+.cardFooter .cancelBtn,
+.cardFooter .deleteBtn {
+  flex: 1;
+  text-align: center;
+  padding: 9px 12px;
+  font-size: 13px;
+}
+
 /* ── Empty / Error States ────────────────────────────── */
 .emptyState {
   text-align: center;
@@ -608,36 +756,32 @@
    RESPONSIVE BREAKPOINTS
    ══════════════════════════════════════════════════════ */
 
-/* ── Tablet ──────────────────────────────────────────── */
 @media (max-width: 1024px) {
   .featureGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* ── Mobile Large (768px) ────────────────────────────── */
 @media (max-width: 768px) {
   .main {
     padding: 1.25rem 1rem 3rem;
   }
 
-  /* Welcome banner: stack vertically */
   .welcomeBanner {
     flex-direction: column;
     align-items: flex-start;
-    padding: 1.25rem 1.25rem;
+    padding: 1.25rem;
     gap: 1.25rem;
   }
 
   .welcomeTitle {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
   }
 
   .welcomeSub {
     font-size: 0.85rem;
   }
 
-  /* Stats strip: full width, even spacing */
   .welcomeStats {
     width: 100%;
     justify-content: space-around;
@@ -645,38 +789,33 @@
     box-sizing: border-box;
   }
 
-  .welcomeStatNumber {
-    font-size: 1.4rem;
-  }
-
-  /* Stat cards: 2-column grid */
   .statsRow {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }
 
-  /* Hide username to save header space */
   .userName {
     display: none;
   }
 
-  /* Feature cards: 2 columns */
+  /* Swap table for cards */
+  .tableWrapper {
+    display: none;
+  }
+
+  .cardList {
+    display: flex;
+  }
+
   .featureGrid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.875rem;
   }
 
-  .featureCard {
-    padding: 1rem;
-  }
-
-  /* Section header: wrap on small screens */
   .sectionHeader {
     flex-wrap: wrap;
   }
 }
 
-/* ── Mobile Small (480px) ────────────────────────────── */
 @media (max-width: 480px) {
   .header {
     padding: 0 16px;
@@ -688,60 +827,34 @@
 
   .welcomeBanner {
     padding: 1rem;
-    border-radius: 10px;
   }
 
   .welcomeTitle {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
   }
 
-  .badge {
-    font-size: 0.65rem;
-    padding: 0.25rem 0.75rem;
-  }
-
-  /* Full-width stats row on very small screens */
-  .welcomeStats {
-    gap: 0.75rem;
-    padding: 0.875rem 0.75rem;
-  }
-
-  .welcomeStatNumber {
-    font-size: 1.25rem;
-  }
-
-  .welcomeStatLabel {
-    font-size: 0.6rem;
-  }
-
-  /* Single-column feature grid */
   .featureGrid {
     grid-template-columns: 1fr;
   }
 
-  /* 2-column stat cards still work at 480 */
   .statsRow {
-    grid-template-columns: repeat(2, 1fr);
     gap: 8px;
   }
 
-  .statCard {
-    padding: 14px 16px;
+  /* Single column card fields on very small screens */
+  .cardGrid {
+    grid-template-columns: 1fr;
   }
 
-  .statNumber {
-    font-size: 1.5rem;
+  .cardField {
+    border-right: none;
   }
 
-  /* Table scroll hint — subtle shadow on right edge */
-  .tableWrapper {
-    border-radius: 8px;
-    box-shadow: var(--shadow-sm), inset -8px 0 12px -8px rgba(0, 0, 0, 0.06);
+  .cardField:nth-last-child(-n+2) {
+    border-bottom: 1px solid var(--border-200);
   }
 
-  /* Actions stack vertically in tight spaces */
-  .actions {
-    flex-direction: column;
-    align-items: flex-start;
+  .cardField:last-child {
+    border-bottom: none;
   }
 }

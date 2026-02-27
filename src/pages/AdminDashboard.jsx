@@ -111,9 +111,7 @@ function AdminDashboard() {
       });
       if (!res.ok) throw new Error('Failed to update status');
       const updated = await res.json();
-      setBookings(prev =>
-        prev.map(b => (b.id === bookingId ? updated : b))
-      );
+      setBookings(prev => prev.map(b => (b.id === bookingId ? updated : b)));
     } catch (err) {
       alert('Error updating booking: ' + err.message);
     } finally {
@@ -151,6 +149,41 @@ function AdminDashboard() {
   const cancelled = bookings.filter(b => b.status === 'cancelled');
   const firstName = user?.full_name?.split(' ')[0] || 'there';
 
+  // ── Shared action buttons (reused in both table and cards) ──
+  function ActionButtons({ booking }) {
+    const busy = updatingId === booking.id;
+    return (
+      <div className={styles.actions}>
+        {booking.status !== 'confirmed' && (
+          <button
+            className={styles.confirmBtn}
+            disabled={busy}
+            onClick={() => updateStatus(booking.id, 'confirmed')}
+          >
+            Confirm
+          </button>
+        )}
+        {booking.status !== 'cancelled' && (
+          <button
+            className={styles.cancelBtn}
+            disabled={busy}
+            onClick={() => updateStatus(booking.id, 'cancelled')}
+          >
+            Cancel
+          </button>
+        )}
+        {booking.status === 'cancelled' && (
+          <button
+            className={styles.deleteBtn}
+            onClick={() => deleteBooking(booking.id)}
+          >
+            Delete
+          </button>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className={styles.page}>
 
@@ -184,7 +217,7 @@ function AdminDashboard() {
           <div className={styles.welcomeStats}>
             <div className={styles.welcomeStat}>
               <span className={styles.welcomeStatNumber}>{bookings.length}</span>
-              <span className={styles.welcomeStatLabel}>Total Bookings</span>
+              <span className={styles.welcomeStatLabel}>Total</span>
             </div>
             <div className={styles.welcomeStatDivider} />
             <div className={styles.welcomeStat}>
@@ -199,6 +232,13 @@ function AdminDashboard() {
                 {confirmed.length}
               </span>
               <span className={styles.welcomeStatLabel}>Confirmed</span>
+            </div>
+            <div className={styles.welcomeStatDivider} />
+            <div className={styles.welcomeStat}>
+              <span className={`${styles.welcomeStatNumber} ${styles.cancelledColor}`}>
+                {cancelled.length}
+              </span>
+              <span className={styles.welcomeStatLabel}>Cancelled</span>
             </div>
           </div>
         </div>
@@ -223,7 +263,7 @@ function AdminDashboard() {
                 <button
                   className={styles.featureBtn}
                   disabled={!card.ready}
-                  onClick={() => {/* wire route here */ }}
+                  onClick={() => { }}
                 >
                   {card.cta}
                 </button>
@@ -262,7 +302,6 @@ function AdminDashboard() {
             </div>
           </div>
 
-          {/* Bookings Table */}
           {loading ? (
             <div className={styles.emptyState}>Loading bookings…</div>
           ) : error ? (
@@ -270,50 +309,126 @@ function AdminDashboard() {
           ) : bookings.length === 0 ? (
             <div className={styles.emptyState}>No bookings yet.</div>
           ) : (
-            <div className={styles.tableWrapper}>
-              <table className={styles.table}>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Company</th>
-                    <th>Date & Time</th>
-                    <th>Phone</th>
-                    <th>Notes</th>
-                    <th>Meeting</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
+            <>
+              {/* ── Desktop Table (hidden on mobile) ── */}
+              <div className={styles.tableWrapper}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Company</th>
+                      <th>Date & Time</th>
+                      <th>Phone</th>
+                      <th>Meeting</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bookings.map((booking) => (
+                      <tr key={booking.id} className={styles.row}>
 
-                <tbody>
-                  {bookings.map((booking) => (
-                    <tr key={booking.id} className={styles.row}>
-                      <td className={styles.nameCell}>{booking.employer_name}</td>
+                        <td className={styles.nameCell}>
+                          {booking.employer_name}
+                        </td>
 
-                      <td>
-                        <a
-                          href={`mailto:${booking.employer_email}`}
-                          className={styles.emailLink}
-                        >
+                        <td>
+                          <a href={`mailto:${booking.employer_email}`} className={styles.emailLink}>
+                            {booking.employer_email}
+                          </a>
+                        </td>
+
+                        <td>
+                          {booking.company_name && (
+                            <div className={styles.companyName}>{booking.company_name}</div>
+                          )}
+                          {booking.website_url && (
+                            <a
+                              href={booking.website_url.startsWith('http') ? booking.website_url : `https://${booking.website_url}`}
+                              className={styles.websiteLink}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {booking.website_url.replace(/^https?:\/\//, '')}
+                            </a>
+                          )}
+                        </td>
+
+                        <td>
+                          <div className={styles.dateText}>{formatDate(booking.date)}</div>
+                          <div className={styles.timeText}>{booking.time_slot} EST</div>
+                        </td>
+
+                        <td className={styles.phone}>
+                          {booking.phone || '—'}
+                        </td>
+
+                        <td>
+                          {booking.meeting_url ? (
+                            <a
+                              href={booking.meeting_url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className={styles.zoomLink}
+                            >
+                              Join Zoom →
+                            </a>
+                          ) : (
+                            <span className={styles.zoomPending}>Pending</span>
+                          )}
+                        </td>
+
+                        <td>
+                          <span className={`${styles.statusBadge} ${STATUS_COLORS[booking.status]}`}>
+                            {STATUS_LABELS[booking.status]}
+                          </span>
+                        </td>
+
+                        <td>
+                          <ActionButtons booking={booking} />
+                        </td>
+
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* ── Mobile Cards (hidden on desktop) ── */}
+              <div className={styles.cardList}>
+                {bookings.map((booking) => (
+                  <div key={booking.id} className={styles.bookingCard}>
+
+                    {/* Card Header: name + status badge */}
+                    <div className={styles.cardHeader}>
+                      <div className={styles.cardName}>{booking.employer_name}</div>
+                      <span className={`${styles.statusBadge} ${STATUS_COLORS[booking.status]}`}>
+                        {STATUS_LABELS[booking.status]}
+                      </span>
+                    </div>
+
+                    {/* Card Body: two-column grid of details */}
+                    <div className={styles.cardGrid}>
+
+                      <div className={styles.cardField}>
+                        <span className={styles.cardLabel}>Email</span>
+                        <a href={`mailto:${booking.employer_email}`} className={styles.emailLink}>
                           {booking.employer_email}
                         </a>
-                      </td>
+                      </div>
 
-                      <td>
-                        {booking.company_name && (
-                          <div className={styles.companyName}>
-                            {booking.company_name}
-                          </div>
-                        )}
+                      <div className={styles.cardField}>
+                        <span className={styles.cardLabel}>Phone</span>
+                        <span className={styles.cardValue}>{booking.phone || '—'}</span>
+                      </div>
 
+                      <div className={styles.cardField}>
+                        <span className={styles.cardLabel}>Company</span>
+                        <span className={styles.cardValue}>{booking.company_name || '—'}</span>
                         {booking.website_url && (
                           <a
-                            href={
-                              booking.website_url.startsWith('http')
-                                ? booking.website_url
-                                : `https://${booking.website_url}`
-                            }
+                            href={booking.website_url.startsWith('http') ? booking.website_url : `https://${booking.website_url}`}
                             className={styles.websiteLink}
                             target="_blank"
                             rel="noreferrer"
@@ -321,96 +436,41 @@ function AdminDashboard() {
                             {booking.website_url.replace(/^https?:\/\//, '')}
                           </a>
                         )}
-                      </td>
+                      </div>
 
-                      <td>
-                        <div className={styles.dateText}>
-                          {formatDate(booking.date)}
-                        </div>
-                        <div className={styles.timeText}>
-                          {booking.time_slot} EST
-                        </div>
-                      </td>
+                      <div className={styles.cardField}>
+                        <span className={styles.cardLabel}>Date & Time</span>
+                        <span className={styles.cardValue}>{formatDate(booking.date)}</span>
+                        <span className={styles.timeText}>{booking.time_slot} EST</span>
+                      </div>
 
-                      <td className={styles.phone}>
-                        {booking.phone || '—'}
-                      </td>
-
-                      <td>
+                      <div className={styles.cardField}>
+                        <span className={styles.cardLabel}>Meeting</span>
                         {booking.meeting_url ? (
                           <a
                             href={booking.meeting_url}
                             target="_blank"
                             rel="noreferrer"
-                            style={{
-                              color: '#0a66c2',
-                              fontWeight: 600,
-                              textDecoration: 'none',
-                              fontSize: '13px',
-                            }}
+                            className={styles.zoomLink}
                           >
                             Join Zoom →
                           </a>
                         ) : (
-                          <span style={{ color: '#94a3b8', fontSize: '13px' }}>
-                            Pending
-                          </span>
+                          <span className={styles.zoomPending}>Pending</span>
                         )}
-                      </td>
+                      </div>
 
-                      <td>
-                        <span
-                          className={`${styles.statusBadge} ${STATUS_COLORS[booking.status]}`}
-                        >
-                          {STATUS_LABELS[booking.status]}
-                        </span>
-                      </td>
+                    </div>
 
-                      <td>
-                        <div className={styles.actions}>
-                          {booking.status !== 'confirmed' && (
-                            <button
-                              className={styles.confirmBtn}
-                              disabled={updatingId === booking.id}
-                              onClick={() =>
-                                updateStatus(booking.id, 'confirmed')
-                              }
-                            >
-                              Confirm
-                            </button>
-                          )}
+                    {/* Card Footer: action buttons */}
+                    <div className={styles.cardFooter}>
+                      <ActionButtons booking={booking} />
+                    </div>
 
-                          {booking.status !== 'cancelled' && (
-                            <button
-                              className={styles.cancelBtn}
-                              disabled={updatingId === booking.id}
-                              onClick={() =>
-                                updateStatus(booking.id, 'cancelled')
-                              }
-                            >
-                              Cancel
-                            </button>
-                          )}
-
-                          {booking.status === 'cancelled' && (
-                            <button
-                              className={styles.deleteBtn}
-                              onClick={() =>
-                                deleteBooking(booking.id)
-                              }
-                            >
-                              Delete
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-
-
-              </table>
-            </div>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </section>
 
