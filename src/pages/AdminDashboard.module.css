@@ -146,12 +146,15 @@
 .welcomeStats {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1rem;
   flex-shrink: 0;
   background: var(--bg-50);
   border: 1px solid var(--border-200);
   border-radius: 12px;
-  padding: 1rem 1.5rem;
+  padding: 1rem 1.25rem;
+  /* FIX: never let the strip overflow its container */
+  min-width: 0;
+  overflow: hidden;
 }
 
 .welcomeStat {
@@ -169,11 +172,12 @@
 }
 
 .welcomeStatLabel {
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 600;
   color: var(--text-500);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
 }
 
 .welcomeStatDivider {
@@ -594,7 +598,10 @@
 .deleteBtn {
   font-size: 12px;
   font-weight: 700;
-  padding: 5px 10px;
+  padding: 5px 0;
+  min-width: 64px;
+  width: 64px;
+  text-align: center;
   border-radius: 6px;
   cursor: pointer;
   border: none;
