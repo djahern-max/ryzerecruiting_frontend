@@ -121,7 +121,7 @@ function IntelligenceBrief({ profileId, onClose }) {
   return (
     <div className={styles.briefPanel}>
       <div className={styles.briefHeader}>
-        <span className={styles.briefTitle}>🧠 Pre-Call Intelligence Brief</span>
+        <span className={styles.briefTitle}>⚡ Pre-Call Intelligence Brief</span>
         {profile.ai_brief_updated_at && (
           <span className={styles.briefUpdated}>
             Updated {new Date(profile.ai_brief_updated_at).toLocaleDateString('en-US', {
@@ -312,7 +312,7 @@ function AdminDashboard() {
             onClick={() => toggleBrief(booking.id)}
             title="View AI intelligence brief"
           >
-            🧠 Brief
+            ⚡ Brief
           </button>
         )}
         {booking.status !== 'confirmed' && (
