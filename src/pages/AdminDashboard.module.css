@@ -5,6 +5,9 @@
   min-height: 100vh;
   background: var(--bg-50);
   font-family: var(--font-sans);
+  /* FIX: prevents horizontal wobble/overflow on mobile */
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 /* ── Header ──────────────────────────────────────────── */
@@ -16,12 +19,15 @@
   top: 0;
   z-index: 100;
   box-shadow: var(--shadow-sm);
+  /* FIX: prevent header from causing overflow */
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .headerContent {
   max-width: 1200px;
   margin: 0 auto;
-  height: 64px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -30,11 +36,11 @@
 .headerLeft {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .logo {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 800;
   color: var(--brand-800);
   margin: 0;
@@ -43,7 +49,7 @@
 .adminBadge {
   background: #dcfce7;
   color: #15803d;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   padding: 3px 8px;
   border-radius: 20px;
@@ -54,7 +60,7 @@
 .headerRight {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .userName {
@@ -73,6 +79,8 @@
   border-radius: 6px;
   font-family: var(--font-sans);
   transition: color 120ms ease, background 120ms ease;
+  /* FIX: make tap target larger on mobile */
+  min-height: 36px;
 }
 
 .logoutButton:hover {
@@ -84,7 +92,10 @@
 .main {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2.5rem 1.5rem 4rem;
+  padding: 2rem 1.5rem 4rem;
+  /* FIX: box-sizing so padding doesn't add to width */
+  box-sizing: border-box;
+  width: 100%;
 }
 
 /* ── Welcome Banner ──────────────────────────────────── */
@@ -92,17 +103,19 @@
   background: white;
   border: 1px solid var(--border-200);
   border-radius: var(--radius);
-  padding: 2rem 2.5rem;
-  margin-bottom: 2.5rem;
+  padding: 1.75rem 2rem;
+  margin-bottom: 2rem;
   box-shadow: var(--shadow-sm);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .welcomeText {
   flex: 1;
+  min-width: 0;
+  /* FIX: allows flex child to shrink properly */
 }
 
 .badge {
@@ -112,38 +125,37 @@
   color: #15803d;
   padding: 0.3rem 1rem;
   border-radius: 20px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.6rem;
 }
 
 .welcomeTitle {
-  font-size: 1.75rem;
+  font-size: 1.6rem;
   font-weight: 800;
   color: var(--text-900);
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.4rem;
   letter-spacing: -0.4px;
 }
 
 .welcomeSub {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: var(--text-500);
   margin: 0;
-  max-width: 480px;
   line-height: 1.5;
 }
 
 .welcomeStats {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.25rem;
   flex-shrink: 0;
   background: var(--bg-50);
   border: 1px solid var(--border-200);
   border-radius: 12px;
-  padding: 1.25rem 1.75rem;
+  padding: 1rem 1.5rem;
 }
 
 .welcomeStat {
@@ -154,14 +166,14 @@
 }
 
 .welcomeStatNumber {
-  font-size: 1.75rem;
+  font-size: 1.6rem;
   font-weight: 800;
   color: var(--text-900);
   line-height: 1;
 }
 
 .welcomeStatLabel {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 600;
   color: var(--text-500);
   text-transform: uppercase;
@@ -170,7 +182,7 @@
 
 .welcomeStatDivider {
   width: 1px;
-  height: 36px;
+  height: 32px;
   background: var(--border-200);
 }
 
@@ -184,7 +196,7 @@
 
 /* ── Sections ────────────────────────────────────────── */
 .section {
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
 }
 
 .sectionHeader {
@@ -192,17 +204,17 @@
   align-items: flex-start;
   justify-content: space-between;
   margin-bottom: 1.25rem;
+  gap: 1rem;
 }
 
 .sectionTitle {
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--text-700);
   margin: 0 0 1.25rem;
   letter-spacing: -0.1px;
 }
 
-/* When inside sectionHeader, remove the bottom margin */
 .sectionHeader .sectionTitle {
   margin-bottom: 0.2rem;
 }
@@ -232,18 +244,18 @@
 .featureGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .featureCard {
   background: white;
   border: 1px solid var(--border-200);
   border-radius: var(--radius);
-  padding: 1.5rem;
+  padding: 1.25rem;
   box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.4rem;
   transition: box-shadow 160ms ease, transform 160ms ease;
 }
 
@@ -269,12 +281,12 @@
 }
 
 .featureIcon {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   line-height: 1;
 }
 
 .soonBadge {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -286,14 +298,14 @@
 }
 
 .featureTitle {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--text-900);
   margin: 0;
 }
 
 .featureDesc {
-  font-size: 0.875rem;
+  font-size: 0.83rem;
   color: var(--text-500);
   margin: 0;
   line-height: 1.5;
@@ -301,14 +313,14 @@
 }
 
 .featureBtn {
-  margin-top: 0.75rem;
+  margin-top: 0.6rem;
   align-self: flex-start;
   background: none;
   border: 1.5px solid var(--brand-800);
   color: var(--brand-800);
   border-radius: 8px;
-  padding: 0.45rem 1rem;
-  font-size: 0.85rem;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
   font-family: var(--font-sans);
   cursor: pointer;
@@ -330,7 +342,7 @@
 .statsRow {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  gap: 12px;
   margin-bottom: 1.25rem;
 }
 
@@ -338,7 +350,7 @@
   background: white;
   border: 1px solid var(--border-200);
   border-radius: var(--radius);
-  padding: 20px 24px;
+  padding: 16px 20px;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -346,7 +358,7 @@
 }
 
 .statNumber {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 800;
   color: var(--text-900);
   line-height: 1;
@@ -365,7 +377,7 @@
 }
 
 .statLabel {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-500);
   font-weight: 500;
 }
@@ -377,13 +389,19 @@
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
+  /* FIX: scroll only the table, not the whole page */
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* FIX: constrain to parent width */
+  max-width: 100%;
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+  /* FIX: allow table to scroll internally without bloating the page */
+  min-width: 700px;
 }
 
 .table thead tr {
@@ -393,8 +411,8 @@
 
 .table th {
   text-align: left;
-  padding: 12px 16px;
-  font-size: 12px;
+  padding: 11px 14px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--text-500);
   text-transform: uppercase;
@@ -416,7 +434,7 @@
 }
 
 .table td {
-  padding: 14px 16px;
+  padding: 12px 14px;
   vertical-align: top;
   color: var(--text-700);
 }
@@ -425,6 +443,7 @@
 .nameCell {
   font-weight: 600;
   color: var(--text-900);
+  white-space: nowrap;
 }
 
 .emailLink {
@@ -441,6 +460,7 @@
   font-weight: 500;
   color: var(--text-900);
   margin-bottom: 2px;
+  white-space: nowrap;
 }
 
 .websiteLink {
@@ -472,7 +492,7 @@
 }
 
 .notes {
-  max-width: 200px;
+  max-width: 180px;
   color: var(--text-500);
   font-size: 13px;
 }
@@ -480,7 +500,7 @@
 /* ── Status Badge ────────────────────────────────────── */
 .statusBadge {
   display: inline-block;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   padding: 4px 10px;
   border-radius: 20px;
@@ -506,9 +526,9 @@
 /* ── Action Buttons ──────────────────────────────────── */
 .actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .confirmBtn,
@@ -516,7 +536,7 @@
 .deleteBtn {
   font-size: 12px;
   font-weight: 700;
-  padding: 5px 12px;
+  padding: 5px 10px;
   border-radius: 6px;
   cursor: pointer;
   border: none;
@@ -584,43 +604,144 @@
   font-size: 14px;
 }
 
-/* ── Responsive ──────────────────────────────────────── */
-@media (max-width: 900px) {
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   ══════════════════════════════════════════════════════ */
+
+/* ── Tablet ──────────────────────────────────────────── */
+@media (max-width: 1024px) {
   .featureGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
+/* ── Mobile Large (768px) ────────────────────────────── */
 @media (max-width: 768px) {
+  .main {
+    padding: 1.25rem 1rem 3rem;
+  }
+
+  /* Welcome banner: stack vertically */
   .welcomeBanner {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .welcomeStats {
-    width: 100%;
-    justify-content: space-around;
-  }
-
-  .statsRow {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .userName {
-    display: none;
-  }
-}
-
-@media (max-width: 640px) {
-  .main {
-    padding: 1.5rem 1rem 3rem;
-  }
-
-  .featureGrid {
-    grid-template-columns: 1fr;
+    padding: 1.25rem 1.25rem;
+    gap: 1.25rem;
   }
 
   .welcomeTitle {
     font-size: 1.4rem;
+  }
+
+  .welcomeSub {
+    font-size: 0.85rem;
+  }
+
+  /* Stats strip: full width, even spacing */
+  .welcomeStats {
+    width: 100%;
+    justify-content: space-around;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+
+  .welcomeStatNumber {
+    font-size: 1.4rem;
+  }
+
+  /* Stat cards: 2-column grid */
+  .statsRow {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  /* Hide username to save header space */
+  .userName {
+    display: none;
+  }
+
+  /* Feature cards: 2 columns */
+  .featureGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.875rem;
+  }
+
+  .featureCard {
+    padding: 1rem;
+  }
+
+  /* Section header: wrap on small screens */
+  .sectionHeader {
+    flex-wrap: wrap;
+  }
+}
+
+/* ── Mobile Small (480px) ────────────────────────────── */
+@media (max-width: 480px) {
+  .header {
+    padding: 0 16px;
+  }
+
+  .main {
+    padding: 1rem 0.875rem 3rem;
+  }
+
+  .welcomeBanner {
+    padding: 1rem;
+    border-radius: 10px;
+  }
+
+  .welcomeTitle {
+    font-size: 1.25rem;
+  }
+
+  .badge {
+    font-size: 0.65rem;
+    padding: 0.25rem 0.75rem;
+  }
+
+  /* Full-width stats row on very small screens */
+  .welcomeStats {
+    gap: 0.75rem;
+    padding: 0.875rem 0.75rem;
+  }
+
+  .welcomeStatNumber {
+    font-size: 1.25rem;
+  }
+
+  .welcomeStatLabel {
+    font-size: 0.6rem;
+  }
+
+  /* Single-column feature grid */
+  .featureGrid {
+    grid-template-columns: 1fr;
+  }
+
+  /* 2-column stat cards still work at 480 */
+  .statsRow {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .statCard {
+    padding: 14px 16px;
+  }
+
+  .statNumber {
+    font-size: 1.5rem;
+  }
+
+  /* Table scroll hint — subtle shadow on right edge */
+  .tableWrapper {
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm), inset -8px 0 12px -8px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Actions stack vertically in tight spaces */
+  .actions {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
