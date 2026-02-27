@@ -991,18 +991,23 @@
   }
 }
 
-/* Mobile: brief panel inside card */
-@media (max-width: 767px) {
-  .briefPanel {
-    border-radius: 0 0 var(--radius) var(--radius);
-    border-left: none;
-    border-top: 2px solid #bfdbfe;
-    margin-top: 0.75rem;
-  }
+/* Fix: ensure brief panel fills the full table width */
+.briefCell {
+  padding: 0 !important;
+  width: 100%;
+}
 
-  .briefRow {
-    grid-template-columns: 1fr;
-  }
+.briefRow {
+  width: 100%;
+}
+
+.briefRow>td {
+  padding: 0 !important;
+}
+
+.briefPanel {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ══════════════════════════════════════════════════════
