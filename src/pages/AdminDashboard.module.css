@@ -790,15 +790,15 @@
 }
 
 .briefBtnActive {
-  background: #0a66c2;
-  border-color: #0a66c2;
-  color: white;
+  background: #dbeafe;
+  border-color: #2563eb;
+  border-width: 2.5px;
+  color: #1e40af;
 }
 
 .briefBtnActive:hover {
-  background: #0958a8;
-  border-color: #0958a8;
-  color: white;
+  background: #bfdbfe;
+  border-color: #1d4ed8;
 }
 
 /* Expanded booking row highlight */
