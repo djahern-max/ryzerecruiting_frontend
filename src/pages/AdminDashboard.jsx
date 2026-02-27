@@ -313,8 +313,7 @@ function AdminDashboard() {
             onClick={() => toggleBrief(booking.id)}
             title="View AI intelligence brief"
           >
-            <img src={RobotIcon} alt="AI" style={{ width: '16px', height: '16px', verticalAlign: 'middle', marginRight: '5px' }} />
-            Brief
+            <img src={RobotIcon} alt="AI" style={{ width: '22px', height: '22px' }} />
           </button>
         )}
         {booking.status !== 'confirmed' && (

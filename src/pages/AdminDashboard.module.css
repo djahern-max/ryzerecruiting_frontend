@@ -777,6 +777,11 @@
   cursor: pointer;
   transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
   white-space: nowrap;
+  min-width: 70px;
+  /* match Cancel button width */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .briefBtn:hover {
