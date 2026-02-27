@@ -1,41 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Cute robot emoji">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-label="Robot emoji">
+  <!-- Background bubble (helps it read like an emoji) -->
+  <circle cx="12" cy="12" r="10" fill="#EAF2FF" stroke="#111827" stroke-width="1.75"/>
+
   <!-- Antenna -->
-  <g>
-    <line x1="64" y1="12" x2="64" y2="24" stroke="#1f2937" stroke-width="6" stroke-linecap="round"/>
-    <circle cx="64" cy="10" r="8" fill="#ff4d6d" stroke="#1f2937" stroke-width="4"/>
-    <circle cx="61" cy="7" r="2.5" fill="#ffffff" opacity="0.9"/>
-  </g>
+  <path d="M12 4.2v2.2" stroke="#111827" stroke-width="1.75" stroke-linecap="round"/>
+  <circle cx="12" cy="3.8" r="1.4" fill="#FF4D6D" stroke="#111827" stroke-width="1.2"/>
 
-  <!-- Head (outer) -->
-  <rect x="22" y="26" width="84" height="78" rx="24" fill="#e8f2ff" stroke="#1f2937" stroke-width="6"/>
-
-  <!-- Cheek blush -->
-  <circle cx="38" cy="78" r="7" fill="#ff8fab" opacity="0.55"/>
-  <circle cx="90" cy="78" r="7" fill="#ff8fab" opacity="0.55"/>
+  <!-- Head -->
+  <rect x="6.2" y="7" width="11.6" height="11" rx="3.2" fill="#D6ECFF" stroke="#111827" stroke-width="1.75"/>
 
   <!-- Face panel -->
-  <rect x="34" y="44" width="60" height="44" rx="16" fill="#bfe6ff" stroke="#1f2937" stroke-width="6"/>
+  <rect x="7.7" y="9.1" width="8.6" height="6.8" rx="2.2" fill="#9FD6FF" stroke="#111827" stroke-width="1.5"/>
 
-  <!-- Eyes -->
-  <g>
-    <circle cx="52" cy="66" r="9" fill="#111827"/>
-    <circle cx="76" cy="66" r="9" fill="#111827"/>
-    <circle cx="49" cy="63" r="3.2" fill="#ffffff" opacity="0.95"/>
-    <circle cx="73" cy="63" r="3.2" fill="#ffffff" opacity="0.95"/>
-  </g>
+  <!-- Eyes (bigger, higher contrast) -->
+  <circle cx="10.4" cy="12.4" r="1.1" fill="#111827"/>
+  <circle cx="13.6" cy="12.4" r="1.1" fill="#111827"/>
 
-  <!-- Mouth -->
-  <path d="M56 79 C60 84, 68 84, 72 79" fill="none" stroke="#1f2937" stroke-width="6" stroke-linecap="round"/>
+  <!-- Smile -->
+  <path d="M10.5 14.4c.9.8 2.1.8 3 0" fill="none" stroke="#111827" stroke-width="1.6" stroke-linecap="round"/>
 
-  <!-- Side bolts -->
-  <g>
-    <circle cx="22" cy="58" r="7" fill="#ffd166" stroke="#1f2937" stroke-width="6"/>
-    <circle cx="106" cy="58" r="7" fill="#ffd166" stroke="#1f2937" stroke-width="6"/>
-  </g>
-
-  <!-- Tiny sparkle -->
-  <g opacity="0.9">
-    <path d="M98 36 L101 42 L107 45 L101 48 L98 54 L95 48 L89 45 L95 42 Z" fill="#ffffff"/>
-    <path d="M98 36 L101 42 L107 45 L101 48 L98 54 L95 48 L89 45 L95 42 Z" fill="none" stroke="#1f2937" stroke-width="3" stroke-linejoin="round"/>
-  </g>
+  <!-- Side bolts (simple) -->
+  <circle cx="6.2" cy="11.2" r="1.1" fill="#FFD166" stroke="#111827" stroke-width="1.25"/>
+  <circle cx="17.8" cy="11.2" r="1.1" fill="#FFD166" stroke="#111827" stroke-width="1.25"/>
 </svg>
