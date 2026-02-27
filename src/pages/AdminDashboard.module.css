@@ -796,19 +796,18 @@
   color: white;
 }
 
-/* Expanded row highlight */
+/* Expanded booking row highlight */
 .rowExpanded {
   background: #f8faff !important;
 }
 
-/* Brief panel — full-width row below booking row */
-.briefRow td {
+/* The <tr> that holds the brief panel — must span all columns */
+.briefTableRow td {
   padding: 0 !important;
   border-bottom: 2px solid #bfdbfe;
-}
-
-.briefCell {
-  padding: 0 !important;
+  width: 100%;
+  max-width: 0;
+  /* forces the cell to not set a natural width */
 }
 
 /* The panel itself */
@@ -816,6 +815,8 @@
   background: #f0f9ff;
   border-left: 4px solid #0a66c2;
   padding: 1.25rem 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
   animation: briefSlideIn 180ms ease;
 }
 
@@ -875,6 +876,7 @@
   gap: 0.9rem;
 }
 
+/* Two-column layout inside the panel (NOT the table row) */
 .briefRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -960,7 +962,23 @@
   color: #dc2626;
 }
 
-/* Mobile: brief panel inside card */
+.briefSpinner {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+  margin-right: 6px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mobile */
 @media (max-width: 767px) {
   .briefPanel {
     border-radius: 0 0 var(--radius) var(--radius);

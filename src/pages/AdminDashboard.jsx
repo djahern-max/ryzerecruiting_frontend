@@ -555,7 +555,7 @@ function AdminDashboard() {
 
                         {/* Intelligence Brief Row — expands below the booking row */}
                         {expandedBriefId === booking.id && booking.employer_profile_id && (
-                          <tr key={`brief-${booking.id}`} className={styles.briefRow}>
+                          <tr key={`brief-${booking.id}`} className={styles.briefTableRow}>
                             <td colSpan={8} className={styles.briefCell}>
                               <IntelligenceBrief
                                 profileId={booking.employer_profile_id}
