@@ -974,6 +974,37 @@
   }
 }
 
+/* Spinner animation for brief loading state */
+.briefSpinner {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+  margin-right: 6px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mobile: brief panel inside card */
+@media (max-width: 767px) {
+  .briefPanel {
+    border-radius: 0 0 var(--radius) var(--radius);
+    border-left: none;
+    border-top: 2px solid #bfdbfe;
+    margin-top: 0.75rem;
+  }
+
+  .briefRow {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ══════════════════════════════════════════════════════
    RESPONSIVE BREAKPOINTS
    ══════════════════════════════════════════════════════ */

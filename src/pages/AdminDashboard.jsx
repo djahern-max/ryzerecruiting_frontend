@@ -101,7 +101,7 @@ function IntelligenceBrief({ profileId, onClose }) {
   if (loading) {
     return (
       <div className={styles.briefPanel}>
-        <div className={styles.briefLoading}>Loading intelligence brief…</div>
+        <div className={styles.briefLoading}><span className={styles.briefSpinner}>⏳</span> Generating intelligence brief…</div>
       </div>
     );
   }
