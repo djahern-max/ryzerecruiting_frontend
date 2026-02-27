@@ -2,7 +2,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import styles from './AdminDashboard.module.css';
-import RobotIcon from '../assets/cute-robot-emoji.svg?url';
+import RobotIcon from '../assets/RYZE_LOGO.svg';
 
 const API_BASE = import.meta.env.PROD
   ? 'https://api.ryzerecruiting.com'
@@ -140,11 +140,71 @@ function IntelligenceBrief({ profileId, onClose }) {
       ) : (
         <div className={styles.briefBody}>
 
-          {/* Fallback: raw text */}
-          {profile.ai_brief_raw && !hasStructuredData && (
-            <pre className={styles.briefRaw}>{profile.ai_brief_raw}</pre>
-          )}
-
+          {/* Fallback: parse raw JSON brief if structured fields aren't populated */}
+          {profile.ai_brief_raw && !hasStructuredData && (() => {
+            try {
+              const cleaned = profile.ai_brief_raw
+                .replace(/^```json\s*/m, '')
+                .replace(/^```\s*/m, '')
+                .replace(/\s*```$/m, '')
+                .trim();
+              const parsed = JSON.parse(cleaned);
+              return (
+                <div className={styles.briefBody}>
+                  {parsed.company_overview && (
+                    <div className={styles.briefSection}>
+                      <div className={styles.briefSectionLabel}>Company Overview</div>
+                      <div className={styles.briefSectionContent}>{parsed.company_overview}</div>
+                    </div>
+                  )}
+                  <div className={styles.briefRow}>
+                    {parsed.industry && (
+                      <div className={styles.briefSection}>
+                        <div className={styles.briefSectionLabel}>Industry</div>
+                        <div className={styles.briefSectionContent}>{parsed.industry}</div>
+                      </div>
+                    )}
+                    {parsed.estimated_size && (
+                      <div className={styles.briefSection}>
+                        <div className={styles.briefSectionLabel}>Estimated Size</div>
+                        <div className={styles.briefSectionContent}>{parsed.estimated_size}</div>
+                      </div>
+                    )}
+                  </div>
+                  {parsed.hiring_needs?.length > 0 && (
+                    <div className={styles.briefSection}>
+                      <div className={styles.briefSectionLabel}>Likely Hiring Needs</div>
+                      <div className={styles.briefTags}>
+                        {parsed.hiring_needs.map((need, i) => (
+                          <span key={i} className={styles.briefTag}>{need}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {parsed.talking_points?.length > 0 && (
+                    <div className={styles.briefSection}>
+                      <div className={styles.briefSectionLabel}>Key Talking Points</div>
+                      <ul className={styles.briefList}>
+                        {parsed.talking_points.map((pt, i) => (
+                          <li key={i}>{pt}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {parsed.red_flags && (
+                    <div className={styles.briefSection}>
+                      <div className={styles.briefSectionLabel}>⚠️ Red Flags</div>
+                      <div className={`${styles.briefSectionContent} ${styles.briefRedFlags}`}>
+                        {parsed.red_flags}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            } catch {
+              return <pre className={styles.briefRaw}>{profile.ai_brief_raw}</pre>;
+            }
+          })()}
           {/* Structured fields */}
           {profile.ai_company_overview && (
             <div className={styles.briefSection}>
