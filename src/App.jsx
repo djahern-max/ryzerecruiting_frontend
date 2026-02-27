@@ -12,6 +12,7 @@ import CandidateDashboard from './pages/CandidateDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
+import EmployerRoster from './pages/EmployerRoster';
 
 const loadingScreen = (
   <div style={{
@@ -60,6 +61,7 @@ function App() {
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
 
+
           <Route
             path="/employer/dashboard"
             element={
@@ -81,6 +83,14 @@ function App() {
             element={
               <AdminRoute>
                 <AdminDashboard />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/employers"
+            element={
+              <AdminRoute>
+                <EmployerRoster />
               </AdminRoute>
             }
           />

@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import styles from './AdminDashboard.module.css';
 import RobotIcon from '../assets/RYZE_LOGO.svg';
+import { useNavigate } from 'react-router-dom';
 
 const API_BASE = import.meta.env.PROD
   ? 'https://api.ryzerecruiting.com'
@@ -35,7 +36,7 @@ const FEATURE_CARDS = [
     title: 'Employer Roster',
     description: 'Your full client list — company details, active roles, call history, and relationship notes.',
     cta: 'View Employers',
-    ready: false,
+    ready: true,
   },
   {
     id: 'candidate-roster',
@@ -283,6 +284,7 @@ function AdminDashboard() {
   const [error, setError] = useState(null);
   const [updatingId, setUpdatingId] = useState(null);
   const [expandedBriefId, setExpandedBriefId] = useState(null); // booking.id of expanded brief
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchBookings();
@@ -485,7 +487,9 @@ function AdminDashboard() {
                 <button
                   className={styles.featureBtn}
                   disabled={!card.ready}
-                  onClick={() => { }}
+                  onClick={() => {
+                    if (card.id === 'employer-roster') navigate('/admin/employers');
+                  }}
                 >
                   {card.cta}
                 </button>
