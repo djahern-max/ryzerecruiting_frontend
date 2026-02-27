@@ -2,6 +2,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import styles from './AdminDashboard.module.css';
+import RobotIcon from '../assets/cute-robot-emoji.svg?url';
 
 const API_BASE = import.meta.env.PROD
   ? 'https://api.ryzerecruiting.com'
@@ -312,7 +313,8 @@ function AdminDashboard() {
             onClick={() => toggleBrief(booking.id)}
             title="View AI intelligence brief"
           >
-            ⚡ Brief
+            <img src={RobotIcon} alt="AI" style={{ width: '16px', height: '16px', verticalAlign: 'middle', marginRight: '5px' }} />
+            Brief
           </button>
         )}
         {booking.status !== 'confirmed' && (
