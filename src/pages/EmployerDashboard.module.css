@@ -132,7 +132,9 @@
     flex-shrink: 0;
 }
 
-/* Status row */
+/* ── Status row ──────────────────────────────────── */
+/* ✅ All three statuses now use CDN font icons (fi fi-rr-*)
+   .statusIcon removed — checkIcon SVG is no longer used         */
 .callStatus {
     font-size: 0.8rem;
     font-weight: 700;
@@ -157,13 +159,6 @@
 
 .statusCancelled {
     color: #dc2626;
-}
-
-/* Illustrated check icon next to Confirmed */
-.statusIcon {
-    width: 16px;
-    height: 16px;
-    object-fit: contain;
 }
 
 .callDate {
@@ -194,7 +189,7 @@
     font-style: italic;
 }
 
-/* Empty state */
+/* ── Empty state ─────────────────────────────────── */
 .callsEmpty {
     background: white;
     border: 1px solid var(--border-200);
@@ -213,14 +208,16 @@
     margin: 0;
 }
 
-/* Zoom button */
+/* ── Zoom button ─────────────────────────────────── */
+/* ✅ Tier 2 asset — Zoom SVG stays (third-party brand asset)
+   Wrapper is intentionally bare: no background, no border, no padding */
 .zoomButton {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     background: none;
     border: none;
-    padding: 0;
+    padding: 4px;
     text-decoration: none;
     transition: opacity 0.15s ease, transform 0.1s ease;
 }
@@ -231,14 +228,16 @@
 }
 
 .zoomIcon {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     object-fit: contain;
     flex-shrink: 0;
     display: block;
 }
 
 /* ── Feature Grid ────────────────────────────────── */
+/* ✅ Tier 1 icons — fi fi-rr-* CDN font icons throughout  */
+/* ✅ Tier 2 asset — Coming Soon SVG badge stays            */
 .featureGrid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -372,14 +371,6 @@
         justify-content: center;
     }
 
-    .zoomLabel {
-        display: none;
-    }
-
-    .zoomButton {
-        padding: 0.6rem;
-        border-radius: 50%;
-        width: auto;
-        aspect-ratio: 1;
-    }
+    /* ✅ Removed dead .zoomLabel and duplicate .zoomButton overrides —
+       the global styles above handle all screen sizes correctly        */
 }
