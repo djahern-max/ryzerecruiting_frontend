@@ -102,110 +102,6 @@
   width: 100%;
 }
 
-/* ══════════════════════════════════════════════════════
-   WELCOME BANNER
-   ══════════════════════════════════════════════════════ */
-.welcomeBanner {
-  background: white;
-  border: 1px solid var(--border-200);
-  border-radius: var(--radius);
-  padding: 1.75rem 2rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  box-sizing: border-box;
-}
-
-.welcomeText {
-  flex: 1;
-  min-width: 0;
-}
-
-.badge {
-  display: inline-block;
-  background: #dcfce7;
-  border: 1px solid #86efac;
-  color: #15803d;
-  padding: 0.3rem 1rem;
-  border-radius: 20px;
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  margin-bottom: 0.6rem;
-}
-
-.welcomeTitle {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--text-900);
-  margin: 0 0 0.4rem;
-  letter-spacing: -0.4px;
-}
-
-.welcomeSub {
-  font-size: 0.9rem;
-  color: var(--text-500);
-  margin: 0;
-  line-height: 1.5;
-}
-
-.welcomeStats {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-shrink: 0;
-  background: var(--bg-50);
-  border: 1px solid var(--border-200);
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.welcomeStat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-
-.welcomeStatNumber {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--text-900);
-  line-height: 1;
-}
-
-.welcomeStatLabel {
-  font-size: 0.62rem;
-  font-weight: 600;
-  color: var(--text-500);
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  white-space: nowrap;
-}
-
-.welcomeStatDivider {
-  width: 1px;
-  height: 32px;
-  background: var(--border-200);
-}
-
-.pendingColor {
-  color: #d97706;
-}
-
-.confirmedColor {
-  color: #16a34a;
-}
-
-.cancelledColor {
-  color: #dc2626;
-}
 
 /* ══════════════════════════════════════════════════════
    SECTIONS
@@ -1088,6 +984,16 @@
   color: #dc2626;
 }
 
+.pageGreeting {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-600);
+  margin: 0 0 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-200);
+  letter-spacing: -0.1px;
+}
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -1110,28 +1016,6 @@
 @media (max-width: 768px) {
   .main {
     padding: 1.25rem 1rem 3rem;
-  }
-
-  .welcomeBanner {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1.25rem;
-    gap: 1.25rem;
-  }
-
-  .welcomeTitle {
-    font-size: 1.3rem;
-  }
-
-  .welcomeSub {
-    font-size: 0.85rem;
-  }
-
-  .welcomeStats {
-    width: 100%;
-    justify-content: space-around;
-    padding: 1rem;
-    box-sizing: border-box;
   }
 
   .statsRow {
@@ -1180,13 +1064,6 @@
     padding: 1rem 0.875rem 3rem;
   }
 
-  .welcomeBanner {
-    padding: 1rem;
-  }
-
-  .welcomeTitle {
-    font-size: 1.2rem;
-  }
 
   .featureGrid {
     grid-template-columns: 1fr;

@@ -441,41 +441,9 @@ function AdminDashboard() {
 
       <main className={styles.main}>
 
-        {/* ── Welcome Banner ──────────────────────────────── */}
-        <div className={styles.welcomeBanner}>
-          <div className={styles.welcomeText}>
-            <div className={styles.badge}>Recruiter Dashboard</div>
-            <h2 className={styles.welcomeTitle}>Welcome back, {firstName}.</h2>
-            <p className={styles.welcomeSub}>
-              Your RYZE command center — manage employers, candidates, job orders, and placements all in one place.
-            </p>
-          </div>
-          <div className={styles.welcomeStats}>
-            <div className={styles.welcomeStat}>
-              <span className={styles.welcomeStatNumber}>{bookings.length}</span>
-              <span className={styles.welcomeStatLabel}>Total</span>
-            </div>
-            <div className={styles.welcomeStatDivider} />
-            <div className={styles.welcomeStat}>
-              <span className={`${styles.welcomeStatNumber} ${styles.pendingColor}`}>{pending.length}</span>
-              <span className={styles.welcomeStatLabel}>Pending</span>
-            </div>
-            <div className={styles.welcomeStatDivider} />
-            <div className={styles.welcomeStat}>
-              <span className={`${styles.welcomeStatNumber} ${styles.confirmedColor}`}>{confirmed.length}</span>
-              <span className={styles.welcomeStatLabel}>Confirmed</span>
-            </div>
-            <div className={styles.welcomeStatDivider} />
-            <div className={styles.welcomeStat}>
-              <span className={`${styles.welcomeStatNumber} ${styles.cancelledColor}`}>{cancelled.length}</span>
-              <span className={styles.welcomeStatLabel}>Cancelled</span>
-            </div>
-          </div>
-        </div>
-
         {/* ── Recruiter Tools Grid ────────────────────────── */}
         <section className={styles.section}>
-          <h3 className={styles.sectionTitle}>Recruiter Tools</h3>
+          <p className={styles.pageGreeting}>Welcome back, {firstName}.</p>
           <div className={styles.featureGrid}>
             {FEATURE_CARDS.map((card) => (
               <div
