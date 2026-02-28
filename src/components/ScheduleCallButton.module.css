@@ -33,23 +33,28 @@
     object-fit: contain;
 }
 
-/* Icon-only sizes */
+/* ── Icon-only sizes ─────────────────────────────
+   sm  → 36px  (compact contexts, empty states)
+   md  → 48px  ✅ matched to Zoom icon in call cards
+   lg  → 72px  (hero / onboarding contexts)
+─────────────────────────────────────────────────*/
 .iconOnly_sm .iconOnlyImg,
 .iconOnlyBtn.iconOnly_sm .iconOnlyImg {
-    width: 48px;
-    height: 48px;
+    width: 36px;
+    height: 36px;
 }
 
 .iconOnly_md .iconOnlyImg,
 .iconOnlyBtn.iconOnly_md .iconOnlyImg {
-    width: 72px;
-    height: 72px;
+    width: 48px;
+    /* ← was 72px, now matches .zoomIcon */
+    height: 48px;
 }
 
 .iconOnly_lg .iconOnlyImg,
 .iconOnlyBtn.iconOnly_lg .iconOnlyImg {
-    width: 96px;
-    height: 96px;
+    width: 72px;
+    height: 72px;
 }
 
 /* ─────────────────────────────────────────────────

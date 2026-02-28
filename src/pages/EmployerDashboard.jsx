@@ -5,8 +5,8 @@ import { useAuth } from '../contexts/AuthContext';
 import ScheduleCallButton from '../components/ScheduleCallButton';
 import styles from './EmployerDashboard.module.css';
 import comingSoonIcon from '../assets/icons/coming-soon.svg';
+import checkIcon from '../assets/icons/check.svg';
 import zoomIcon from '../assets/icons/zoom.svg';
-// ✅ checkIcon SVG removed — now using fi fi-rr-check-circle CDN font icon
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -113,6 +113,7 @@ function EmployerDashboard() {
             </p>
           </div>
           <div className={styles.welcomeActions}>
+            {/* Icon size constrained by .welcomeActions in CSS — see ScheduleCallButton note */}
             <ScheduleCallButton variant="iconOnly" size="md" />
           </div>
         </div>
@@ -141,10 +142,10 @@ function EmployerDashboard() {
                   <div className={styles.callCardLeft}>
 
                     <div className={styles.callStatus}>
-                      {/* ✅ Migrated from SVG img to CDN font icon */}
+                      {/* ✅ check.svg restored — illustrated SVG preferred over CDN font here */}
                       {booking.status === 'confirmed' && (
                         <span className={styles.statusConfirmed}>
-                          <i className="fi fi-rr-check-circle" style={{ fontSize: '14px', lineHeight: 1 }}></i>
+                          <img src={checkIcon} alt="" className={styles.statusIcon} />
                           Confirmed
                         </span>
                       )}
@@ -185,7 +186,7 @@ function EmployerDashboard() {
                     )}
                   </div>
 
-                  {/* ✅ Zoom SVG stays — it's a third-party brand asset */}
+                  {/* ✅ Zoom SVG — Tier 2 brand asset */}
                   {booking.status === 'confirmed' && booking.meeting_url && (
                     <div className={styles.callCardRight}>
                       <a
@@ -215,10 +216,8 @@ function EmployerDashboard() {
                 className={`${styles.featureCard} ${!card.ready ? styles.featureCardDisabled : ''}`}
               >
                 <div className={styles.featureCardTop}>
-                  {/* ✅ CDN font icons — correct tier for UI/functional icons */}
                   <i className={`${card.icon} ${styles.featureIcon}`}></i>
                   {!card.ready && (
-                    /* ✅ SVG stays — Coming Soon is an illustrated brand asset */
                     <img
                       src={comingSoonIcon}
                       alt="Coming Soon"

@@ -61,8 +61,8 @@
     line-height: 1.5;
 }
 
-/* The ScheduleCallButton lives here — no extra styling needed,
-   the component handles its own appearance */
+/* ScheduleCallButton iconOnly_md is now 48px —
+   no overrides needed here, the component handles it */
 .welcomeActions {
     flex-shrink: 0;
 }
@@ -133,8 +133,6 @@
 }
 
 /* ── Status row ──────────────────────────────────── */
-/* ✅ All three statuses now use CDN font icons (fi fi-rr-*)
-   .statusIcon removed — checkIcon SVG is no longer used         */
 .callStatus {
     font-size: 0.8rem;
     font-weight: 700;
@@ -159,6 +157,13 @@
 
 .statusCancelled {
     color: #dc2626;
+}
+
+/* ✅ check.svg — illustrated SVG for confirmed status */
+.statusIcon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
 }
 
 .callDate {
@@ -209,8 +214,7 @@
 }
 
 /* ── Zoom button ─────────────────────────────────── */
-/* ✅ Tier 2 asset — Zoom SVG stays (third-party brand asset)
-   Wrapper is intentionally bare: no background, no border, no padding */
+/* ✅ 48px — matches ScheduleCallButton iconOnly_md   */
 .zoomButton {
     display: inline-flex;
     align-items: center;
@@ -228,16 +232,14 @@
 }
 
 .zoomIcon {
-    width: 36px;
-    height: 36px;
+    width: 48px;
+    height: 48px;
     object-fit: contain;
     flex-shrink: 0;
     display: block;
 }
 
 /* ── Feature Grid ────────────────────────────────── */
-/* ✅ Tier 1 icons — fi fi-rr-* CDN font icons throughout  */
-/* ✅ Tier 2 asset — Coming Soon SVG badge stays            */
 .featureGrid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -370,7 +372,4 @@
         width: 100%;
         justify-content: center;
     }
-
-    /* ✅ Removed dead .zoomLabel and duplicate .zoomButton overrides —
-       the global styles above handle all screen sizes correctly        */
 }
