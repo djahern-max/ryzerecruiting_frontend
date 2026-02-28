@@ -147,7 +147,7 @@ function IntelligenceBrief({ profileId, onClose }) {
             })}
           </span>
         )}
-        {/* ✅ letter-x.svg replaces ✕ text */}
+        {/* ✅ letter-x.svg for brief close */}
         <button className={styles.briefClose} onClick={onClose} aria-label="Close brief">
           <img src={letterXIcon} alt="Close" className={styles.briefCloseIcon} />
         </button>
@@ -160,7 +160,7 @@ function IntelligenceBrief({ profileId, onClose }) {
       ) : (
         <div className={styles.briefBody}>
 
-          {/* Fallback: parse raw JSON brief if structured fields aren't populated */}
+          {/* Fallback: parse raw JSON brief */}
           {profile.ai_brief_raw && !hasStructuredData && (() => {
             try {
               const cleaned = profile.ai_brief_raw
@@ -311,9 +311,7 @@ function AdminDashboard() {
   const [expandedBriefId, setExpandedBriefId] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchBookings();
-  }, []);
+  useEffect(() => { fetchBookings(); }, []);
 
   async function fetchBookings() {
     try {
@@ -376,10 +374,7 @@ function AdminDashboard() {
   function formatDate(dateStr) {
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
+      weekday: 'short', month: 'short', day: 'numeric', year: 'numeric',
     });
   }
 
@@ -388,7 +383,7 @@ function AdminDashboard() {
   const cancelled = bookings.filter(b => b.status === 'cancelled');
   const firstName = user?.full_name?.split(' ')[0] || 'there';
 
-  // ── Action Buttons ──────────────────────────────────────
+  // ── Action Buttons ────────────────────────────────────
   function ActionButtons({ booking }) {
     const busy = updatingId === booking.id;
     const isConfirming = busy && booking.status === 'pending';
@@ -396,7 +391,7 @@ function AdminDashboard() {
     return (
       <div className={styles.actions}>
 
-        {/* ✅ AI brief button — artificial-intelligence.svg (Tier 2) */}
+        {/* ✅ AI brief button — no border, just the icon centered */}
         {booking.status === 'confirmed' && booking.employer_profile_id && (
           <button
             className={`${styles.briefBtn} ${expandedBriefId === booking.id ? styles.briefBtnActive : ''}`}
@@ -421,14 +416,15 @@ function AdminDashboard() {
           </button>
         )}
 
+        {/* ✅ letter-x.svg used for Cancel button icon */}
         {booking.status !== 'cancelled' && (
           <button
             className={styles.cancelBtn}
             disabled={busy}
             onClick={() => updateStatus(booking.id, 'cancelled')}
           >
-            {/* ✅ fi fi-rr-cross for cancel action (Tier 1 — functional UI action) */}
-            <i className="fi fi-rr-cross" style={{ marginRight: '4px' }}></i>Cancel
+            <img src={letterXIcon} alt="" className={styles.actionBtnIcon} />
+            Cancel
           </button>
         )}
 
@@ -448,7 +444,7 @@ function AdminDashboard() {
   return (
     <div className={styles.page}>
 
-      {/* ── Header ────────────────────────────────────────── */}
+      {/* ── Header ──────────────────────────────────────── */}
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.headerLeft}>
@@ -508,9 +504,7 @@ function AdminDashboard() {
                 className={`${styles.featureCard} ${!card.ready ? styles.featureCardDisabled : ''}`}
               >
                 <div className={styles.featureCardTop}>
-                  {/* ✅ Tier 1: CDN font icon */}
                   <i className={`${card.icon} ${styles.featureIcon}`}></i>
-                  {/* ✅ Tier 2: coming-soon.svg for non-ready cards (employer-roster is ready: true) */}
                   {!card.ready && (
                     <img
                       src={comingSoonIcon}
@@ -631,7 +625,7 @@ function AdminDashboard() {
 
                           <td className={styles.phone}>{booking.phone || '—'}</td>
 
-                          {/* ✅ Zoom SVG replaces 📹 emoji */}
+                          {/* ✅ Zoom SVG — Tier 2 brand asset */}
                           <td>
                             {booking.meeting_url ? (
                               <a
@@ -681,7 +675,6 @@ function AdminDashboard() {
               <div className={styles.cardList}>
                 {bookings.map((booking) => (
                   <div key={booking.id} className={styles.bookingCard}>
-
                     <div className={styles.cardHeader}>
                       <div className={styles.cardName}>{booking.employer_name}</div>
                       <span className={`${styles.statusBadge} ${STATUS_COLORS[booking.status]}`}>
@@ -748,7 +741,6 @@ function AdminDashboard() {
                         onClose={() => setExpandedBriefId(null)}
                       />
                     )}
-
                   </div>
                 ))}
               </div>

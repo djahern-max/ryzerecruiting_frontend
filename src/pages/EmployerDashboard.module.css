@@ -61,8 +61,7 @@
     line-height: 1.5;
 }
 
-/* ScheduleCallButton iconOnly_md is now 48px —
-   no overrides needed here, the component handles it */
+/* ScheduleCallButton iconOnly_md is 48px — matches .zoomIcon */
 .welcomeActions {
     flex-shrink: 0;
 }
@@ -355,6 +354,13 @@
         font-size: 1.3rem;
     }
 
+    /* ✅ Center the calendar icon on mobile — matches zoom icon centering */
+    .welcomeActions {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
     .featureGrid {
         grid-template-columns: 1fr;
     }
@@ -366,10 +372,7 @@
 
     .callCardRight {
         width: 100%;
-    }
-
-    .zoomButton {
-        width: 100%;
+        display: flex;
         justify-content: center;
     }
 }

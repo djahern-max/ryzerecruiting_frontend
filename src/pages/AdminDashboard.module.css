@@ -299,14 +299,12 @@
   margin-bottom: 0.25rem;
 }
 
-/* CDN font icon sizing — consistent with EmployerDashboard */
 .featureIcon {
   font-size: 1.5rem;
   line-height: 1;
   color: var(--text-700);
 }
 
-/* ✅ Tier 2: illustrated coming-soon SVG badge */
 .comingSoonBadge {
   width: 60px;
   height: auto;
@@ -555,7 +553,7 @@
   font-size: 13px;
 }
 
-/* ✅ Zoom SVG link — Tier 2 brand asset, 36px matches icon scale */
+/* ✅ Zoom SVG — Tier 2 brand asset */
 .zoomIconLink {
   display: inline-flex;
   align-items: center;
@@ -576,7 +574,6 @@
   display: block;
 }
 
-/* Mobile zoom link */
 .zoomLinkMobile {
   display: inline-flex;
   align-items: center;
@@ -675,6 +672,7 @@
   background: var(--bg-100);
   color: var(--text-700);
   border: 1px solid var(--border-200);
+  gap: 4px;
 }
 
 .cancelBtn:hover:not(:disabled) {
@@ -693,40 +691,50 @@
   color: white;
 }
 
-/* ✅ AI brief button — artificial-intelligence.svg (Tier 2) */
+/* ✅ letter-x.svg icon used inside Cancel button */
+.actionBtnIcon {
+  width: 10px;
+  height: 10px;
+  object-fit: contain;
+  display: block;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.cancelBtn:hover .actionBtnIcon {
+  opacity: 1;
+}
+
+/* ✅ AI brief button — no border, no background, just the icon centered */
 .briefBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #f0f9ff;
-  border: 1.5px solid #7dd3fc;
+  background: none;
+  border: none;
+  padding: 4px;
   border-radius: 8px;
-  padding: 5px 8px;
   cursor: pointer;
-  transition: background 140ms ease, border-color 140ms ease;
-  min-width: 36px;
+  transition: opacity 140ms ease, transform 140ms ease;
 }
 
 .briefBtn:hover {
-  background: #e0f2fe;
-  border-color: #38bdf8;
+  opacity: 0.75;
+  transform: translateY(-1px);
 }
 
 .briefBtnActive {
-  background: #dbeafe;
-  border-color: #2563eb;
-  border-width: 2.5px;
+  opacity: 1;
 }
 
 .briefBtnActive:hover {
-  background: #bfdbfe;
-  border-color: #1d4ed8;
+  opacity: 0.85;
 }
 
-/* ✅ 24px — consistent with action button icon scale */
+/* ✅ 28px — clear but not oversized in the actions column */
 .briefBtnIcon {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   object-fit: contain;
   display: block;
 }
@@ -870,13 +878,10 @@
 /* ══════════════════════════════════════════════════════
    INTELLIGENCE BRIEF PANEL
    ══════════════════════════════════════════════════════ */
-
-/* Expanded booking row highlight */
 .rowExpanded {
   background: #f8faff !important;
 }
 
-/* The <tr> that holds the brief panel */
 .briefTableRow td {
   padding: 0 !important;
   border-bottom: 2px solid #bfdbfe;
@@ -888,7 +893,6 @@
   width: 100%;
 }
 
-/* The panel itself */
 .briefPanel {
   background: #f0f9ff;
   border-left: 4px solid #0a66c2;
@@ -918,7 +922,6 @@
   flex-wrap: wrap;
 }
 
-/* ✅ AI icon in brief header — 22px, matches action button icon */
 .briefAiIcon {
   width: 22px;
   height: 22px;
@@ -938,7 +941,7 @@
   color: #64748b;
 }
 
-/* ✅ letter-x.svg close button — 14px icon, minimal footprint */
+/* ✅ letter-x.svg close button */
 .briefClose {
   display: inline-flex;
   align-items: center;
@@ -1064,7 +1067,6 @@
   color: #dc2626;
 }
 
-/* ── Spin animation (used inline on fi icons) ── */
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -1120,7 +1122,6 @@
     display: none;
   }
 
-  /* Swap table for cards on mobile */
   .tableWrapper {
     display: none;
   }
@@ -1174,7 +1175,6 @@
     gap: 8px;
   }
 
-  /* Single column card fields on very small screens */
   .cardGrid {
     grid-template-columns: 1fr;
   }
