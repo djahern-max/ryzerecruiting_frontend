@@ -217,7 +217,7 @@ export default function BookingCard() {
 
           <div className={styles.field}>
             <label htmlFor="booking-website">
-              Company Website
+              Company Website <span style={{ fontWeight: 400, color: '#5a7290' }}>(optional)</span>
               <button
                 type="button"
                 className={styles.infoBtn}
@@ -229,10 +229,17 @@ export default function BookingCard() {
             </label>
             <input
               id="booking-website"
-              type="url"
-              placeholder="https://acmecorp.com"
+              type="text"
+              inputMode="url"
+              placeholder="dirtt.com"
               value={websiteUrl}
               onChange={(e) => setWebsiteUrl(e.target.value)}
+              onBlur={(e) => {
+                const val = e.target.value.trim();
+                if (val && !val.startsWith('http')) {
+                  setWebsiteUrl('https://' + val);
+                }
+              }}
               className={styles.input}
             />
           </div>
