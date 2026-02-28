@@ -217,16 +217,14 @@
 .zoomButton {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
     background: #0B5CFF;
     color: white;
     text-decoration: none;
-    font-weight: 700;
-    font-size: 0.875rem;
-    padding: 0.6rem 1.1rem;
-    border-radius: 10px;
+    padding: 0.65rem;
+    border-radius: 50%;
+    aspect-ratio: 1;
     transition: background 0.15s ease, transform 0.1s ease;
-    white-space: nowrap;
 }
 
 .zoomButton:hover {
@@ -235,10 +233,11 @@
 }
 
 .zoomIcon {
-    width: 22px;
-    height: 22px;
+    width: 26px;
+    height: 26px;
     object-fit: contain;
     flex-shrink: 0;
+    display: block;
 }
 
 .zoomLabel {

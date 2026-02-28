@@ -114,7 +114,7 @@ function EmployerDashboard() {
           </div>
           <div className={styles.welcomeActions}>
             <ScheduleCallButton variant="iconOnly" size="md" />
-            <p className={styles.iconLabel}>Schedule a Call</p>
+
           </div>
         </div>
 
@@ -195,7 +195,7 @@ function EmployerDashboard() {
                         aria-label="Join Zoom Call"
                       >
                         <img src={zoomIcon} alt="" className={styles.zoomIcon} />
-                        <span className={styles.zoomLabel}>Join Zoom</span>
+
                       </a>
                     </div>
                   )}
