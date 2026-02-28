@@ -983,6 +983,17 @@
   }
 }
 
+.zoomIconLink {
+  font-size: 1.3rem;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
+
+.zoomIconLink:hover {
+  transform: scale(1.2);
+}
+
 /* Mobile */
 @media (max-width: 767px) {
   .briefPanel {
