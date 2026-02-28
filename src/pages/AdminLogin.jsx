@@ -78,7 +78,7 @@ function AdminLogin() {
               id="password"
               type="password"
               autoComplete="current-password"
-              placeholder="••••••••"
+              placeholder="12345678"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
