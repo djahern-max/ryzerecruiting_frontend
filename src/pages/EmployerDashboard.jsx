@@ -100,9 +100,12 @@ function EmployerDashboard() {
   return (
     <div className={styles.page}>
       <Header />
+
       <main className={styles.main}>
+
         {/* ── Page Greeting ─────────────────────────────── */}
         <p className={styles.pageGreeting}>Welcome back, {firstName}.</p>
+
         {/* ── My Scheduled Calls ────────────────────────── */}
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
@@ -110,7 +113,6 @@ function EmployerDashboard() {
               <h3 className={styles.sectionTitle}>My Scheduled Calls</h3>
               <p className={styles.sectionSub}>Your discovery calls with RYZE Recruiting</p>
             </div>
-            <ScheduleCallButton variant="iconOnly" size="md" />
           </div>
 
           {bookingsLoading ? (
@@ -130,7 +132,6 @@ function EmployerDashboard() {
                   <div className={styles.callCardLeft}>
 
                     <div className={styles.callStatus}>
-                      {/* ✅ check.svg restored — illustrated SVG preferred over CDN font here */}
                       {booking.status === 'confirmed' && (
                         <span className={styles.statusConfirmed}>
                           <img src={checkIcon} alt="" className={styles.statusIcon} />
@@ -165,16 +166,12 @@ function EmployerDashboard() {
                     {booking.status === 'cancelled' && (
                       <div className={styles.callPendingNote}>
                         This call was cancelled.{' '}
-                        <ScheduleCallButton
-                          variant="ghost"
-                          size="sm"
-                          label="Rebook →"
-                        />
+                        <ScheduleCallButton variant="ghost" size="sm" label="Rebook →" />
                       </div>
                     )}
                   </div>
 
-                  {/* ✅ Zoom SVG — Tier 2 brand asset */}
+                  {/* Right side icon — Zoom for confirmed, Calendar for pending */}
                   {booking.status === 'confirmed' && booking.meeting_url && (
                     <div className={styles.callCardRight}>
                       <a
@@ -188,6 +185,12 @@ function EmployerDashboard() {
                       </a>
                     </div>
                   )}
+                  {booking.status === 'pending' && (
+                    <div className={styles.callCardRight}>
+                      <ScheduleCallButton variant="iconOnly" size="md" />
+                    </div>
+                  )}
+
                 </div>
               ))}
             </div>
@@ -196,7 +199,6 @@ function EmployerDashboard() {
 
         {/* ── Feature Grid ──────────────────────────────── */}
         <section className={styles.section}>
-
           <div className={styles.featureGrid}>
             {FEATURE_CARDS.map((card) => (
               <div
