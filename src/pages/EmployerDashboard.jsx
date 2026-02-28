@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import { useAuth } from '../contexts/AuthContext';
 import BookingModal from '../components/BookingModal';
 import styles from './EmployerDashboard.module.css';
+import comingSoonIcon from '../assets/icons/coming-soon.svg';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -221,7 +222,11 @@ function EmployerDashboard() {
                 <div className={styles.featureCardTop}>
                   <i className={`${card.icon} ${styles.featureIcon}`}></i>
                   {!card.ready && (
-                    <span className={styles.soonBadge}>Coming Soon</span>
+                    <img
+                      src={comingSoonIcon}
+                      alt="Coming Soon"
+                      className={styles.comingSoonBadge}
+                    />
                   )}
                 </div>
                 <h4 className={styles.featureTitle}>{card.title}</h4>
