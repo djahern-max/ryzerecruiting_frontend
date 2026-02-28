@@ -1,5 +1,5 @@
 /* src/pages/AdminDashboard.jsx */
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import styles from './AdminDashboard.module.css';
 import { useNavigate } from 'react-router-dom';
@@ -26,7 +26,6 @@ const STATUS_COLORS = {
   cancelled: styles.statusCancelled,
 };
 
-// ── Tier 1: CDN font icons (fi fi-rr-*) ──────────────────
 const FEATURE_CARDS = [
   {
     id: 'job-orders',
@@ -135,8 +134,6 @@ function IntelligenceBrief({ profileId, onClose }) {
 
   return (
     <div className={styles.briefPanel}>
-
-      {/* ── Brief Header ─────────────────────────────── */}
       <div className={styles.briefHeader}>
         <img src={aiIcon} alt="" className={styles.briefAiIcon} />
         <span className={styles.briefTitle}>Pre-Call Intelligence Brief</span>
@@ -147,7 +144,7 @@ function IntelligenceBrief({ profileId, onClose }) {
             })}
           </span>
         )}
-        {/* ✅ letter-x.svg for brief close */}
+        {/* ✅ letter-x.svg — bare icon button, no wrapper styling */}
         <button className={styles.briefClose} onClick={onClose} aria-label="Close brief">
           <img src={letterXIcon} alt="Close" className={styles.briefCloseIcon} />
         </button>
@@ -159,15 +156,10 @@ function IntelligenceBrief({ profileId, onClose }) {
         </p>
       ) : (
         <div className={styles.briefBody}>
-
-          {/* Fallback: parse raw JSON brief */}
           {profile.ai_brief_raw && !hasStructuredData && (() => {
             try {
               const cleaned = profile.ai_brief_raw
-                .replace(/^```json\s*/m, '')
-                .replace(/^```\s*/m, '')
-                .replace(/\s*```$/m, '')
-                .trim();
+                .replace(/^```json\s*/m, '').replace(/^```\s*/m, '').replace(/\s*```$/m, '').trim();
               const parsed = JSON.parse(cleaned);
               return (
                 <div className={styles.briefBody}>
@@ -195,9 +187,7 @@ function IntelligenceBrief({ profileId, onClose }) {
                     <div className={styles.briefSection}>
                       <div className={styles.briefSectionLabel}>Likely Hiring Needs</div>
                       <div className={styles.briefTags}>
-                        {parsed.hiring_needs.map((need, i) => (
-                          <span key={i} className={styles.briefTag}>{need}</span>
-                        ))}
+                        {parsed.hiring_needs.map((need, i) => <span key={i} className={styles.briefTag}>{need}</span>)}
                       </div>
                     </div>
                   )}
@@ -212,12 +202,9 @@ function IntelligenceBrief({ profileId, onClose }) {
                   {parsed.red_flags && (
                     <div className={styles.briefSection}>
                       <div className={styles.briefSectionLabel}>
-                        <i className="fi fi-rr-triangle-warning" style={{ marginRight: '4px' }}></i>
-                        Red Flags
+                        <i className="fi fi-rr-triangle-warning" style={{ marginRight: '4px' }}></i>Red Flags
                       </div>
-                      <div className={`${styles.briefSectionContent} ${styles.briefRedFlags}`}>
-                        {parsed.red_flags}
-                      </div>
+                      <div className={`${styles.briefSectionContent} ${styles.briefRedFlags}`}>{parsed.red_flags}</div>
                     </div>
                   )}
                 </div>
@@ -227,14 +214,12 @@ function IntelligenceBrief({ profileId, onClose }) {
             }
           })()}
 
-          {/* ── Structured fields ──────────────────── */}
           {profile.ai_company_overview && (
             <div className={styles.briefSection}>
               <div className={styles.briefSectionLabel}>Company Overview</div>
               <div className={styles.briefSectionContent}>{profile.ai_company_overview}</div>
             </div>
           )}
-
           <div className={styles.briefRow}>
             {profile.ai_industry && (
               <div className={styles.briefSection}>
@@ -249,18 +234,14 @@ function IntelligenceBrief({ profileId, onClose }) {
               </div>
             )}
           </div>
-
           {profile.ai_hiring_needs?.length > 0 && (
             <div className={styles.briefSection}>
               <div className={styles.briefSectionLabel}>Likely Hiring Needs</div>
               <div className={styles.briefTags}>
-                {profile.ai_hiring_needs.map((need, i) => (
-                  <span key={i} className={styles.briefTag}>{need}</span>
-                ))}
+                {profile.ai_hiring_needs.map((need, i) => <span key={i} className={styles.briefTag}>{need}</span>)}
               </div>
             </div>
           )}
-
           {profile.ai_talking_points?.length > 0 && (
             <div className={styles.briefSection}>
               <div className={styles.briefSectionLabel}>Key Talking Points</div>
@@ -269,29 +250,22 @@ function IntelligenceBrief({ profileId, onClose }) {
               </ul>
             </div>
           )}
-
           {profile.ai_red_flags && (
             <div className={styles.briefSection}>
               <div className={styles.briefSectionLabel}>
-                <i className="fi fi-rr-triangle-warning" style={{ marginRight: '4px' }}></i>
-                Red Flags / Considerations
+                <i className="fi fi-rr-triangle-warning" style={{ marginRight: '4px' }}></i>Red Flags / Considerations
               </div>
-              <div className={`${styles.briefSectionContent} ${styles.briefRedFlags}`}>
-                {profile.ai_red_flags}
-              </div>
+              <div className={`${styles.briefSectionContent} ${styles.briefRedFlags}`}>{profile.ai_red_flags}</div>
             </div>
           )}
-
           {profile.recruiter_notes && (
             <div className={styles.briefSection}>
               <div className={styles.briefSectionLabel}>
-                <i className="fi fi-rr-pencil" style={{ marginRight: '4px' }}></i>
-                Recruiter Notes
+                <i className="fi fi-rr-pencil" style={{ marginRight: '4px' }}></i>Recruiter Notes
               </div>
               <div className={styles.briefSectionContent}>{profile.recruiter_notes}</div>
             </div>
           )}
-
         </div>
       )}
     </div>
@@ -335,10 +309,7 @@ function AdminDashboard() {
       const token = localStorage.getItem('token');
       const res = await fetch(`${API_BASE}/api/bookings/${bookingId}/status`, {
         method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
       });
       if (!res.ok) throw new Error('Failed to update status');
@@ -372,8 +343,7 @@ function AdminDashboard() {
   }
 
   function formatDate(dateStr) {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', {
+    return new Date(dateStr).toLocaleDateString('en-US', {
       weekday: 'short', month: 'short', day: 'numeric', year: 'numeric',
     });
   }
@@ -391,15 +361,15 @@ function AdminDashboard() {
     return (
       <div className={styles.actions}>
 
-        {/* ✅ AI brief button — no border, just the icon centered */}
+        {/* ✅ AI icon — bare SVG button, centered, no border/background */}
         {booking.status === 'confirmed' && booking.employer_profile_id && (
           <button
-            className={`${styles.briefBtn} ${expandedBriefId === booking.id ? styles.briefBtnActive : ''}`}
+            className={`${styles.iconBtn} ${expandedBriefId === booking.id ? styles.iconBtnActive : ''}`}
             onClick={() => toggleBrief(booking.id)}
             title="View AI intelligence brief"
             aria-label="View AI intelligence brief"
           >
-            <img src={aiIcon} alt="" className={styles.briefBtnIcon} />
+            <img src={aiIcon} alt="" className={styles.actionIcon} />
           </button>
         )}
 
@@ -416,15 +386,16 @@ function AdminDashboard() {
           </button>
         )}
 
-        {/* ✅ letter-x.svg used for Cancel button icon */}
+        {/* ✅ Cancel — bare X SVG button, no grey pill wrapper */}
         {booking.status !== 'cancelled' && (
           <button
-            className={styles.cancelBtn}
+            className={styles.iconBtn}
             disabled={busy}
             onClick={() => updateStatus(booking.id, 'cancelled')}
+            title="Cancel booking"
+            aria-label="Cancel booking"
           >
-            <img src={letterXIcon} alt="" className={styles.actionBtnIcon} />
-            Cancel
+            <img src={letterXIcon} alt="" className={styles.actionIcon} />
           </button>
         )}
 
@@ -506,11 +477,7 @@ function AdminDashboard() {
                 <div className={styles.featureCardTop}>
                   <i className={`${card.icon} ${styles.featureIcon}`}></i>
                   {!card.ready && (
-                    <img
-                      src={comingSoonIcon}
-                      alt="Coming Soon"
-                      className={styles.comingSoonBadge}
-                    />
+                    <img src={comingSoonIcon} alt="Coming Soon" className={styles.comingSoonBadge} />
                   )}
                 </div>
                 <h4 className={styles.featureTitle}>{card.title}</h4>
@@ -518,9 +485,7 @@ function AdminDashboard() {
                 <button
                   className={styles.featureBtn}
                   disabled={!card.ready}
-                  onClick={() => {
-                    if (card.id === 'employer-roster') navigate('/admin/employers');
-                  }}
+                  onClick={() => { if (card.id === 'employer-roster') navigate('/admin/employers'); }}
                 >
                   {card.cta}
                 </button>
@@ -541,7 +506,6 @@ function AdminDashboard() {
             </div>
           </div>
 
-          {/* Stats Row */}
           <div className={styles.statsRow}>
             <div className={styles.statCard}>
               <span className={styles.statNumber}>{bookings.length}</span>
@@ -595,17 +559,13 @@ function AdminDashboard() {
                           className={`${styles.row} ${expandedBriefId === booking.id ? styles.rowExpanded : ''}`}
                         >
                           <td className={styles.nameCell}>{booking.employer_name}</td>
-
                           <td>
                             <a href={`mailto:${booking.employer_email}`} className={styles.emailLink}>
                               {booking.employer_email}
                             </a>
                           </td>
-
                           <td>
-                            {booking.company_name && (
-                              <div className={styles.companyName}>{booking.company_name}</div>
-                            )}
+                            {booking.company_name && <div className={styles.companyName}>{booking.company_name}</div>}
                             {booking.website_url && (
                               <a
                                 href={booking.website_url.startsWith('http') ? booking.website_url : `https://${booking.website_url}`}
@@ -617,15 +577,11 @@ function AdminDashboard() {
                               </a>
                             )}
                           </td>
-
                           <td>
                             <div className={styles.dateText}>{formatDate(booking.date)}</div>
                             <div className={styles.timeText}>{booking.time_slot} EST</div>
                           </td>
-
                           <td className={styles.phone}>{booking.phone || '—'}</td>
-
-                          {/* ✅ Zoom SVG — Tier 2 brand asset */}
                           <td>
                             {booking.meeting_url ? (
                               <a
@@ -642,19 +598,16 @@ function AdminDashboard() {
                               <span className={styles.zoomPending}>—</span>
                             )}
                           </td>
-
                           <td>
                             <span className={`${styles.statusBadge} ${STATUS_COLORS[booking.status]}`}>
                               {STATUS_LABELS[booking.status]}
                             </span>
                           </td>
-
                           <td>
                             <ActionButtons booking={booking} />
                           </td>
                         </tr>
 
-                        {/* Intelligence Brief Row */}
                         {expandedBriefId === booking.id && booking.employer_profile_id && (
                           <tr key={`brief-${booking.id}`} className={styles.briefTableRow}>
                             <td colSpan={8} className={styles.briefCell}>
@@ -681,7 +634,6 @@ function AdminDashboard() {
                         {STATUS_LABELS[booking.status]}
                       </span>
                     </div>
-
                     <div className={styles.cardGrid}>
                       <div className={styles.cardField}>
                         <span className={styles.cardLabel}>Email</span>
@@ -730,11 +682,9 @@ function AdminDashboard() {
                         )}
                       </div>
                     </div>
-
                     <div className={styles.cardFooter}>
                       <ActionButtons booking={booking} />
                     </div>
-
                     {expandedBriefId === booking.id && booking.employer_profile_id && (
                       <IntelligenceBrief
                         profileId={booking.employer_profile_id}
