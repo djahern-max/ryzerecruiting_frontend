@@ -93,6 +93,11 @@
 /* ── Section ─────────────────────────────────────── */
 .section {
     margin-top: 0;
+    margin-bottom: 2.5rem;
+}
+
+.sectionHeader {
+    margin-bottom: 1rem;
 }
 
 .sectionTitle {
@@ -101,6 +106,140 @@
     color: var(--text-700);
     margin: 0 0 1.25rem;
     letter-spacing: -0.1px;
+}
+
+.sectionSub {
+    font-size: 0.875rem;
+    color: var(--text-500);
+    margin: 0;
+}
+
+/* ── My Calls ────────────────────────────────────── */
+.callsList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.callCard {
+    background: white;
+    border: 1px solid var(--border-200);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    border-left: 4px solid var(--border-200);
+}
+
+.callCard_confirmed {
+    border-left-color: #16a34a;
+}
+
+.callCard_pending {
+    border-left-color: #d97706;
+}
+
+.callCard_cancelled {
+    border-left-color: #dc2626;
+    opacity: 0.65;
+}
+
+.callCardLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.callCardRight {
+    flex-shrink: 0;
+}
+
+.callStatus {
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.statusConfirmed {
+    color: #16a34a;
+}
+
+.statusPending {
+    color: #d97706;
+}
+
+.statusCancelled {
+    color: #dc2626;
+}
+
+.callDate {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-900);
+}
+
+.callTime {
+    font-size: 0.875rem;
+    color: var(--text-500);
+}
+
+.callCompany {
+    font-size: 0.875rem;
+    color: var(--text-700);
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+.callPendingNote {
+    font-size: 0.8rem;
+    color: var(--text-500);
+    margin-top: 6px;
+    font-style: italic;
+}
+
+.callsEmpty {
+    background: white;
+    border: 1px solid var(--border-200);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    text-align: center;
+    color: var(--text-500);
+    font-size: 0.9rem;
+}
+
+.callsBookLink {
+    background: none;
+    border: none;
+    color: var(--brand-800);
+    font-weight: 600;
+    cursor: pointer;
+    font-size: inherit;
+    padding: 0;
+    text-decoration: underline;
+    font-family: inherit;
+}
+
+.zoomButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #0B5CFF;
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.65rem 1.25rem;
+    border-radius: 10px;
+    transition: background 0.15s ease, transform 0.1s ease;
+    white-space: nowrap;
+}
+
+.zoomButton:hover {
+    background: #0040cc;
+    transform: translateY(-1px);
 }
 
 /* ── Feature Grid ────────────────────────────────── */
@@ -230,5 +369,19 @@
 
     .featureGrid {
         grid-template-columns: 1fr;
+    }
+
+    .callCard {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .callCardRight {
+        width: 100%;
+    }
+
+    .zoomButton {
+        width: 100%;
+        justify-content: center;
     }
 }
