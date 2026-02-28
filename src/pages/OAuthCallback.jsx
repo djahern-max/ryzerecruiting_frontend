@@ -35,11 +35,11 @@ function OAuthCallback() {
                 })
                 .then(userData => {
                     if (userData.user_type === 'ADMIN') {
-                        window.location.href = '/admin';
+                        navigate('/admin');
                     } else if (userData.user_type === 'EMPLOYER') {
-                        window.location.href = '/employer/dashboard';
+                        navigate('/employer/dashboard');
                     } else {
-                        window.location.href = '/candidate/dashboard';
+                        navigate('/candidate/dashboard');
                     }
                 })
                 .catch(err => {
