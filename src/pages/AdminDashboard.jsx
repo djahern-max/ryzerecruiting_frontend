@@ -367,6 +367,8 @@ function AdminDashboard() {
   // Shared action buttons (reused in both table and cards)
   function ActionButtons({ booking }) {
     const busy = updatingId === booking.id;
+    const isConfirming = busy && booking.status === 'pending'; // confirming = pending → confirmed
+
     return (
       <div className={styles.actions}>
         {booking.status === 'confirmed' && booking.employer_profile_id && (
@@ -380,11 +382,11 @@ function AdminDashboard() {
         )}
         {booking.status !== 'confirmed' && (
           <button
-            className={styles.confirmBtn}
+            className={`${styles.confirmBtn} ${isConfirming ? styles.confirmBtnLoading : ''}`}
             disabled={busy}
             onClick={() => updateStatus(booking.id, 'confirmed')}
           >
-            Confirm
+            {isConfirming ? '⏳ Researching…' : 'Confirm'}
           </button>
         )}
         {booking.status !== 'cancelled' && (
