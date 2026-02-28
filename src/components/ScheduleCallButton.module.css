@@ -1,0 +1,142 @@
+/* src/components/ScheduleCallButton.module.css */
+
+/* ─────────────────────────────────────────────────
+   ICON-ONLY MODE
+   Just the illustration — no border, no background,
+   no text. The icon IS the button.
+───────────────────────────────────────────────── */
+.iconOnlyBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: transform 0.18s ease, filter 0.18s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.iconOnlyBtn:hover {
+    transform: scale(1.08) translateY(-2px);
+    filter: drop-shadow(0 6px 14px rgba(10, 102, 194, 0.2));
+}
+
+.iconOnlyBtn:active {
+    transform: scale(0.96);
+    filter: none;
+}
+
+.iconOnlyImg {
+    display: block;
+    object-fit: contain;
+}
+
+/* Icon-only sizes */
+.iconOnly_sm .iconOnlyImg,
+.iconOnlyBtn.iconOnly_sm .iconOnlyImg {
+    width: 48px;
+    height: 48px;
+}
+
+.iconOnly_md .iconOnlyImg,
+.iconOnlyBtn.iconOnly_md .iconOnlyImg {
+    width: 72px;
+    height: 72px;
+}
+
+.iconOnly_lg .iconOnlyImg,
+.iconOnlyBtn.iconOnly_lg .iconOnlyImg {
+    width: 96px;
+    height: 96px;
+}
+
+/* ─────────────────────────────────────────────────
+   STANDARD LABELED BUTTON
+───────────────────────────────────────────────── */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+    border-radius: 10px;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    white-space: nowrap;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+/* Variants */
+.primary {
+    background: var(--brand-800, #0a66c2);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(10, 102, 194, 0.25);
+}
+
+.primary:hover {
+    background: var(--brand-700, #004182);
+    box-shadow: 0 4px 14px rgba(10, 102, 194, 0.35);
+}
+
+.secondary {
+    background: #ffffff;
+    color: var(--brand-800, #0a66c2);
+    border: 1.5px solid var(--brand-800, #0a66c2);
+}
+
+.secondary:hover {
+    background: var(--light-blue, #dbe7f2);
+}
+
+.ghost {
+    background: transparent;
+    color: var(--brand-800, #0a66c2);
+    border: none;
+    box-shadow: none;
+    padding-left: 0;
+    padding-right: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.ghost:hover {
+    color: var(--brand-700, #004182);
+}
+
+/* Sizes */
+.sm {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.83rem;
+}
+
+.md {
+    padding: 0.65rem 1.4rem;
+    font-size: 0.93rem;
+}
+
+.lg {
+    padding: 0.85rem 1.9rem;
+    font-size: 1.05rem;
+}
+
+/* Full width */
+.fullWidth {
+    width: 100%;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+
+    .btn.md,
+    .btn.lg {
+        width: 100%;
+        justify-content: center;
+    }
+}

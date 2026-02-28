@@ -2,9 +2,11 @@
 import { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import { useAuth } from '../contexts/AuthContext';
-import BookingModal from '../components/BookingModal';
+import ScheduleCallButton from '../components/ScheduleCallButton';
 import styles from './EmployerDashboard.module.css';
 import comingSoonIcon from '../assets/icons/coming-soon.svg';
+import checkIcon from '../assets/icons/check.svg';
+import zoomIcon from '../assets/icons/zoom.svg';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -61,7 +63,6 @@ const FEATURE_CARDS = [
 
 function EmployerDashboard() {
   const { user } = useAuth();
-  const [bookingOpen, setBookingOpen] = useState(false);
   const [myBookings, setMyBookings] = useState([]);
   const [bookingsLoading, setBookingsLoading] = useState(true);
 
@@ -112,33 +113,24 @@ function EmployerDashboard() {
             </p>
           </div>
           <div className={styles.welcomeActions}>
-            <button
-              className={styles.bookingBtn}
-              onClick={() => setBookingOpen(true)}
-            >
-              <i className="fi fi-rr-calendar"></i>
-              Schedule Intro Call
-            </button>
+            <ScheduleCallButton variant="iconOnly" size="md" />
+            <p className={styles.iconLabel}>Schedule a Call</p>
           </div>
         </div>
 
         {/* ── My Scheduled Calls ────────────────────────── */}
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
-            <div>
-              <h3 className={styles.sectionTitle}>My Scheduled Calls</h3>
-              <p className={styles.sectionSub}>Your discovery calls with RYZE Recruiting</p>
-            </div>
+            <h3 className={styles.sectionTitle}>My Scheduled Calls</h3>
+            <p className={styles.sectionSub}>Your discovery calls with RYZE Recruiting</p>
           </div>
 
           {bookingsLoading ? (
             <div className={styles.callsEmpty}>Loading your calls…</div>
           ) : myBookings.length === 0 ? (
             <div className={styles.callsEmpty}>
-              No calls scheduled yet.{' '}
-              <button className={styles.callsBookLink} onClick={() => setBookingOpen(true)}>
-                Book your first call →
-              </button>
+              <p>No calls scheduled yet.</p>
+              <ScheduleCallButton size="sm" label="Book your first call" />
             </div>
           ) : (
             <div className={styles.callsList}>
@@ -148,10 +140,11 @@ function EmployerDashboard() {
                   className={`${styles.callCard} ${styles[`callCard_${booking.status}`]}`}
                 >
                   <div className={styles.callCardLeft}>
+
                     <div className={styles.callStatus}>
                       {booking.status === 'confirmed' && (
                         <span className={styles.statusConfirmed}>
-                          <i className="fi fi-rr-check-circle"></i>
+                          <img src={checkIcon} alt="" className={styles.statusIcon} />
                           Confirmed
                         </span>
                       )}
@@ -168,8 +161,10 @@ function EmployerDashboard() {
                         </span>
                       )}
                     </div>
+
                     <div className={styles.callDate}>{formatDate(booking.date)}</div>
                     <div className={styles.callTime}>{booking.time_slot} EST</div>
+
                     {booking.company_name && (
                       <div className={styles.callCompany}>{booking.company_name}</div>
                     )}
@@ -181,12 +176,11 @@ function EmployerDashboard() {
                     {booking.status === 'cancelled' && (
                       <div className={styles.callPendingNote}>
                         This call was cancelled.{' '}
-                        <button
-                          className={styles.callsBookLink}
-                          onClick={() => setBookingOpen(true)}
-                        >
-                          Rebook →
-                        </button>
+                        <ScheduleCallButton
+                          variant="ghost"
+                          size="sm"
+                          label="Rebook →"
+                        />
                       </div>
                     )}
                   </div>
@@ -198,9 +192,10 @@ function EmployerDashboard() {
                         target="_blank"
                         rel="noopener noreferrer"
                         className={styles.zoomButton}
+                        aria-label="Join Zoom Call"
                       >
-                        <i className="fi fi-rr-video-camera"></i>
-                        Join Zoom Call
+                        <img src={zoomIcon} alt="" className={styles.zoomIcon} />
+                        <span className={styles.zoomLabel}>Join Zoom</span>
                       </a>
                     </div>
                   )}
@@ -234,7 +229,7 @@ function EmployerDashboard() {
                 <button
                   className={styles.featureBtn}
                   disabled={!card.ready}
-                  onClick={() => {/* wire route here */ }}
+                  onClick={() => { }}
                 >
                   {card.cta}
                 </button>
@@ -244,12 +239,6 @@ function EmployerDashboard() {
         </section>
 
       </main>
-
-      {/* ── Booking Modal ─────────────────────────────── */}
-      <BookingModal
-        isOpen={bookingOpen}
-        onClose={() => setBookingOpen(false)}
-      />
     </div>
   );
 }
