@@ -10,7 +10,7 @@ const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const FEATURE_CARDS = [
   {
     id: 'post-job',
-    icon: '📋',
+    icon: 'fi fi-rr-document',
     title: 'Post a Job',
     description: 'Create a new listing and reach vetted accounting & finance professionals.',
     cta: 'Post Now',
@@ -18,7 +18,7 @@ const FEATURE_CARDS = [
   },
   {
     id: 'browse-candidates',
-    icon: '🔍',
+    icon: 'fi fi-rr-search',
     title: 'Browse Candidates',
     description: 'Search our database of pre-screened accounting and finance talent.',
     cta: 'Search Talent',
@@ -26,7 +26,7 @@ const FEATURE_CARDS = [
   },
   {
     id: 'applications',
-    icon: '📁',
+    icon: 'fi fi-rr-folder',
     title: 'Manage Applications',
     description: 'Review, track, and move candidates through your hiring pipeline.',
     cta: 'View Pipeline',
@@ -34,7 +34,7 @@ const FEATURE_CARDS = [
   },
   {
     id: 'messages',
-    icon: '💬',
+    icon: 'fi fi-rr-comment',
     title: 'Messages',
     description: 'Communicate directly with candidates and your RYZE recruiter.',
     cta: 'Open Inbox',
@@ -42,7 +42,7 @@ const FEATURE_CARDS = [
   },
   {
     id: 'analytics',
-    icon: '📊',
+    icon: 'fi fi-rr-chart-histogram',
     title: 'Analytics',
     description: 'Track time-to-fill, applicant quality, and hiring funnel performance.',
     cta: 'View Reports',
@@ -50,7 +50,7 @@ const FEATURE_CARDS = [
   },
   {
     id: 'saved',
-    icon: '⭐',
+    icon: 'fi fi-rr-bookmark',
     title: 'Saved Candidates',
     description: "Revisit candidates you've bookmarked for future roles.",
     cta: 'View Saved',
@@ -86,8 +86,6 @@ function EmployerDashboard() {
   }, []);
 
   function formatDate(dateStr) {
-    // dateStr is "YYYY-MM-DD" from the API — parse as local date to avoid
-    // timezone-shift issues (e.g. Dec 31 rendering as Dec 30).
     const [year, month, day] = dateStr.split('-').map(Number);
     return new Date(year, month - 1, day).toLocaleDateString('en-US', {
       weekday: 'long',
@@ -117,7 +115,8 @@ function EmployerDashboard() {
               className={styles.bookingBtn}
               onClick={() => setBookingOpen(true)}
             >
-              📅 Schedule Intro Call
+              <i className="fi fi-rr-calendar"></i>
+              Schedule Intro Call
             </button>
           </div>
         </div>
@@ -150,13 +149,22 @@ function EmployerDashboard() {
                   <div className={styles.callCardLeft}>
                     <div className={styles.callStatus}>
                       {booking.status === 'confirmed' && (
-                        <span className={styles.statusConfirmed}>✅ Confirmed</span>
+                        <span className={styles.statusConfirmed}>
+                          <i className="fi fi-rr-check-circle"></i>
+                          Confirmed
+                        </span>
                       )}
                       {booking.status === 'pending' && (
-                        <span className={styles.statusPending}>🕐 Awaiting Confirmation</span>
+                        <span className={styles.statusPending}>
+                          <i className="fi fi-rr-clock"></i>
+                          Awaiting Confirmation
+                        </span>
                       )}
                       {booking.status === 'cancelled' && (
-                        <span className={styles.statusCancelled}>❌ Cancelled</span>
+                        <span className={styles.statusCancelled}>
+                          <i className="fi fi-rr-circle-xmark"></i>
+                          Cancelled
+                        </span>
                       )}
                     </div>
                     <div className={styles.callDate}>{formatDate(booking.date)}</div>
@@ -190,7 +198,8 @@ function EmployerDashboard() {
                         rel="noopener noreferrer"
                         className={styles.zoomButton}
                       >
-                        📹 Join Zoom Call
+                        <i className="fi fi-rr-video-camera"></i>
+                        Join Zoom Call
                       </a>
                     </div>
                   )}
@@ -210,7 +219,7 @@ function EmployerDashboard() {
                 className={`${styles.featureCard} ${!card.ready ? styles.featureCardDisabled : ''}`}
               >
                 <div className={styles.featureCardTop}>
-                  <span className={styles.featureIcon}>{card.icon}</span>
+                  <i className={`${card.icon} ${styles.featureIcon}`}></i>
                   {!card.ready && (
                     <span className={styles.soonBadge}>Coming Soon</span>
                   )}
