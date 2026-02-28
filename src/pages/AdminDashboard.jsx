@@ -144,7 +144,6 @@ function IntelligenceBrief({ profileId, onClose }) {
             })}
           </span>
         )}
-        {/* ✅ letter-x.svg — bare icon button, no wrapper styling */}
         <button className={styles.briefClose} onClick={onClose} aria-label="Close brief">
           <img src={letterXIcon} alt="Close" className={styles.briefCloseIcon} />
         </button>
@@ -323,8 +322,17 @@ function AdminDashboard() {
     }
   }
 
+  // ✅ Cancel with confirmation — guards against accidental clicks
+  async function cancelBooking(bookingId, employerName) {
+    const confirmed = window.confirm(
+      `Cancel this meeting with ${employerName}?\n\nThis cannot be undone. The booking will be marked as cancelled.`
+    );
+    if (!confirmed) return;
+    await updateStatus(bookingId, 'cancelled');
+  }
+
   async function deleteBooking(bookingId) {
-    if (!window.confirm('Are you sure you want to delete this booking?')) return;
+    if (!window.confirm('Are you sure you want to permanently delete this booking?')) return;
     try {
       const token = localStorage.getItem('token');
       const res = await fetch(`${API_BASE}/api/bookings/${bookingId}`, {
@@ -361,10 +369,10 @@ function AdminDashboard() {
     return (
       <div className={styles.actions}>
 
-        {/* ✅ AI icon — bare SVG button, centered, no border/background */}
+        {/* ✅ AI brief icon — bare, centered */}
         {booking.status === 'confirmed' && booking.employer_profile_id && (
           <button
-            className={`${styles.iconBtn} ${expandedBriefId === booking.id ? styles.iconBtnActive : ''}`}
+            className={`${styles.iconBtn} ${styles.iconBtnAi} ${expandedBriefId === booking.id ? styles.iconBtnActive : ''}`}
             onClick={() => toggleBrief(booking.id)}
             title="View AI intelligence brief"
             aria-label="View AI intelligence brief"
@@ -386,14 +394,14 @@ function AdminDashboard() {
           </button>
         )}
 
-        {/* ✅ Cancel — bare X SVG button, no grey pill wrapper */}
+        {/* ✅ Cancel — bare X icon with confirmation guard */}
         {booking.status !== 'cancelled' && (
           <button
-            className={styles.iconBtn}
+            className={`${styles.iconBtn} ${styles.iconBtnCancel}`}
             disabled={busy}
-            onClick={() => updateStatus(booking.id, 'cancelled')}
-            title="Cancel booking"
-            aria-label="Cancel booking"
+            onClick={() => cancelBooking(booking.id, booking.employer_name)}
+            title={`Cancel meeting with ${booking.employer_name}`}
+            aria-label={`Cancel meeting with ${booking.employer_name}`}
           >
             <img src={letterXIcon} alt="" className={styles.actionIcon} />
           </button>

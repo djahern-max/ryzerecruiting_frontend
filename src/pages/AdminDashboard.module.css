@@ -436,7 +436,6 @@
   text-overflow: ellipsis;
 }
 
-/* Actions column: center-align header */
 .table th:nth-child(8) {
   text-align: center;
 }
@@ -446,11 +445,11 @@
 }
 
 .table th:nth-child(2) {
-  width: 19%;
+  width: 18%;
 }
 
 .table th:nth-child(3) {
-  width: 16%;
+  width: 15%;
 }
 
 .table th:nth-child(4) {
@@ -458,7 +457,7 @@
 }
 
 .table th:nth-child(5) {
-  width: 12%;
+  width: 11%;
 }
 
 .table th:nth-child(6) {
@@ -470,7 +469,7 @@
 }
 
 .table th:nth-child(8) {
-  width: 10%;
+  width: 13%;
 }
 
 .row {
@@ -547,7 +546,6 @@
   font-size: 13px;
 }
 
-/* ✅ Zoom SVG */
 .zoomIconLink {
   display: inline-flex;
   align-items: center;
@@ -622,93 +620,121 @@
 
 /* ══════════════════════════════════════════════════════
    ACTION BUTTONS
-   ✅ .actions: centered on both desktop and mobile
-   ✅ .iconBtn: bare — no border, no background, just SVG
-   ✅ .confirmBtn / .deleteBtn: labeled buttons
+   ✅ Centered on desktop + mobile
+   ✅ Gap increased — AI and cancel icons well separated
+   ✅ Distinct hover per icon type (blue glow / red glow)
    ══════════════════════════════════════════════════════ */
 .actions {
   display: flex;
-  gap: 10px;
+  gap: 16px;
+  /* ← was 10px — more breathing room between icons */
   align-items: center;
   justify-content: center;
-  /* ← centers all icons horizontally */
   flex-wrap: wrap;
 }
 
-/* ✅ Bare icon button — AI and X cancel icons */
+/* ── Base bare icon button ───────────────────────────── */
 .iconBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   background: none;
   border: none;
-  padding: 4px;
+  padding: 6px;
   cursor: pointer;
-  border-radius: 6px;
-  transition: opacity 150ms ease, transform 150ms ease;
+  border-radius: 8px;
+  transition: transform 150ms ease, filter 150ms ease, background 150ms ease;
   -webkit-tap-highlight-color: transparent;
 }
 
-.iconBtn:hover {
-  opacity: 0.7;
-  transform: translateY(-1px);
-}
-
 .iconBtn:active {
-  transform: scale(0.92);
-  opacity: 1;
+  transform: scale(0.9);
 }
 
 .iconBtn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
   transform: none;
+  filter: none;
 }
 
-/* Subtle glow ring when AI brief is open */
+/* ✅ AI icon — blue lift + glow on hover */
+.iconBtnAi:hover {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 4px 10px rgba(10, 102, 194, 0.5));
+}
+
+/* Active state when brief is open — persistent blue glow */
 .iconBtnActive {
-  filter: drop-shadow(0 0 6px rgba(10, 102, 194, 0.45));
+  filter: drop-shadow(0 0 7px rgba(10, 102, 194, 0.6));
 }
 
-/* ✅ Both AI and X icons — 28px, consistent with Zoom icon scale */
+.iconBtnActive:hover {
+  filter: drop-shadow(0 4px 12px rgba(10, 102, 194, 0.7));
+}
+
+/* ✅ Cancel X icon — red background + red glow on hover
+   Very deliberate — user sees danger signal before clicking */
+.iconBtnCancel:hover {
+  background: rgba(220, 38, 38, 0.1);
+  transform: translateY(-2px);
+  filter: drop-shadow(0 4px 8px rgba(220, 38, 38, 0.4));
+}
+
+.iconBtnCancel:hover img {
+  /* Tint the X icon red on hover using CSS */
+  filter: invert(18%) sepia(90%) saturate(3500%) hue-rotate(350deg) brightness(90%) contrast(120%);
+}
+
+/* ✅ Both AI and X icons — 28px */
 .actionIcon {
   width: 28px;
   height: 28px;
   object-fit: contain;
   display: block;
+  transition: filter 150ms ease;
 }
 
+/* ── Labeled buttons (Confirm / Delete) ─────────────── */
 .confirmBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 12px;
   font-weight: 700;
-  padding: 5px 10px;
-  min-width: 76px;
+  padding: 6px 12px;
+  min-width: 80px;
   border-radius: 6px;
   cursor: pointer;
   border: none;
   font-family: var(--font-sans);
   background: #16a34a;
   color: white;
-  transition: opacity 120ms ease, transform 120ms ease;
+  box-shadow: 0 2px 6px rgba(22, 163, 74, 0.25);
+  transition: box-shadow 150ms ease, transform 150ms ease, background 150ms ease;
   white-space: nowrap;
 }
 
 .confirmBtn:hover:not(:disabled) {
-  opacity: 0.85;
-  transform: translateY(-1px);
+  background: #15803d;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.45);
+  transform: translateY(-2px);
+}
+
+.confirmBtn:active {
+  transform: scale(0.96);
 }
 
 .confirmBtn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .confirmBtnLoading {
   background: #d97706;
   color: white;
+  box-shadow: 0 2px 6px rgba(217, 119, 6, 0.3);
   animation: pulse 1.2s ease-in-out infinite;
   min-width: 110px;
 }
@@ -719,21 +745,28 @@
   justify-content: center;
   font-size: 12px;
   font-weight: 700;
-  padding: 5px 10px;
-  min-width: 76px;
+  padding: 6px 12px;
+  min-width: 80px;
   border-radius: 6px;
   cursor: pointer;
   border: none;
   font-family: var(--font-sans);
   background: #fee2e2;
   color: #b91c1c;
-  transition: background 120ms ease, color 120ms ease;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.15);
+  transition: box-shadow 150ms ease, transform 150ms ease, background 150ms ease, color 150ms ease;
   white-space: nowrap;
 }
 
 .deleteBtn:hover {
   background: #dc2626;
   color: white;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.45);
+  transform: translateY(-2px);
+}
+
+.deleteBtn:active {
+  transform: scale(0.96);
 }
 
 @keyframes pulse {
@@ -821,7 +854,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* ← centers icons on mobile too */
   background: var(--bg-50);
   border-top: 1px solid var(--border-200);
 }
@@ -831,7 +863,6 @@
   justify-content: center;
 }
 
-/* Labeled buttons stretch on mobile */
 .cardFooter .confirmBtn,
 .cardFooter .deleteBtn {
   flex: 1;
@@ -848,7 +879,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
   padding: 60px 24px;
   color: var(--text-500);
   font-size: 15px;
@@ -933,7 +963,6 @@
   color: #64748b;
 }
 
-/* ✅ Brief close — bare X icon, no border/background */
 .briefClose {
   display: inline-flex;
   align-items: center;
