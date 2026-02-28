@@ -600,8 +600,11 @@ function AdminDashboard() {
                                 target="_blank"
                                 rel="noreferrer"
                                 className={styles.zoomLink}
+                                title="Join Zoom Meeting"
                               >
-                                Join Zoom →
+                                <svg viewBox="0 0 24 24" width="28" height="28" fill="#0B5CFF">
+                                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm1-9c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm4 9h-2v-4.5c0-.28-.22-.5-.5-.5s-.5.22-.5.5V16h-1V8h2v4.17c.31-.11.64-.17 1-.17 1.38 0 2.5 1.12 2.5 2.5V16z" />
+                                </svg>
                               </a>
                             ) : (
                               <span className={styles.zoomPending}>Pending</span>
