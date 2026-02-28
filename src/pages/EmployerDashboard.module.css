@@ -340,6 +340,12 @@
     cursor: not-allowed;
 }
 
+.comingSoonBadge {
+    width: 72px;
+    height: auto;
+    flex-shrink: 0;
+}
+
 /* ── Responsive ──────────────────────────────────── */
 @media (max-width: 900px) {
     .featureGrid {
