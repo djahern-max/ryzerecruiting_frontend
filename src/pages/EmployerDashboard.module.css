@@ -13,53 +13,7 @@
     padding: 2.5rem 2rem 4rem;
 }
 
-/* ── Welcome Banner ──────────────────────────────── */
-.welcomeBanner {
-    background: white;
-    border: 1px solid var(--border-200);
-    border-radius: var(--radius);
-    padding: 1.75rem 2rem;
-    margin-bottom: 2.5rem;
-    box-shadow: var(--shadow-sm);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-}
 
-.welcomeText {
-    flex: 1;
-}
-
-.badge {
-    display: inline-block;
-    background: color-mix(in srgb, var(--brand-800) 10%, white);
-    border: 1px solid color-mix(in srgb, var(--brand-800) 22%, white);
-    color: var(--brand-800);
-    padding: 0.3rem 1rem;
-    border-radius: 20px;
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    margin-bottom: 0.6rem;
-}
-
-.welcomeTitle {
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: var(--text-900);
-    margin: 0 0 0.4rem;
-    letter-spacing: -0.4px;
-}
-
-.welcomeSub {
-    font-size: 0.9rem;
-    color: var(--text-500);
-    margin: 0;
-    max-width: 520px;
-    line-height: 1.5;
-}
 
 /* ScheduleCallButton iconOnly_md is 48px — matches .zoomIcon */
 .welcomeActions {
@@ -331,6 +285,16 @@
     cursor: not-allowed;
 }
 
+.pageGreeting {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-600);
+    margin: 0 0 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-200);
+    letter-spacing: -0.1px;
+}
+
 /* ── Responsive ──────────────────────────────────── */
 @media (max-width: 900px) {
     .featureGrid {
@@ -341,24 +305,6 @@
 @media (max-width: 640px) {
     .main {
         padding: 1.25rem 1rem 3rem;
-    }
-
-    .welcomeBanner {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 1.25rem;
-        gap: 1rem;
-    }
-
-    .welcomeTitle {
-        font-size: 1.3rem;
-    }
-
-    /* ✅ Center the calendar icon on mobile — matches zoom icon centering */
-    .welcomeActions {
-        width: 100%;
-        display: flex;
-        justify-content: center;
     }
 
     .featureGrid {

@@ -100,29 +100,17 @@ function EmployerDashboard() {
   return (
     <div className={styles.page}>
       <Header />
-
       <main className={styles.main}>
-
-        {/* ── Welcome Banner ────────────────────────────── */}
-        <div className={styles.welcomeBanner}>
-          <div className={styles.welcomeText}>
-            <div className={styles.badge}>Employer</div>
-            <h2 className={styles.welcomeTitle}>Welcome back, {firstName}.</h2>
-            <p className={styles.welcomeSub}>
-              Your RYZE recruiting dashboard — everything you need to hire top accounting &amp; finance talent.
-            </p>
-          </div>
-          <div className={styles.welcomeActions}>
-            {/* Icon size constrained by .welcomeActions in CSS — see ScheduleCallButton note */}
-            <ScheduleCallButton variant="iconOnly" size="md" />
-          </div>
-        </div>
-
+        {/* ── Page Greeting ─────────────────────────────── */}
+        <p className={styles.pageGreeting}>Welcome back, {firstName}.</p>
         {/* ── My Scheduled Calls ────────────────────────── */}
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
-            <h3 className={styles.sectionTitle}>My Scheduled Calls</h3>
-            <p className={styles.sectionSub}>Your discovery calls with RYZE Recruiting</p>
+            <div>
+              <h3 className={styles.sectionTitle}>My Scheduled Calls</h3>
+              <p className={styles.sectionSub}>Your discovery calls with RYZE Recruiting</p>
+            </div>
+            <ScheduleCallButton variant="iconOnly" size="md" />
           </div>
 
           {bookingsLoading ? (
@@ -208,7 +196,7 @@ function EmployerDashboard() {
 
         {/* ── Feature Grid ──────────────────────────────── */}
         <section className={styles.section}>
-          <h3 className={styles.sectionTitle}>What would you like to do?</h3>
+
           <div className={styles.featureGrid}>
             {FEATURE_CARDS.map((card) => (
               <div
