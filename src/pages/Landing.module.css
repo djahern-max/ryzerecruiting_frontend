@@ -291,7 +291,7 @@
 
 .adminAccess {
   font-size: 0.72rem;
-  color: var(--text-300, #cbd5e1);
+  color: transparent;
   text-decoration: none;
   letter-spacing: 0.3px;
   transition: color 150ms ease;
