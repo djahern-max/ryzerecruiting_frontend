@@ -66,12 +66,6 @@ function Landing() {
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <span className={styles.logo}>RYZE Recruiting</span>
-          <button
-            className={styles.signInLink}
-            onClick={() => navigate("/auth")}
-          >
-            Sign in
-          </button>
         </div>
       </header>
 
@@ -92,7 +86,8 @@ function Landing() {
           </h1>
 
           <p className={styles.subtitle}>
-            Coming Soon
+            Specialized recruiting from someone who speaks your language.
+            Be the first to know when we launch.
           </p>
 
           {/* ── Email Capture ── */}
