@@ -86,8 +86,7 @@ function Landing() {
           </h1>
 
           <p className={styles.subtitle}>
-            Specialized recruiting from someone who speaks your language.
-            Be the first to know when we launch.
+            Coming Soon
           </p>
 
           {/* ── Email Capture ── */}
