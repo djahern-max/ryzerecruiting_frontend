@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import styles from "./Landing.module.css";
-import underConstructionIcon from "../assets/icons/under-construction.svg";
+import UnderConstructionIcon from "../assets/icons/under-construction.svg?react";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
@@ -104,7 +104,7 @@ function Landing() {
           {/* ── Email Capture ── */}
           {status === "success" ? (
             <div className={styles.successBox}>
-              <img src={underConstructionIcon} alt="" style={{ width: "2rem", height: "2rem", flexShrink: 0 }} />
+              <UnderConstructionIcon style={{ width: "2rem", height: "2rem", flexShrink: 0 }} />
               <div>
                 <p className={styles.successTitle}>You're on the list.</p>
                 <p className={styles.successSub}>We'll be in touch when we launch.</p>
