@@ -1,12 +1,18 @@
 /* src/pages/Landing.jsx */
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Landing.module.css";
+
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 function Landing() {
   const navigate = useNavigate();
   const { user } = useAuth();
+
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState("idle"); // idle | loading | success | error
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     if (user) {
@@ -16,10 +22,51 @@ function Landing() {
     }
   }, [user, navigate]);
 
+  function isValidEmail(val) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
+  }
+
+  async function handleSubmit() {
+    setErrorMsg("");
+    if (!isValidEmail(email)) {
+      setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+
+    setStatus("loading");
+    try {
+      const res = await fetch(`${API_BASE}/api/waitlist`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+
+      if (res.ok) {
+        setStatus("success");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 409) {
+          // Already on the list — treat as success so it doesn't feel like an error
+          setStatus("success");
+        } else {
+          setErrorMsg(data.detail || "Something went wrong. Please try again.");
+          setStatus("idle");
+        }
+      }
+    } catch {
+      setErrorMsg("Network error. Please check your connection and try again.");
+      setStatus("idle");
+    }
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === "Enter") handleSubmit();
+  }
+
   return (
     <div className={`${styles.page} ryzeBannerBg`}>
 
-      {/* ── Minimal landing header ── */}
+      {/* ── Header ── */}
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <span className={styles.logo}>RYZE Recruiting</span>
@@ -35,8 +82,14 @@ function Landing() {
       <main className={`ryzeContainer ${styles.main}`}>
         <section className={styles.hero}>
 
+          {/* ── Badge ── */}
+          <div className={styles.badge}>
+            <span className={styles.badgeDot} />
+            Coming Soon
+          </div>
+
           <h1 className={styles.title}>
-            Recruiting built for{" "}
+            Recruiting Built for{" "}
             <span className={styles.titleEmphasis}>
               Accounting &amp; Finance
             </span>
@@ -44,37 +97,53 @@ function Landing() {
 
           <p className={styles.subtitle}>
             Specialized recruiting from someone who speaks your language.
+            Be the first to know when we launch.
           </p>
 
-          <div className={styles.ctaRow}>
-            <div className={styles.ctaCard}>
-              <div className={styles.ctaLabel}>Employers</div>
-              <h3 className={styles.ctaTitle}>Fill Your Open Role</h3>
-              <p className={styles.ctaText}>
-                Tell us what you need. We'll surface candidates who actually fit — screened on technical skills, not just keywords.
-              </p>
-              <button
-                className={`ryzeBtn ryzeBtnPrimary ${styles.ctaButton}`}
-                onClick={() => navigate("/auth?type=employer")}
-              >
-                Get Started →
-              </button>
+          {/* ── Email Capture ── */}
+          {status === "success" ? (
+            <div className={styles.successBox}>
+              <i className="fi fi-rr-check-circle" style={{ fontSize: "1.4rem", color: "var(--brand-800)" }} />
+              <div>
+                <p className={styles.successTitle}>You're on the list.</p>
+                <p className={styles.successSub}>We'll be in touch when we launch.</p>
+              </div>
             </div>
+          ) : (
+            <div className={styles.captureWrapper}>
+              <div className={styles.inputRow}>
+                <input
+                  className={`${styles.emailInput} ${errorMsg ? styles.inputError : ""}`}
+                  type="email"
+                  placeholder="Enter your email address"
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); setErrorMsg(""); }}
+                  onKeyDown={handleKeyDown}
+                  disabled={status === "loading"}
+                  autoComplete="email"
+                />
+                <button
+                  className={`ryzeBtn ryzeBtnPrimary ${styles.notifyBtn}`}
+                  onClick={handleSubmit}
+                  disabled={status === "loading"}
+                >
+                  {status === "loading" ? (
+                    <span className={styles.spinner} />
+                  ) : (
+                    <>Notify Me &rarr;</>
+                  )}
+                </button>
+              </div>
+              {errorMsg && (
+                <p className={styles.errorMsg}>{errorMsg}</p>
+              )}
+            </div>
+          )}
 
-            <div className={styles.ctaCard}>
-              <div className={styles.ctaLabel}>Candidates</div>
-              <h3 className={styles.ctaTitle}>Find Your Next Role</h3>
-              <p className={styles.ctaText}>
-                Work with a recruiter who understands your background and won't waste your time on roles that don't fit.
-              </p>
-              <button
-                className={`ryzeBtn ryzeBtnPrimary ${styles.ctaButton}`}
-                onClick={() => navigate("/auth?type=candidate")}
-              >
-                Browse Roles →
-              </button>
-            </div>
-          </div>
+          {/* ── Trust line ── */}
+          <p className={styles.trustLine}>
+            No spam. No pressure. Just a heads-up when we open the doors.
+          </p>
 
         </section>
 

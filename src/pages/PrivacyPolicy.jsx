@@ -43,6 +43,19 @@ const PrivacyPolicy = () => {
                         <li>Usage data and analytics</li>
                         <li>Cookies and similar tracking technologies</li>
                     </ul>
+
+                    <h3>2.4 Phone Number and SMS Communications</h3>
+                    <p>
+                        When you submit a call request through our platform, we collect your
+                        phone number to send you transactional SMS notifications. These messages
+                        include booking confirmations, call reminders, and cancellation notices.
+                        By providing your phone number and submitting a call request, you consent
+                        to receive these transactional SMS messages from RYZE Recruiting. Message
+                        and data rates may apply. You may opt out at any time by replying STOP
+                        to any message. For help, reply HELP. We do not share your phone number
+                        with third parties for marketing purposes. SMS communications are
+                        facilitated through Twilio, Inc., our SMS service provider.
+                    </p>
                 </section>
 
                 <section>
