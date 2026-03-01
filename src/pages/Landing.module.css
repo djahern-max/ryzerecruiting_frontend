@@ -67,44 +67,11 @@
   gap: 0;
 }
 
-/* ── Coming Soon Badge ─────────────────────────────────── */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.9px;
-  text-transform: uppercase;
-  color: var(--brand-800);
-  background: color-mix(in srgb, var(--brand-800) 9%, white);
-  border: 1px solid color-mix(in srgb, var(--brand-800) 22%, white);
-  padding: 5px 13px;
-  border-radius: 999px;
-  margin-bottom: 28px;
-}
-
-.badgeDot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--brand-800);
-  animation: pulse 2s ease-in-out infinite;
-  flex-shrink: 0;
-}
-
-@keyframes pulse {
-
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 0.5;
-    transform: scale(0.75);
-  }
+/* ── Under Construction Icon ───────────────────────────── */
+.constructionIcon {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 20px;
 }
 
 /* ── Headline ──────────────────────────────────────────── */

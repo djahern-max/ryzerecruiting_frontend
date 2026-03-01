@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import styles from "./Landing.module.css";
-import UnderConstructionIcon from "../assets/icons/under-construction.svg?react";
+import underConstructionIcon from "../assets/icons/under-construction.svg";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
@@ -42,17 +42,12 @@ function Landing() {
         body: JSON.stringify({ email: email.trim() }),
       });
 
-      if (res.ok) {
+      if (res.ok || res.status === 409) {
         setStatus("success");
       } else {
         const data = await res.json().catch(() => ({}));
-        if (res.status === 409) {
-          // Already on the list — treat as success so it doesn't feel like an error
-          setStatus("success");
-        } else {
-          setErrorMsg(data.detail || "Something went wrong. Please try again.");
-          setStatus("idle");
-        }
+        setErrorMsg(data.detail || "Something went wrong. Please try again.");
+        setStatus("idle");
       }
     } catch {
       setErrorMsg("Network error. Please check your connection and try again.");
@@ -83,28 +78,31 @@ function Landing() {
       <main className={`ryzeContainer ${styles.main}`}>
         <section className={styles.hero}>
 
-          {/* ── Badge ── */}
-          <div className={styles.badge}>
-            <span className={styles.badgeDot} />
-            Coming Soon
-          </div>
+          {/* ── Under Construction Icon ── */}
+          <img
+            src={underConstructionIcon}
+            alt=""
+            className={styles.constructionIcon}
+          />
 
+          {/* ── Headline ── */}
           <h1 className={styles.title}>
-            Recruiting Built for{" "}
-            <span className={styles.titleEmphasis}>
-              Accounting &amp; Finance
-            </span>
+            <span className={styles.titleEmphasis}>Accounting & Finance</span>{" "}
+            Recruiting, Done Right.
           </h1>
 
           <p className={styles.subtitle}>
-            Specialized recruiting from someone who speaks your language.
-            Be the first to know when we launch.
+            Coming Soon
           </p>
 
           {/* ── Email Capture ── */}
           {status === "success" ? (
             <div className={styles.successBox}>
-              <UnderConstructionIcon style={{ width: "2rem", height: "2rem", flexShrink: 0 }} />
+              <img
+                src={underConstructionIcon}
+                alt=""
+                style={{ width: "2rem", height: "2rem", flexShrink: 0 }}
+              />
               <div>
                 <p className={styles.successTitle}>You're on the list.</p>
                 <p className={styles.successSub}>We'll be in touch when we launch.</p>
