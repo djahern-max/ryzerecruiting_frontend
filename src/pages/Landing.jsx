@@ -81,10 +81,9 @@ function Landing() {
 
           {/* ── Headline ── */}
           <h1 className={styles.title}>
-            <span className={styles.titleEmphasis}>Accounting & Finance</span>{" "}
-            Recruiting, Done Right.
+            <span className={styles.titleEmphasis}>Recruiting,</span>{" "}
+            Done Right.
           </h1>
-
           <p className={styles.subtitle}>
             Coming Soon
           </p>
