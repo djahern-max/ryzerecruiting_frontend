@@ -7,11 +7,18 @@ import underConstructionIcon from "../assets/icons/under-construction.svg";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
+const INTENT_OPTIONS = [
+  { value: "hiring", emoji: "🏢", label: "I need to hire" },
+  { value: "job_seeking", emoji: "💼", label: "I need a job" },
+  { value: "following", emoji: "👀", label: "Just a fan" },
+];
+
 function Landing() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
   const [email, setEmail] = useState("");
+  const [intent, setIntent] = useState(null);
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -27,6 +34,10 @@ function Landing() {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
   }
 
+  function handleIntentClick(value) {
+    setIntent(prev => prev === value ? null : value); // toggle off if same
+  }
+
   async function handleSubmit() {
     setErrorMsg("");
     if (!isValidEmail(email)) {
@@ -39,7 +50,7 @@ function Landing() {
       const res = await fetch(`${API_BASE}/api/waitlist`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({ email: email.trim(), intent }),
       });
 
       if (res.ok || res.status === 409) {
@@ -103,6 +114,24 @@ function Landing() {
             </div>
           ) : (
             <div className={styles.captureWrapper}>
+
+              {/* ── Intent Selector ── */}
+              <div className={styles.intentRow}>
+                {INTENT_OPTIONS.map(({ value, emoji, label }) => (
+                  <button
+                    key={value}
+                    type="button"
+                    className={`${styles.intentBtn} ${intent === value ? styles.intentBtnActive : ""}`}
+                    onClick={() => handleIntentClick(value)}
+                    disabled={status === "loading"}
+                  >
+                    <span className={styles.intentEmoji}>{emoji}</span>
+                    <span className={styles.intentLabel}>{label}</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* ── Email + Submit ── */}
               <div className={styles.inputRow}>
                 <input
                   className={`${styles.emailInput} ${errorMsg ? styles.inputError : ""}`}

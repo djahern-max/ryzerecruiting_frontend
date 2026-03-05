@@ -103,11 +103,67 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
   max-width: 520px;
 }
 
+/* ── Intent Selector ───────────────────────────────────── */
+.intentRow {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
+.intentBtn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 8px;
+  background: white;
+  border: 1.5px solid var(--border-200);
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease;
+}
+
+.intentBtn:hover {
+  border-color: var(--brand-800);
+  background: color-mix(in srgb, var(--brand-800) 4%, white);
+}
+
+.intentBtnActive {
+  border-color: var(--brand-800);
+  background: color-mix(in srgb, var(--brand-800) 8%, white);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-800) 12%, transparent);
+}
+
+.intentBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.intentEmoji {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.intentLabel {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-700, #374151);
+  white-space: nowrap;
+}
+
+.intentBtnActive .intentLabel {
+  color: var(--brand-800);
+}
+
+/* ── Input Row ─────────────────────────────────────────── */
 .inputRow {
   display: flex;
   gap: 10px;
@@ -284,6 +340,14 @@
   .subtitle {
     font-size: 1rem;
     margin-bottom: 28px;
+  }
+
+  .intentRow {
+    gap: 6px;
+  }
+
+  .intentLabel {
+    font-size: 0.72rem;
   }
 
   .inputRow {
