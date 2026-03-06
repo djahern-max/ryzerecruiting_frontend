@@ -65,6 +65,7 @@ export default function BookingCard({ variant = "employer" }) {
 
   const [date, setDate] = useState("");
   const [timeSlot, setTimeSlot] = useState("");
+  const [name, setName] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [phone, setPhone] = useState("");
@@ -96,6 +97,11 @@ export default function BookingCard({ variant = "employer" }) {
       return;
     }
 
+    if (isCandidate && !name.trim()) {
+      setError("Please enter your name.");
+      return;
+    }
+
     setSubmitting(true);
     try {
       const token = localStorage.getItem('token');
@@ -105,8 +111,10 @@ export default function BookingCard({ variant = "employer" }) {
 
       const payload = isCandidate
         ? {
+          name: name.trim(),
           date,
           time_slot: timeSlot,
+          company_name: companyName || null,
           phone: phone || null,
           notes: notes || null,
         }
@@ -177,6 +185,38 @@ export default function BookingCard({ variant = "employer" }) {
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
+
+          {/* Candidate-only: name + current company */}
+          {isCandidate && (
+            <>
+              <div className={styles.field}>
+                <label htmlFor="booking-name">Your Name</label>
+                <input
+                  id="booking-name"
+                  type="text"
+                  placeholder="Jane Smith"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className={styles.input}
+                />
+              </div>
+
+              <div className={styles.field}>
+                <label htmlFor="booking-company">
+                  Current Company{" "}
+                  <span style={{ fontWeight: 400, color: '#5a7290' }}>(optional)</span>
+                </label>
+                <input
+                  id="booking-company"
+                  type="text"
+                  placeholder="Acme Corp"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  className={styles.input}
+                />
+              </div>
+            </>
+          )}
 
           <div className={styles.field}>
             <label htmlFor="booking-date">Preferred Date</label>
