@@ -105,19 +105,19 @@ export default function BookingCard({ variant = "employer" }) {
 
       const payload = isCandidate
         ? {
-            date,
-            time_slot: timeSlot,
-            phone: phone || null,
-            notes: notes || null,
-          }
+          date,
+          time_slot: timeSlot,
+          phone: phone || null,
+          notes: notes || null,
+        }
         : {
-            date,
-            time_slot: timeSlot,
-            company_name: companyName || null,
-            website_url: websiteUrl || null,
-            phone: phone || null,
-            notes: notes || null,
-          };
+          date,
+          time_slot: timeSlot,
+          company_name: companyName || null,
+          website_url: websiteUrl || null,
+          phone: phone || null,
+          notes: notes || null,
+        };
 
       const { data } = await axios.post(endpoint, payload, {
         headers: { Authorization: `Bearer ${token}` },
