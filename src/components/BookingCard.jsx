@@ -59,7 +59,10 @@ function InfoModal({ onClose }) {
   );
 }
 
-export default function BookingCard() {
+// variant: "employer" (default) | "candidate"
+export default function BookingCard({ variant = "employer" }) {
+  const isCandidate = variant === "candidate";
+
   const [date, setDate] = useState("");
   const [timeSlot, setTimeSlot] = useState("");
   const [companyName, setCompanyName] = useState("");
@@ -67,7 +70,7 @@ export default function BookingCard() {
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [booking, setBooking] = useState(null);  // stores full booking response
+  const [booking, setBooking] = useState(null);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
 
@@ -75,7 +78,6 @@ export default function BookingCard() {
     setPhone(formatPhone(e.target.value));
   }
 
-  // Clear selected time slot if it's no longer available after date change
   function handleDateChange(e) {
     const newDate = e.target.value;
     setDate(newDate);
@@ -97,18 +99,29 @@ export default function BookingCard() {
     setSubmitting(true);
     try {
       const token = localStorage.getItem('token');
-      const { data } = await axios.post(
-        `${API_URL}/api/bookings`,
-        {
-          date,
-          time_slot: timeSlot,
-          company_name: companyName || null,
-          website_url: websiteUrl || null,
-          phone: phone || null,
-          notes: notes || null,
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const endpoint = isCandidate
+        ? `${API_URL}/api/bookings/candidate`
+        : `${API_URL}/api/bookings`;
+
+      const payload = isCandidate
+        ? {
+            date,
+            time_slot: timeSlot,
+            phone: phone || null,
+            notes: notes || null,
+          }
+        : {
+            date,
+            time_slot: timeSlot,
+            company_name: companyName || null,
+            website_url: websiteUrl || null,
+            phone: phone || null,
+            notes: notes || null,
+          };
+
+      const { data } = await axios.post(endpoint, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setBooking(data);
     } catch (err) {
       setError(err.response?.data?.detail || "Something went wrong. Please try again.");
@@ -124,11 +137,11 @@ export default function BookingCard() {
           <span className={styles.checkIcon}>✓</span>
           <h2>You're booked!</h2>
           <p>
-            Your intro call is set for <strong>{booking.date}</strong> at{" "}
+            Your call is set for <strong>{booking.date}</strong> at{" "}
             <strong>{booking.time_slot} EST</strong>.
           </p>
           <p className={styles.confirmSub}>
-            A confirmation email is on its way. We'll reach out if anything changes.
+            A confirmation email is on its way. We'll reach out shortly to confirm your Zoom link.
           </p>
           {booking.meeting_url && (
             <a
@@ -153,9 +166,13 @@ export default function BookingCard() {
 
       <div className={styles.card}>
         <div className={styles.cardHeader}>
-          <h2 className={styles.headline}>Schedule an Intro Call</h2>
+          <h2 className={styles.headline}>
+            {isCandidate ? "Schedule a Call" : "Schedule an Intro Call"}
+          </h2>
           <p className={styles.subtext}>
-            Let us learn about your hiring needs and how RYZE can help.
+            {isCandidate
+              ? "Tell us a bit about yourself and pick a time that works for you."
+              : "Let us learn about your hiring needs and how RYZE can help."}
           </p>
         </div>
 
@@ -193,59 +210,70 @@ export default function BookingCard() {
             </div>
           </div>
 
-          <div className={styles.field}>
-            <label htmlFor="booking-company">
-              Company Name
-              <button
-                type="button"
-                className={styles.infoBtn}
-                onClick={() => setShowModal(true)}
-                aria-label="Why we need this"
-              >
-                ⓘ
-              </button>
-            </label>
-            <input
-              id="booking-company"
-              type="text"
-              placeholder="Acme Corp"
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-              className={styles.input}
-            />
-          </div>
+          {/* Employer-only fields */}
+          {!isCandidate && (
+            <>
+              <div className={styles.field}>
+                <label htmlFor="booking-company">
+                  Company Name
+                  <button
+                    type="button"
+                    className={styles.infoBtn}
+                    onClick={() => setShowModal(true)}
+                    aria-label="Why we need this"
+                  >
+                    ⓘ
+                  </button>
+                </label>
+                <input
+                  id="booking-company"
+                  type="text"
+                  placeholder="Acme Corp"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  className={styles.input}
+                />
+              </div>
+
+              <div className={styles.field}>
+                <label htmlFor="booking-website">
+                  Company Website{" "}
+                  <span style={{ fontWeight: 400, color: '#5a7290' }}>(optional)</span>
+                  <button
+                    type="button"
+                    className={styles.infoBtn}
+                    onClick={() => setShowModal(true)}
+                    aria-label="Why we need this"
+                  >
+                    ⓘ
+                  </button>
+                </label>
+                <input
+                  id="booking-website"
+                  type="text"
+                  inputMode="url"
+                  placeholder="dirtt.com"
+                  value={websiteUrl}
+                  onChange={(e) => setWebsiteUrl(e.target.value)}
+                  onBlur={(e) => {
+                    const val = e.target.value.trim();
+                    if (val && !val.startsWith('http')) {
+                      setWebsiteUrl('https://' + val);
+                    }
+                  }}
+                  className={styles.input}
+                />
+              </div>
+            </>
+          )}
 
           <div className={styles.field}>
-            <label htmlFor="booking-website">
-              Company Website <span style={{ fontWeight: 400, color: '#5a7290' }}>(optional)</span>
-              <button
-                type="button"
-                className={styles.infoBtn}
-                onClick={() => setShowModal(true)}
-                aria-label="Why we need this"
-              >
-                ⓘ
-              </button>
+            <label htmlFor="booking-phone">
+              Phone Number{" "}
+              {isCandidate && (
+                <span style={{ fontWeight: 400, color: '#5a7290' }}>(optional)</span>
+              )}
             </label>
-            <input
-              id="booking-website"
-              type="text"
-              inputMode="url"
-              placeholder="dirtt.com"
-              value={websiteUrl}
-              onChange={(e) => setWebsiteUrl(e.target.value)}
-              onBlur={(e) => {
-                const val = e.target.value.trim();
-                if (val && !val.startsWith('http')) {
-                  setWebsiteUrl('https://' + val);
-                }
-              }}
-              className={styles.input}
-            />
-          </div>
-
-          <div className={styles.field}>
-            <label htmlFor="booking-phone">Phone Number</label>
             <input
               id="booking-phone"
               type="tel"
@@ -261,7 +289,11 @@ export default function BookingCard() {
             <textarea
               id="booking-notes"
               rows={3}
-              placeholder="Role you're hiring for, team size, timeline..."
+              placeholder={
+                isCandidate
+                  ? "Roles you're interested in, experience level, availability..."
+                  : "Role you're hiring for, team size, timeline..."
+              }
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               className={styles.textarea}

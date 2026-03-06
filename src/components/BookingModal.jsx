@@ -1,10 +1,10 @@
-/* src/components/BookingModal.jsx */
+// src/components/BookingModal.jsx
 import { useEffect } from 'react';
 import BookingCard from './BookingCard';
 import styles from './BookingModal.module.css';
 
-function BookingModal({ isOpen, onClose }) {
-    // Lock body scroll while open
+// variant: "employer" (default) | "candidate"
+function BookingModal({ isOpen, onClose, variant = "employer" }) {
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
@@ -16,6 +16,8 @@ function BookingModal({ isOpen, onClose }) {
 
     if (!isOpen) return null;
 
+    const title = variant === "candidate" ? "Schedule a Call" : "Schedule an Intro Call";
+
     return (
         <div className={styles.overlay} onClick={onClose}>
             <div
@@ -23,13 +25,13 @@ function BookingModal({ isOpen, onClose }) {
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className={styles.drawerHeader}>
-                    <h2 className={styles.drawerTitle}>Schedule an Intro Call</h2>
+                    <h2 className={styles.drawerTitle}>{title}</h2>
                     <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
                         ✕
                     </button>
                 </div>
                 <div className={styles.drawerBody}>
-                    <BookingCard />
+                    <BookingCard variant={variant} />
                 </div>
             </div>
         </div>
