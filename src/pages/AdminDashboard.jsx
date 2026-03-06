@@ -220,30 +220,35 @@ function SendInviteModal({ onClose, onSuccess }) {
           </div>
 
           {/* Phone + Company */}
-          <div className={styles.fieldRow}>
-            <div className={styles.fieldGroup}>
-              <label className={styles.fieldLabel}>Phone</label>
-              <input
-                className={styles.fieldInput}
-                type="tel"
-                name="contact_phone"
-                value={form.contact_phone}
-                onChange={handleChange}
-                placeholder="(555) 000-0000"
-              />
-            </div>
-            <div className={styles.fieldGroup}>
-              <label className={styles.fieldLabel}>Company</label>
-              <input
-                className={styles.fieldInput}
-                type="text"
-                name="company_name"
-                value={form.company_name}
-                onChange={handleChange}
-                placeholder="Analytics Hub"
-              />
-            </div>
+
+          {/* Phone — always visible */}
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>Phone</label>
+            <input className={styles.fieldInput} type="tel" name="contact_phone"
+              value={form.contact_phone} onChange={handleChange} placeholder="(555) 000-0000" />
           </div>
+
+          {/* Company + Website — employer only */}
+          {form.invite_type === 'outbound_employer' && (
+            <>
+              <div className={styles.fieldGroup}>
+                <label className={styles.fieldLabel}>Company</label>
+                <input className={styles.fieldInput} type="text" name="company_name"
+                  value={form.company_name} onChange={handleChange} placeholder="Analytics Hub" />
+              </div>
+              <div className={styles.fieldGroup}>
+                <label className={styles.fieldLabel}>
+                  Website <span className={styles.fieldHint}>(used for AI brief)</span>
+                </label>
+                <input className={styles.fieldInput} type="text" name="website_url"
+                  value={form.website_url} onChange={handleChange} placeholder="https://analytics-hub.com" />
+              </div>
+            </>
+          )}
+
+
+
+
 
           {/* Website */}
           <div className={styles.fieldGroup}>

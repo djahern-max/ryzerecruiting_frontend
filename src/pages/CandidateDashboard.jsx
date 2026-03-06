@@ -122,6 +122,7 @@ function CandidateDashboard() {
       <BookingModal
         isOpen={bookingOpen}
         onClose={() => setBookingOpen(false)}
+        variant="candidate"
       />
     </div>
   );
