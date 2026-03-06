@@ -148,13 +148,8 @@ function SendInviteModal({ onClose, onSuccess }) {
     }
   }
 
-  // Close on backdrop click
-  function handleBackdrop(e) {
-    if (e.target === e.currentTarget) onClose();
-  }
-
   return (
-    <div className={styles.modalOverlay} onClick={handleBackdrop}>
+    <div className={styles.modalOverlay}>
       <div className={styles.modal}>
 
         {/* Header */}
@@ -219,8 +214,6 @@ function SendInviteModal({ onClose, onSuccess }) {
             </div>
           </div>
 
-          {/* Phone + Company */}
-
           {/* Phone — always visible */}
           <div className={styles.fieldGroup}>
             <label className={styles.fieldLabel}>Phone</label>
@@ -245,25 +238,6 @@ function SendInviteModal({ onClose, onSuccess }) {
               </div>
             </>
           )}
-
-
-
-
-
-          {/* Website */}
-          <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel}>
-              Website <span className={styles.fieldHint}>(used for AI brief)</span>
-            </label>
-            <input
-              className={styles.fieldInput}
-              type="text"
-              name="website_url"
-              value={form.website_url}
-              onChange={handleChange}
-              placeholder="https://analytics-hub.com"
-            />
-          </div>
 
           {/* Date + Time */}
           <div className={styles.fieldRow}>
@@ -675,7 +649,6 @@ function AdminDashboard() {
     );
   }
 
-  // Booking type label for the table
   function BookingTypeBadge({ type }) {
     if (type === 'outbound_employer') {
       return <span className={styles.typeBadgeOutbound}>Outbound · Employer</span>;
