@@ -26,6 +26,13 @@ const STATUS_COLORS = {
   cancelled: styles.statusCancelled,
 };
 
+const TIME_SLOTS = [
+  '8:00 AM', '8:30 AM', '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM',
+  '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM', '1:00 PM', '1:30 PM',
+  '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM',
+  '5:00 PM',
+];
+
 const FEATURE_CARDS = [
   {
     id: 'job-orders',
@@ -76,6 +83,249 @@ const FEATURE_CARDS = [
     ready: false,
   },
 ];
+
+// ---------------------------------------------------------------------------
+// Send Meeting Invite Modal
+// ---------------------------------------------------------------------------
+
+function SendInviteModal({ onClose, onSuccess }) {
+  const [form, setForm] = useState({
+    invite_type: 'outbound_employer',
+    contact_name: '',
+    contact_email: '',
+    contact_phone: '',
+    company_name: '',
+    website_url: '',
+    date: '',
+    time_slot: '9:00 AM',
+    notes: '',
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+  }
+
+  async function handleSubmit() {
+    setError(null);
+    if (!form.contact_name || !form.contact_email || !form.date) {
+      setError('Name, email, and date are required.');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE}/api/bookings/recruiter-invite`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          invite_type: form.invite_type,
+          contact_name: form.contact_name,
+          contact_email: form.contact_email,
+          contact_phone: form.contact_phone || null,
+          company_name: form.company_name || null,
+          website_url: form.website_url || null,
+          date: form.date,
+          time_slot: form.time_slot,
+          notes: form.notes || null,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.detail || 'Failed to send invite');
+      }
+      const booking = await res.json();
+      onSuccess(booking);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  // Close on backdrop click
+  function handleBackdrop(e) {
+    if (e.target === e.currentTarget) onClose();
+  }
+
+  return (
+    <div className={styles.modalOverlay} onClick={handleBackdrop}>
+      <div className={styles.modal}>
+
+        {/* Header */}
+        <div className={styles.modalHeader}>
+          <h2 className={styles.modalTitle}>Send Meeting Invite</h2>
+          <button className={styles.modalClose} onClick={onClose} aria-label="Close">
+            <img src={letterXIcon} alt="Close" className={styles.modalCloseIcon} />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className={styles.modalBody}>
+
+          {/* Invite type toggle */}
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>Invite Type</label>
+            <div className={styles.toggleGroup}>
+              <button
+                type="button"
+                className={`${styles.toggleBtn} ${form.invite_type === 'outbound_employer' ? styles.toggleBtnActive : ''}`}
+                onClick={() => setForm(p => ({ ...p, invite_type: 'outbound_employer' }))}
+              >
+                <i className="fi fi-rr-building" style={{ marginRight: '6px' }}></i>Employer
+              </button>
+              <button
+                type="button"
+                className={`${styles.toggleBtn} ${form.invite_type === 'outbound_candidate' ? styles.toggleBtnActive : ''}`}
+                onClick={() => setForm(p => ({ ...p, invite_type: 'outbound_candidate' }))}
+              >
+                <i className="fi fi-rr-user" style={{ marginRight: '6px' }}></i>Candidate
+              </button>
+            </div>
+          </div>
+
+          {/* Name + Email */}
+          <div className={styles.fieldRow}>
+            <div className={styles.fieldGroup}>
+              <label className={styles.fieldLabel}>
+                Full Name <span className={styles.required}>*</span>
+              </label>
+              <input
+                className={styles.fieldInput}
+                type="text"
+                name="contact_name"
+                value={form.contact_name}
+                onChange={handleChange}
+                placeholder="Bob Henderson"
+              />
+            </div>
+            <div className={styles.fieldGroup}>
+              <label className={styles.fieldLabel}>
+                Email <span className={styles.required}>*</span>
+              </label>
+              <input
+                className={styles.fieldInput}
+                type="email"
+                name="contact_email"
+                value={form.contact_email}
+                onChange={handleChange}
+                placeholder="bob@company.com"
+              />
+            </div>
+          </div>
+
+          {/* Phone + Company */}
+          <div className={styles.fieldRow}>
+            <div className={styles.fieldGroup}>
+              <label className={styles.fieldLabel}>Phone</label>
+              <input
+                className={styles.fieldInput}
+                type="tel"
+                name="contact_phone"
+                value={form.contact_phone}
+                onChange={handleChange}
+                placeholder="(555) 000-0000"
+              />
+            </div>
+            <div className={styles.fieldGroup}>
+              <label className={styles.fieldLabel}>Company</label>
+              <input
+                className={styles.fieldInput}
+                type="text"
+                name="company_name"
+                value={form.company_name}
+                onChange={handleChange}
+                placeholder="Analytics Hub"
+              />
+            </div>
+          </div>
+
+          {/* Website */}
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>
+              Website <span className={styles.fieldHint}>(used for AI brief)</span>
+            </label>
+            <input
+              className={styles.fieldInput}
+              type="text"
+              name="website_url"
+              value={form.website_url}
+              onChange={handleChange}
+              placeholder="https://analytics-hub.com"
+            />
+          </div>
+
+          {/* Date + Time */}
+          <div className={styles.fieldRow}>
+            <div className={styles.fieldGroup}>
+              <label className={styles.fieldLabel}>
+                Date <span className={styles.required}>*</span>
+              </label>
+              <input
+                className={styles.fieldInput}
+                type="date"
+                name="date"
+                value={form.date}
+                onChange={handleChange}
+              />
+            </div>
+            <div className={styles.fieldGroup}>
+              <label className={styles.fieldLabel}>Time (EST)</label>
+              <select
+                className={styles.fieldInput}
+                name="time_slot"
+                value={form.time_slot}
+                onChange={handleChange}
+              >
+                {TIME_SLOTS.map(slot => (
+                  <option key={slot} value={slot}>{slot} EST</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Notes */}
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>Notes</label>
+            <textarea
+              className={styles.fieldTextarea}
+              name="notes"
+              value={form.notes}
+              onChange={handleChange}
+              placeholder="Optional context — how you found them, role they're hiring for, etc."
+              rows={3}
+            />
+          </div>
+
+          {error && <div className={styles.modalError}>{error}</div>}
+        </div>
+
+        {/* Footer */}
+        <div className={styles.modalFooter}>
+          <button className={styles.modalCancelBtn} onClick={onClose} disabled={submitting}>
+            Cancel
+          </button>
+          <button
+            className={`${styles.modalSubmitBtn} ${submitting ? styles.modalSubmitBtnLoading : ''}`}
+            onClick={handleSubmit}
+            disabled={submitting}
+          >
+            {submitting
+              ? <><i className="fi fi-rr-time" style={{ marginRight: '6px' }}></i>Sending…</>
+              : <><i className="fi fi-rr-paper-plane" style={{ marginRight: '6px' }}></i>Send Invite</>
+            }
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
 
 // ---------------------------------------------------------------------------
 // Intelligence Brief Panel
@@ -282,6 +532,7 @@ function AdminDashboard() {
   const [error, setError] = useState(null);
   const [updatingId, setUpdatingId] = useState(null);
   const [expandedBriefId, setExpandedBriefId] = useState(null);
+  const [showInviteModal, setShowInviteModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => { fetchBookings(); }, []);
@@ -322,7 +573,6 @@ function AdminDashboard() {
     }
   }
 
-  // ✅ Cancel with confirmation — guards against accidental clicks
   async function cancelBooking(bookingId, employerName) {
     const confirmed = window.confirm(
       `Cancel this meeting with ${employerName}?\n\nThis cannot be undone. The booking will be marked as cancelled.`
@@ -346,6 +596,11 @@ function AdminDashboard() {
     }
   }
 
+  function handleInviteSuccess(newBooking) {
+    setBookings(prev => [...prev, newBooking]);
+    setShowInviteModal(false);
+  }
+
   function toggleBrief(bookingId) {
     setExpandedBriefId(prev => (prev === bookingId ? null : bookingId));
   }
@@ -361,15 +616,12 @@ function AdminDashboard() {
   const cancelled = bookings.filter(b => b.status === 'cancelled');
   const firstName = user?.full_name?.split(' ')[0] || 'there';
 
-  // ── Action Buttons ────────────────────────────────────
   function ActionButtons({ booking }) {
     const busy = updatingId === booking.id;
     const isConfirming = busy && booking.status === 'pending';
 
     return (
       <div className={styles.actions}>
-
-        {/* ✅ AI brief icon — bare, centered */}
         {booking.status === 'confirmed' && booking.employer_profile_id && (
           <button
             className={`${styles.iconBtn} ${styles.iconBtnAi} ${expandedBriefId === booking.id ? styles.iconBtnActive : ''}`}
@@ -394,7 +646,6 @@ function AdminDashboard() {
           </button>
         )}
 
-        {/* ✅ Cancel — bare X icon with confirmation guard */}
         {booking.status !== 'cancelled' && (
           <button
             className={`${styles.iconBtn} ${styles.iconBtnCancel}`}
@@ -415,9 +666,19 @@ function AdminDashboard() {
             <i className="fi fi-rr-trash" style={{ marginRight: '4px' }}></i>Delete
           </button>
         )}
-
       </div>
     );
+  }
+
+  // Booking type label for the table
+  function BookingTypeBadge({ type }) {
+    if (type === 'outbound_employer') {
+      return <span className={styles.typeBadgeOutbound}>Outbound · Employer</span>;
+    }
+    if (type === 'outbound_candidate') {
+      return <span className={styles.typeBadgeOutbound}>Outbound · Candidate</span>;
+    }
+    return <span className={styles.typeBadgeInbound}>Inbound</span>;
   }
 
   return (
@@ -477,8 +738,17 @@ function AdminDashboard() {
               <h3 className={styles.sectionTitle}>Booking Management</h3>
               <p className={styles.sectionSub}>All incoming discovery call requests</p>
             </div>
-            <div className={styles.liveBadge}>
-              <i className="fi fi-rr-circle" style={{ fontSize: '8px' }}></i> Live
+            <div className={styles.sectionHeaderRight}>
+              <button
+                className={styles.scheduleBtn}
+                onClick={() => setShowInviteModal(true)}
+              >
+                <i className="fi fi-rr-paper-plane" style={{ marginRight: '7px' }}></i>
+                Send Meeting Invite
+              </button>
+              <div className={styles.liveBadge}>
+                <i className="fi fi-rr-circle" style={{ fontSize: '8px' }}></i> Live
+              </div>
             </div>
           </div>
 
@@ -523,6 +793,7 @@ function AdminDashboard() {
                       <th>Date &amp; Time</th>
                       <th>Phone</th>
                       <th>Meeting</th>
+                      <th>Type</th>
                       <th>Status</th>
                       <th>Actions</th>
                     </tr>
@@ -575,6 +846,9 @@ function AdminDashboard() {
                             )}
                           </td>
                           <td>
+                            <BookingTypeBadge type={booking.booking_type} />
+                          </td>
+                          <td>
                             <span className={`${styles.statusBadge} ${STATUS_COLORS[booking.status]}`}>
                               {STATUS_LABELS[booking.status]}
                             </span>
@@ -586,7 +860,7 @@ function AdminDashboard() {
 
                         {expandedBriefId === booking.id && booking.employer_profile_id && (
                           <tr key={`brief-${booking.id}`} className={styles.briefTableRow}>
-                            <td colSpan={8} className={styles.briefCell}>
+                            <td colSpan={9} className={styles.briefCell}>
                               <IntelligenceBrief
                                 profileId={booking.employer_profile_id}
                                 onClose={() => setExpandedBriefId(null)}
@@ -641,6 +915,10 @@ function AdminDashboard() {
                         <span className={styles.timeText}>{booking.time_slot} EST</span>
                       </div>
                       <div className={styles.cardField}>
+                        <span className={styles.cardLabel}>Type</span>
+                        <BookingTypeBadge type={booking.booking_type} />
+                      </div>
+                      <div className={styles.cardField}>
                         <span className={styles.cardLabel}>Meeting</span>
                         {booking.meeting_url ? (
                           <a
@@ -675,6 +953,15 @@ function AdminDashboard() {
         </section>
 
       </main>
+
+      {/* ── Send Invite Modal ────────────────────────────── */}
+      {showInviteModal && (
+        <SendInviteModal
+          onClose={() => setShowInviteModal(false)}
+          onSuccess={handleInviteSuccess}
+        />
+      )}
+
     </div>
   );
 }
