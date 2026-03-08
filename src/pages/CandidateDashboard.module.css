@@ -201,6 +201,72 @@
     cursor: not-allowed;
 }
 
+/* ── Confirmed Call Banner ───────────────────────── */
+.callBanner {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    background: #edf7ed;
+    border: 1.5px solid #7bc67e;
+    border-radius: var(--radius);
+    padding: 1.25rem 1.75rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.callBannerIcon {
+    font-size: 1.75rem;
+    flex-shrink: 0;
+}
+
+.callBannerText {
+    flex: 1;
+}
+
+.callBannerTitle {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1e4620;
+    margin-bottom: 0.2rem;
+}
+
+.callBannerSub {
+    font-size: 0.875rem;
+    color: #2e7d32;
+}
+
+.callBannerBtn {
+    flex-shrink: 0;
+    background: #2e7d32;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    font-family: var(--font-sans);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 140ms;
+    white-space: nowrap;
+}
+
+.callBannerBtn:hover {
+    background: #1b5e20;
+}
+
+@media (max-width: 640px) {
+    .callBanner {
+        flex-wrap: wrap;
+        padding: 1rem 1.25rem;
+    }
+
+    .callBannerBtn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
 /* ── Responsive ──────────────────────────────────── */
 @media (max-width: 900px) {
     .featureGrid {

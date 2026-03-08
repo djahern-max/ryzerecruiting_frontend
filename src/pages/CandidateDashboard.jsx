@@ -1,9 +1,13 @@
 /* src/pages/CandidateDashboard.jsx */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import { useAuth } from '../contexts/AuthContext';
 import BookingModal from '../components/BookingModal';
 import styles from './CandidateDashboard.module.css';
+
+const API_BASE = import.meta.env.PROD
+  ? 'https://api.ryzerecruiting.com'
+  : 'http://localhost:8000';
 
 const FEATURE_CARDS = [
   {
@@ -56,17 +60,63 @@ const FEATURE_CARDS = [
   },
 ];
 
+function formatDate(dateStr) {
+  return new Date(dateStr).toLocaleDateString('en-US', {
+    weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
+  });
+}
+
 function CandidateDashboard() {
   const { user } = useAuth();
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [confirmedBookings, setConfirmedBookings] = useState([]);
 
   const firstName = user?.full_name?.split(' ')[0] || 'there';
+
+  useEffect(() => {
+    async function fetchMyBookings() {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${API_BASE}/api/bookings/my`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const confirmed = data.filter(b => b.status === 'confirmed' && b.meeting_url);
+        setConfirmedBookings(confirmed);
+      } catch (e) {
+        // non-fatal
+      }
+    }
+    fetchMyBookings();
+  }, []);
 
   return (
     <div className={styles.page}>
       <Header />
 
       <main className={styles.main}>
+
+        {/* ── Confirmed Call Banner ─────────────────────── */}
+        {confirmedBookings.map(booking => (
+          <div key={booking.id} className={styles.callBanner}>
+            <div className={styles.callBannerIcon}>📅</div>
+            <div className={styles.callBannerText}>
+              <div className={styles.callBannerTitle}>Your intro call is confirmed</div>
+              <div className={styles.callBannerSub}>
+                {formatDate(booking.date)} at {booking.time_slot} EST
+              </div>
+            </div>
+            <a
+              href={booking.meeting_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.callBannerBtn}
+            >
+              Join Zoom Call →
+            </a>
+          </div>
+        ))}
 
         {/* ── Welcome Banner ────────────────────────────── */}
         <div className={styles.welcomeBanner}>
