@@ -1344,6 +1344,45 @@
   }
 }
 
+/* ── Time slot buttons (Send Invite Modal) ─────── */
+.timeGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.timeSlotBtn {
+  background: #f0f5fb;
+  border: 1.5px solid var(--border-200);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  color: var(--text-700);
+  cursor: pointer;
+  transition: background 140ms, border-color 140ms, color 140ms;
+}
+
+.timeSlotBtn:hover {
+  background: #ddeaf7;
+  border-color: var(--brand-800);
+}
+
+.timeSlotBtnActive {
+  background: var(--brand-800);
+  border-color: var(--brand-800);
+  color: white;
+}
+
+.noSlots {
+  font-size: 0.8rem;
+  color: var(--text-500);
+  font-style: italic;
+  margin: 0;
+}
+
+
 /* ══════════════════════════════════════════════════════
    RESPONSIVE BREAKPOINTS
    ══════════════════════════════════════════════════════ */

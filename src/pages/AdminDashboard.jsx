@@ -84,6 +84,26 @@ const FEATURE_CARDS = [
   },
 ];
 
+
+// Add this function near TIME_SLOTS at the top of the file
+function getAvailableSlots(selectedDate) {
+  if (!selectedDate) return TIME_SLOTS;
+  const now = new Date();
+  const selected = new Date(selectedDate + 'T00:00:00');
+  const isToday = selected.toDateString() === now.toDateString();
+  if (!isToday) return TIME_SLOTS;
+
+  return TIME_SLOTS.filter((slot) => {
+    const [time, period] = slot.split(' ');
+    let [hours, minutes] = time.split(':').map(Number);
+    if (period === 'PM' && hours !== 12) hours += 12;
+    if (period === 'AM' && hours === 12) hours = 0;
+    const slotTime = new Date();
+    slotTime.setHours(hours, minutes, 0, 0);
+    return slotTime > now;
+  });
+}
+
 // ---------------------------------------------------------------------------
 // Send Meeting Invite Modal
 // ---------------------------------------------------------------------------
@@ -97,21 +117,31 @@ function SendInviteModal({ onClose, onSuccess }) {
     company_name: '',
     website_url: '',
     date: '',
-    time_slot: '9:00 AM',
+    time_slot: '',
     notes: '',
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
+  // Update handleChange to clear stale time slot when date changes
   function handleChange(e) {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm(prev => {
+      const updated = { ...prev, [name]: value };
+      if (name === 'date') {
+        const available = getAvailableSlots(value);
+        if (prev.time_slot && !available.includes(prev.time_slot)) {
+          updated.time_slot = '';
+        }
+      }
+      return updated;
+    });
   }
 
   async function handleSubmit() {
     setError(null);
-    if (!form.contact_name || !form.contact_email || !form.date) {
-      setError('Name, email, and date are required.');
+    if (!form.contact_name || !form.contact_email || !form.date || !form.time_slot) {
+      setError('Name, email, date, and time are required.');
       return;
     }
     setSubmitting(true);
@@ -184,34 +214,40 @@ function SendInviteModal({ onClose, onSuccess }) {
             </div>
           </div>
 
-          {/* Name + Email */}
-          <div className={styles.fieldRow}>
-            <div className={styles.fieldGroup}>
-              <label className={styles.fieldLabel}>
-                Full Name <span className={styles.required}>*</span>
-              </label>
-              <input
-                className={styles.fieldInput}
-                type="text"
-                name="contact_name"
-                value={form.contact_name}
-                onChange={handleChange}
-                placeholder="Full Name"
-              />
-            </div>
-            <div className={styles.fieldGroup}>
-              <label className={styles.fieldLabel}>
-                Email <span className={styles.required}>*</span>
-              </label>
-              <input
-                className={styles.fieldInput}
-                type="email"
-                name="contact_email"
-                value={form.contact_email}
-                onChange={handleChange}
-                placeholder="Email Address"
-              />
-            </div>
+          {/* Date */}
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>
+              Date <span className={styles.required}>*</span>
+            </label>
+            <input
+              className={styles.fieldInput}
+              type="date"
+              name="date"
+              value={form.date}
+              onChange={handleChange}
+              min={new Date().toISOString().split('T')[0]}
+            />
+          </div>
+          w
+          {/* Time slot buttons */}
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>Time (EST)</label>
+            {form.date && getAvailableSlots(form.date).length === 0 ? (
+              <p className={styles.noSlots}>No remaining slots for today — please select a future date.</p>
+            ) : (
+              <div className={styles.timeGrid}>
+                {getAvailableSlots(form.date).map(slot => (
+                  <button
+                    key={slot}
+                    type="button"
+                    className={`${styles.timeSlotBtn} ${form.time_slot === slot ? styles.timeSlotBtnActive : ''}`}
+                    onClick={() => setForm(p => ({ ...p, time_slot: slot }))}
+                  >
+                    {slot}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Phone — always visible */}
@@ -305,6 +341,9 @@ function SendInviteModal({ onClose, onSuccess }) {
     </div>
   );
 }
+
+
+
 
 // ---------------------------------------------------------------------------
 // Intelligence Brief Panel
