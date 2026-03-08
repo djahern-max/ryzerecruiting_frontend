@@ -1226,7 +1226,7 @@
 }
 
 .fieldInput::placeholder {
-  color: var(--text-400);
+  color: #b8c9d9;
 }
 
 .fieldTextarea {

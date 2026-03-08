@@ -196,7 +196,7 @@ function SendInviteModal({ onClose, onSuccess }) {
                 name="contact_name"
                 value={form.contact_name}
                 onChange={handleChange}
-                placeholder="Bob Henderson"
+                placeholder="Full Name"
               />
             </div>
             <div className={styles.fieldGroup}>
@@ -209,7 +209,7 @@ function SendInviteModal({ onClose, onSuccess }) {
                 name="contact_email"
                 value={form.contact_email}
                 onChange={handleChange}
-                placeholder="bob@company.com"
+                placeholder="Email Address"
               />
             </div>
           </div>
