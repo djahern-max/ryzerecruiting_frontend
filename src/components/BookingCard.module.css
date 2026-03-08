@@ -290,6 +290,26 @@
   margin-bottom: 0;
 }
 
+/* SMS consent */
+.smsConsent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+  color: #5a7290;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.smsCheckbox {
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: #004182;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
 /* ─── Mobile ─────────────────────────────────────────────────────────────── */
 
 @media (max-width: 480px) {
