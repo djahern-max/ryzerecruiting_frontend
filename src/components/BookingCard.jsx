@@ -70,6 +70,7 @@ export default function BookingCard({ variant = "employer" }) {
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
+  const [smsConsent, setSmsConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [booking, setBooking] = useState(null);
   const [error, setError] = useState("");
@@ -339,6 +340,21 @@ export default function BookingCard({ variant = "employer" }) {
               className={styles.textarea}
             />
           </div>
+
+          {/* SMS opt-in consent */}
+          <label className={styles.smsConsent}>
+            <input
+              type="checkbox"
+              checked={smsConsent}
+              onChange={(e) => setSmsConsent(e.target.checked)}
+              className={styles.smsCheckbox}
+            />
+            <span>
+              I agree to receive SMS notifications from RYZE Recruiting regarding my booking,
+              including confirmations, reminders, and cancellations. Message and data rates may
+              apply. Reply STOP to opt out.
+            </span>
+          </label>
 
           {error && <p className={styles.error}>{error}</p>}
 
