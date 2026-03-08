@@ -84,8 +84,6 @@ const FEATURE_CARDS = [
   },
 ];
 
-
-// Add this function near TIME_SLOTS at the top of the file
 function getAvailableSlots(selectedDate) {
   if (!selectedDate) return TIME_SLOTS;
   const now = new Date();
@@ -123,7 +121,6 @@ function SendInviteModal({ onClose, onSuccess }) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
-  // Update handleChange to clear stale time slot when date changes
   function handleChange(e) {
     const { name, value } = e.target;
     setForm(prev => {
@@ -214,6 +211,79 @@ function SendInviteModal({ onClose, onSuccess }) {
             </div>
           </div>
 
+          {/* Name + Email */}
+          <div className={styles.fieldRow}>
+            <div className={styles.fieldGroup}>
+              <label className={styles.fieldLabel}>
+                Full Name <span className={styles.required}>*</span>
+              </label>
+              <input
+                className={styles.fieldInput}
+                type="text"
+                name="contact_name"
+                value={form.contact_name}
+                onChange={handleChange}
+                placeholder="Full name"
+              />
+            </div>
+            <div className={styles.fieldGroup}>
+              <label className={styles.fieldLabel}>
+                Email <span className={styles.required}>*</span>
+              </label>
+              <input
+                className={styles.fieldInput}
+                type="email"
+                name="contact_email"
+                value={form.contact_email}
+                onChange={handleChange}
+                placeholder="Email address"
+              />
+            </div>
+          </div>
+
+          {/* Phone */}
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>Phone</label>
+            <input
+              className={styles.fieldInput}
+              type="tel"
+              name="contact_phone"
+              value={form.contact_phone}
+              onChange={handleChange}
+              placeholder="(555) 000-0000"
+            />
+          </div>
+
+          {/* Company + Website — employer only */}
+          {form.invite_type === 'outbound_employer' && (
+            <>
+              <div className={styles.fieldGroup}>
+                <label className={styles.fieldLabel}>Company</label>
+                <input
+                  className={styles.fieldInput}
+                  type="text"
+                  name="company_name"
+                  value={form.company_name}
+                  onChange={handleChange}
+                  placeholder="Company name"
+                />
+              </div>
+              <div className={styles.fieldGroup}>
+                <label className={styles.fieldLabel}>
+                  Website <span className={styles.fieldHint}>(used for AI brief)</span>
+                </label>
+                <input
+                  className={styles.fieldInput}
+                  type="text"
+                  name="website_url"
+                  value={form.website_url}
+                  onChange={handleChange}
+                  placeholder="https://company.com"
+                />
+              </div>
+            </>
+          )}
+
           {/* Date */}
           <div className={styles.fieldGroup}>
             <label className={styles.fieldLabel}>
@@ -228,7 +298,7 @@ function SendInviteModal({ onClose, onSuccess }) {
               min={new Date().toISOString().split('T')[0]}
             />
           </div>
-          w
+
           {/* Time slot buttons */}
           <div className={styles.fieldGroup}>
             <label className={styles.fieldLabel}>Time (EST)</label>
@@ -248,60 +318,6 @@ function SendInviteModal({ onClose, onSuccess }) {
                 ))}
               </div>
             )}
-          </div>
-
-          {/* Phone — always visible */}
-          <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel}>Phone</label>
-            <input className={styles.fieldInput} type="tel" name="contact_phone"
-              value={form.contact_phone} onChange={handleChange} placeholder="(555) 000-0000" />
-          </div>
-
-          {/* Company + Website — employer only */}
-          {form.invite_type === 'outbound_employer' && (
-            <>
-              <div className={styles.fieldGroup}>
-                <label className={styles.fieldLabel}>Company</label>
-                <input className={styles.fieldInput} type="text" name="company_name"
-                  value={form.company_name} onChange={handleChange} placeholder="Analytics Hub" />
-              </div>
-              <div className={styles.fieldGroup}>
-                <label className={styles.fieldLabel}>
-                  Website <span className={styles.fieldHint}>(used for AI brief)</span>
-                </label>
-                <input className={styles.fieldInput} type="text" name="website_url"
-                  value={form.website_url} onChange={handleChange} placeholder="https://analytics-hub.com" />
-              </div>
-            </>
-          )}
-
-          {/* Date + Time */}
-          <div className={styles.fieldRow}>
-            <div className={styles.fieldGroup}>
-              <label className={styles.fieldLabel}>
-                Date <span className={styles.required}>*</span>
-              </label>
-              <input
-                className={styles.fieldInput}
-                type="date"
-                name="date"
-                value={form.date}
-                onChange={handleChange}
-              />
-            </div>
-            <div className={styles.fieldGroup}>
-              <label className={styles.fieldLabel}>Time (EST)</label>
-              <select
-                className={styles.fieldInput}
-                name="time_slot"
-                value={form.time_slot}
-                onChange={handleChange}
-              >
-                {TIME_SLOTS.map(slot => (
-                  <option key={slot} value={slot}>{slot} EST</option>
-                ))}
-              </select>
-            </div>
           </div>
 
           {/* Notes */}
@@ -341,9 +357,6 @@ function SendInviteModal({ onClose, onSuccess }) {
     </div>
   );
 }
-
-
-
 
 // ---------------------------------------------------------------------------
 // Intelligence Brief Panel
