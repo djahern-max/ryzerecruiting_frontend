@@ -206,8 +206,8 @@
     display: flex;
     align-items: center;
     gap: 1.25rem;
-    background: #edf7ed;
-    border: 1.5px solid #7bc67e;
+    background: #f0fdf4;
+    border: 1.5px solid #4ade80;
     border-radius: var(--radius);
     padding: 1.25rem 1.75rem;
     margin-bottom: 1.5rem;
@@ -226,18 +226,18 @@
 .callBannerTitle {
     font-size: 1rem;
     font-weight: 700;
-    color: #1e4620;
+    color: #15803d;
     margin-bottom: 0.2rem;
 }
 
 .callBannerSub {
     font-size: 0.875rem;
-    color: #2e7d32;
+    color: #16a34a;
 }
 
 .callBannerBtn {
     flex-shrink: 0;
-    background: #2e7d32;
+    background: #16a34a;
     color: white;
     border: none;
     border-radius: 8px;
@@ -252,7 +252,7 @@
 }
 
 .callBannerBtn:hover {
-    background: #1b5e20;
+    background: #15803d;
 }
 
 @media (max-width: 640px) {
