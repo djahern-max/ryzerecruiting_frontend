@@ -1396,6 +1396,39 @@
   white-space: nowrap;
 }
 
+.summaryPanel {
+  background: #f0fdf4;
+  border-left: 4px solid #16a34a;
+  padding: 1.25rem 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  animation: briefSlideIn 180ms ease;
+}
+
+.summaryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #15803d;
+  margin-bottom: 0.75rem;
+}
+
+.summaryText {
+  font-size: 0.875rem;
+  color: var(--text-900);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.iconBtnSummary:hover {
+  background: #dcfce7;
+  border-color: #16a34a;
+  color: #16a34a;
+}
+
 
 /* ══════════════════════════════════════════════════════
    RESPONSIVE BREAKPOINTS

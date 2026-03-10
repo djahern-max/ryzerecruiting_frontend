@@ -563,6 +563,7 @@ function AdminDashboard() {
   const [error, setError] = useState(null);
   const [updatingId, setUpdatingId] = useState(null);
   const [expandedBriefId, setExpandedBriefId] = useState(null);
+  const [expandedSummaryId, setExpandedSummaryId] = useState(null);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const navigate = useNavigate();
 
@@ -636,6 +637,10 @@ function AdminDashboard() {
     setExpandedBriefId(prev => (prev === bookingId ? null : bookingId));
   }
 
+  function toggleSummary(bookingId) {
+    setExpandedSummaryId(prev => (prev === bookingId ? null : bookingId));
+  }
+
   function formatDate(dateStr) {
     return new Date(dateStr).toLocaleDateString('en-US', {
       weekday: 'short', month: 'short', day: 'numeric', year: 'numeric',
@@ -661,6 +666,17 @@ function AdminDashboard() {
             aria-label="View AI intelligence brief"
           >
             <img src={aiIcon} alt="" className={styles.actionIcon} />
+          </button>
+        )}
+
+        {booking.meeting_summary && (
+          <button
+            className={`${styles.iconBtn} ${styles.iconBtnSummary} ${expandedSummaryId === booking.id ? styles.iconBtnActive : ''}`}
+            onClick={() => toggleSummary(booking.id)}
+            title="View meeting summary"
+            aria-label="View meeting summary"
+          >
+            <i className="fi fi-rr-document" style={{ fontSize: '15px' }}></i>
           </button>
         )}
 
@@ -898,6 +914,20 @@ function AdminDashboard() {
                             </td>
                           </tr>
                         )}
+
+                        {expandedSummaryId === booking.id && booking.meeting_summary && (
+                          <tr key={`summary-${booking.id}`} className={styles.briefTableRow}>
+                            <td colSpan={9} className={styles.briefCell}>
+                              <div className={styles.summaryPanel}>
+                                <div className={styles.summaryHeader}>
+                                  <span>📋 Meeting Summary</span>
+                                  <button className={styles.briefClose} onClick={() => setExpandedSummaryId(null)}>✕</button>
+                                </div>
+                                <p className={styles.summaryText}>{booking.meeting_summary}</p>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
                       </>
                     ))}
                   </tbody>
@@ -974,6 +1004,15 @@ function AdminDashboard() {
                         profileId={booking.employer_profile_id}
                         onClose={() => setExpandedBriefId(null)}
                       />
+                    )}
+                    {expandedSummaryId === booking.id && booking.meeting_summary && (
+                      <div className={styles.summaryPanel}>
+                        <div className={styles.summaryHeader}>
+                          <span>📋 Meeting Summary</span>
+                          <button className={styles.briefClose} onClick={() => setExpandedSummaryId(null)}>✕</button>
+                        </div>
+                        <p className={styles.summaryText}>{booking.meeting_summary}</p>
+                      </div>
                     )}
                   </div>
                 ))}
