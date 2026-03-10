@@ -1,15 +1,16 @@
 /* src/pages/AdminDashboard.jsx */
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import styles from './AdminDashboard.module.css';
 import { useNavigate } from 'react-router-dom';
+import styles from './AdminDashboard.module.css';
 
-// ── Tier 2 SVG assets (brand / illustrated) ──────────────
+import IntelligenceBrief from '../components/IntelligenceBrief';
+import MeetingSummaryPanel from '../components/MeetingSummaryPanel';
+
 import aiIcon from '../assets/icons/artificial-intelligence.svg';
 import aiNotesIcon from '../assets/icons/ai_notes.svg';
 import zoomIcon from '../assets/icons/zoom.svg';
 import letterXIcon from '../assets/icons/letter-x.svg';
-import comingSoonIcon from '../assets/icons/coming-soon.svg';
 
 const API_BASE = import.meta.env.PROD
   ? 'https://api.ryzerecruiting.com'
@@ -32,57 +33,6 @@ const TIME_SLOTS = [
   '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM', '1:00 PM', '1:30 PM',
   '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM',
   '5:00 PM',
-];
-
-const FEATURE_CARDS = [
-  {
-    id: 'job-orders',
-    icon: 'fi fi-rr-document',
-    title: 'Job Orders',
-    description: "Manage every active role you're recruiting for. Track status from intake all the way through to placement.",
-    cta: 'View Job Orders',
-    ready: false,
-  },
-  {
-    id: 'employer-roster',
-    icon: 'fi fi-rr-building',
-    title: 'Employer Roster',
-    description: 'Your full client list — company details, active roles, call history, and relationship notes.',
-    cta: 'View Employers',
-    ready: true,
-  },
-  {
-    id: 'candidate-roster',
-    icon: 'fi fi-rr-users',
-    title: 'Candidate Roster',
-    description: "Every candidate in your database with availability status, credentials, and which roles they're being considered for.",
-    cta: 'View Candidates',
-    ready: false,
-  },
-  {
-    id: 'match-queue',
-    icon: 'fi fi-rr-target',
-    title: 'Match Queue',
-    description: 'Suggested candidate-to-job matches based on role criteria, experience level, and location. Your matchmaking command center.',
-    cta: 'View Matches',
-    ready: false,
-  },
-  {
-    id: 'activity-feed',
-    icon: 'fi fi-rr-bolt',
-    title: 'Activity Feed',
-    description: 'A chronological log of everything happening across your pipeline — new bookings, submissions, employer responses, and status changes.',
-    cta: 'View Activity',
-    ready: false,
-  },
-  {
-    id: 'analytics',
-    icon: 'fi fi-rr-chart-histogram',
-    title: 'Reports & Analytics',
-    description: 'Time-to-fill, placement rates, pipeline velocity, and revenue metrics. See how your desk is performing.',
-    cta: 'View Reports',
-    ready: false,
-  },
 ];
 
 function getAvailableSlots(selectedDate) {
@@ -179,8 +129,6 @@ function SendInviteModal({ onClose, onSuccess }) {
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
-
-        {/* Header */}
         <div className={styles.modalHeader}>
           <h2 className={styles.modalTitle}>Send Meeting Invite</h2>
           <button className={styles.modalClose} onClick={onClose} aria-label="Close">
@@ -188,10 +136,8 @@ function SendInviteModal({ onClose, onSuccess }) {
           </button>
         </div>
 
-        {/* Body */}
         <div className={styles.modalBody}>
-
-          {/* Invite type toggle */}
+          {/* Invite type */}
           <div className={styles.fieldGroup}>
             <label className={styles.fieldLabel}>Invite Type</label>
             <div className={styles.toggleGroup}>
@@ -215,94 +161,46 @@ function SendInviteModal({ onClose, onSuccess }) {
           {/* Name + Email */}
           <div className={styles.fieldRow}>
             <div className={styles.fieldGroup}>
-              <label className={styles.fieldLabel}>
-                Full Name <span className={styles.required}>*</span>
-              </label>
-              <input
-                className={styles.fieldInput}
-                type="text"
-                name="contact_name"
-                value={form.contact_name}
-                onChange={handleChange}
-                placeholder="Full name"
-              />
+              <label className={styles.fieldLabel}>Full Name <span className={styles.required}>*</span></label>
+              <input className={styles.fieldInput} type="text" name="contact_name" value={form.contact_name} onChange={handleChange} placeholder="Full name" />
             </div>
             <div className={styles.fieldGroup}>
-              <label className={styles.fieldLabel}>
-                Email <span className={styles.required}>*</span>
-              </label>
-              <input
-                className={styles.fieldInput}
-                type="email"
-                name="contact_email"
-                value={form.contact_email}
-                onChange={handleChange}
-                placeholder="Email address"
-              />
+              <label className={styles.fieldLabel}>Email <span className={styles.required}>*</span></label>
+              <input className={styles.fieldInput} type="email" name="contact_email" value={form.contact_email} onChange={handleChange} placeholder="Email address" />
             </div>
           </div>
 
           {/* Phone */}
           <div className={styles.fieldGroup}>
             <label className={styles.fieldLabel}>Phone</label>
-            <input
-              className={styles.fieldInput}
-              type="tel"
-              name="contact_phone"
-              value={form.contact_phone}
-              onChange={handleChange}
-              placeholder="(555) 000-0000"
-            />
+            <input className={styles.fieldInput} type="tel" name="contact_phone" value={form.contact_phone} onChange={handleChange} placeholder="(555) 000-0000" />
           </div>
 
-          {/* Company + Website — employer only */}
+          {/* Employer-only fields */}
           {form.invite_type === 'outbound_employer' && (
             <>
               <div className={styles.fieldGroup}>
                 <label className={styles.fieldLabel}>Company</label>
-                <input
-                  className={styles.fieldInput}
-                  type="text"
-                  name="company_name"
-                  value={form.company_name}
-                  onChange={handleChange}
-                  placeholder="Company name"
-                />
+                <input className={styles.fieldInput} type="text" name="company_name" value={form.company_name} onChange={handleChange} placeholder="Company name" />
               </div>
               <div className={styles.fieldGroup}>
                 <label className={styles.fieldLabel}>
                   Website <span className={styles.fieldHint}>(used for AI brief)</span>
                 </label>
-                <input
-                  className={styles.fieldInput}
-                  type="text"
-                  name="website_url"
-                  value={form.website_url}
-                  onChange={handleChange}
-                  placeholder="https://company.com"
-                />
+                <input className={styles.fieldInput} type="text" name="website_url" value={form.website_url} onChange={handleChange} placeholder="https://company.com" />
               </div>
             </>
           )}
 
           {/* Date */}
           <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel}>
-              Date <span className={styles.required}>*</span>
-            </label>
-            <input
-              className={styles.fieldInput}
-              type="date"
-              name="date"
-              value={form.date}
-              onChange={handleChange}
-              min={new Date().toISOString().split('T')[0]}
-            />
+            <label className={styles.fieldLabel}>Date <span className={styles.required}>*</span></label>
+            <input className={styles.fieldInput} type="date" name="date" value={form.date} onChange={handleChange} min={new Date().toISOString().split('T')[0]} />
           </div>
 
-          {/* Time slot buttons */}
+          {/* Time slots */}
           <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel}>Time (EST)</label>
+            <label className={styles.fieldLabel}>Time (EST) <span className={styles.required}>*</span></label>
             {form.date && getAvailableSlots(form.date).length === 0 ? (
               <p className={styles.noSlots}>No remaining slots for today — please select a future date.</p>
             ) : (
@@ -337,11 +235,8 @@ function SendInviteModal({ onClose, onSuccess }) {
           {error && <div className={styles.modalError}>{error}</div>}
         </div>
 
-        {/* Footer */}
         <div className={styles.modalFooter}>
-          <button className={styles.modalCancelBtn} onClick={onClose} disabled={submitting}>
-            Cancel
-          </button>
+          <button className={styles.modalCancelBtn} onClick={onClose} disabled={submitting}>Cancel</button>
           <button
             className={`${styles.modalSubmitBtn} ${submitting ? styles.modalSubmitBtnLoading : ''}`}
             onClick={handleSubmit}
@@ -353,204 +248,18 @@ function SendInviteModal({ onClose, onSuccess }) {
             }
           </button>
         </div>
-
       </div>
     </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Intelligence Brief Panel
+// Booking Type Badge
 // ---------------------------------------------------------------------------
-
-function IntelligenceBrief({ profileId, onClose }) {
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    async function fetchProfile() {
-      try {
-        const token = localStorage.getItem('token');
-        const res = await fetch(`${API_BASE}/api/employer-profiles/${profileId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (!res.ok) throw new Error('Failed to load intelligence brief');
-        const data = await res.json();
-        setProfile(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchProfile();
-  }, [profileId]);
-
-  if (loading) {
-    return (
-      <div className={styles.briefPanel}>
-        <div className={styles.briefLoading}>
-          <i className="fi fi-rr-time" style={{ animation: 'spin 1s linear infinite', marginRight: '6px' }}></i>
-          Generating intelligence brief…
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !profile) {
-    return (
-      <div className={styles.briefPanel}>
-        <div className={styles.briefError}>Could not load brief. {error}</div>
-      </div>
-    );
-  }
-
-  const hasStructuredData =
-    profile.ai_company_overview ||
-    profile.ai_industry ||
-    profile.ai_company_size ||
-    profile.ai_hiring_needs?.length ||
-    profile.ai_talking_points?.length ||
-    profile.ai_red_flags;
-
-  return (
-    <div className={styles.briefPanel}>
-      <div className={styles.briefHeader}>
-        <img src={aiIcon} alt="" className={styles.briefAiIcon} />
-        <span className={styles.briefTitle}>Pre-Call Intelligence Brief</span>
-        {profile.ai_brief_updated_at && (
-          <span className={styles.briefUpdated}>
-            Updated {new Date(profile.ai_brief_updated_at).toLocaleDateString('en-US', {
-              month: 'short', day: 'numeric', year: 'numeric',
-            })}
-          </span>
-        )}
-        <button className={styles.briefClose} onClick={onClose} aria-label="Close brief">
-          <img src={letterXIcon} alt="Close" className={styles.briefCloseIcon} />
-        </button>
-      </div>
-
-      {!hasStructuredData && !profile.ai_brief_raw ? (
-        <p className={styles.briefEmpty}>
-          No intelligence brief available — website may not have been provided or the brief generation failed.
-        </p>
-      ) : (
-        <div className={styles.briefBody}>
-          {profile.ai_brief_raw && !hasStructuredData && (() => {
-            try {
-              const cleaned = profile.ai_brief_raw
-                .replace(/^```json\s*/m, '').replace(/^```\s*/m, '').replace(/\s*```$/m, '').trim();
-              const parsed = JSON.parse(cleaned);
-              return (
-                <div className={styles.briefBody}>
-                  {parsed.company_overview && (
-                    <div className={styles.briefSection}>
-                      <div className={styles.briefSectionLabel}>Company Overview</div>
-                      <div className={styles.briefSectionContent}>{parsed.company_overview}</div>
-                    </div>
-                  )}
-                  <div className={styles.briefRow}>
-                    {parsed.industry && (
-                      <div className={styles.briefSection}>
-                        <div className={styles.briefSectionLabel}>Industry</div>
-                        <div className={styles.briefSectionContent}>{parsed.industry}</div>
-                      </div>
-                    )}
-                    {parsed.estimated_size && (
-                      <div className={styles.briefSection}>
-                        <div className={styles.briefSectionLabel}>Estimated Size</div>
-                        <div className={styles.briefSectionContent}>{parsed.estimated_size}</div>
-                      </div>
-                    )}
-                  </div>
-                  {parsed.hiring_needs?.length > 0 && (
-                    <div className={styles.briefSection}>
-                      <div className={styles.briefSectionLabel}>Likely Hiring Needs</div>
-                      <div className={styles.briefTags}>
-                        {parsed.hiring_needs.map((need, i) => <span key={i} className={styles.briefTag}>{need}</span>)}
-                      </div>
-                    </div>
-                  )}
-                  {parsed.talking_points?.length > 0 && (
-                    <div className={styles.briefSection}>
-                      <div className={styles.briefSectionLabel}>Key Talking Points</div>
-                      <ul className={styles.briefList}>
-                        {parsed.talking_points.map((pt, i) => <li key={i}>{pt}</li>)}
-                      </ul>
-                    </div>
-                  )}
-                  {parsed.red_flags && (
-                    <div className={styles.briefSection}>
-                      <div className={styles.briefSectionLabel}>
-                        <i className="fi fi-rr-triangle-warning" style={{ marginRight: '4px' }}></i>Red Flags
-                      </div>
-                      <div className={`${styles.briefSectionContent} ${styles.briefRedFlags}`}>{parsed.red_flags}</div>
-                    </div>
-                  )}
-                </div>
-              );
-            } catch {
-              return <pre className={styles.briefRaw}>{profile.ai_brief_raw}</pre>;
-            }
-          })()}
-
-          {profile.ai_company_overview && (
-            <div className={styles.briefSection}>
-              <div className={styles.briefSectionLabel}>Company Overview</div>
-              <div className={styles.briefSectionContent}>{profile.ai_company_overview}</div>
-            </div>
-          )}
-          <div className={styles.briefRow}>
-            {profile.ai_industry && (
-              <div className={styles.briefSection}>
-                <div className={styles.briefSectionLabel}>Industry</div>
-                <div className={styles.briefSectionContent}>{profile.ai_industry}</div>
-              </div>
-            )}
-            {profile.ai_company_size && (
-              <div className={styles.briefSection}>
-                <div className={styles.briefSectionLabel}>Estimated Size</div>
-                <div className={styles.briefSectionContent}>{profile.ai_company_size}</div>
-              </div>
-            )}
-          </div>
-          {profile.ai_hiring_needs?.length > 0 && (
-            <div className={styles.briefSection}>
-              <div className={styles.briefSectionLabel}>Likely Hiring Needs</div>
-              <div className={styles.briefTags}>
-                {profile.ai_hiring_needs.map((need, i) => <span key={i} className={styles.briefTag}>{need}</span>)}
-              </div>
-            </div>
-          )}
-          {profile.ai_talking_points?.length > 0 && (
-            <div className={styles.briefSection}>
-              <div className={styles.briefSectionLabel}>Key Talking Points</div>
-              <ul className={styles.briefList}>
-                {profile.ai_talking_points.map((pt, i) => <li key={i}>{pt}</li>)}
-              </ul>
-            </div>
-          )}
-          {profile.ai_red_flags && (
-            <div className={styles.briefSection}>
-              <div className={styles.briefSectionLabel}>
-                <i className="fi fi-rr-triangle-warning" style={{ marginRight: '4px' }}></i>Red Flags / Considerations
-              </div>
-              <div className={`${styles.briefSectionContent} ${styles.briefRedFlags}`}>{profile.ai_red_flags}</div>
-            </div>
-          )}
-          {profile.recruiter_notes && (
-            <div className={styles.briefSection}>
-              <div className={styles.briefSectionLabel}>
-                <i className="fi fi-rr-pencil" style={{ marginRight: '4px' }}></i>Recruiter Notes
-              </div>
-              <div className={styles.briefSectionContent}>{profile.recruiter_notes}</div>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
+function BookingTypeBadge({ type }) {
+  if (type === 'outbound_employer') return <span className={styles.badgeOutboundEmployer}>Employer · Out</span>;
+  if (type === 'outbound_candidate') return <span className={styles.badgeOutboundCandidate}>Candidate · Out</span>;
+  return <span className={styles.badgeInbound}>Inbound</span>;
 }
 
 // ---------------------------------------------------------------------------
@@ -606,16 +315,13 @@ function AdminDashboard() {
     }
   }
 
-  async function cancelBooking(bookingId, employerName) {
-    const confirmed = window.confirm(
-      `Cancel this meeting with ${employerName}?\n\nThis cannot be undone. The booking will be marked as cancelled.`
-    );
-    if (!confirmed) return;
+  async function cancelBooking(bookingId, name) {
+    if (!window.confirm(`Cancel this meeting with ${name}?\n\nThis cannot be undone.`)) return;
     await updateStatus(bookingId, 'cancelled');
   }
 
   async function deleteBooking(bookingId) {
-    if (!window.confirm('Are you sure you want to permanently delete this booking?')) return;
+    if (!window.confirm('Permanently delete this booking?')) return;
     try {
       const token = localStorage.getItem('token');
       const res = await fetch(`${API_BASE}/api/bookings/${bookingId}`, {
@@ -634,21 +340,13 @@ function AdminDashboard() {
     setShowInviteModal(false);
   }
 
-  function toggleBrief(bookingId) {
-    setExpandedBriefId(prev => (prev === bookingId ? null : bookingId));
-  }
-
-  function toggleSummary(bookingId) {
-    setExpandedSummaryId(prev => (prev === bookingId ? null : bookingId));
-  }
-
   function formatDate(dateStr) {
     return new Date(dateStr).toLocaleDateString('en-US', {
       weekday: 'short', month: 'short', day: 'numeric', year: 'numeric',
     });
   }
 
-  const pending = bookings.filter(b => b.status === 'pending');
+  const pending   = bookings.filter(b => b.status === 'pending');
   const confirmed = bookings.filter(b => b.status === 'confirmed');
   const cancelled = bookings.filter(b => b.status === 'cancelled');
   const firstName = user?.full_name?.split(' ')[0] || 'there';
@@ -662,9 +360,8 @@ function AdminDashboard() {
         {booking.status === 'confirmed' && booking.employer_profile_id && (
           <button
             className={`${styles.iconBtn} ${styles.iconBtnAi} ${expandedBriefId === booking.id ? styles.iconBtnActive : ''}`}
-            onClick={() => toggleBrief(booking.id)}
+            onClick={() => setExpandedBriefId(prev => (prev === booking.id ? null : booking.id))}
             title="View AI intelligence brief"
-            aria-label="View AI intelligence brief"
           >
             <img src={aiIcon} alt="" className={styles.actionIcon} />
           </button>
@@ -673,9 +370,8 @@ function AdminDashboard() {
         {booking.meeting_summary && (
           <button
             className={`${styles.iconBtn} ${styles.iconBtnSummary} ${expandedSummaryId === booking.id ? styles.iconBtnActive : ''}`}
-            onClick={() => toggleSummary(booking.id)}
+            onClick={() => setExpandedSummaryId(prev => (prev === booking.id ? null : booking.id))}
             title="View meeting summary"
-            aria-label="View meeting summary"
           >
             <img src={aiNotesIcon} alt="" className={styles.actionIcon} />
           </button>
@@ -700,32 +396,18 @@ function AdminDashboard() {
             disabled={busy}
             onClick={() => cancelBooking(booking.id, booking.employer_name)}
             title={`Cancel meeting with ${booking.employer_name}`}
-            aria-label={`Cancel meeting with ${booking.employer_name}`}
           >
             <img src={letterXIcon} alt="" className={styles.actionIcon} />
           </button>
         )}
 
         {booking.status === 'cancelled' && (
-          <button
-            className={styles.deleteBtn}
-            onClick={() => deleteBooking(booking.id)}
-          >
+          <button className={styles.deleteBtn} onClick={() => deleteBooking(booking.id)}>
             <i className="fi fi-rr-trash" style={{ marginRight: '4px' }}></i>Delete
           </button>
         )}
       </div>
     );
-  }
-
-  function BookingTypeBadge({ type }) {
-    if (type === 'outbound_employer') {
-      return <span className={styles.typeBadgeOutbound}>Outbound · Employer</span>;
-    }
-    if (type === 'outbound_candidate') {
-      return <span className={styles.typeBadgeOutbound}>Outbound · Candidate</span>;
-    }
-    return <span className={styles.typeBadgeInbound}>Inbound</span>;
   }
 
   return (
@@ -735,13 +417,30 @@ function AdminDashboard() {
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.headerLeft}>
-            <h1 className={styles.logo}>RYZE Recruiting</h1>
+            <span className={styles.logo}>RYZE</span>
+            <span className={styles.logoSub}>Recruiting</span>
             <span className={styles.adminBadge}>Admin</span>
           </div>
+
+          <nav className={styles.headerNav}>
+            <button className={`${styles.navLink} ${styles.navLinkActive}`}>
+              <i className="fi fi-rr-apps"></i>Dashboard
+            </button>
+            <button className={styles.navLink} onClick={() => navigate('/admin/employers')}>
+              <i className="fi fi-rr-building"></i>Employers
+            </button>
+            <button className={`${styles.navLink} ${styles.navLinkSoon}`} disabled>
+              <i className="fi fi-rr-users"></i>Candidates
+            </button>
+            <button className={`${styles.navLink} ${styles.navLinkSoon}`} disabled>
+              <i className="fi fi-rr-chart-histogram"></i>Reports
+            </button>
+          </nav>
+
           <div className={styles.headerRight}>
             <span className={styles.userName}>{user?.full_name}</span>
-            <button className={styles.logoutButton} onClick={logout}>
-              <i className="fi fi-rr-exit" style={{ marginRight: '6px' }}></i>Logout
+            <button className={styles.logoutBtn} onClick={logout}>
+              <i className="fi fi-rr-exit"></i>
             </button>
           </div>
         </div>
@@ -749,325 +448,244 @@ function AdminDashboard() {
 
       <main className={styles.main}>
 
-        {/* ── Recruiter Tools Grid ────────────────────────── */}
-        <section className={styles.section}>
-          <p className={styles.pageGreeting}>Welcome back, {firstName}.</p>
-          <div className={styles.featureGrid}>
-            {FEATURE_CARDS.map((card) => (
-              <div
-                key={card.id}
-                className={`${styles.featureCard} ${!card.ready ? styles.featureCardDisabled : ''}`}
-              >
-                <div className={styles.featureCardTop}>
-                  <i className={`${card.icon} ${styles.featureIcon}`}></i>
-                  {!card.ready && (
-                    <img src={comingSoonIcon} alt="Coming Soon" className={styles.comingSoonBadge} />
-                  )}
-                </div>
-                <h4 className={styles.featureTitle}>{card.title}</h4>
-                <p className={styles.featureDesc}>{card.description}</p>
-                <button
-                  className={styles.featureBtn}
-                  disabled={!card.ready}
-                  onClick={() => { if (card.id === 'employer-roster') navigate('/admin/employers'); }}
-                >
-                  {card.cta}
-                </button>
-              </div>
-            ))}
+        {/* ── Page title + action ──────────────────────── */}
+        <div className={styles.pageTop}>
+          <div>
+            <h1 className={styles.pageTitle}>Booking Management</h1>
+            <p className={styles.pageSub}>Welcome back, {firstName}. Here's your pipeline.</p>
           </div>
-        </section>
-
-        {/* ── Booking Management ──────────────────────────── */}
-        <section className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <div>
-              <h3 className={styles.sectionTitle}>Booking Management</h3>
-              <p className={styles.sectionSub}>All incoming discovery call requests</p>
-            </div>
-            <div className={styles.sectionHeaderRight}>
-              <button
-                className={styles.scheduleBtn}
-                onClick={() => setShowInviteModal(true)}
-              >
-                <i className="fi fi-rr-paper-plane" style={{ marginRight: '7px' }}></i>
-                Send Meeting Invite
-              </button>
-              <div className={styles.liveBadge}>
-                <i className="fi fi-rr-circle" style={{ fontSize: '8px' }}></i> Live
-              </div>
+          <div className={styles.pageTopRight}>
+            <button className={styles.inviteBtn} onClick={() => setShowInviteModal(true)}>
+              <i className="fi fi-rr-paper-plane"></i>
+              Send Invite
+            </button>
+            <div className={styles.liveBadge}>
+              <span className={styles.liveDot}></span>Live
             </div>
           </div>
+        </div>
 
-          <div className={styles.statsRow}>
-            <div className={styles.statCard}>
+        {/* ── Stats ───────────────────────────────────── */}
+        <div className={styles.statsRow}>
+          <div className={styles.statCard}>
+            <div className={styles.statIcon}><i className="fi fi-rr-calendar"></i></div>
+            <div className={styles.statInfo}>
               <span className={styles.statNumber}>{bookings.length}</span>
               <span className={styles.statLabel}>Total</span>
             </div>
-            <div className={styles.statCard}>
+          </div>
+          <div className={styles.statCard}>
+            <div className={`${styles.statIcon} ${styles.statIconPending}`}><i className="fi fi-rr-clock"></i></div>
+            <div className={styles.statInfo}>
               <span className={`${styles.statNumber} ${styles.statPending}`}>{pending.length}</span>
               <span className={styles.statLabel}>Pending</span>
             </div>
-            <div className={styles.statCard}>
+          </div>
+          <div className={styles.statCard}>
+            <div className={`${styles.statIcon} ${styles.statIconConfirmed}`}><i className="fi fi-rr-check-circle"></i></div>
+            <div className={styles.statInfo}>
               <span className={`${styles.statNumber} ${styles.statConfirmed}`}>{confirmed.length}</span>
               <span className={styles.statLabel}>Confirmed</span>
             </div>
-            <div className={styles.statCard}>
+          </div>
+          <div className={styles.statCard}>
+            <div className={`${styles.statIcon} ${styles.statIconCancelled}`}><i className="fi fi-rr-ban"></i></div>
+            <div className={styles.statInfo}>
               <span className={`${styles.statNumber} ${styles.statCancelled}`}>{cancelled.length}</span>
               <span className={styles.statLabel}>Cancelled</span>
             </div>
           </div>
+        </div>
 
-          {loading ? (
-            <div className={styles.emptyState}>
-              <i className="fi fi-rr-time" style={{ marginRight: '8px', animation: 'spin 1s linear infinite' }}></i>
-              Loading bookings…
-            </div>
-          ) : error ? (
-            <div className={styles.errorState}>{error}</div>
-          ) : bookings.length === 0 ? (
-            <div className={styles.emptyState}>No bookings yet.</div>
-          ) : (
-            <>
-              {/* ── Desktop Table ── */}
-              <div className={styles.tableWrapper}>
-                <table className={styles.table}>
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Company</th>
-                      <th>Date &amp; Time</th>
-                      <th>Phone</th>
-                      <th>Meeting</th>
-                      <th>Type</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {bookings.map((booking) => (
-                      <>
-                        <tr
-                          key={booking.id}
-                          className={`${styles.row} ${expandedBriefId === booking.id ? styles.rowExpanded : ''}`}
-                        >
-                          <td className={styles.nameCell}>{booking.employer_name}</td>
-                          <td>
-                            <a href={`mailto:${booking.employer_email}`} className={styles.emailLink}>
-                              {booking.employer_email}
+        {/* ── Bookings ────────────────────────────────── */}
+        {loading ? (
+          <div className={styles.emptyState}>
+            <i className="fi fi-rr-time" style={{ animation: 'spin 1s linear infinite', marginRight: '8px' }}></i>
+            Loading bookings…
+          </div>
+        ) : error ? (
+          <div className={styles.errorState}>{error}</div>
+        ) : bookings.length === 0 ? (
+          <div className={styles.emptyState}>
+            <i className="fi fi-rr-calendar" style={{ marginRight: '10px', fontSize: '1.25rem' }}></i>
+            No bookings yet. Send your first invite above.
+          </div>
+        ) : (
+          <>
+            {/* Desktop table */}
+            <div className={styles.tableWrapper}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Company</th>
+                    <th>Date &amp; Time</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Meeting</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {bookings.map((booking) => (
+                    <>
+                      <tr
+                        key={booking.id}
+                        className={`${styles.row} ${expandedBriefId === booking.id || expandedSummaryId === booking.id ? styles.rowExpanded : ''}`}
+                      >
+                        <td className={styles.nameCell}>{booking.employer_name}</td>
+                        <td>
+                          {booking.company_name && <div className={styles.companyName}>{booking.company_name}</div>}
+                          {booking.website_url && (
+                            <a
+                              href={booking.website_url.startsWith('http') ? booking.website_url : `https://${booking.website_url}`}
+                              className={styles.websiteLink}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {booking.website_url.replace(/^https?:\/\//, '')}
                             </a>
-                          </td>
-                          <td>
-                            {booking.company_name && <div className={styles.companyName}>{booking.company_name}</div>}
-                            {booking.website_url && (
-                              <a
-                                href={booking.website_url.startsWith('http') ? booking.website_url : `https://${booking.website_url}`}
-                                className={styles.websiteLink}
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                {booking.website_url.replace(/^https?:\/\//, '')}
-                              </a>
-                            )}
-                          </td>
-                          <td>
-                            <div className={styles.dateText}>{formatDate(booking.date)}</div>
-                            <div className={styles.timeText}>{booking.time_slot} EST</div>
-                          </td>
-                          <td className={styles.phone}>{booking.phone || '—'}</td>
-                          <td>
-                            {booking.meeting_url ? (
-                              <a
-                                href={booking.meeting_url}
-                                target="_blank"
-                                rel="noreferrer"
-                                className={styles.zoomIconLink}
-                                title="Join Zoom Meeting"
-                                aria-label="Join Zoom Meeting"
-                              >
-                                <img src={zoomIcon} alt="" className={styles.zoomIconImg} />
-                              </a>
-                            ) : (
-                              <span className={styles.zoomPending}>—</span>
-                            )}
-                          </td>
-                          <td>
-                            <BookingTypeBadge type={booking.booking_type} />
-                          </td>
-                          <td>
-                            <span className={`${styles.statusBadge} ${STATUS_COLORS[booking.status]}`}>
-                              {STATUS_LABELS[booking.status]}
-                            </span>
-                          </td>
-                          <td>
-                            <ActionButtons booking={booking} />
+                          )}
+                        </td>
+                        <td>
+                          <div className={styles.dateText}>{formatDate(booking.date)}</div>
+                          <div className={styles.timeText}>{booking.time_slot} EST</div>
+                        </td>
+                        <td>
+                          <a href={`mailto:${booking.employer_email}`} className={styles.emailLink}>
+                            {booking.employer_email}
+                          </a>
+                        </td>
+                        <td className={styles.phone}>{booking.phone || '—'}</td>
+                        <td>
+                          {booking.meeting_url ? (
+                            <a href={booking.meeting_url} target="_blank" rel="noreferrer" className={styles.zoomLink} title="Join Zoom Meeting">
+                              <img src={zoomIcon} alt="" className={styles.zoomIcon} />
+                            </a>
+                          ) : (
+                            <span className={styles.zoomPending}>—</span>
+                          )}
+                        </td>
+                        <td><BookingTypeBadge type={booking.booking_type} /></td>
+                        <td>
+                          <span className={`${styles.statusBadge} ${STATUS_COLORS[booking.status]}`}>
+                            {STATUS_LABELS[booking.status]}
+                          </span>
+                        </td>
+                        <td><ActionButtons booking={booking} /></td>
+                      </tr>
+
+                      {expandedBriefId === booking.id && booking.employer_profile_id && (
+                        <tr key={`brief-${booking.id}`} className={styles.expandedRow}>
+                          <td colSpan={9} className={styles.expandedCell}>
+                            <IntelligenceBrief
+                              profileId={booking.employer_profile_id}
+                              onClose={() => setExpandedBriefId(null)}
+                            />
                           </td>
                         </tr>
+                      )}
 
-                        {expandedBriefId === booking.id && booking.employer_profile_id && (
-                          <tr key={`brief-${booking.id}`} className={styles.briefTableRow}>
-                            <td colSpan={9} className={styles.briefCell}>
-                              <IntelligenceBrief
-                                profileId={booking.employer_profile_id}
-                                onClose={() => setExpandedBriefId(null)}
-                              />
-                            </td>
-                          </tr>
-                        )}
+                      {expandedSummaryId === booking.id && booking.meeting_summary && (
+                        <tr key={`summary-${booking.id}`} className={styles.expandedRow}>
+                          <td colSpan={9} className={styles.expandedCell}>
+                            <MeetingSummaryPanel
+                              booking={booking}
+                              onClose={() => setExpandedSummaryId(null)}
+                            />
+                          </td>
+                        </tr>
+                      )}
+                    </>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-                        {expandedSummaryId === booking.id && booking.meeting_summary && (
-                          <tr key={`summary-${booking.id}`} className={styles.briefTableRow}>
-                            <td colSpan={9} className={styles.briefCell}>
-                              <div className={styles.summaryPanel}>
-                                <div className={styles.summaryHeader}>
-                                  <span><img src={aiNotesIcon} alt="" style={{ width: '16px', height: '16px', marginRight: '7px', verticalAlign: 'middle' }} />Meeting Summary</span>
-                                  <button className={styles.briefClose} onClick={() => setExpandedSummaryId(null)}>✕</button>
-                                </div>
-                                <div className={styles.summaryMeta}>
-                                  <span className={styles.summaryMetaItem}>
-                                    <span className={styles.summaryMetaLabel}>Contact</span>
-                                    {booking.employer_name}
-                                  </span>
-                                  {booking.company_name && (
-                                    <span className={styles.summaryMetaItem}>
-                                      <span className={styles.summaryMetaLabel}>Company</span>
-                                      {booking.company_name}
-                                    </span>
-                                  )}
-                                  <span className={styles.summaryMetaItem}>
-                                    <span className={styles.summaryMetaLabel}>Date</span>
-                                    {formatDate(booking.date)} · {booking.time_slot} EST
-                                  </span>
-                                  <span className={styles.summaryMetaItem}>
-                                    <span className={styles.summaryMetaLabel}>Email</span>
-                                    {booking.employer_email}
-                                  </span>
-                                </div>
-                                <p className={styles.summaryText}>{booking.meeting_summary}</p>
-                              </div>
-                            </td>
-                          </tr>
-                        )}
-                      </>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* ── Mobile Cards ── */}
-              <div className={styles.cardList}>
-                {bookings.map((booking) => (
-                  <div key={booking.id} className={styles.bookingCard}>
-                    <div className={styles.cardHeader}>
-                      <div className={styles.cardName}>{booking.employer_name}</div>
-                      <span className={`${styles.statusBadge} ${STATUS_COLORS[booking.status]}`}>
-                        {STATUS_LABELS[booking.status]}
-                      </span>
-                    </div>
-                    <div className={styles.cardGrid}>
-                      <div className={styles.cardField}>
-                        <span className={styles.cardLabel}>Email</span>
-                        <a href={`mailto:${booking.employer_email}`} className={styles.emailLink}>
-                          {booking.employer_email}
-                        </a>
-                      </div>
-                      <div className={styles.cardField}>
-                        <span className={styles.cardLabel}>Phone</span>
-                        <span className={styles.cardValue}>{booking.phone || '—'}</span>
-                      </div>
-                      <div className={styles.cardField}>
-                        <span className={styles.cardLabel}>Company</span>
-                        <span className={styles.cardValue}>{booking.company_name || '—'}</span>
-                        {booking.website_url && (
-                          <a
-                            href={booking.website_url.startsWith('http') ? booking.website_url : `https://${booking.website_url}`}
-                            className={styles.websiteLink}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            {booking.website_url.replace(/^https?:\/\//, '')}
-                          </a>
-                        )}
-                      </div>
-                      <div className={styles.cardField}>
-                        <span className={styles.cardLabel}>Date &amp; Time</span>
-                        <span className={styles.cardValue}>{formatDate(booking.date)}</span>
-                        <span className={styles.timeText}>{booking.time_slot} EST</span>
-                      </div>
-                      <div className={styles.cardField}>
-                        <span className={styles.cardLabel}>Type</span>
-                        <BookingTypeBadge type={booking.booking_type} />
-                      </div>
-                      <div className={styles.cardField}>
-                        <span className={styles.cardLabel}>Meeting</span>
-                        {booking.meeting_url ? (
-                          <a
-                            href={booking.meeting_url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className={styles.zoomLinkMobile}
-                            aria-label="Join Zoom Meeting"
-                          >
-                            <img src={zoomIcon} alt="" className={styles.zoomIconImgMobile} />
-                            <span>Join Zoom</span>
-                          </a>
-                        ) : (
-                          <span className={styles.zoomPending}>Pending</span>
-                        )}
-                      </div>
-                    </div>
-                    <div className={styles.cardFooter}>
-                      <ActionButtons booking={booking} />
-                    </div>
-                    {expandedBriefId === booking.id && booking.employer_profile_id && (
-                      <IntelligenceBrief
-                        profileId={booking.employer_profile_id}
-                        onClose={() => setExpandedBriefId(null)}
-                      />
-                    )}
-                    {expandedSummaryId === booking.id && booking.meeting_summary && (
-                      <div className={styles.summaryPanel}>
-                        <div className={styles.summaryHeader}>
-                          <span><img src={aiNotesIcon} alt="" style={{ width: '16px', height: '16px', marginRight: '7px', verticalAlign: 'middle' }} />Meeting Summary</span>
-                          <button className={styles.briefClose} onClick={() => setExpandedSummaryId(null)}>✕</button>
-                        </div>
-                        <div className={styles.summaryMeta}>
-                          <span className={styles.summaryMetaItem}>
-                            <span className={styles.summaryMetaLabel}>Contact</span>
-                            {booking.employer_name}
-                          </span>
-                          {booking.company_name && (
-                            <span className={styles.summaryMetaItem}>
-                              <span className={styles.summaryMetaLabel}>Company</span>
-                              {booking.company_name}
-                            </span>
-                          )}
-                          <span className={styles.summaryMetaItem}>
-                            <span className={styles.summaryMetaLabel}>Date</span>
-                            {formatDate(booking.date)} · {booking.time_slot} EST
-                          </span>
-                        </div>
-                        <p className={styles.summaryText}>{booking.meeting_summary}</p>
-                      </div>
-                    )}
+            {/* Mobile cards */}
+            <div className={styles.cardList}>
+              {bookings.map((booking) => (
+                <div key={booking.id} className={styles.bookingCard}>
+                  <div className={styles.cardHeader}>
+                    <div className={styles.cardName}>{booking.employer_name}</div>
+                    <span className={`${styles.statusBadge} ${STATUS_COLORS[booking.status]}`}>
+                      {STATUS_LABELS[booking.status]}
+                    </span>
                   </div>
-                ))}
-              </div>
-            </>
-          )}
-        </section>
-
+                  <div className={styles.cardBody}>
+                    <div className={styles.cardField}>
+                      <span className={styles.cardLabel}>Company</span>
+                      <span className={styles.cardValue}>{booking.company_name || '—'}</span>
+                      {booking.website_url && (
+                        <a
+                          href={booking.website_url.startsWith('http') ? booking.website_url : `https://${booking.website_url}`}
+                          className={styles.websiteLink}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {booking.website_url.replace(/^https?:\/\//, '')}
+                        </a>
+                      )}
+                    </div>
+                    <div className={styles.cardField}>
+                      <span className={styles.cardLabel}>Date &amp; Time</span>
+                      <span className={styles.cardValue}>{formatDate(booking.date)}</span>
+                      <span className={styles.timeText}>{booking.time_slot} EST</span>
+                    </div>
+                    <div className={styles.cardField}>
+                      <span className={styles.cardLabel}>Email</span>
+                      <a href={`mailto:${booking.employer_email}`} className={styles.emailLink}>{booking.employer_email}</a>
+                    </div>
+                    <div className={styles.cardField}>
+                      <span className={styles.cardLabel}>Phone</span>
+                      <span className={styles.cardValue}>{booking.phone || '—'}</span>
+                    </div>
+                    <div className={styles.cardField}>
+                      <span className={styles.cardLabel}>Type</span>
+                      <BookingTypeBadge type={booking.booking_type} />
+                    </div>
+                    <div className={styles.cardField}>
+                      <span className={styles.cardLabel}>Meeting</span>
+                      {booking.meeting_url ? (
+                        <a href={booking.meeting_url} target="_blank" rel="noreferrer" className={styles.zoomLinkMobile}>
+                          <img src={zoomIcon} alt="" style={{ width: '18px', height: '18px' }} />
+                          <span>Join Zoom</span>
+                        </a>
+                      ) : (
+                        <span className={styles.zoomPending}>Pending</span>
+                      )}
+                    </div>
+                  </div>
+                  <div className={styles.cardFooter}>
+                    <ActionButtons booking={booking} />
+                  </div>
+                  {expandedBriefId === booking.id && booking.employer_profile_id && (
+                    <IntelligenceBrief
+                      profileId={booking.employer_profile_id}
+                      onClose={() => setExpandedBriefId(null)}
+                    />
+                  )}
+                  {expandedSummaryId === booking.id && booking.meeting_summary && (
+                    <MeetingSummaryPanel
+                      booking={booking}
+                      onClose={() => setExpandedSummaryId(null)}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </main>
 
-      {/* ── Send Invite Modal ────────────────────────────── */}
       {showInviteModal && (
         <SendInviteModal
           onClose={() => setShowInviteModal(false)}
           onSuccess={handleInviteSuccess}
         />
       )}
-
     </div>
   );
 }

@@ -1,6 +1,5 @@
 /* src/pages/CandidateDashboard.module.css */
 
-/* ── Page shell ──────────────────────────────────── */
 .page {
     min-height: 100vh;
     background: var(--bg-50);
@@ -8,106 +7,111 @@
 }
 
 .main {
-    max-width: 1200px;
+    max-width: 860px;
     margin: 0 auto;
-    padding: 2.5rem 2rem 4rem;
+    padding: 2rem 1.5rem 4rem;
 }
 
-/* ── Welcome Banner ──────────────────────────────── */
-.welcomeBanner {
+/* ── Welcome Banner ──────────────────────────────────── */
+.banner {
     background: white;
     border: 1px solid var(--border-200);
-    border-radius: var(--radius);
-    padding: 2rem 2.5rem;
-    margin-bottom: 2.5rem;
-    box-shadow: var(--shadow-sm);
+    border-radius: 14px;
+    padding: 1.75rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 2rem;
 }
 
-.welcomeText {
+.bannerLeft {
     flex: 1;
 }
 
-.badge {
+.bannerBadge {
     display: inline-block;
-    background: color-mix(in srgb, var(--brand-800) 10%, white);
-    border: 1px solid color-mix(in srgb, var(--brand-800) 22%, white);
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
     color: var(--brand-800);
-    padding: 0.3rem 1rem;
+    padding: 3px 10px;
     border-radius: 20px;
-    font-size: 0.75rem;
+    font-size: 10px;
     font-weight: 800;
     letter-spacing: 0.8px;
     text-transform: uppercase;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.6rem;
 }
 
-.welcomeTitle {
-    font-size: 1.75rem;
+.bannerTitle {
+    font-size: 1.4rem;
     font-weight: 800;
     color: var(--text-900);
-    margin: 0 0 0.5rem;
+    margin: 0 0 5px;
     letter-spacing: -0.4px;
 }
 
-.welcomeSub {
-    font-size: 1rem;
+.bannerSub {
+    font-size: 0.875rem;
     color: var(--text-500);
     margin: 0;
-    max-width: 520px;
+    max-width: 480px;
     line-height: 1.5;
 }
 
-.welcomeActions {
+.bannerRight {
     flex-shrink: 0;
 }
 
-.bookingBtn {
+.scheduleBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     background: var(--brand-800);
     color: white;
     border: none;
     border-radius: 10px;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.95rem;
+    padding: 10px 20px;
+    font-size: 0.9rem;
     font-weight: 700;
     font-family: var(--font-sans);
     cursor: pointer;
+    box-shadow: 0 2px 8px rgba(10, 102, 194, 0.28);
+    transition: background 150ms, transform 120ms, box-shadow 150ms;
     white-space: nowrap;
-    transition: background 160ms ease, transform 120ms ease, box-shadow 160ms ease;
-    box-shadow: var(--shadow-sm);
 }
 
-.bookingBtn:hover {
-    background: var(--brand-700);
+.scheduleBtn:hover {
+    background: #004182;
     transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 14px rgba(10, 102, 194, 0.38);
 }
 
-.bookingBtn:active {
-    transform: translateY(0);
+.scheduleBtn:active {
+    transform: scale(0.97);
 }
 
-.bookingBtnSm {
+.scheduleBtnSm {
+    display: inline-flex;
+    align-items: center;
     background: var(--brand-800);
     color: white;
     border: none;
     border-radius: 8px;
-    padding: 0.5rem 1.1rem;
+    padding: 7px 16px;
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 700;
     font-family: var(--font-sans);
     cursor: pointer;
-    transition: background 140ms ease;
+    transition: background 140ms;
 }
 
-.bookingBtnSm:hover {
-    background: var(--brand-700);
+.scheduleBtnSm:hover {
+    background: #004182;
 }
 
-/* ── Section ─────────────────────────────────────── */
+/* ── Section ─────────────────────────────────────────── */
 .section {
     margin-bottom: 2.5rem;
 }
@@ -117,36 +121,75 @@
 }
 
 .sectionTitle {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 700;
     color: var(--text-700);
-    margin: 0 0 0.25rem;
+    margin: 0 0 3px;
+    letter-spacing: -0.1px;
 }
 
 .sectionSub {
-    font-size: 0.85rem;
-    color: var(--text-500);
-    margin: 0 0 1.25rem;
+    font-size: 0.825rem;
+    color: var(--text-400);
+    margin: 0;
 }
 
-/* ── My Calls ────────────────────────────────────── */
+/* ── Calls Empty ─────────────────────────────────────── */
+.callsEmpty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    background: white;
+    border: 1px dashed var(--border-200);
+    border-radius: 12px;
+    color: var(--text-400);
+    font-size: 14px;
+}
+
+.callsEmptyInner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+}
+
+.callsEmptyIcon {
+    font-size: 2rem;
+    color: var(--text-300);
+}
+
+.callsEmptyText {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-400);
+}
+
+/* ── Calls List ──────────────────────────────────────── */
 .callsList {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
 .callCard {
     background: white;
     border: 1px solid var(--border-200);
-    border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
-    box-shadow: var(--shadow-sm);
+    border-left: 4px solid var(--border-200);
+    border-radius: 12px;
+    padding: 1.1rem 1.4rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    border-left: 4px solid var(--border-200);
+    transition: box-shadow 150ms, transform 150ms;
+}
+
+.callCard:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+    transform: translateY(-1px);
 }
 
 .callCard_confirmed {
@@ -159,24 +202,25 @@
 
 .callCard_cancelled {
     border-left-color: #dc2626;
-    opacity: 0.65;
+    opacity: 0.6;
 }
 
 .callCardLeft {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
 }
 
 .callCardRight {
     flex-shrink: 0;
 }
 
-/* ── Status row ──────────────────────────────────── */
+/* ── Status ──────────────────────────────────────────── */
 .callStatus {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    margin-bottom: 4px;
+    margin-bottom: 5px;
 }
 
 .statusConfirmed,
@@ -184,7 +228,7 @@
 .statusCancelled {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: 5px;
 }
 
 .statusConfirmed {
@@ -200,8 +244,8 @@
 }
 
 .statusIcon {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     object-fit: contain;
 }
 
@@ -212,226 +256,147 @@
 }
 
 .callTime {
-    font-size: 0.875rem;
+    font-size: 0.825rem;
     color: var(--text-500);
 }
 
-.callCompany {
-    font-size: 0.875rem;
-    color: var(--text-700);
-    font-weight: 500;
-    margin-top: 2px;
-}
-
-.callPendingNote {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
+.callNote {
     font-size: 0.8rem;
-    color: var(--text-500);
-    margin-top: 6px;
+    color: var(--text-400);
     font-style: italic;
+    margin: 4px 0 0;
 }
 
 .rebookLink {
     background: none;
     border: none;
-    padding: 0;
-    font-size: 0.8rem;
-    font-style: italic;
     color: var(--brand-800);
+    font-weight: 600;
+    font-size: 0.8rem;
     cursor: pointer;
+    padding: 0;
     font-family: var(--font-sans);
+}
+
+.rebookLink:hover {
     text-decoration: underline;
 }
 
-/* ── Empty state ─────────────────────────────────── */
-.callsEmpty {
-    background: white;
-    border: 1px solid var(--border-200);
-    border-radius: var(--radius);
-    padding: 2.5rem;
-    text-align: center;
-    color: var(--text-500);
-    font-size: 0.9rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-}
-
-.callsEmpty p {
-    margin: 0;
-}
-
-/* ── Zoom button ─────────────────────────────────── */
+/* ── Zoom Button ─────────────────────────────────────── */
 .zoomButton {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    padding: 4px;
+    gap: 8px;
+    background: #f0f7ff;
+    border: 1.5px solid #bfdbfe;
+    border-radius: 10px;
+    padding: 8px 14px;
     text-decoration: none;
-    transition: opacity 0.15s ease, transform 0.1s ease;
+    color: var(--brand-800);
+    font-size: 13px;
+    font-weight: 700;
+    font-family: var(--font-sans);
+    transition: background 140ms, border-color 140ms, transform 140ms;
 }
 
 .zoomButton:hover {
-    opacity: 0.75;
+    background: #dbeafe;
+    border-color: #93c5fd;
     transform: translateY(-1px);
 }
 
 .zoomIcon {
-    width: 48px;
-    height: 48px;
+    width: 22px;
+    height: 22px;
     object-fit: contain;
     flex-shrink: 0;
-    display: block;
 }
 
-/* ── Calendar icon button (pending state) ────────── */
-.calendarIcon {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-    padding: 4px;
-    line-height: 1;
-    opacity: 0.5;
-    transition: opacity 0.15s ease;
+.pendingPill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #92400e;
 }
 
-.calendarIcon:hover {
-    opacity: 0.75;
-}
-
-/* ── Feature Grid ────────────────────────────────── */
-.featureGrid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
-}
-
-.featureCard {
-    background: white;
-    border: 1px solid var(--border-200);
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    box-shadow: var(--shadow-sm);
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    transition: box-shadow 160ms ease, transform 160ms ease;
-}
-
-.featureCard:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
-}
-
-.featureCardDisabled {
-    opacity: 0.75;
-}
-
-.featureCardDisabled:hover {
-    transform: none;
-    box-shadow: var(--shadow-sm);
-}
-
-.featureCardTop {
+/* ── Coming Soon Strip ───────────────────────────────── */
+.comingSoon {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.25rem;
-}
-
-.featureIcon {
-    font-size: 1.6rem;
-    line-height: 1;
-}
-
-.soonBadge {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    color: var(--text-500);
-    background: var(--bg-100);
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: white;
     border: 1px solid var(--border-200);
-    padding: 0.2rem 0.6rem;
-    border-radius: 20px;
+    border-radius: 12px;
+    flex-wrap: wrap;
 }
 
-.featureTitle {
-    font-size: 1rem;
+.comingSoonLabel {
+    font-size: 10px;
     font-weight: 700;
-    color: var(--text-900);
-    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-400);
+    white-space: nowrap;
+    padding-right: 1rem;
+    border-right: 1px solid var(--border-200);
 }
 
-.featureDesc {
-    font-size: 0.875rem;
-    color: var(--text-500);
-    margin: 0;
-    line-height: 1.5;
+.comingSoonItems {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
     flex: 1;
 }
 
-.featureBtn {
-    margin-top: 0.75rem;
-    align-self: flex-start;
-    background: none;
-    border: 1.5px solid var(--brand-800);
-    color: var(--brand-800);
-    border-radius: 8px;
-    padding: 0.45rem 1rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    font-family: var(--font-sans);
-    cursor: pointer;
-    transition: background 140ms ease, color 140ms ease;
+.comingSoonItem {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg-50);
+    border: 1px solid var(--border-200);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-400);
 }
 
-.featureBtn:hover:not(:disabled) {
-    background: var(--brand-800);
-    color: white;
+.comingSoonItem i {
+    font-size: 11px;
 }
 
-.featureBtn:disabled {
-    border-color: var(--border-200);
-    color: var(--text-500);
-    cursor: not-allowed;
-}
-
-/* ── Responsive ──────────────────────────────────── */
-@media (max-width: 900px) {
-    .featureGrid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
+/* ── Responsive ──────────────────────────────────────── */
 @media (max-width: 640px) {
     .main {
-        padding: 1.5rem 1rem 3rem;
+        padding: 1.25rem 1rem 3rem;
     }
 
-    .welcomeBanner {
+    .banner {
         flex-direction: column;
         align-items: flex-start;
-        padding: 1.5rem;
+        padding: 1.4rem;
+        gap: 1.25rem;
     }
 
-    .welcomeTitle {
-        font-size: 1.4rem;
+    .bannerTitle {
+        font-size: 1.2rem;
     }
 
-    .bookingBtn {
+    .scheduleBtn,
+    .bannerRight {
         width: 100%;
-        text-align: center;
     }
 
-    .featureGrid {
-        grid-template-columns: 1fr;
+    .scheduleBtn {
+        justify-content: center;
+        width: 100%;
     }
 
     .callCard {
@@ -441,7 +406,23 @@
 
     .callCardRight {
         width: 100%;
-        display: flex;
+    }
+
+    .zoomButton {
+        width: 100%;
         justify-content: center;
+    }
+
+    .comingSoon {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .comingSoonLabel {
+        border-right: none;
+        padding-right: 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border-200);
+        width: 100%;
     }
 }

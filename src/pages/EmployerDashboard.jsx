@@ -4,61 +4,18 @@ import Header from '../components/Header';
 import { useAuth } from '../contexts/AuthContext';
 import ScheduleCallButton from '../components/ScheduleCallButton';
 import styles from './EmployerDashboard.module.css';
-import comingSoonIcon from '../assets/icons/coming-soon.svg';
 import checkIcon from '../assets/icons/check.svg';
 import zoomIcon from '../assets/icons/zoom.svg';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-const FEATURE_CARDS = [
-  {
-    id: 'post-job',
-    icon: 'fi fi-rr-document',
-    title: 'Post a Job',
-    description: 'Create a new listing and reach vetted accounting & finance professionals.',
-    cta: 'Post Now',
-    ready: false,
-  },
-  {
-    id: 'browse-candidates',
-    icon: 'fi fi-rr-search',
-    title: 'Browse Candidates',
-    description: 'Search our database of pre-screened accounting and finance talent.',
-    cta: 'Search Talent',
-    ready: false,
-  },
-  {
-    id: 'applications',
-    icon: 'fi fi-rr-folder',
-    title: 'Manage Applications',
-    description: 'Review, track, and move candidates through your hiring pipeline.',
-    cta: 'View Pipeline',
-    ready: false,
-  },
-  {
-    id: 'messages',
-    icon: 'fi fi-rr-comment',
-    title: 'Messages',
-    description: 'Communicate directly with candidates and your RYZE recruiter.',
-    cta: 'Open Inbox',
-    ready: false,
-  },
-  {
-    id: 'analytics',
-    icon: 'fi fi-rr-chart-histogram',
-    title: 'Analytics',
-    description: 'Track time-to-fill, applicant quality, and hiring funnel performance.',
-    cta: 'View Reports',
-    ready: false,
-  },
-  {
-    id: 'saved',
-    icon: 'fi fi-rr-bookmark',
-    title: 'Saved Candidates',
-    description: "Revisit candidates you've bookmarked for future roles.",
-    cta: 'View Saved',
-    ready: false,
-  },
+const COMING_SOON = [
+  { icon: 'fi fi-rr-document', label: 'Post a Job' },
+  { icon: 'fi fi-rr-search', label: 'Browse Candidates' },
+  { icon: 'fi fi-rr-folder', label: 'Manage Applications' },
+  { icon: 'fi fi-rr-comment', label: 'Messages' },
+  { icon: 'fi fi-rr-chart-histogram', label: 'Analytics' },
+  { icon: 'fi fi-rr-bookmark', label: 'Saved Candidates' },
 ];
 
 function EmployerDashboard() {
@@ -90,10 +47,7 @@ function EmployerDashboard() {
   function formatDate(dateStr) {
     const [year, month, day] = dateStr.split('-').map(Number);
     return new Date(year, month - 1, day).toLocaleDateString('en-US', {
-      weekday: 'long',
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
+      weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
     });
   }
 
@@ -103,24 +57,34 @@ function EmployerDashboard() {
 
       <main className={styles.main}>
 
-        {/* ── Page Greeting ─────────────────────────────── */}
-        <p className={styles.pageGreeting}>Welcome back, {firstName}.</p>
+        {/* ── Page Top ──────────────────────────────────── */}
+        <div className={styles.pageTop}>
+          <div>
+            <h1 className={styles.pageTitle}>Welcome back, {firstName}.</h1>
+            <p className={styles.pageSub}>Your hiring dashboard — powered by RYZE Recruiting.</p>
+          </div>
+          <ScheduleCallButton variant="primary" size="md" label="Schedule a Call" />
+        </div>
 
         {/* ── My Scheduled Calls ────────────────────────── */}
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
-            <div>
-              <h3 className={styles.sectionTitle}>My Scheduled Calls</h3>
-              <p className={styles.sectionSub}>Your discovery calls with RYZE Recruiting</p>
-            </div>
+            <h3 className={styles.sectionTitle}>My Scheduled Calls</h3>
+            <p className={styles.sectionSub}>Your discovery calls with RYZE Recruiting</p>
           </div>
 
           {bookingsLoading ? (
-            <div className={styles.callsEmpty}>Loading your calls…</div>
+            <div className={styles.callsEmpty}>
+              <i className="fi fi-rr-time" style={{ marginRight: '8px' }}></i>
+              Loading your calls…
+            </div>
           ) : myBookings.length === 0 ? (
             <div className={styles.callsEmpty}>
-              <p>No calls scheduled yet.</p>
-              <ScheduleCallButton size="sm" label="Book your first call" />
+              <div className={styles.callsEmptyInner}>
+                <i className={`fi fi-rr-calendar ${styles.callsEmptyIcon}`}></i>
+                <p className={styles.callsEmptyText}>No calls scheduled yet.</p>
+                <ScheduleCallButton variant="primary" size="sm" label="Book Your First Call" />
+              </div>
             </div>
           ) : (
             <div className={styles.callsList}>
@@ -130,7 +94,7 @@ function EmployerDashboard() {
                   className={`${styles.callCard} ${styles[`callCard_${booking.status}`]}`}
                 >
                   <div className={styles.callCardLeft}>
-
+                    {/* Status */}
                     <div className={styles.callStatus}>
                       {booking.status === 'confirmed' && (
                         <span className={styles.statusConfirmed}>
@@ -140,38 +104,38 @@ function EmployerDashboard() {
                       )}
                       {booking.status === 'pending' && (
                         <span className={styles.statusPending}>
-                          <i className="fi fi-rr-clock"></i>
+                          <i className="fi fi-rr-clock" style={{ fontSize: '13px' }}></i>
                           Awaiting Confirmation
                         </span>
                       )}
                       {booking.status === 'cancelled' && (
                         <span className={styles.statusCancelled}>
-                          <i className="fi fi-rr-circle-xmark"></i>
+                          <i className="fi fi-rr-ban" style={{ fontSize: '13px' }}></i>
                           Cancelled
                         </span>
                       )}
                     </div>
 
+                    {/* Date & time */}
                     <div className={styles.callDate}>{formatDate(booking.date)}</div>
                     <div className={styles.callTime}>{booking.time_slot} EST</div>
 
-                    {booking.company_name && (
-                      <div className={styles.callCompany}>{booking.company_name}</div>
-                    )}
+                    {/* Pending nudge */}
                     {booking.status === 'pending' && (
                       <div className={styles.callPendingNote}>
-                        You'll receive an email with your Zoom link once confirmed.
+                        Your call request has been received — we'll confirm shortly.
                       </div>
                     )}
+
+                    {/* Cancelled nudge */}
                     {booking.status === 'cancelled' && (
-                      <div className={styles.callPendingNote}>
+                      <div className={styles.callCancelledNote}>
                         This call was cancelled.{' '}
                         <ScheduleCallButton variant="ghost" size="sm" label="Rebook →" />
                       </div>
                     )}
                   </div>
 
-                  {/* Right side icon — Zoom for confirmed, Calendar for pending */}
                   {booking.status === 'confirmed' && booking.meeting_url && (
                     <div className={styles.callCardRight}>
                       <a
@@ -182,52 +146,37 @@ function EmployerDashboard() {
                         aria-label="Join Zoom Call"
                       >
                         <img src={zoomIcon} alt="" className={styles.zoomIcon} />
+                        <span>Join Zoom</span>
                       </a>
                     </div>
                   )}
+
                   {booking.status === 'pending' && (
                     <div className={styles.callCardRight}>
-                      <ScheduleCallButton variant="iconOnly" size="md" />
+                      <div className={styles.pendingPill}>
+                        <i className="fi fi-rr-hourglass" style={{ fontSize: '13px' }}></i>
+                        Pending
+                      </div>
                     </div>
                   )}
-
                 </div>
               ))}
             </div>
           )}
         </section>
 
-        {/* ── Feature Grid ──────────────────────────────── */}
-        <section className={styles.section}>
-          <div className={styles.featureGrid}>
-            {FEATURE_CARDS.map((card) => (
-              <div
-                key={card.id}
-                className={`${styles.featureCard} ${!card.ready ? styles.featureCardDisabled : ''}`}
-              >
-                <div className={styles.featureCardTop}>
-                  <i className={`${card.icon} ${styles.featureIcon}`}></i>
-                  {!card.ready && (
-                    <img
-                      src={comingSoonIcon}
-                      alt="Coming Soon"
-                      className={styles.comingSoonBadge}
-                    />
-                  )}
-                </div>
-                <h4 className={styles.featureTitle}>{card.title}</h4>
-                <p className={styles.featureDesc}>{card.description}</p>
-                <button
-                  className={styles.featureBtn}
-                  disabled={!card.ready}
-                  onClick={() => { }}
-                >
-                  {card.cta}
-                </button>
+        {/* ── Coming Soon Strip ─────────────────────────── */}
+        <div className={styles.comingSoon}>
+          <span className={styles.comingSoonLabel}>Coming soon</span>
+          <div className={styles.comingSoonItems}>
+            {COMING_SOON.map((item) => (
+              <div key={item.label} className={styles.comingSoonItem}>
+                <i className={item.icon}></i>
+                <span>{item.label}</span>
               </div>
             ))}
           </div>
-        </section>
+        </div>
 
       </main>
     </div>
