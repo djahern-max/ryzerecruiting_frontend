@@ -326,6 +326,7 @@
   font-weight: 500;
 }
 
+
 /* ══════════════════════════════════════════════════════
    DESKTOP TABLE
    ══════════════════════════════════════════════════════ */
@@ -334,7 +335,6 @@
   border: 1px solid var(--border-200);
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
-  overflow: hidden;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   max-width: 100%;
@@ -344,8 +344,8 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
-  min-width: 760px;
-  table-layout: fixed;
+  min-width: 960px;
+  table-layout: auto;
 }
 
 .table thead tr {
@@ -362,48 +362,10 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.table th:nth-child(9) {
+.table th:last-child {
   text-align: center;
-}
-
-.table th:nth-child(1) {
-  width: 11%;
-}
-
-.table th:nth-child(2) {
-  width: 16%;
-}
-
-.table th:nth-child(3) {
-  width: 13%;
-}
-
-.table th:nth-child(4) {
-  width: 12%;
-}
-
-.table th:nth-child(5) {
-  width: 9%;
-}
-
-.table th:nth-child(6) {
-  width: 6%;
-}
-
-.table th:nth-child(7) {
-  width: 11%;
-}
-
-.table th:nth-child(8) {
-  width: 9%;
-}
-
-.table th:nth-child(9) {
-  width: 13%;
 }
 
 .row {
@@ -423,8 +385,6 @@
   padding: 13px 14px;
   vertical-align: middle;
   color: var(--text-700);
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .nameCell {
@@ -524,6 +484,66 @@
   color: var(--text-500);
   font-size: 13px;
 }
+
+/* ── Status Badge ────────────────────────────────────── */
+.statusBadge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.statusPending {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.statusConfirmed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.statusCancelled {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ── Booking Type Badge ───────────────────────────────── */
+.typeBadgeInbound {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: #f1f5f9;
+  color: #475569;
+  white-space: nowrap;
+}
+
+.typeBadgeOutbound {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  white-space: nowrap;
+}
+
+/* ── Actions ─────────────────────────────────────────── */
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
 
 /* ── Status Badge ────────────────────────────────────── */
 .statusBadge {
