@@ -116,7 +116,7 @@ function CandidateDashboard() {
               className={styles.bookingBtn}
               onClick={() => setBookingOpen(true)}
             >
-              📅 Schedule Intro Call
+              📅 Schedule Call
             </button>
           </div>
         </div>

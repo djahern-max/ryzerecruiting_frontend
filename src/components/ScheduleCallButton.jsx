@@ -11,7 +11,7 @@ import scheduleIcon from '../assets/icons/morning-routine.svg';
  * Props:
  *   variant   — 'primary' (default) | 'secondary' | 'ghost' | 'iconOnly'
  *   size      — 'sm' | 'md' (default) | 'lg'
- *   label     — button text (default: 'Schedule Intro Call')
+ *   label     — button text (default: 'Schedule Call')
  *   fullWidth — stretch to container width (default: false)
  *
  * Usage:
@@ -26,7 +26,7 @@ import scheduleIcon from '../assets/icons/morning-routine.svg';
 function ScheduleCallButton({
     variant = 'primary',
     size = 'md',
-    label = 'Schedule Intro Call',
+    label = 'Schedule Call',
     fullWidth = false,
 }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -38,8 +38,8 @@ function ScheduleCallButton({
                 <button
                     className={`${styles.iconOnlyBtn} ${styles[`iconOnly_${size}`]}`}
                     onClick={() => setIsOpen(true)}
-                    aria-label="Schedule Intro Call"
-                    title="Schedule Intro Call"
+                    aria-label="Schedule Call"
+                    title="Schedule Call"
                 >
                     <img
                         src={scheduleIcon}
