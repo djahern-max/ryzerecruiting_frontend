@@ -90,17 +90,219 @@
     transform: translateY(0);
 }
 
+.bookingBtnSm {
+    background: var(--brand-800);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: background 140ms ease;
+}
+
+.bookingBtnSm:hover {
+    background: var(--brand-700);
+}
+
 /* ── Section ─────────────────────────────────────── */
 .section {
-    margin-top: 0;
+    margin-bottom: 2.5rem;
+}
+
+.sectionHeader {
+    margin-bottom: 1rem;
 }
 
 .sectionTitle {
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--text-700);
+    margin: 0 0 0.25rem;
+}
+
+.sectionSub {
+    font-size: 0.85rem;
+    color: var(--text-500);
     margin: 0 0 1.25rem;
-    letter-spacing: -0.1px;
+}
+
+/* ── My Calls ────────────────────────────────────── */
+.callsList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.callCard {
+    background: white;
+    border: 1px solid var(--border-200);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    border-left: 4px solid var(--border-200);
+}
+
+.callCard_confirmed {
+    border-left-color: #16a34a;
+}
+
+.callCard_pending {
+    border-left-color: #d97706;
+}
+
+.callCard_cancelled {
+    border-left-color: #dc2626;
+    opacity: 0.65;
+}
+
+.callCardLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.callCardRight {
+    flex-shrink: 0;
+}
+
+/* ── Status row ──────────────────────────────────── */
+.callStatus {
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.statusConfirmed,
+.statusPending,
+.statusCancelled {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.statusConfirmed {
+    color: #16a34a;
+}
+
+.statusPending {
+    color: #d97706;
+}
+
+.statusCancelled {
+    color: #dc2626;
+}
+
+.statusIcon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
+.callDate {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-900);
+}
+
+.callTime {
+    font-size: 0.875rem;
+    color: var(--text-500);
+}
+
+.callCompany {
+    font-size: 0.875rem;
+    color: var(--text-700);
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+.callPendingNote {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--text-500);
+    margin-top: 6px;
+    font-style: italic;
+}
+
+.rebookLink {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--brand-800);
+    cursor: pointer;
+    font-family: var(--font-sans);
+    text-decoration: underline;
+}
+
+/* ── Empty state ─────────────────────────────────── */
+.callsEmpty {
+    background: white;
+    border: 1px solid var(--border-200);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    text-align: center;
+    color: var(--text-500);
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.callsEmpty p {
+    margin: 0;
+}
+
+/* ── Zoom button ─────────────────────────────────── */
+.zoomButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 4px;
+    text-decoration: none;
+    transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.zoomButton:hover {
+    opacity: 0.75;
+    transform: translateY(-1px);
+}
+
+.zoomIcon {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    flex-shrink: 0;
+    display: block;
+}
+
+/* ── Calendar icon button (pending state) ────────── */
+.calendarIcon {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+    opacity: 0.5;
+    transition: opacity 0.15s ease;
+}
+
+.calendarIcon:hover {
+    opacity: 0.75;
 }
 
 /* ── Feature Grid ────────────────────────────────── */
@@ -201,72 +403,6 @@
     cursor: not-allowed;
 }
 
-/* ── Confirmed Call Banner ───────────────────────── */
-.callBanner {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    background: #f0fdf4;
-    border: 1.5px solid #4ade80;
-    border-radius: var(--radius);
-    padding: 1.25rem 1.75rem;
-    margin-bottom: 1.5rem;
-    box-shadow: var(--shadow-sm);
-}
-
-.callBannerIcon {
-    font-size: 1.75rem;
-    flex-shrink: 0;
-}
-
-.callBannerText {
-    flex: 1;
-}
-
-.callBannerTitle {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #15803d;
-    margin-bottom: 0.2rem;
-}
-
-.callBannerSub {
-    font-size: 0.875rem;
-    color: #16a34a;
-}
-
-.callBannerBtn {
-    flex-shrink: 0;
-    background: #16a34a;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 0.6rem 1.25rem;
-    font-size: 0.9rem;
-    font-weight: 700;
-    font-family: var(--font-sans);
-    text-decoration: none;
-    cursor: pointer;
-    transition: background 140ms;
-    white-space: nowrap;
-}
-
-.callBannerBtn:hover {
-    background: #15803d;
-}
-
-@media (max-width: 640px) {
-    .callBanner {
-        flex-wrap: wrap;
-        padding: 1rem 1.25rem;
-    }
-
-    .callBannerBtn {
-        width: 100%;
-        text-align: center;
-    }
-}
-
 /* ── Responsive ──────────────────────────────────── */
 @media (max-width: 900px) {
     .featureGrid {
@@ -296,5 +432,16 @@
 
     .featureGrid {
         grid-template-columns: 1fr;
+    }
+
+    .callCard {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .callCardRight {
+        width: 100%;
+        display: flex;
+        justify-content: center;
     }
 }

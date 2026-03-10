@@ -4,6 +4,8 @@ import Header from '../components/Header';
 import { useAuth } from '../contexts/AuthContext';
 import BookingModal from '../components/BookingModal';
 import styles from './CandidateDashboard.module.css';
+import checkIcon from '../assets/icons/check.svg';
+import zoomIcon from '../assets/icons/zoom.svg';
 
 const API_BASE = import.meta.env.PROD
   ? 'https://api.ryzerecruiting.com'
@@ -61,7 +63,8 @@ const FEATURE_CARDS = [
 ];
 
 function formatDate(dateStr) {
-  return new Date(dateStr).toLocaleDateString('en-US', {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day).toLocaleDateString('en-US', {
     weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
   });
 }
@@ -69,7 +72,8 @@ function formatDate(dateStr) {
 function CandidateDashboard() {
   const { user } = useAuth();
   const [bookingOpen, setBookingOpen] = useState(false);
-  const [confirmedBookings, setConfirmedBookings] = useState([]);
+  const [myBookings, setMyBookings] = useState([]);
+  const [bookingsLoading, setBookingsLoading] = useState(true);
 
   const firstName = user?.full_name?.split(' ')[0] || 'there';
 
@@ -82,10 +86,11 @@ function CandidateDashboard() {
         });
         if (!res.ok) return;
         const data = await res.json();
-        const confirmed = data.filter(b => b.status === 'confirmed' && b.meeting_url);
-        setConfirmedBookings(confirmed);
+        setMyBookings(data);
       } catch (e) {
         // non-fatal
+      } finally {
+        setBookingsLoading(false);
       }
     }
     fetchMyBookings();
@@ -96,27 +101,6 @@ function CandidateDashboard() {
       <Header />
 
       <main className={styles.main}>
-
-        {/* ── Confirmed Call Banner ─────────────────────── */}
-        {confirmedBookings.map(booking => (
-          <div key={booking.id} className={styles.callBanner}>
-            <div className={styles.callBannerIcon}>📅</div>
-            <div className={styles.callBannerText}>
-              <div className={styles.callBannerTitle}>Your intro call is confirmed</div>
-              <div className={styles.callBannerSub}>
-                {formatDate(booking.date)} at {booking.time_slot} EST
-              </div>
-            </div>
-            <a
-              href={booking.meeting_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.callBannerBtn}
-            >
-              Join Zoom Call →
-            </a>
-          </div>
-        ))}
 
         {/* ── Welcome Banner ────────────────────────────── */}
         <div className={styles.welcomeBanner}>
@@ -136,6 +120,109 @@ function CandidateDashboard() {
             </button>
           </div>
         </div>
+
+        {/* ── My Scheduled Calls ────────────────────────── */}
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <div>
+              <h3 className={styles.sectionTitle}>My Scheduled Calls</h3>
+              <p className={styles.sectionSub}>Your intro calls with RYZE Recruiting</p>
+            </div>
+          </div>
+
+          {bookingsLoading ? (
+            <div className={styles.callsEmpty}>Loading your calls…</div>
+          ) : myBookings.length === 0 ? (
+            <div className={styles.callsEmpty}>
+              <p>No calls scheduled yet.</p>
+              <button className={styles.bookingBtnSm} onClick={() => setBookingOpen(true)}>
+                Book your first call
+              </button>
+            </div>
+          ) : (
+            <div className={styles.callsList}>
+              {myBookings.map((booking) => (
+                <div
+                  key={booking.id}
+                  className={`${styles.callCard} ${styles[`callCard_${booking.status}`]}`}
+                >
+                  <div className={styles.callCardLeft}>
+
+                    <div className={styles.callStatus}>
+                      {booking.status === 'confirmed' && (
+                        <span className={styles.statusConfirmed}>
+                          <img src={checkIcon} alt="" className={styles.statusIcon} />
+                          Confirmed
+                        </span>
+                      )}
+                      {booking.status === 'pending' && (
+                        <span className={styles.statusPending}>
+                          <i className="fi fi-rr-clock"></i>
+                          Awaiting Confirmation
+                        </span>
+                      )}
+                      {booking.status === 'cancelled' && (
+                        <span className={styles.statusCancelled}>
+                          <i className="fi fi-rr-circle-xmark"></i>
+                          Cancelled
+                        </span>
+                      )}
+                    </div>
+
+                    <div className={styles.callDate}>{formatDate(booking.date)}</div>
+                    <div className={styles.callTime}>{booking.time_slot} EST</div>
+
+                    {booking.company_name && (
+                      <div className={styles.callCompany}>{booking.company_name}</div>
+                    )}
+                    {booking.status === 'pending' && (
+                      <div className={styles.callPendingNote}>
+                        You'll receive an email with your Zoom link once confirmed.
+                      </div>
+                    )}
+                    {booking.status === 'cancelled' && (
+                      <div className={styles.callPendingNote}>
+                        This call was cancelled.{' '}
+                        <button
+                          className={styles.rebookLink}
+                          onClick={() => setBookingOpen(true)}
+                        >
+                          Rebook →
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {booking.status === 'confirmed' && booking.meeting_url && (
+                    <div className={styles.callCardRight}>
+                      <a
+                        href={booking.meeting_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.zoomButton}
+                        aria-label="Join Zoom Call"
+                      >
+                        <img src={zoomIcon} alt="" className={styles.zoomIcon} />
+                      </a>
+                    </div>
+                  )}
+                  {booking.status === 'pending' && (
+                    <div className={styles.callCardRight}>
+                      <button
+                        className={styles.calendarIcon}
+                        onClick={() => setBookingOpen(true)}
+                        aria-label="Schedule another call"
+                      >
+                        📅
+                      </button>
+                    </div>
+                  )}
+
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
 
         {/* ── Feature Grid ──────────────────────────────── */}
         <section className={styles.section}>
@@ -157,7 +244,7 @@ function CandidateDashboard() {
                 <button
                   className={styles.featureBtn}
                   disabled={!card.ready}
-                  onClick={() => {/* wire route here */ }}
+                  onClick={() => { }}
                 >
                   {card.cta}
                 </button>
