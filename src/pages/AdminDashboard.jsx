@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 // ── Tier 2 SVG assets (brand / illustrated) ──────────────
 import aiIcon from '../assets/icons/artificial-intelligence.svg';
+import aiNotesIcon from '../assets/icons/ai_notes.svg';
 import zoomIcon from '../assets/icons/zoom.svg';
 import letterXIcon from '../assets/icons/letter-x.svg';
 import comingSoonIcon from '../assets/icons/coming-soon.svg';
@@ -676,7 +677,7 @@ function AdminDashboard() {
             title="View meeting summary"
             aria-label="View meeting summary"
           >
-            <i className="fi fi-rr-document" style={{ fontSize: '15px' }}></i>
+            <img src={aiNotesIcon} alt="" className={styles.actionIcon} />
           </button>
         )}
 
@@ -920,7 +921,7 @@ function AdminDashboard() {
                             <td colSpan={9} className={styles.briefCell}>
                               <div className={styles.summaryPanel}>
                                 <div className={styles.summaryHeader}>
-                                  <span>📋 Meeting Summary</span>
+                                  <span><img src={aiNotesIcon} alt="" style={{ width: '16px', height: '16px', marginRight: '7px', verticalAlign: 'middle' }} />Meeting Summary</span>
                                   <button className={styles.briefClose} onClick={() => setExpandedSummaryId(null)}>✕</button>
                                 </div>
                                 <div className={styles.summaryMeta}>
@@ -1028,7 +1029,7 @@ function AdminDashboard() {
                     {expandedSummaryId === booking.id && booking.meeting_summary && (
                       <div className={styles.summaryPanel}>
                         <div className={styles.summaryHeader}>
-                          <span>📋 Meeting Summary</span>
+                          <span><img src={aiNotesIcon} alt="" style={{ width: '16px', height: '16px', marginRight: '7px', verticalAlign: 'middle' }} />Meeting Summary</span>
                           <button className={styles.briefClose} onClick={() => setExpandedSummaryId(null)}>✕</button>
                         </div>
                         <div className={styles.summaryMeta}>
