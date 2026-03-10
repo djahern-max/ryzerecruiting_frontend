@@ -923,6 +923,26 @@ function AdminDashboard() {
                                   <span>📋 Meeting Summary</span>
                                   <button className={styles.briefClose} onClick={() => setExpandedSummaryId(null)}>✕</button>
                                 </div>
+                                <div className={styles.summaryMeta}>
+                                  <span className={styles.summaryMetaItem}>
+                                    <span className={styles.summaryMetaLabel}>Contact</span>
+                                    {booking.employer_name}
+                                  </span>
+                                  {booking.company_name && (
+                                    <span className={styles.summaryMetaItem}>
+                                      <span className={styles.summaryMetaLabel}>Company</span>
+                                      {booking.company_name}
+                                    </span>
+                                  )}
+                                  <span className={styles.summaryMetaItem}>
+                                    <span className={styles.summaryMetaLabel}>Date</span>
+                                    {formatDate(booking.date)} · {booking.time_slot} EST
+                                  </span>
+                                  <span className={styles.summaryMetaItem}>
+                                    <span className={styles.summaryMetaLabel}>Email</span>
+                                    {booking.employer_email}
+                                  </span>
+                                </div>
                                 <p className={styles.summaryText}>{booking.meeting_summary}</p>
                               </div>
                             </td>
@@ -1010,6 +1030,22 @@ function AdminDashboard() {
                         <div className={styles.summaryHeader}>
                           <span>📋 Meeting Summary</span>
                           <button className={styles.briefClose} onClick={() => setExpandedSummaryId(null)}>✕</button>
+                        </div>
+                        <div className={styles.summaryMeta}>
+                          <span className={styles.summaryMetaItem}>
+                            <span className={styles.summaryMetaLabel}>Contact</span>
+                            {booking.employer_name}
+                          </span>
+                          {booking.company_name && (
+                            <span className={styles.summaryMetaItem}>
+                              <span className={styles.summaryMetaLabel}>Company</span>
+                              {booking.company_name}
+                            </span>
+                          )}
+                          <span className={styles.summaryMetaItem}>
+                            <span className={styles.summaryMetaLabel}>Date</span>
+                            {formatDate(booking.date)} · {booking.time_slot} EST
+                          </span>
                         </div>
                         <p className={styles.summaryText}>{booking.meeting_summary}</p>
                       </div>

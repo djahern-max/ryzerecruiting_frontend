@@ -1396,9 +1396,10 @@
   white-space: nowrap;
 }
 
+/* ── Meeting Summary Panel ─────────────────────────────────────────── */
 .summaryPanel {
-  background: #f0fdf4;
-  border-left: 4px solid #16a34a;
+  background: #f0f5ff;
+  border-left: 4px solid #0a66c2;
   padding: 1.25rem 1.5rem;
   width: 100%;
   box-sizing: border-box;
@@ -1411,8 +1412,33 @@
   align-items: center;
   font-weight: 700;
   font-size: 0.875rem;
-  color: #15803d;
+  color: #004182;
   margin-bottom: 0.75rem;
+}
+
+.summaryMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.875rem;
+  border-bottom: 1px solid #c7d9f5;
+}
+
+.summaryMetaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.8rem;
+  color: var(--text-700);
+}
+
+.summaryMetaLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #57a0d3;
 }
 
 .summaryText {
@@ -1424,9 +1450,9 @@
 }
 
 .iconBtnSummary:hover {
-  background: #dcfce7;
-  border-color: #16a34a;
-  color: #16a34a;
+  background: #dbeafe;
+  border-color: #0a66c2;
+  color: #0a66c2;
 }
 
 
