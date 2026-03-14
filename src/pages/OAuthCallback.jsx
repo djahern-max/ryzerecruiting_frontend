@@ -58,7 +58,7 @@ function OAuthCallback() {
             <div className={styles.authPage}>
                 <div className={styles.authContainer}>
                     <div className={styles.authHeader}>
-                        <h1 className={styles.logo}>RYZE Recruiting</h1>
+                        <h1 className={styles.logo}>RYZE.ai</h1>
                         <h2 className={styles.authTitle}>Authentication Error</h2>
                     </div>
                     <div className={styles.error}>{error}</div>
@@ -74,7 +74,7 @@ function OAuthCallback() {
         <div className={styles.authPage}>
             <div className={styles.authContainer}>
                 <div className={styles.authHeader}>
-                    <h1 className={styles.logo}>RYZE Recruiting</h1>
+                    <h1 className={styles.logo}>RYZE.ai</h1>
                     <h2 className={styles.authTitle}>Completing Sign In...</h2>
                 </div>
                 <p style={{ textAlign: 'center', color: 'var(--text-500)' }}>

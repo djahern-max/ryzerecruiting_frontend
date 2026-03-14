@@ -12,14 +12,14 @@ const TermsOfService = () => {
                 <section>
                     <h2>1. Agreement to Terms</h2>
                     <p>
-                        By accessing or using RYZE Recruiting ("Platform"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use our Platform.
+                        By accessing or using RYZE.ai ("Platform"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use our Platform.
                     </p>
                 </section>
 
                 <section>
                     <h2>2. Description of Service</h2>
                     <p>
-                        RYZE Recruiting is a recruiting platform that connects employers with job candidates. The Platform allows employers to post job listings and candidates to create profiles and apply for positions.
+                        RYZE.ai is a recruiting platform that connects employers with job candidates. The Platform allows employers to post job listings and candidates to create profiles and apply for positions.
                     </p>
                 </section>
 
@@ -133,14 +133,14 @@ const TermsOfService = () => {
                 <section>
                     <h2>11. Limitation of Liability</h2>
                     <p>
-                        TO THE MAXIMUM EXTENT PERMITTED BY LAW, RYZE RECRUITING SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES.
+                        TO THE MAXIMUM EXTENT PERMITTED BY LAW, RYZE.ai SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES.
                     </p>
                 </section>
 
                 <section>
                     <h2>12. Indemnification</h2>
                     <p>
-                        You agree to indemnify and hold harmless RYZE Recruiting from any claims, damages, losses, liabilities, and expenses arising from your use of the Platform or violation of these Terms.
+                        You agree to indemnify and hold harmless RYZE.ai from any claims, damages, losses, liabilities, and expenses arising from your use of the Platform or violation of these Terms.
                     </p>
                 </section>
 

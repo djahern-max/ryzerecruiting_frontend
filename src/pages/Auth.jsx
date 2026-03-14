@@ -103,7 +103,7 @@ function Auth() {
       <div className={styles.authContainer}>
         <div className={styles.authHeader}>
           <h1 className={styles.logo} onClick={() => navigate('/')}>
-            RYZE Recruiting
+            RYZE.ai
           </h1>
           <h2 className={styles.authTitle}>
             {isLogin ? 'Welcome Back' : 'Create Account'}

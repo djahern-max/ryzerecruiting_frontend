@@ -47,7 +47,7 @@ function AdminLogin() {
       <div className={styles.card}>
         <div className={styles.header}>
           <h1 className={styles.logo} onClick={() => navigate('/')}>
-            RYZE Recruiting
+            RYZE.ai
           </h1>
           <span className={styles.adminBadge}>Admin Access</span>
         </div>

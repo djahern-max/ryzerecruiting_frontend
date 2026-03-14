@@ -30,7 +30,7 @@ function Header() {
     <header className={styles.header}>
       <div className={styles.headerContent}>
         <h1 className={styles.logo} onClick={handleLogoClick}>
-          RYZE Recruiting
+          RYZE.ai
         </h1>
         <div className={styles.userInfo}>
           {user && (

@@ -350,7 +350,7 @@ export default function BookingCard({ variant = "employer" }) {
               className={styles.smsCheckbox}
             />
             <span>
-              I agree to receive SMS notifications from RYZE Recruiting regarding my booking,
+              I agree to receive SMS notifications from RYZE.ai regarding my booking,
               including confirmations, reminders, and cancellations. Message and data rates may
               apply. Reply STOP to opt out.
             </span>

@@ -61,7 +61,7 @@ function EmployerDashboard() {
         <div className={styles.pageTop}>
           <div>
             <h1 className={styles.pageTitle}>Welcome back, {firstName}.</h1>
-            <p className={styles.pageSub}>Your hiring dashboard — powered by RYZE Recruiting.</p>
+            <p className={styles.pageSub}>Your hiring dashboard — powered by RYZE.ai.</p>
           </div>
           <ScheduleCallButton variant="primary" size="md" label="Schedule a Call" />
         </div>
@@ -70,7 +70,7 @@ function EmployerDashboard() {
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
             <h3 className={styles.sectionTitle}>My Scheduled Calls</h3>
-            <p className={styles.sectionSub}>Your discovery calls with RYZE Recruiting</p>
+            <p className={styles.sectionSub}>Your discovery calls with RYZE.ai</p>
           </div>
 
           {bookingsLoading ? (

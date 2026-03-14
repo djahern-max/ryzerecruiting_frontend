@@ -314,7 +314,7 @@ export default function EmployerRoster() {
             <header className={styles.header}>
                 <div className={styles.headerContent}>
                     <div className={styles.headerLeft}>
-                        <h1 className={styles.logo}>RYZE Recruiting</h1>
+                        <h1 className={styles.logo}>RYZE.ai</h1>
                         <span className={styles.adminBadge}>Admin</span>
                     </div>
                     <div className={styles.headerRight}>

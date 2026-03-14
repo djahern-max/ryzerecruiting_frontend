@@ -12,7 +12,7 @@ const PrivacyPolicy = () => {
                 <section>
                     <h2>1. Introduction</h2>
                     <p>
-                        Welcome to RYZE Recruiting ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our recruiting platform.
+                        Welcome to RYZE.ai ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our recruiting platform.
                     </p>
                 </section>
 
@@ -50,7 +50,7 @@ const PrivacyPolicy = () => {
                         phone number to send you transactional SMS notifications. These messages
                         include booking confirmations, call reminders, and cancellation notices.
                         By providing your phone number and submitting a call request, you consent
-                        to receive these transactional SMS messages from RYZE Recruiting. Message
+                        to receive these transactional SMS messages from RYZE.ai. Message
                         and data rates may apply. You may opt out at any time by replying STOP
                         to any message. For help, reply HELP. We do not share your phone number
                         with third parties for marketing purposes. SMS communications are

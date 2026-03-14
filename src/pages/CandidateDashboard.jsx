@@ -81,7 +81,7 @@ function CandidateDashboard() {
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
             <h3 className={styles.sectionTitle}>My Scheduled Calls</h3>
-            <p className={styles.sectionSub}>Your intro calls with RYZE Recruiting</p>
+            <p className={styles.sectionSub}>Your intro calls with RYZE.ai</p>
           </div>
 
           {bookingsLoading ? (
