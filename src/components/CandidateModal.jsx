@@ -14,6 +14,13 @@ const EMPTY_FORM = {
     current_company: "",
     location: "",
     notes: "",
+    ai_summary: "",
+    ai_career_level: "",
+    ai_experience: "",
+    ai_education: "",
+    ai_certifications: "",
+    ai_skills: [],
+    ai_years_experience: "",
 };
 
 export default function CandidateModal({ candidate, token, onSaved, onClose }) {
@@ -79,6 +86,13 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                 current_company: parsed.current_company || prev.current_company,
                 location: parsed.location || prev.location,
                 notes: prev.notes,
+                ai_summary: parsed.ai_summary || prev.ai_summary,
+                ai_career_level: parsed.ai_career_level || prev.ai_career_level,
+                ai_experience: parsed.ai_experience || prev.ai_experience,
+                ai_education: parsed.ai_education || prev.ai_education,
+                ai_certifications: parsed.ai_certifications || prev.ai_certifications,
+                ai_skills: parsed.ai_skills || prev.ai_skills,
+                ai_years_experience: parsed.ai_years_experience || prev.ai_years_experience,
             }));
 
             // Switch to manual tab to review parsed fields
