@@ -9,7 +9,8 @@ const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 export default function CandidatesPage() {
     const navigate = useNavigate();
-    const { user, logout, token } = useAuth();
+    const { user, logout } = useAuth();
+    const token = localStorage.getItem('token');
 
     const [candidates, setCandidates] = useState([]);
     const [loading, setLoading] = useState(true);
