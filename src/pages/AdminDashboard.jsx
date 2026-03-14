@@ -12,9 +12,7 @@ import aiNotesIcon from '../assets/icons/ai_notes.svg';
 import zoomIcon from '../assets/icons/zoom.svg';
 import letterXIcon from '../assets/icons/letter-x.svg';
 
-const API_BASE = import.meta.env.PROD
-  ? 'https://api.ryzerecruiting.com'
-  : 'http://localhost:8000';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 const STATUS_LABELS = {
   pending: 'Pending',
@@ -346,7 +344,7 @@ function AdminDashboard() {
     });
   }
 
-  const pending   = bookings.filter(b => b.status === 'pending');
+  const pending = bookings.filter(b => b.status === 'pending');
   const confirmed = bookings.filter(b => b.status === 'confirmed');
   const cancelled = bookings.filter(b => b.status === 'cancelled');
   const firstName = user?.full_name?.split(' ')[0] || 'there';
@@ -417,9 +415,8 @@ function AdminDashboard() {
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.headerLeft}>
-            <span className={styles.logo}>RYZE</span>
-            <span className={styles.logoSub}>Recruiting</span>
-            <span className={styles.adminBadge}>Admin</span>
+            <span className={styles.logo}>RYZE.ai</span>
+            <span className={styles.adminBadge}>ADMIN</span>
           </div>
 
           <nav className={styles.headerNav}>
@@ -429,7 +426,7 @@ function AdminDashboard() {
             <button className={styles.navLink} onClick={() => navigate('/admin/employers')}>
               <i className="fi fi-rr-building"></i>Employers
             </button>
-            <button className={`${styles.navLink} ${styles.navLinkSoon}`} disabled>
+            <button className={styles.navLink} onClick={() => navigate('/admin/candidates')}>
               <i className="fi fi-rr-users"></i>Candidates
             </button>
             <button className={`${styles.navLink} ${styles.navLinkSoon}`} disabled>
