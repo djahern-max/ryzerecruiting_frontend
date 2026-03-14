@@ -289,11 +289,46 @@ function FragmentRow({
                         <div className={styles.detailPanel}>
                             {c.ai_summary && (
                                 <div className={styles.detailSection}>
-                                    <div className={styles.detailLabel}>AI Candidate Summary</div>
+                                    <div className={styles.detailLabel}>AI Summary</div>
                                     <div className={styles.detailContent}>{c.ai_summary}</div>
                                 </div>
                             )}
-
+                            {c.ai_career_level && (
+                                <div className={styles.detailSection}>
+                                    <div className={styles.detailLabel}>Career Level</div>
+                                    <div className={styles.detailContent} style={{ textTransform: 'capitalize' }}>
+                                        {c.ai_career_level} {c.ai_years_experience ? `· ${c.ai_years_experience} years experience` : ""}
+                                    </div>
+                                </div>
+                            )}
+                            {c.ai_experience && (
+                                <div className={styles.detailSection}>
+                                    <div className={styles.detailLabel}>Experience</div>
+                                    <div className={styles.detailContent}>{c.ai_experience}</div>
+                                </div>
+                            )}
+                            {c.ai_education && (
+                                <div className={styles.detailSection}>
+                                    <div className={styles.detailLabel}>Education</div>
+                                    <div className={styles.detailContent}>{c.ai_education}</div>
+                                </div>
+                            )}
+                            {c.ai_certifications && (
+                                <div className={styles.detailSection}>
+                                    <div className={styles.detailLabel}>Certifications</div>
+                                    <div className={styles.detailContent}>{c.ai_certifications}</div>
+                                </div>
+                            )}
+                            {c.ai_skills?.length > 0 && (
+                                <div className={styles.detailSection}>
+                                    <div className={styles.detailLabel}>Skills</div>
+                                    <div className={styles.tagRow}>
+                                        {c.ai_skills.map((skill, i) => (
+                                            <span key={i} className={styles.tag}>{skill}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                             {c.notes && (
                                 <div className={styles.detailSection}>
                                     <div className={styles.detailLabel}>Recruiter Notes</div>
