@@ -7,7 +7,7 @@ const PrivacyPolicy = () => {
         <div className={styles.container}>
             <div className={styles.content}>
                 <h1>Privacy Policy</h1>
-                <p className={styles.lastUpdated}>Last Updated: February 15, 2026</p>
+                <p className={styles.lastUpdated}>Last Updated: March 14, 2026</p>
 
                 <section>
                     <h2>1. Introduction</h2>
@@ -109,7 +109,7 @@ const PrivacyPolicy = () => {
                         <li><strong>Withdraw Consent:</strong> Withdraw consent for data processing where applicable</li>
                     </ul>
                     <p>
-                        To exercise these rights, please contact us at privacy@ryzerecruiting.com
+                        To exercise these rights, please contact us at <a href="mailto:dane@ryze.ai">dane@ryze.ai</a>
                     </p>
                 </section>
 
@@ -159,8 +159,8 @@ const PrivacyPolicy = () => {
                     <h2>12. Contact Us</h2>
                     <p>If you have questions about this Privacy Policy, please contact us:</p>
                     <ul>
-                        <li>Email: privacy@ryzerecruiting.com</li>
-                        <li>Website: https://ryzerecruiting.com/contact</li>
+                        <li>Email: <a href="mailto:dane@ryze.ai">dane@ryze.ai</a></li>
+                        <li>Website: <a href="https://ryze.ai">https://ryze.ai</a></li>
                     </ul>
                 </section>
             </div>

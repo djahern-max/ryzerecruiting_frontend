@@ -8,7 +8,7 @@ function AdminLogin() {
   const navigate = useNavigate();
   const { user, login, loading } = useAuth();
 
-  const [email, setEmail] = useState('dane@ryzerecruiting.com');
+  const [email, setEmail] = useState('dane@ryze.ai');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -65,7 +65,7 @@ function AdminLogin() {
               id="email"
               type="email"
               autoComplete="email"
-              placeholder="dane@ryzerecruiting.com"
+              placeholder="dane@ryze.ai"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

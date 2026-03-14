@@ -4,9 +4,7 @@ import styles from './IntelligenceBrief.module.css';
 import aiIcon from '../assets/icons/artificial-intelligence.svg';
 import letterXIcon from '../assets/icons/letter-x.svg';
 
-const API_BASE = import.meta.env.PROD
-  ? 'https://api.ryzerecruiting.com'
-  : 'http://localhost:8000';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 function IntelligenceBrief({ profileId, onClose }) {
   const [profile, setProfile] = useState(null);

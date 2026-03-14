@@ -7,9 +7,7 @@ import styles from './CandidateDashboard.module.css';
 import checkIcon from '../assets/icons/check.svg';
 import zoomIcon from '../assets/icons/zoom.svg';
 
-const API_BASE = import.meta.env.PROD
-  ? 'https://api.ryzerecruiting.com'
-  : 'http://localhost:8000';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 const COMING_SOON = [
   { icon: 'fi fi-rr-search', label: 'Browse Jobs' },

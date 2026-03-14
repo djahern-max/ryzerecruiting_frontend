@@ -4,9 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import styles from './EmployerRoster.module.css';
 
-const API_BASE = import.meta.env.PROD
-    ? 'https://api.ryzerecruiting.com'
-    : 'http://localhost:8000';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 const RELATIONSHIP_OPTIONS = [
     { value: '', label: 'Set status...' },

@@ -7,7 +7,7 @@ const TermsOfService = () => {
         <div className={styles.container}>
             <div className={styles.content}>
                 <h1>Terms of Service</h1>
-                <p className={styles.lastUpdated}>Last Updated: February 15, 2026</p>
+                <p className={styles.lastUpdated}>Last Updated: March 14, 2026</p>
 
                 <section>
                     <h2>1. Agreement to Terms</h2>
@@ -176,8 +176,8 @@ const TermsOfService = () => {
                     <h2>17. Contact Information</h2>
                     <p>If you have questions about these Terms, please contact us:</p>
                     <ul>
-                        <li>Email: legal@ryzerecruiting.com</li>
-                        <li>Website: https://ryzerecruiting.com/contact</li>
+                        <li>Email: <a href="mailto:dane@ryze.ai">dane@ryze.ai</a></li>
+                        <li>Website: <a href="https://ryze.ai">https://ryze.ai</a></li>
                     </ul>
                 </section>
             </div>

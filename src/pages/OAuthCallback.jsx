@@ -22,13 +22,12 @@ function OAuthCallback() {
             localStorage.setItem('token', token);
 
             fetch(
-                import.meta.env.PROD
-                    ? 'https://api.ryzerecruiting.com/api/auth/me'
-                    : 'http://localhost:8000/api/auth/me',
+                `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/auth/me`,
                 {
                     headers: { Authorization: `Bearer ${token}` }
                 }
             )
+
                 .then(res => {
                     if (!res.ok) throw new Error(`Auth failed: ${res.status}`);
                     return res.json();
