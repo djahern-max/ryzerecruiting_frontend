@@ -76,7 +76,7 @@ function Landing() {
       {/* ── Header ── */}
       <header className={styles.header}>
         <div className={styles.headerContent}>
-          <span className={styles.logo}>RYZE Recruiting</span>
+          <span className={styles.logo}>RYZE.ai</span>
         </div>
       </header>
 
@@ -173,7 +173,7 @@ function Landing() {
             <a href="/privacy" className={styles.footerLink}>Privacy</a>
             <a href="/terms" className={styles.footerLink}>Terms</a>
           </div>
-          <p className={styles.copyright}>© 2026 RYZE Recruiting</p>
+          <p className={styles.copyright}>© 2026 RYZE.ai</p>
           <a href="/admin/login" className={styles.adminAccess}>Admin</a>
         </footer>
       </main>
