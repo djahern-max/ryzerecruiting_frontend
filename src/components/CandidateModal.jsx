@@ -151,11 +151,12 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                 {/* ── Tabs ── */}
                 {!isEdit && (
                     <div className={styles.tabs}>
+                        {/* CHANGED: removed "LinkedIn /" from tab label */}
                         <button
                             className={`${styles.tab} ${activeTab === "parse" ? styles.tabActive : ""}`}
                             onClick={() => setActiveTab("parse")}
                         >
-                            ⚡ Parse from LinkedIn / Resume
+                            ⚡ Parse from Resume
                         </button>
                         <button
                             className={`${styles.tab} ${activeTab === "manual" ? styles.tabActive : ""}`}
@@ -170,14 +171,15 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                     {/* ── Parse Tab ── */}
                     {activeTab === "parse" && !isEdit && (
                         <div className={styles.parseSection}>
+                            {/* CHANGED: instructions no longer mention LinkedIn */}
                             <p className={styles.parseInstructions}>
-                                Open a LinkedIn profile or resume, select all (<kbd>⌘A</kbd>),
-                                copy (<kbd>⌘C</kbd>), and paste below. Claude will extract the
-                                candidate's details automatically.
+                                Paste a resume, bio, or any candidate profile text below.
+                                Claude will extract their details automatically.
                             </p>
+                            {/* CHANGED: placeholder no longer mentions LinkedIn */}
                             <textarea
                                 className={styles.parseTextarea}
-                                placeholder="Paste LinkedIn profile or resume text here..."
+                                placeholder="Paste resume or candidate profile text here..."
                                 value={parseText}
                                 onChange={(e) => setParseText(e.target.value)}
                                 rows={10}
