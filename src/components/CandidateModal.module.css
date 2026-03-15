@@ -15,7 +15,7 @@
     background: white;
     border-radius: 16px;
     width: 100%;
-    max-width: 640px;
+    max-width: 680px;
     max-height: 90vh;
     display: flex;
     flex-direction: column;
@@ -113,15 +113,6 @@
     border-radius: 0 8px 8px 0;
 }
 
-.parseInstructions kbd {
-    background: white;
-    border: 1px solid var(--border-200);
-    border-radius: 4px;
-    padding: 1px 6px;
-    font-size: 0.8rem;
-    font-family: monospace;
-}
-
 .parseTextarea {
     width: 100%;
     border: 1.5px solid var(--border-200);
@@ -166,11 +157,50 @@
     cursor: not-allowed;
 }
 
+/* ── Form Sections ── */
+.formSections {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.sectionBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-500);
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-100, #f1f5f9);
+}
+
+.sectionHint {
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--text-300);
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    color: #0369a1;
+    padding: 2px 8px;
+    border-radius: 20px;
+}
+
 /* ── Form Grid ── */
 .formGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 14px;
 }
 
 .formGroup {
@@ -207,6 +237,29 @@
     border-color: var(--brand-800);
 }
 
+.select {
+    height: 40px;
+    padding: 0 12px;
+    border: 1.5px solid var(--border-200);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--text-900);
+    background: white;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 140ms;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+}
+
+.select:focus {
+    border-color: var(--brand-800);
+}
+
 .textarea {
     padding: 10px 12px;
     border: 1.5px solid var(--border-200);
@@ -217,10 +270,75 @@
     outline: none;
     transition: border-color 140ms;
     resize: vertical;
+    line-height: 1.5;
 }
 
 .textarea:focus {
     border-color: var(--brand-800);
+}
+
+/* ── Skills Tag Input ── */
+.skillsWrapper {
+    min-height: 40px;
+    padding: 6px 10px;
+    border: 1.5px solid var(--border-200);
+    border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    transition: border-color 140ms;
+    cursor: text;
+}
+
+.skillsWrapper:focus-within {
+    border-color: var(--brand-800);
+}
+
+.skillTag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+    border-radius: 20px;
+    padding: 3px 10px 3px 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.skillRemove {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    cursor: pointer;
+    font-size: 0.9rem;
+    line-height: 1;
+    padding: 0;
+    margin-left: 2px;
+    display: flex;
+    align-items: center;
+}
+
+.skillRemove:hover {
+    color: #1e40af;
+}
+
+.skillInput {
+    border: none;
+    outline: none;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--text-900);
+    flex: 1;
+    min-width: 120px;
+    background: transparent;
+}
+
+.skillInput::placeholder {
+    color: var(--text-300);
 }
 
 /* ── Footer ── */
