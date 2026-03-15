@@ -576,6 +576,19 @@
     animation: spin 0.7s linear infinite;
 }
 
+.thinkingLabel {
+    font-size: 0.78rem;
+    color: var(--text-400);
+    margin: 0 0 8px;
+    font-style: italic;
+}
+
+.typingBubbleInner {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
 @keyframes spin {
     to {
         transform: rotate(360deg);

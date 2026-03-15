@@ -147,10 +147,13 @@ function TypingIndicator() {
                     <path fill="#004aad" d="M 186.078125 19.484375 L 0.367188 341.148438 L 180.234375 341.148438 L 229.054688 256.585938 L 201.605469 215.015625 L 190.46875 234.308594 L 154.511719 296.59375 L 77.539062 296.59375 L 186.394531 108.039062 L 296.730469 295.972656 L 243.730469 295.972656 L 221.453125 340.527344 L 374.554688 340.527344 Z" />
                 </svg>
             </div>
-            <div className={`${styles.bubble} ${styles.bubbleAI} ${styles.typingBubble}`}>
-                <span className={styles.dot} />
-                <span className={styles.dot} />
-                <span className={styles.dot} />
+            <div className={`${styles.bubble} ${styles.bubbleAI}`}>
+                <p className={styles.thinkingLabel}>Searching your database...</p>
+                <div className={styles.typingBubbleInner}>
+                    <span className={styles.dot} />
+                    <span className={styles.dot} />
+                    <span className={styles.dot} />
+                </div>
             </div>
         </div>
     );
