@@ -1,5 +1,5 @@
 /* src/components/CandidateModal.jsx */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./CandidateModal.module.css";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
@@ -38,12 +38,16 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
     const isEdit = !!candidate;
     const [form, setForm] = useState(EMPTY_FORM);
     const [parseText, setParseText] = useState("");
+    const [parseMode, setParseMode] = useState("text"); // "text" | "file"
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [dragOver, setDragOver] = useState(false);
     const [parsing, setParsing] = useState(false);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState(null);
     const [parseError, setParseError] = useState(null);
     const [activeTab, setActiveTab] = useState("manual");
     const [skillInput, setSkillInput] = useState("");
+    const fileInputRef = useRef(null);
 
     useEffect(() => {
         if (candidate) {
@@ -90,7 +94,47 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
         }));
     }
 
-    async function handleParse() {
+    function handleFileSelect(file) {
+        if (!file) return;
+        const name = file.name.toLowerCase();
+        if (!name.endsWith(".pdf") && !name.endsWith(".docx")) {
+            setParseError("Please select a PDF or Word (.docx) file.");
+            return;
+        }
+        setParseError(null);
+        setSelectedFile(file);
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+        setDragOver(false);
+        const file = e.dataTransfer.files[0];
+        handleFileSelect(file);
+    }
+
+    function applyParsedResult(parsed) {
+        setForm((prev) => ({
+            name: parsed.name || prev.name,
+            email: parsed.email || prev.email,
+            phone: parsed.phone || prev.phone,
+            linkedin_url: parsed.linkedin_url || prev.linkedin_url,
+            linkedin_raw_text: parsed.linkedin_raw_text || parseText || prev.linkedin_raw_text,
+            current_title: parsed.current_title || prev.current_title,
+            current_company: parsed.current_company || prev.current_company,
+            location: parsed.location || prev.location,
+            notes: prev.notes,
+            ai_summary: parsed.ai_summary || prev.ai_summary,
+            ai_career_level: parsed.ai_career_level || prev.ai_career_level,
+            ai_experience: parsed.ai_experience || prev.ai_experience,
+            ai_education: parsed.ai_education || prev.ai_education,
+            ai_certifications: parsed.ai_certifications || prev.ai_certifications,
+            ai_skills: parsed.ai_skills || prev.ai_skills,
+            ai_years_experience: parsed.ai_years_experience || prev.ai_years_experience,
+        }));
+        setActiveTab("manual");
+    }
+
+    async function handleParseText() {
         setParseError(null);
         if (!parseText.trim() || parseText.trim().length < 50) {
             setParseError("Please paste more text — at least a few lines.");
@@ -110,28 +154,34 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                 const data = await res.json().catch(() => ({}));
                 throw new Error(data.detail || "Parse failed");
             }
-            const parsed = await res.json();
+            applyParsedResult(await res.json());
+        } catch (e) {
+            setParseError(e.message);
+        } finally {
+            setParsing(false);
+        }
+    }
 
-            setForm((prev) => ({
-                name: parsed.name || prev.name,
-                email: parsed.email || prev.email,
-                phone: parsed.phone || prev.phone,
-                linkedin_url: parsed.linkedin_url || prev.linkedin_url,
-                linkedin_raw_text: parseText,
-                current_title: parsed.current_title || prev.current_title,
-                current_company: parsed.current_company || prev.current_company,
-                location: parsed.location || prev.location,
-                notes: prev.notes,
-                ai_summary: parsed.ai_summary || prev.ai_summary,
-                ai_career_level: parsed.ai_career_level || prev.ai_career_level,
-                ai_experience: parsed.ai_experience || prev.ai_experience,
-                ai_education: parsed.ai_education || prev.ai_education,
-                ai_certifications: parsed.ai_certifications || prev.ai_certifications,
-                ai_skills: parsed.ai_skills || prev.ai_skills,
-                ai_years_experience: parsed.ai_years_experience || prev.ai_years_experience,
-            }));
-
-            setActiveTab("manual");
+    async function handleParseFile() {
+        setParseError(null);
+        if (!selectedFile) {
+            setParseError("Please select a file first.");
+            return;
+        }
+        setParsing(true);
+        try {
+            const formData = new FormData();
+            formData.append("file", selectedFile);
+            const res = await fetch(`${API_BASE}/api/candidates/parse-file`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData,
+            });
+            if (!res.ok) {
+                const data = await res.json().catch(() => ({}));
+                throw new Error(data.detail || "Parse failed");
+            }
+            applyParsedResult(await res.json());
         } catch (e) {
             setParseError(e.message);
         } finally {
@@ -212,29 +262,98 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                     {/* ── Parse Tab ── */}
                     {activeTab === "parse" && !isEdit && (
                         <div className={styles.parseSection}>
-                            <p className={styles.parseInstructions}>
-                                Paste a resume, bio, or any candidate profile text below.
-                                Claude will extract their details automatically.
-                            </p>
-                            <textarea
-                                className={styles.parseTextarea}
-                                placeholder="Paste resume or candidate profile text here..."
-                                value={parseText}
-                                onChange={(e) => setParseText(e.target.value)}
-                                rows={10}
-                            />
-                            {parseError && <p className={styles.errorMsg}>{parseError}</p>}
-                            <button
-                                className={styles.parseBtn}
-                                onClick={handleParse}
-                                disabled={parsing}
-                            >
-                                {parsing ? (
-                                    <><span className={styles.spinner} /> Parsing...</>
-                                ) : (
-                                    "⚡ Parse Profile"
-                                )}
-                            </button>
+
+                            {/* Parse mode toggle */}
+                            <div className={styles.parseModeToggle}>
+                                <button
+                                    className={`${styles.parseModeBtn} ${parseMode === "file" ? styles.parseModeBtnActive : ""}`}
+                                    onClick={() => { setParseMode("file"); setParseError(null); }}
+                                    type="button"
+                                >
+                                    📎 Upload File
+                                </button>
+                                <button
+                                    className={`${styles.parseModeBtn} ${parseMode === "text" ? styles.parseModeBtnActive : ""}`}
+                                    onClick={() => { setParseMode("text"); setParseError(null); }}
+                                    type="button"
+                                >
+                                    📋 Paste Text
+                                </button>
+                            </div>
+
+                            {/* File upload */}
+                            {parseMode === "file" && (
+                                <>
+                                    <div
+                                        className={`${styles.dropZone} ${dragOver ? styles.dropZoneActive : ""} ${selectedFile ? styles.dropZoneHasFile : ""}`}
+                                        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+                                        onDragLeave={() => setDragOver(false)}
+                                        onDrop={handleDrop}
+                                        onClick={() => fileInputRef.current?.click()}
+                                    >
+                                        <input
+                                            ref={fileInputRef}
+                                            type="file"
+                                            accept=".pdf,.docx"
+                                            style={{ display: "none" }}
+                                            onChange={(e) => handleFileSelect(e.target.files[0])}
+                                        />
+                                        {selectedFile ? (
+                                            <div className={styles.dropZoneFileSelected}>
+                                                <span className={styles.dropZoneFileIcon}>
+                                                    {selectedFile.name.endsWith(".pdf") ? "📄" : "📝"}
+                                                </span>
+                                                <div>
+                                                    <div className={styles.dropZoneFileName}>{selectedFile.name}</div>
+                                                    <div className={styles.dropZoneFileSize}>
+                                                        {(selectedFile.size / 1024).toFixed(0)} KB — click to change
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className={styles.dropZoneEmpty}>
+                                                <div className={styles.dropZoneIcon}>⬆️</div>
+                                                <div className={styles.dropZoneText}>
+                                                    Drag & drop a resume here, or <span className={styles.dropZoneBrowse}>browse</span>
+                                                </div>
+                                                <div className={styles.dropZoneHint}>PDF or Word (.docx) · Max 10MB</div>
+                                            </div>
+                                        )}
+                                    </div>
+                                    {parseError && <p className={styles.errorMsg}>{parseError}</p>}
+                                    <button
+                                        className={styles.parseBtn}
+                                        onClick={handleParseFile}
+                                        disabled={parsing || !selectedFile}
+                                    >
+                                        {parsing ? <><span className={styles.spinner} /> Parsing...</> : "⚡ Parse Resume"}
+                                    </button>
+                                </>
+                            )}
+
+                            {/* Text paste */}
+                            {parseMode === "text" && (
+                                <>
+                                    <p className={styles.parseInstructions}>
+                                        Paste a resume, bio, or LinkedIn profile text below. Claude will extract their details automatically.
+                                    </p>
+                                    <textarea
+                                        className={styles.parseTextarea}
+                                        placeholder="Paste resume or candidate profile text here..."
+                                        value={parseText}
+                                        onChange={(e) => setParseText(e.target.value)}
+                                        rows={10}
+                                    />
+                                    {parseError && <p className={styles.errorMsg}>{parseError}</p>}
+                                    <button
+                                        className={styles.parseBtn}
+                                        onClick={handleParseText}
+                                        disabled={parsing}
+                                    >
+                                        {parsing ? <><span className={styles.spinner} /> Parsing...</> : "⚡ Parse Profile"}
+                                    </button>
+                                </>
+                            )}
                         </div>
                     )}
 
@@ -242,159 +361,75 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                     {activeTab === "manual" && (
                         <div className={styles.formSections}>
 
-                            {/* ── Section: Basic Info ── */}
+                            {/* Basic Info */}
                             <div className={styles.sectionBlock}>
                                 <div className={styles.sectionHeader}>Basic Info</div>
                                 <div className={styles.formGrid}>
                                     <div className={styles.formGroup}>
                                         <label className={styles.label}>Name *</label>
-                                        <input
-                                            className={styles.input}
-                                            name="name"
-                                            value={form.name}
-                                            onChange={handleChange}
-                                            placeholder="Full name"
-                                        />
+                                        <input className={styles.input} name="name" value={form.name} onChange={handleChange} placeholder="Full name" />
                                     </div>
-
                                     <div className={styles.formGroup}>
                                         <label className={styles.label}>Current Title</label>
-                                        <input
-                                            className={styles.input}
-                                            name="current_title"
-                                            value={form.current_title}
-                                            onChange={handleChange}
-                                            placeholder="e.g. Senior Accountant"
-                                        />
+                                        <input className={styles.input} name="current_title" value={form.current_title} onChange={handleChange} placeholder="e.g. Senior Accountant" />
                                     </div>
-
                                     <div className={styles.formGroup}>
                                         <label className={styles.label}>Current Company</label>
-                                        <input
-                                            className={styles.input}
-                                            name="current_company"
-                                            value={form.current_company}
-                                            onChange={handleChange}
-                                            placeholder="e.g. Deloitte"
-                                        />
+                                        <input className={styles.input} name="current_company" value={form.current_company} onChange={handleChange} placeholder="e.g. Deloitte" />
                                     </div>
-
                                     <div className={styles.formGroup}>
                                         <label className={styles.label}>Location</label>
-                                        <input
-                                            className={styles.input}
-                                            name="location"
-                                            value={form.location}
-                                            onChange={handleChange}
-                                            placeholder="e.g. Boston, MA"
-                                        />
+                                        <input className={styles.input} name="location" value={form.location} onChange={handleChange} placeholder="e.g. Boston, MA" />
                                     </div>
-
                                     <div className={styles.formGroup}>
                                         <label className={styles.label}>Email</label>
-                                        <input
-                                            className={styles.input}
-                                            name="email"
-                                            type="email"
-                                            value={form.email}
-                                            onChange={handleChange}
-                                            placeholder="email@example.com"
-                                        />
+                                        <input className={styles.input} name="email" type="email" value={form.email} onChange={handleChange} placeholder="email@example.com" />
                                     </div>
-
                                     <div className={styles.formGroup}>
                                         <label className={styles.label}>Phone</label>
-                                        <input
-                                            className={styles.input}
-                                            name="phone"
-                                            value={form.phone}
-                                            onChange={handleChange}
-                                            placeholder="+1 (555) 000-0000"
-                                        />
+                                        <input className={styles.input} name="phone" value={form.phone} onChange={handleChange} placeholder="+1 (555) 000-0000" />
                                     </div>
-
                                     <div className={`${styles.formGroup} ${styles.fullWidth}`}>
                                         <label className={styles.label}>LinkedIn URL</label>
-                                        <input
-                                            className={styles.input}
-                                            name="linkedin_url"
-                                            value={form.linkedin_url}
-                                            onChange={handleChange}
-                                            placeholder="https://linkedin.com/in/..."
-                                        />
+                                        <input className={styles.input} name="linkedin_url" value={form.linkedin_url} onChange={handleChange} placeholder="https://linkedin.com/in/..." />
                                     </div>
                                 </div>
                             </div>
 
-                            {/* ── Section: AI Intelligence ── */}
+                            {/* AI Intelligence */}
                             <div className={styles.sectionBlock}>
                                 <div className={styles.sectionHeader}>
                                     <span>AI Intelligence</span>
                                     <span className={styles.sectionHint}>Extracted by Claude · editable</span>
                                 </div>
                                 <div className={styles.formGrid}>
-
                                     <div className={styles.formGroup}>
                                         <label className={styles.label}>Career Level</label>
-                                        <select
-                                            className={styles.select}
-                                            name="ai_career_level"
-                                            value={form.ai_career_level}
-                                            onChange={handleChange}
-                                        >
+                                        <select className={styles.select} name="ai_career_level" value={form.ai_career_level} onChange={handleChange}>
                                             {CAREER_LEVEL_OPTIONS.map((o) => (
                                                 <option key={o.value} value={o.value}>{o.label}</option>
                                             ))}
                                         </select>
                                     </div>
-
                                     <div className={styles.formGroup}>
                                         <label className={styles.label}>Years of Experience</label>
-                                        <input
-                                            className={styles.input}
-                                            name="ai_years_experience"
-                                            type="number"
-                                            min="0"
-                                            max="50"
-                                            value={form.ai_years_experience}
-                                            onChange={handleChange}
-                                            placeholder="e.g. 8"
-                                        />
+                                        <input className={styles.input} name="ai_years_experience" type="number" min="0" max="50" value={form.ai_years_experience} onChange={handleChange} placeholder="e.g. 8" />
                                     </div>
-
                                     <div className={styles.formGroup}>
                                         <label className={styles.label}>Certifications</label>
-                                        <input
-                                            className={styles.input}
-                                            name="ai_certifications"
-                                            value={form.ai_certifications}
-                                            onChange={handleChange}
-                                            placeholder="e.g. CPA, CMA"
-                                        />
+                                        <input className={styles.input} name="ai_certifications" value={form.ai_certifications} onChange={handleChange} placeholder="e.g. CPA, CMA" />
                                     </div>
-
                                     <div className={styles.formGroup}>
                                         <label className={styles.label}>Education</label>
-                                        <input
-                                            className={styles.input}
-                                            name="ai_education"
-                                            value={form.ai_education}
-                                            onChange={handleChange}
-                                            placeholder="e.g. BS Accounting, UMass"
-                                        />
+                                        <input className={styles.input} name="ai_education" value={form.ai_education} onChange={handleChange} placeholder="e.g. BS Accounting, UMass" />
                                     </div>
-
                                     <div className={`${styles.formGroup} ${styles.fullWidth}`}>
                                         <label className={styles.label}>Skills</label>
                                         <div className={styles.skillsWrapper}>
                                             {form.ai_skills.map((skill) => (
                                                 <span key={skill} className={styles.skillTag}>
                                                     {skill}
-                                                    <button
-                                                        className={styles.skillRemove}
-                                                        onClick={() => removeSkill(skill)}
-                                                        type="button"
-                                                    >×</button>
+                                                    <button className={styles.skillRemove} onClick={() => removeSkill(skill)} type="button">×</button>
                                                 </span>
                                             ))}
                                             <input
@@ -407,47 +442,23 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                                         </div>
                                         <p className={styles.fieldHint}>Type a skill and press <em>Enter</em> or <em>,</em> to add it. Click × to remove.</p>
                                     </div>
-
                                     <div className={`${styles.formGroup} ${styles.fullWidth}`}>
                                         <label className={styles.label}>AI Summary</label>
-                                        <textarea
-                                            className={styles.textarea}
-                                            name="ai_summary"
-                                            value={form.ai_summary}
-                                            onChange={handleChange}
-                                            placeholder="Recruiter-perspective summary of this candidate..."
-                                            rows={3}
-                                        />
+                                        <textarea className={styles.textarea} name="ai_summary" value={form.ai_summary} onChange={handleChange} placeholder="Recruiter-perspective summary of this candidate..." rows={3} />
                                     </div>
-
                                     <div className={`${styles.formGroup} ${styles.fullWidth}`}>
                                         <label className={styles.label}>Experience</label>
-                                        <textarea
-                                            className={styles.textarea}
-                                            name="ai_experience"
-                                            value={form.ai_experience}
-                                            onChange={handleChange}
-                                            placeholder="Work history and key accomplishments..."
-                                            rows={4}
-                                        />
+                                        <textarea className={styles.textarea} name="ai_experience" value={form.ai_experience} onChange={handleChange} placeholder="Work history and key accomplishments..." rows={4} />
                                     </div>
-
                                 </div>
                             </div>
 
-                            {/* ── Section: Recruiter Notes ── */}
+                            {/* Recruiter Notes */}
                             <div className={styles.sectionBlock}>
                                 <div className={styles.sectionHeader}>Recruiter Notes</div>
                                 <div className={styles.formGrid}>
                                     <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                                        <textarea
-                                            className={styles.textarea}
-                                            name="notes"
-                                            value={form.notes}
-                                            onChange={handleChange}
-                                            placeholder="Internal notes — not visible to candidates..."
-                                            rows={3}
-                                        />
+                                        <textarea className={styles.textarea} name="notes" value={form.notes} onChange={handleChange} placeholder="Internal notes — not visible to candidates..." rows={3} />
                                     </div>
                                 </div>
                             </div>
@@ -462,11 +473,7 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                     <div className={styles.footerActions}>
                         <button className={styles.cancelBtn} onClick={onClose}>Cancel</button>
                         {activeTab === "manual" && (
-                            <button
-                                className={styles.saveBtn}
-                                onClick={handleSave}
-                                disabled={saving}
-                            >
+                            <button className={styles.saveBtn} onClick={handleSave} disabled={saving}>
                                 {saving ? "Saving..." : isEdit ? "Save Changes" : "Add Candidate"}
                             </button>
                         )}
