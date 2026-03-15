@@ -14,6 +14,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import EmployerRoster from './pages/EmployerRoster';
 import CandidatesPage from './pages/CandidatesPage';
+import ChatPage from './pages/ChatPage';
 
 const loadingScreen = (
   <div style={{
@@ -100,6 +101,14 @@ function App() {
             element={
               <AdminRoute>
                 <CandidatesPage />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/chat"
+            element={
+              <AdminRoute>
+                <ChatPage />
               </AdminRoute>
             }
           />
