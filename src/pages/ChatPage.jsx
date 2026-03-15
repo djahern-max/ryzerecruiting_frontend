@@ -8,15 +8,6 @@ import RyzeLogo from "../assets/RYZE_LOGO.svg";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-const SUGGESTED_PROMPTS = [
-    "Who are my strongest CPA candidates?",
-    "Do I have any meetings today?",
-    "Which candidates have Big 4 experience?",
-    "Who would be a good fit for a Controller role?",
-    "Show me senior-level candidates in Boston",
-    "Which candidates have the most experience?",
-];
-
 function CandidateCard({ candidate }) {
     return (
         <div className={styles.candidateCard}>
@@ -271,17 +262,7 @@ export default function ChatPage() {
                                 Ask anything about your candidates, employers, or schedule.
                                 Your entire recruiting database, in plain English.
                             </p>
-                            <div className={styles.suggestedGrid}>
-                                {SUGGESTED_PROMPTS.map((prompt) => (
-                                    <button
-                                        key={prompt}
-                                        className={styles.suggestedBtn}
-                                        onClick={() => sendMessage(prompt)}
-                                    >
-                                        {prompt}
-                                    </button>
-                                ))}
-                            </div>
+
                         </div>
                     )}
 
