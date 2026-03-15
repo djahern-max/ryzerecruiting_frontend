@@ -93,6 +93,87 @@
     padding: 24px;
     overflow-y: auto;
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ── Duplicate Warning ── */
+.duplicateWarning {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    background: #fffbeb;
+    border: 1.5px solid #fcd34d;
+    border-left: 4px solid #f59e0b;
+    border-radius: 10px;
+    padding: 14px 16px;
+    flex-shrink: 0;
+}
+
+.duplicateWarningLeft {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+}
+
+.duplicateWarningIcon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    line-height: 1.3;
+}
+
+.duplicateWarningTitle {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #92400e;
+    margin-bottom: 6px;
+}
+
+.duplicateWarningMatches {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 6px;
+}
+
+.duplicateMatch {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #78350f;
+    background: #fef3c7;
+    border: 1px solid #fde68a;
+    border-radius: 6px;
+    padding: 3px 8px;
+    display: inline-block;
+    width: fit-content;
+}
+
+.duplicateWarningHint {
+    font-size: 0.78rem;
+    color: #92400e;
+    font-style: italic;
+}
+
+.duplicateDismiss {
+    background: white;
+    border: 1.5px solid #fcd34d;
+    color: #92400e;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 140ms;
+}
+
+.duplicateDismiss:hover {
+    background: #fef3c7;
 }
 
 /* ── Parse Section ── */
@@ -102,7 +183,6 @@
     gap: 14px;
 }
 
-/* Parse mode toggle */
 .parseModeToggle {
     display: flex;
     gap: 8px;
@@ -136,7 +216,7 @@
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
-/* Drop zone */
+/* ── Drop Zone ── */
 .dropZone {
     border: 2px dashed var(--border-200);
     border-radius: 12px;
@@ -216,7 +296,7 @@
     margin-top: 2px;
 }
 
-/* Parse instructions */
+/* ── Parse Text ── */
 .parseInstructions {
     font-size: 0.875rem;
     color: var(--text-500);
@@ -390,7 +470,7 @@
     border-color: var(--brand-800);
 }
 
-/* ── Skills Tag Input ── */
+/* ── Skills ── */
 .skillsWrapper {
     min-height: 40px;
     padding: 6px 10px;

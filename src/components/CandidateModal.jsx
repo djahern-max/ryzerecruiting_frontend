@@ -38,7 +38,7 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
     const isEdit = !!candidate;
     const [form, setForm] = useState(EMPTY_FORM);
     const [parseText, setParseText] = useState("");
-    const [parseMode, setParseMode] = useState("text"); // "text" | "file"
+    const [parseMode, setParseMode] = useState("file");
     const [selectedFile, setSelectedFile] = useState(null);
     const [dragOver, setDragOver] = useState(false);
     const [parsing, setParsing] = useState(false);
@@ -47,6 +47,8 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
     const [parseError, setParseError] = useState(null);
     const [activeTab, setActiveTab] = useState("manual");
     const [skillInput, setSkillInput] = useState("");
+    const [duplicates, setDuplicates] = useState([]);
+    const [duplicateDismissed, setDuplicateDismissed] = useState(false);
     const fileInputRef = useRef(null);
 
     useEffect(() => {
@@ -72,6 +74,24 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
         }
     }, [candidate]);
 
+    async function checkForDuplicates(name, location) {
+        if (!name || name.trim().length < 2) return;
+        try {
+            const params = new URLSearchParams({ name: name.trim() });
+            if (location) params.append("location", location.trim());
+            const res = await fetch(`${API_BASE}/api/candidates/check-duplicate?${params}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (res.ok) {
+                const matches = await res.json();
+                setDuplicates(matches);
+                setDuplicateDismissed(false);
+            }
+        } catch {
+            // non-fatal — silently ignore
+        }
+    }
+
     function handleChange(e) {
         setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     }
@@ -88,10 +108,7 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
     }
 
     function removeSkill(skill) {
-        setForm((prev) => ({
-            ...prev,
-            ai_skills: prev.ai_skills.filter((s) => s !== skill),
-        }));
+        setForm((prev) => ({ ...prev, ai_skills: prev.ai_skills.filter((s) => s !== skill) }));
     }
 
     function handleFileSelect(file) {
@@ -108,30 +125,35 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
     function handleDrop(e) {
         e.preventDefault();
         setDragOver(false);
-        const file = e.dataTransfer.files[0];
-        handleFileSelect(file);
+        handleFileSelect(e.dataTransfer.files[0]);
     }
 
     function applyParsedResult(parsed) {
-        setForm((prev) => ({
-            name: parsed.name || prev.name,
-            email: parsed.email || prev.email,
-            phone: parsed.phone || prev.phone,
-            linkedin_url: parsed.linkedin_url || prev.linkedin_url,
-            linkedin_raw_text: parsed.linkedin_raw_text || parseText || prev.linkedin_raw_text,
-            current_title: parsed.current_title || prev.current_title,
-            current_company: parsed.current_company || prev.current_company,
-            location: parsed.location || prev.location,
-            notes: prev.notes,
-            ai_summary: parsed.ai_summary || prev.ai_summary,
-            ai_career_level: parsed.ai_career_level || prev.ai_career_level,
-            ai_experience: parsed.ai_experience || prev.ai_experience,
-            ai_education: parsed.ai_education || prev.ai_education,
-            ai_certifications: parsed.ai_certifications || prev.ai_certifications,
-            ai_skills: parsed.ai_skills || prev.ai_skills,
-            ai_years_experience: parsed.ai_years_experience || prev.ai_years_experience,
-        }));
+        const newForm = {
+            name: parsed.name || "",
+            email: parsed.email || "",
+            phone: parsed.phone || "",
+            linkedin_url: parsed.linkedin_url || "",
+            linkedin_raw_text: parsed.linkedin_raw_text || parseText || "",
+            current_title: parsed.current_title || "",
+            current_company: parsed.current_company || "",
+            location: parsed.location || "",
+            notes: "",
+            ai_summary: parsed.ai_summary || "",
+            ai_career_level: parsed.ai_career_level || "",
+            ai_experience: parsed.ai_experience || "",
+            ai_education: parsed.ai_education || "",
+            ai_certifications: parsed.ai_certifications || "",
+            ai_skills: parsed.ai_skills || [],
+            ai_years_experience: parsed.ai_years_experience || "",
+        };
+        setForm(newForm);
         setActiveTab("manual");
+
+        // Check for duplicates using parsed name + location
+        if (parsed.name) {
+            checkForDuplicates(parsed.name, parsed.location);
+        }
     }
 
     async function handleParseText() {
@@ -144,10 +166,7 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
         try {
             const res = await fetch(`${API_BASE}/api/candidates/parse`, {
                 method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
+                headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
                 body: JSON.stringify({ text: parseText }),
             });
             if (!res.ok) {
@@ -164,10 +183,7 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
 
     async function handleParseFile() {
         setParseError(null);
-        if (!selectedFile) {
-            setParseError("Please select a file first.");
-            return;
-        }
+        if (!selectedFile) { setParseError("Please select a file first."); return; }
         setParsing(true);
         try {
             const formData = new FormData();
@@ -191,28 +207,17 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
 
     async function handleSave() {
         setError(null);
-        if (!form.name.trim()) {
-            setError("Name is required.");
-            return;
-        }
+        if (!form.name.trim()) { setError("Name is required."); return; }
         setSaving(true);
         try {
-            const url = isEdit
-                ? `${API_BASE}/api/candidates/${candidate.id}`
-                : `${API_BASE}/api/candidates`;
+            const url = isEdit ? `${API_BASE}/api/candidates/${candidate.id}` : `${API_BASE}/api/candidates`;
             const method = isEdit ? "PATCH" : "POST";
-
             const res = await fetch(url, {
                 method,
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
+                headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
                 body: JSON.stringify({
                     ...form,
-                    ai_years_experience: form.ai_years_experience
-                        ? parseInt(form.ai_years_experience, 10)
-                        : null,
+                    ai_years_experience: form.ai_years_experience ? parseInt(form.ai_years_experience, 10) : null,
                 }),
             });
             if (!res.ok) {
@@ -227,6 +232,8 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
         }
     }
 
+    const showDuplicateWarning = !isEdit && duplicates.length > 0 && !duplicateDismissed;
+
     return (
         <div className={styles.overlay} onClick={(e) => e.target === e.currentTarget && onClose()}>
             <div className={styles.modal}>
@@ -239,7 +246,7 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                     <button className={styles.closeBtn} onClick={onClose}>✕</button>
                 </div>
 
-                {/* ── Tabs (add flow only) ── */}
+                {/* ── Tabs ── */}
                 {!isEdit && (
                     <div className={styles.tabs}>
                         <button
@@ -259,11 +266,40 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
 
                 <div className={styles.modalBody}>
 
+                    {/* ── Duplicate Warning ── */}
+                    {showDuplicateWarning && (
+                        <div className={styles.duplicateWarning}>
+                            <div className={styles.duplicateWarningLeft}>
+                                <span className={styles.duplicateWarningIcon}>⚠️</span>
+                                <div>
+                                    <div className={styles.duplicateWarningTitle}>
+                                        Possible duplicate{duplicates.length > 1 ? "s" : ""} found
+                                    </div>
+                                    <div className={styles.duplicateWarningMatches}>
+                                        {duplicates.map((d) => (
+                                            <span key={d.id} className={styles.duplicateMatch}>
+                                                {d.name}{d.location ? ` · ${d.location}` : ""}{d.current_title ? ` · ${d.current_title}` : ""}
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <div className={styles.duplicateWarningHint}>
+                                        Review the list before saving to avoid duplicates.
+                                    </div>
+                                </div>
+                            </div>
+                            <button
+                                className={styles.duplicateDismiss}
+                                onClick={() => setDuplicateDismissed(true)}
+                                type="button"
+                            >
+                                Add anyway
+                            </button>
+                        </div>
+                    )}
+
                     {/* ── Parse Tab ── */}
                     {activeTab === "parse" && !isEdit && (
                         <div className={styles.parseSection}>
-
-                            {/* Parse mode toggle */}
                             <div className={styles.parseModeToggle}>
                                 <button
                                     className={`${styles.parseModeBtn} ${parseMode === "file" ? styles.parseModeBtnActive : ""}`}
@@ -281,7 +317,6 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                                 </button>
                             </div>
 
-                            {/* File upload */}
                             {parseMode === "file" && (
                                 <>
                                     <div
@@ -321,17 +356,12 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                                         )}
                                     </div>
                                     {parseError && <p className={styles.errorMsg}>{parseError}</p>}
-                                    <button
-                                        className={styles.parseBtn}
-                                        onClick={handleParseFile}
-                                        disabled={parsing || !selectedFile}
-                                    >
+                                    <button className={styles.parseBtn} onClick={handleParseFile} disabled={parsing || !selectedFile}>
                                         {parsing ? <><span className={styles.spinner} /> Parsing...</> : "⚡ Parse Resume"}
                                     </button>
                                 </>
                             )}
 
-                            {/* Text paste */}
                             {parseMode === "text" && (
                                 <>
                                     <p className={styles.parseInstructions}>
@@ -345,11 +375,7 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                                         rows={10}
                                     />
                                     {parseError && <p className={styles.errorMsg}>{parseError}</p>}
-                                    <button
-                                        className={styles.parseBtn}
-                                        onClick={handleParseText}
-                                        disabled={parsing}
-                                    >
+                                    <button className={styles.parseBtn} onClick={handleParseText} disabled={parsing}>
                                         {parsing ? <><span className={styles.spinner} /> Parsing...</> : "⚡ Parse Profile"}
                                     </button>
                                 </>
@@ -361,7 +387,6 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                     {activeTab === "manual" && (
                         <div className={styles.formSections}>
 
-                            {/* Basic Info */}
                             <div className={styles.sectionBlock}>
                                 <div className={styles.sectionHeader}>Basic Info</div>
                                 <div className={styles.formGrid}>
@@ -396,7 +421,6 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                                 </div>
                             </div>
 
-                            {/* AI Intelligence */}
                             <div className={styles.sectionBlock}>
                                 <div className={styles.sectionHeader}>
                                     <span>AI Intelligence</span>
@@ -453,7 +477,6 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                                 </div>
                             </div>
 
-                            {/* Recruiter Notes */}
                             <div className={styles.sectionBlock}>
                                 <div className={styles.sectionHeader}>Recruiter Notes</div>
                                 <div className={styles.formGrid}>
