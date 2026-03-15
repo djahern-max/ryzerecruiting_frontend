@@ -228,8 +228,8 @@
 .aiAvatar {
     width: 30px;
     height: 30px;
-    border-radius: 8px;
-    background: #eef4fb;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0a66c2, #004182);
     display: flex;
     align-items: center;
     justify-content: center;
