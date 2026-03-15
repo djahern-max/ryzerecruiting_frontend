@@ -405,6 +405,7 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                                                 placeholder={form.ai_skills.length === 0 ? "Type a skill and press Enter..." : "Add another..."}
                                             />
                                         </div>
+                                        <p className={styles.fieldHint}>Type a skill and press <em>Enter</em> or <em>,</em> to add it. Click × to remove.</p>
                                     </div>
 
                                     <div className={`${styles.formGroup} ${styles.fullWidth}`}>

@@ -413,6 +413,13 @@
     animation: spin 0.7s linear infinite;
 }
 
+.fieldHint {
+    font-size: 0.75rem;
+    font-style: italic;
+    color: #64748b;
+    margin: 0;
+}
+
 @keyframes spin {
     to {
         transform: rotate(360deg);
