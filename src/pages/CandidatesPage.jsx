@@ -225,7 +225,16 @@ function FragmentRow({
                     }`}
             >
                 <td>
-                    <div className={styles.candidateName}>{c.name}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <div className={styles.candidateName}>{c.name}</div>
+                        <span
+                            title={c.embedded_at ? `Embedded ${new Date(c.embedded_at).toLocaleDateString()}` : 'Not yet embedded'}
+                            style={{
+                                width: '7px', height: '7px', borderRadius: '50%', flexShrink: 0,
+                                background: c.embedded_at ? '#22c55e' : '#cbd5e1',
+                            }}
+                        />
+                    </div>
                     {c.linkedin_url && (
                         <a
                             href={c.linkedin_url}
