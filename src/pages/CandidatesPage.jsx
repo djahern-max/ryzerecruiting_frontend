@@ -208,7 +208,7 @@ function FragmentRow({ candidate: c, expandedId, setExpandedId, openEdit, handle
                     {c.embedded_at ? (
                         <span className={styles.badgeIndexed}>
                             <span className={styles.badgeDot} />
-                            AI Indexed
+                            Indexed
                         </span>
                     ) : (
                         <span className={styles.badgePending}>
