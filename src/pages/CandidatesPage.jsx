@@ -24,14 +24,11 @@ export default function CandidatesPage() {
         try {
             setLoading(true);
             setError(null);
-
             const params = search ? `?search=${encodeURIComponent(search)}` : "";
             const res = await fetch(`${API_BASE}/api/candidates${params}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-
             if (!res.ok) throw new Error("Failed to fetch candidates");
-
             setCandidates(await res.json());
         } catch (e) {
             setError(e.message);
@@ -46,12 +43,10 @@ export default function CandidatesPage() {
 
     async function handleDelete(id) {
         if (!window.confirm("Delete this candidate?")) return;
-
         await fetch(`${API_BASE}/api/candidates/${id}`, {
             method: "DELETE",
             headers: { Authorization: `Bearer ${token}` },
         });
-
         fetchCandidates();
     }
 
@@ -73,7 +68,6 @@ export default function CandidatesPage() {
     const filtered = candidates.filter((c) => {
         if (!search) return true;
         const q = search.toLowerCase();
-
         return (
             c.name?.toLowerCase().includes(q) ||
             c.email?.toLowerCase().includes(q) ||
@@ -82,6 +76,8 @@ export default function CandidatesPage() {
             c.location?.toLowerCase().includes(q)
         );
     });
+
+    const indexedCount = candidates.filter((c) => c.embedded_at).length;
 
     return (
         <div className={styles.page}>
@@ -92,26 +88,13 @@ export default function CandidatesPage() {
                         <span className={styles.logo}>RYZE.ai</span>
                         <span className={styles.adminBadge}>ADMIN</span>
                     </div>
-
                     <nav className={styles.nav}>
-                        <button className={styles.navBtn} onClick={() => navigate("/admin")}>
-                            Dashboard
-                        </button>
-                        <button
-                            className={styles.navBtn}
-                            onClick={() => navigate("/admin/employers")}
-                        >
-                            Employers
-                        </button>
-                        <button className={`${styles.navBtn} ${styles.navBtnActive}`}>
-                            Candidates
-                        </button>
+                        <button className={styles.navBtn} onClick={() => navigate("/admin")}>Dashboard</button>
+                        <button className={styles.navBtn} onClick={() => navigate("/admin/employers")}>Employers</button>
+                        <button className={`${styles.navBtn} ${styles.navBtnActive}`}>Candidates</button>
                     </nav>
-
                     <div className={styles.headerRight}>
-                        <span className={styles.userName}>
-                            {user?.full_name || user?.email}
-                        </span>
+                        <span className={styles.userName}>{user?.full_name || user?.email}</span>
                         <button className={styles.logoutButton} onClick={logout}>
                             <i className="fi fi-rr-sign-out-alt" />
                         </button>
@@ -125,14 +108,16 @@ export default function CandidatesPage() {
                     <div>
                         <h1 className={styles.pageTitle}>Candidates</h1>
                         <p className={styles.pageSub}>
-                            {candidates.length} candidate{candidates.length !== 1 ? "s" : ""} in
-                            your database
+                            {candidates.length} candidate{candidates.length !== 1 ? "s" : ""} in your database
+                            {candidates.length > 0 && (
+                                <span className={styles.indexedStat}>
+                                    <span className={styles.indexedDot} />
+                                    {indexedCount} of {candidates.length} AI indexed and searchable
+                                </span>
+                            )}
                         </p>
                     </div>
-
-                    <button className={styles.addBtn} onClick={openAdd}>
-                        + Add Candidate
-                    </button>
+                    <button className={styles.addBtn} onClick={openAdd}>+ Add Candidate</button>
                 </div>
 
                 {/* ── Search ── */}
@@ -145,12 +130,7 @@ export default function CandidatesPage() {
                         onChange={(e) => setSearch(e.target.value)}
                     />
                     {search && (
-                        <button
-                            className={styles.clearSearch}
-                            onClick={() => setSearch("")}
-                        >
-                            ✕
-                        </button>
+                        <button className={styles.clearSearch} onClick={() => setSearch("")}>✕</button>
                     )}
                 </div>
 
@@ -161,9 +141,7 @@ export default function CandidatesPage() {
                     <div className={styles.errorState}>{error}</div>
                 ) : filtered.length === 0 ? (
                     <div className={styles.emptyState}>
-                        {search
-                            ? "No candidates match your search."
-                            : "No candidates yet. Add your first one above."}
+                        {search ? "No candidates match your search." : "No candidates yet. Add your first one above."}
                     </div>
                 ) : (
                     <div className={styles.tableWrapper}>
@@ -174,7 +152,7 @@ export default function CandidatesPage() {
                                     <th>Title</th>
                                     <th>Company</th>
                                     <th>Location</th>
-                                    <th>Contact</th>
+                                    <th>AI Search</th>
                                     <th>AI Summary</th>
                                     <th></th>
                                 </tr>
@@ -197,7 +175,6 @@ export default function CandidatesPage() {
                 )}
             </main>
 
-            {/* ── Modal ── */}
             {modalOpen && (
                 <CandidateModal
                     candidate={editingCandidate}
@@ -210,38 +187,14 @@ export default function CandidatesPage() {
     );
 }
 
-function FragmentRow({
-    candidate: c,
-    expandedId,
-    setExpandedId,
-    openEdit,
-    handleDelete,
-    styles,
-}) {
+function FragmentRow({ candidate: c, expandedId, setExpandedId, openEdit, handleDelete, styles }) {
     return (
         <>
-            <tr
-                className={`${styles.row} ${expandedId === c.id ? styles.rowExpanded : ""
-                    }`}
-            >
+            <tr className={`${styles.row} ${expandedId === c.id ? styles.rowExpanded : ""}`}>
                 <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <div className={styles.candidateName}>{c.name}</div>
-                        <span
-                            title={c.embedded_at ? `Embedded ${new Date(c.embedded_at).toLocaleDateString()}` : 'Not yet embedded'}
-                            style={{
-                                width: '7px', height: '7px', borderRadius: '50%', flexShrink: 0,
-                                background: c.embedded_at ? '#22c55e' : '#cbd5e1',
-                            }}
-                        />
-                    </div>
+                    <div className={styles.candidateName}>{c.name}</div>
                     {c.linkedin_url && (
-                        <a
-                            href={c.linkedin_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={styles.linkedinLink}
-                        >
+                        <a href={c.linkedin_url} target="_blank" rel="noopener noreferrer" className={styles.linkedinLink}>
                             LinkedIn ↗
                         </a>
                     )}
@@ -252,23 +205,24 @@ function FragmentRow({
                 <td>{c.location || <span className={styles.empty}>—</span>}</td>
 
                 <td>
-                    {c.email && (
-                        <a href={`mailto:${c.email}`} className={styles.emailLink}>
-                            {c.email}
-                        </a>
+                    {c.embedded_at ? (
+                        <span className={styles.badgeIndexed}>
+                            <span className={styles.badgeDot} />
+                            AI Indexed
+                        </span>
+                    ) : (
+                        <span className={styles.badgePending}>
+                            <span className={styles.badgeSpinner} />
+                            Indexing...
+                        </span>
                     )}
-                    {c.phone && <div className={styles.phone}>{c.phone}</div>}
-                    {!c.email && !c.phone && <span className={styles.empty}>—</span>}
                 </td>
 
                 <td className={styles.summaryCell}>
                     {c.ai_summary ? (
                         <button
-                            className={`${styles.expandBtn} ${expandedId === c.id ? styles.expandBtnActive : ""
-                                }`}
-                            onClick={() =>
-                                setExpandedId(expandedId === c.id ? null : c.id)
-                            }
+                            className={`${styles.expandBtn} ${expandedId === c.id ? styles.expandBtnActive : ""}`}
+                            onClick={() => setExpandedId(expandedId === c.id ? null : c.id)}
                         >
                             {expandedId === c.id ? "Hide" : "View Brief"}
                         </button>
@@ -279,15 +233,8 @@ function FragmentRow({
 
                 <td>
                     <div className={styles.actions}>
-                        <button className={styles.editBtn} onClick={() => openEdit(c)}>
-                            Edit
-                        </button>
-                        <button
-                            className={styles.deleteBtn}
-                            onClick={() => handleDelete(c.id)}
-                        >
-                            Delete
-                        </button>
+                        <button className={styles.editBtn} onClick={() => openEdit(c)}>Edit</button>
+                        <button className={styles.deleteBtn} onClick={() => handleDelete(c.id)}>Delete</button>
                     </div>
                 </td>
             </tr>
@@ -296,17 +243,15 @@ function FragmentRow({
                 <tr className={styles.detailRow}>
                     <td colSpan={7} className={styles.detailCell}>
                         <div className={styles.detailPanel}>
-                            {c.ai_summary && (
-                                <div className={styles.detailSection}>
-                                    <div className={styles.detailLabel}>AI Summary</div>
-                                    <div className={styles.detailContent}>{c.ai_summary}</div>
-                                </div>
-                            )}
+                            <div className={styles.detailSection}>
+                                <div className={styles.detailLabel}>AI Summary</div>
+                                <div className={styles.detailContent}>{c.ai_summary}</div>
+                            </div>
                             {c.ai_career_level && (
                                 <div className={styles.detailSection}>
                                     <div className={styles.detailLabel}>Career Level</div>
                                     <div className={styles.detailContent} style={{ textTransform: 'capitalize' }}>
-                                        {c.ai_career_level} {c.ai_years_experience ? `· ${c.ai_years_experience} years experience` : ""}
+                                        {c.ai_career_level}{c.ai_years_experience ? ` · ${c.ai_years_experience} years experience` : ""}
                                     </div>
                                 </div>
                             )}
