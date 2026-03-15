@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import styles from "./ChatPage.module.css";
 import ReactMarkdown from 'react-markdown';
+import RyzeLogo from "../assets/RYZE_LOGO.svg";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
@@ -98,7 +99,7 @@ function MessageBubble({ message }) {
         <div className={`${styles.messageRow} ${isUser ? styles.messageRowUser : styles.messageRowAI}`}>
             {!isUser && (
                 <div className={styles.aiAvatar}>
-                    <span>R</span>
+                    <img src={RyzeLogo} alt="RYZE" className={styles.aiAvatarLogo} />
                 </div>
             )}
             <div className={`${styles.bubble} ${isUser ? styles.bubbleUser : styles.bubbleAI}`}>
@@ -109,7 +110,6 @@ function MessageBubble({ message }) {
                         <div className={styles.bubbleText}>
                             <ReactMarkdown>{message.content}</ReactMarkdown>
                         </div>
-                        {/* Inline candidate cards */}
                         {message.candidates?.length > 0 && (
                             <div className={styles.inlineCards}>
                                 <div className={styles.inlineCardsLabel}>
@@ -120,7 +120,6 @@ function MessageBubble({ message }) {
                                 ))}
                             </div>
                         )}
-                        {/* Inline meeting cards */}
                         {message.meetings?.length > 0 && (
                             <div className={styles.inlineCards}>
                                 <div className={styles.inlineCardsLabel}>
@@ -141,7 +140,9 @@ function MessageBubble({ message }) {
 function TypingIndicator() {
     return (
         <div className={`${styles.messageRow} ${styles.messageRowAI}`}>
-            <div className={styles.aiAvatar}><span>R</span></div>
+            <div className={styles.aiAvatar}>
+                <img src={RyzeLogo} alt="RYZE" className={styles.aiAvatarLogo} />
+            </div>
             <div className={`${styles.bubble} ${styles.bubbleAI} ${styles.typingBubble}`}>
                 <span className={styles.dot} />
                 <span className={styles.dot} />
@@ -174,14 +175,12 @@ export default function ChatPage() {
         setInput("");
         setError(null);
 
-        // Add user message to thread
         const userMsg = { role: "user", content: userMessage };
         const newMessages = [...messages, userMsg];
         setMessages(newMessages);
         setLoading(true);
 
         try {
-            // Build history for API (exclude the message we just added)
             const history = messages.map((m) => ({ role: m.role, content: m.content }));
 
             const res = await fetch(`${API_BASE}/api/chat`, {
@@ -212,7 +211,6 @@ export default function ChatPage() {
             setMessages([...newMessages, aiMsg]);
         } catch (e) {
             setError(e.message);
-            // Remove the user message if request failed
             setMessages(messages);
         } finally {
             setLoading(false);
@@ -229,7 +227,6 @@ export default function ChatPage() {
 
     return (
         <div className={styles.page}>
-            {/* ── Header ── */}
             <header className={styles.header}>
                 <div className={styles.headerContent}>
                     <div className={styles.headerLeft}>
@@ -252,13 +249,12 @@ export default function ChatPage() {
             </header>
 
             <div className={styles.chatLayout}>
-                {/* ── Chat area ── */}
                 <main className={styles.chatMain}>
-
-                    {/* Empty state */}
                     {messages.length === 0 && (
                         <div className={styles.emptyState}>
-                            <div className={styles.emptyIcon}>⚡</div>
+                            <div className={styles.emptyIcon}>
+                                <img src={RyzeLogo} alt="RYZE" className={styles.emptyLogo} />
+                            </div>
                             <h2 className={styles.emptyTitle}>RYZE Intelligence</h2>
                             <p className={styles.emptySub}>
                                 Ask anything about your candidates, employers, or schedule.
@@ -278,7 +274,6 @@ export default function ChatPage() {
                         </div>
                     )}
 
-                    {/* Message thread */}
                     <div className={styles.thread}>
                         {messages.map((msg, i) => (
                             <MessageBubble key={i} message={msg} />
@@ -288,7 +283,6 @@ export default function ChatPage() {
                     </div>
                 </main>
 
-                {/* ── Input bar ── */}
                 <div className={styles.inputBar}>
                     {error && <div className={styles.errorBanner}>{error}</div>}
                     <div className={styles.inputWrapper}>

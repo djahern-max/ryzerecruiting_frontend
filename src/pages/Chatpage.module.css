@@ -144,8 +144,16 @@
 }
 
 .emptyIcon {
-    font-size: 2.5rem;
-    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.emptyLogo {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
 }
 
 .emptyTitle {
@@ -220,8 +228,8 @@
 .aiAvatar {
     width: 30px;
     height: 30px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #0a66c2, #004182);
+    border-radius: 8px;
+    background: #eef4fb;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -229,10 +237,10 @@
     margin-top: 2px;
 }
 
-.aiAvatar span {
-    color: white;
-    font-size: 0.75rem;
-    font-weight: 800;
+.aiAvatarLogo {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
 }
 
 /* ── Bubbles ── */
