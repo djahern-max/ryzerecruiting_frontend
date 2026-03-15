@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import styles from "./ChatPage.module.css";
+import ReactMarkdown from 'react-markdown';
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
@@ -106,9 +107,7 @@ function MessageBubble({ message }) {
                 ) : (
                     <>
                         <div className={styles.bubbleText}>
-                            {message.content.split("\n").map((line, i) => (
-                                <p key={i} style={{ margin: "2px 0" }}>{line}</p>
-                            ))}
+                            <ReactMarkdown>{message.content}</ReactMarkdown>
                         </div>
                         {/* Inline candidate cards */}
                         {message.candidates?.length > 0 && (
