@@ -672,7 +672,7 @@ export default function Landing() {
             <a href="/terms">Terms</a>
             <a href="https://www.linkedin.com/in/daneahern/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           </div>
-          <p className={styles.footerCopy}>© 2026 RYZE.ai · Built by Daniel Ahern, CPA · Version 10</p>
+          <p className={styles.footerCopy}>© 2026 RYZE.ai · Built by Dane Ahern · Version 10</p>
         </div>
         <a href="/admin/login" className={styles.adminGhost}>Admin</a>
       </footer>
