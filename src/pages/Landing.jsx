@@ -8,13 +8,13 @@ const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 // ── Update these with your actual LinkedIn video URLs ────────────────────
 const EPISODE_LINKS = {
-  1: "https://www.linkedin.com/",
-  2: "https://www.linkedin.com/",
-  3: "https://www.linkedin.com/",
-  4: "https://www.linkedin.com/",
-  5: "https://www.linkedin.com/",
-  6: "https://www.linkedin.com/",
-  7: "https://www.linkedin.com/",
+  1: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-1-start-activity-7434171807298908160-SMk2?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+  2: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-2-one-activity-7434615686380900352-RVmV?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+  3: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-3-what-activity-7434907747122524160-JE-O?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+  4: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-4-booking-activity-7435763383817269248-qiZc?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+  5: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-5-this-activity-7437041631528267776-gSkN?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+  6: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-6-one-activity-7437906403861794816--73c?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+  7: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-7-this-activity-7439103131206029312-6_DF?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
 };
 // ─────────────────────────────────────────────────────────────────────────
 
@@ -92,21 +92,57 @@ const PHASES = [
   },
   {
     id: "4",
-    title: "LinkedIn Integration",
+    title: "Chat-Enhanced Intelligence",
     status: "planned",
-    summary: "Phase 4 connects RYZE.ai to the broader recruiting ecosystem. Months 2–6.",
+    summary: "Zoom meeting notes and AI-generated company profiles surface directly inside RYZE Intelligence chat. Ask about a company and get their full profile, every meeting summary, and key talking points synthesized in a single response.",
+    bullets: [
+      "Zoom meeting summaries queryable through chat — ask about any past call by company or candidate name",
+      "AI company profiles integrated as a chat tool — full employer intelligence on demand",
+      "Meeting history and profile data combined into unified employer context",
+      "Follow-up question chains — ask about a company, then drill into specific meetings or contacts",
+    ],
+  },
+  {
+    id: "5",
+    title: "Candidate–Opportunity Matching",
+    status: "planned",
+    summary: "Link candidates to open job orders with semantic matching. Ask RYZE Intelligence to find the best fits for any role and get ranked candidates with match scores and reasoning — sourced entirely from your own pipeline.",
+    bullets: [
+      "Candidate-to-job-order semantic matching via vector similarity",
+      "Chat tool: 'Who are my best fits for the Controller role at Acme Corp?' → ranked results with reasoning",
+      "Candidate profiles enriched with job match scores visible in the roster",
+      "Shortlist generation — produce a ranked candidate list for any open role in seconds",
+    ],
+  },
+  {
+    id: "6",
+    title: "Go-to-Market & Operations",
+    status: "planned",
+    summary: "Streamline the platform into a working recruiting tool used daily. Refine the end-to-end workflow — from inbound lead to placed candidate — so RYZE.ai runs the business, not just supports it.",
+    bullets: [
+      "End-to-end workflow refinement from first contact to placement",
+      "Recruiter-facing UI polish — faster access to daily priorities",
+      "Pipeline reporting — placement velocity, candidate funnel, employer engagement",
+      "Platform hardening for consistent daily use as the primary recruiting OS",
+    ],
+  },
+  {
+    id: "7",
+    title: "LinkedIn Integration",
+    status: "future",
+    summary: "Phase 7 connects RYZE.ai to the broader recruiting ecosystem via LinkedIn's partner APIs.",
     bullets: [
       "LinkedIn Basic Job Posting API — post jobs from RYZE directly to LinkedIn company pages",
-      "Candidate import flow — structured resume upload replaces manual data entry for most candidates",
+      "Candidate import flow — structured resume upload replaces manual data entry",
       "Apply Connect readiness — data models already structured to support LinkedIn partner integration",
       "LinkedIn Talent Solutions partner application — submit once platform demonstrates meaningful volume",
     ],
   },
   {
-    id: "5",
+    id: "8",
     title: "RYZE.ai Platform Evolution",
     status: "future",
-    summary: "This is where RYZE Recruiting becomes RYZE.ai. The proprietary database of accounting and finance hiring intelligence — every candidate, every company, every outcome — becomes the training substrate for a domain-specific AI that general platforms cannot replicate. Months 6–18.",
+    summary: "This is where RYZE Recruiting becomes RYZE.ai. The proprietary database of accounting and finance hiring intelligence — every candidate, every company, every outcome — becomes the training substrate for a domain-specific AI that general platforms cannot replicate.",
     bullets: [
       "Multi-tenant architecture — other boutique recruiting firms can use RYZE.ai as their operating system",
       "Outcome tracking — track which candidates got placed, at what salary, how long they stayed",
@@ -147,10 +183,21 @@ const INTENT_OPTIONS = [
   { value: "following", emoji: "👀", label: "Following the build" },
 ];
 
-function RyzeLogo({ size = 32, color = "#004182" }) {
+function RyzeLogo({ size = 32, color = "#004aad" }) {
+  // Clean triangle-only path extracted from RYZE_LOGO_V18.svg — no background rects
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 375" width={size} height={size} aria-hidden="true">
-      <path fill={color} d="M 186.078125 19.484375 L 0.367188 341.148438 L 180.234375 341.148438 L 229.054688 256.585938 L 201.605469 215.015625 L 190.46875 234.308594 L 154.511719 296.59375 L 77.539062 296.59375 L 186.394531 108.039062 L 296.730469 295.972656 L 243.730469 295.972656 L 221.453125 340.527344 L 374.554688 340.527344 Z" />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 375 322"
+      width={size}
+      height={Math.round(size * (322 / 375))}
+      aria-hidden="true"
+      style={{ display: "block", flexShrink: 0 }}
+    >
+      <path
+        fill={color}
+        d="M 186.078125 19.484375 L 0.367188 341.148438 L 180.234375 341.148438 L 229.054688 256.585938 L 201.605469 215.015625 L 190.46875 234.308594 L 154.511719 296.59375 L 77.539062 296.59375 L 186.394531 108.039062 L 296.730469 295.972656 L 243.730469 295.972656 L 221.453125 340.527344 L 374.554688 340.527344 Z"
+      />
     </svg>
   );
 }
@@ -294,17 +341,19 @@ export default function Landing() {
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <div className={styles.brand}>
-            <RyzeLogo size={20} color="#004182" />
+            <RyzeLogo size={28} color="#004aad" />
             <span className={styles.brandName}>RYZE.ai</span>
             <span className={styles.brandPipe}>|</span>
             <span className={styles.brandSub}>AI Intelligence Platform</span>
           </div>
-          <div className={styles.headerRight}>
-            <a href="https://www.linkedin.com/in/danny-ahern-cpa/" target="_blank" rel="noopener noreferrer" className={styles.linkedinBtn}>
-              Follow on LinkedIn
-            </a>
-            <button className={styles.signInBtn} onClick={() => navigate("/auth")}>Sign In</button>
-          </div>
+          <a
+            href="https://www.linkedin.com/in/daneahern/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.linkedinBtn}
+          >
+            Follow on LinkedIn
+          </a>
         </div>
       </header>
 
@@ -335,7 +384,7 @@ export default function Landing() {
               Join the Waitlist
             </button>
             <a
-              href="https://www.linkedin.com/in/danny-ahern-cpa/"
+              href="https://www.linkedin.com/in/daneahern/"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.ctaSecondary}
@@ -365,7 +414,7 @@ export default function Landing() {
             </div>
             <div className={styles.defCard}>
               <div className={styles.defNum}>03</div>
-              <p>A CPA-founder's domain-specific prompts are more precise than anything a generic recruiting platform would build.</p>
+              <p>The platform compounds with use. Every placement, pattern, and outcome builds intelligence no competitor can buy.</p>
             </div>
           </div>
         </div>
@@ -570,7 +619,7 @@ export default function Landing() {
           <div className={styles.footerLinks}>
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>
-            <a href="https://www.linkedin.com/in/danny-ahern-cpa/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://www.linkedin.com/in/daneahern/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           </div>
           <p className={styles.footerCopy}>© 2026 RYZE.ai · Built by Daniel Ahern, CPA · Version 10</p>
         </div>

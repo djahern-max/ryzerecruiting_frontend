@@ -67,28 +67,14 @@
   font-weight: 600;
   color: #0a66c2;
   text-decoration: none;
-  transition: opacity 150ms;
-}
-
-.linkedinBtn:hover {
-  opacity: 0.7;
-}
-
-.signInBtn {
-  font-family: 'DM Sans', system-ui, sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #004182;
-  background: transparent;
-  border: 1.5px solid #004182;
+  border: 1.5px solid #0a66c2;
   border-radius: 7px;
   padding: 0.38rem 1rem;
-  cursor: pointer;
   transition: background 150ms, color 150ms;
 }
 
-.signInBtn:hover {
-  background: #004182;
+.linkedinBtn:hover {
+  background: #0a66c2;
   color: #fff;
 }
 
