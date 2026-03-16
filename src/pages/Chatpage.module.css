@@ -594,3 +594,25 @@
         transform: rotate(360deg);
     }
 }
+
+.streamCursor {
+    display: inline-block;
+    animation: cursorBlink 0.7s steps(1) infinite;
+    color: var(--brand-700, #004182);
+    font-size: 0.85rem;
+    line-height: 1;
+    margin-left: 1px;
+    vertical-align: middle;
+}
+
+@keyframes cursorBlink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
