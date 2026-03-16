@@ -11,6 +11,15 @@ const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 // RYZE Logo SVG (shared)
 // ---------------------------------------------------------------------------
 
+// Inject keyframes once globally — required for inline style animations
+const KEYFRAMES = `@keyframes ryze-spin { to { transform: rotate(360deg); } }`;
+if (typeof document !== "undefined" && !document.getElementById("ryze-chat-keyframes")) {
+    const s = document.createElement("style");
+    s.id = "ryze-chat-keyframes";
+    s.textContent = KEYFRAMES;
+    document.head.appendChild(s);
+}
+
 function RyzeLogo({ size = 18, color = "#ffffff" }) {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 375" width={size} height={size}>
@@ -181,10 +190,34 @@ function MessageBubble({ message }) {
 function TypingIndicator({ statusMsg }) {
     return (
         <div className={`${styles.messageRow} ${styles.messageRowAI}`}>
-            <div className={styles.thinkingAvatarWrapper}>
-                <div className={styles.thinkingRing} />
-                <div className={styles.aiAvatar}>
-                    <RyzeLogo size={18} color="#ffffff" />
+            {/* Inline styles bypass CSS Modules hashing — guaranteed to work */}
+            <div style={{
+                position: "relative",
+                width: 30,
+                height: 30,
+                flexShrink: 0,
+                marginTop: 2,
+            }}>
+                {/* Avatar circle with spinning logo inside */}
+                <div style={{
+                    width: 30,
+                    height: 30,
+                    borderRadius: "50%",
+                    background: "linear-gradient(135deg, #0a66c2, #004182)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                }}>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 375 375"
+                        width={18}
+                        height={18}
+                        style={{ animation: "ryze-spin 1.4s linear infinite", transformOrigin: "center" }}
+                    >
+                        <path fill="#ffffff" d="M 186.078125 19.484375 L 0.367188 341.148438 L 180.234375 341.148438 L 229.054688 256.585938 L 201.605469 215.015625 L 190.46875 234.308594 L 154.511719 296.59375 L 77.539062 296.59375 L 186.394531 108.039062 L 296.730469 295.972656 L 243.730469 295.972656 L 221.453125 340.527344 L 374.554688 340.527344 Z" />
+                    </svg>
                 </div>
             </div>
             <div className={`${styles.bubble} ${styles.bubbleAI}`}>

@@ -200,50 +200,7 @@
     flex-shrink: 0;
 }
 
-/* ── FIX 3: Spinning ring wrapper for thinking state ── */
-.thinkingAvatarWrapper {
-    position: relative;
-    width: 30px;
-    height: 30px;
-    flex-shrink: 0;
-    margin-top: 2px;
-}
-
-/* Explicit spinning ring div — reliable cross-browser */
-.thinkingRing {
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    border: 3px solid transparent;
-    border-top-color: #0a66c2;
-    border-right-color: #57a0d3;
-    animation: spinRing 0.85s linear infinite;
-    pointer-events: none;
-    z-index: 0;
-}
-
-/* Avatar sits above the ring */
-.thinkingAvatarWrapper .aiAvatar {
-    position: relative;
-    z-index: 1;
-    animation: avatarGlow 1.2s ease-in-out infinite alternate;
-}
-
-@keyframes spinRing {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes avatarGlow {
-    from {
-        box-shadow: 0 0 0px rgba(10, 102, 194, 0.3);
-    }
-
-    to {
-        box-shadow: 0 0 14px rgba(10, 102, 194, 0.65), 0 0 6px rgba(87, 160, 211, 0.4);
-    }
-}
+/* Thinking avatar animation handled via inline styles + global keyframes in ChatPage.jsx */
 
 /* ── Bubbles ── */
 .bubble {
