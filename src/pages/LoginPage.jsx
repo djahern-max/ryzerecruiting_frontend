@@ -101,11 +101,11 @@ export default function LoginPage() {
             <div className={styles.left}>
                 <div className={styles.leftInner}>
                     <div className={styles.logoMark}>
-                        <RyzeLogo size={36} color="#57a0d3" />
+                        <RyzeLogo size={40} color="#57a0d3" />
                     </div>
                     <h1 className={styles.brandName}>RYZE.ai</h1>
                     <p className={styles.brandTagline}>
-                        The recruiting platform built for accounting &amp; finance professionals.
+                        The AI-native recruiting platform built for modern talent teams.
                     </p>
 
                     <div className={styles.featureList}>
