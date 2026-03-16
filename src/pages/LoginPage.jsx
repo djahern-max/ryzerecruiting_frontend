@@ -6,14 +6,7 @@ import styles from './LoginPage.module.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-function RyzeLogo({ size = 20, color = '#57a0d3' }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6 26 L16 6 L26 26" stroke={color} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-            <path d="M10 19 L22 19" stroke={color} strokeWidth="3" strokeLinecap="round" />
-        </svg>
-    );
-}
+
 
 function GoogleIcon() {
     return (
@@ -100,9 +93,7 @@ export default function LoginPage() {
             {/* Left panel — brand */}
             <div className={styles.left}>
                 <div className={styles.leftInner}>
-                    <div className={styles.logoMark}>
-                        <RyzeLogo size={40} color="#57a0d3" />
-                    </div>
+
                     <h1 className={styles.brandName}>RYZE.ai</h1>
                     <p className={styles.brandTagline}>
                         The AI-native recruiting platform built for modern talent teams.
