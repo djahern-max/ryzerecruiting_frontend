@@ -770,4 +770,6 @@
 
 .logoPulsing {
     animation: logoPulse 1.4s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
 }
