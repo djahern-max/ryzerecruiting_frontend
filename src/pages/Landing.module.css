@@ -998,8 +998,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
-  padding: 12px 6px;
+  gap: 7px;
+  padding: 14px 6px;
   background: rgba(255, 255, 255, 0.05);
   border: 1.5px solid rgba(255, 255, 255, 0.1);
   border-radius: 9px;
@@ -1009,14 +1009,6 @@
   font-weight: 600;
   color: rgba(255, 255, 255, 0.6);
   transition: border-color 150ms, background 150ms, color 150ms;
-}
-
-.intentBtn:first-child {
-  font-size: 1.2rem;
-}
-
-.intentBtn span:first-child {
-  font-size: 1.25rem;
 }
 
 .intentBtn:hover {

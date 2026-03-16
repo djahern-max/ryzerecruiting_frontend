@@ -2,6 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useEffect, useState, useRef } from "react";
+import { Building2, BriefcaseBusiness, Binoculars } from "lucide-react";
 import styles from "./Landing.module.css";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
@@ -212,9 +213,9 @@ const DEMO_QUERIES = [
 ];
 
 const INTENT_OPTIONS = [
-  { value: "hiring", emoji: "🏢", label: "I'm hiring" },
-  { value: "job_seeking", emoji: "💼", label: "I'm job hunting" },
-  { value: "following", emoji: "👀", label: "Following the build" },
+  { value: "hiring", icon: Building2, label: "I'm hiring" },
+  { value: "job_seeking", icon: BriefcaseBusiness, label: "I'm job hunting" },
+  { value: "following", icon: Binoculars, label: "Following the build" },
 ];
 
 function RyzeLogo({ size = 32, color = "#004aad" }) {
@@ -624,7 +625,7 @@ export default function Landing() {
           ) : (
             <div className={styles.wlForm}>
               <div className={styles.intentRow}>
-                {INTENT_OPTIONS.map(({ value, emoji, label }) => (
+                {INTENT_OPTIONS.map(({ value, icon: Icon, label }) => (
                   <button
                     key={value}
                     type="button"
@@ -632,7 +633,7 @@ export default function Landing() {
                     onClick={() => setIntent(p => p === value ? null : value)}
                     disabled={wlStatus === "loading"}
                   >
-                    <span>{emoji}</span>
+                    <Icon size={22} strokeWidth={1.5} />
                     <span>{label}</span>
                   </button>
                 ))}
