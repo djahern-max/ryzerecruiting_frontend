@@ -7,16 +7,50 @@ import styles from "./Landing.module.css";
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 // ── Update these with your actual LinkedIn video URLs ────────────────────
-const EPISODE_LINKS = {
-  1: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-1-start-activity-7434171807298908160-SMk2?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
-  2: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-2-one-activity-7434615686380900352-RVmV?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
-  3: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-3-what-activity-7434907747122524160-JE-O?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
-  4: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-4-booking-activity-7435763383817269248-qiZc?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
-  5: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-5-this-activity-7437041631528267776-gSkN?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
-  6: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-6-one-activity-7437906403861794816--73c?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
-  7: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-7-this-activity-7439103131206029312-6_DF?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
-};
-// ─────────────────────────────────────────────────────────────────────────
+const EPISODES = [
+  {
+    num: 1,
+    title: "Start of Series",
+    url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-1-start-activity-7434171807298908160-SMk2?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "What does it actually take to build an ATS from scratch? I'm documenting the entire process as I build RYZE.ai in public. The goal: build a recruiting platform that captures the data recruiters create every day. Employer booking flow, admin dashboard, AI pre-call briefs, Zoom + Calendar integration, and OAuth login — all live on day one.",
+  },
+  {
+    num: 2,
+    title: "Preparation & Reminders",
+    url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-2-one-activity-7434615686380900352-RVmV?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "One of the biggest problems in recruiting is simple: people walk into calls unprepared. This episode covers automated 15-minute reminders before every Zoom meeting and AI pre-call briefs that summarize the company you're about to speak with. Small features that slowly turn a scheduling tool into a real recruiting platform.",
+  },
+  {
+    num: 3,
+    title: "What If Your Hiring Data Was Connected?",
+    url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-3-what-activity-7434907747122524160-JE-O?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "Notes in spreadsheets. Candidate history in email threads. Call outcomes on sticky notes. The data exists — it's just scattered everywhere and doing nothing. RYZE is built to capture every hire, every call, every candidate interaction from day one. Structured. Persistent. Ready for AI to turn into something useful.",
+  },
+  {
+    num: 4,
+    title: "Building the Booking System",
+    url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-4-booking-activity-7435763383817269248-qiZc?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "Booking systems sound simple until you actually build one. This week I worked through four different meeting scenarios: Recruiter→Candidate, Recruiter→Employer, Candidate→Recruiter, and Employer→Recruiter. Each flow needs different fields, different logic, and different AI research rules. Small details create surprisingly complex systems.",
+  },
+  {
+    num: 5,
+    title: "End-to-End Testing",
+    url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-5-this-activity-7437041631528267776-gSkN?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "This week was all about testing the entire booking system end-to-end. All four meeting flows are now working. The system generates an AI research brief before every call so recruiters walk in prepared. Building software is mostly testing, fixing bugs, and trying again — that's what this episode shows.",
+  },
+  {
+    num: 6,
+    title: "AI Meeting Notes",
+    url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-6-one-activity-7437906403861794816--73c?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "Important conversations happen — and then the details disappear. Notes buried in email threads, scattered across documents, or never written down at all. This week I implemented AI Meeting Notes: after every Zoom call, the summary is automatically captured and saved to the database as part of the candidate or employer record.",
+  },
+  {
+    num: 7,
+    title: "RAG-Powered Intelligence Chat",
+    url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-7-this-activity-7439103131206029312-6_DF?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "I implemented RAG-powered Intelligence Chat — ask your entire candidate database a question in plain English and get an intelligent answer back. Not keyword search. Not filters. Just a question: 'Who would be a good fit for a Controller role in Boston?' The system searches by meaning, powered by pgvector and RAG running directly inside PostgreSQL.",
+  },
+];
 
 const FEATURES = [
   { name: "User authentication", status: "live", note: "OAuth (Google, LinkedIn) + traditional login, role-based routing" },
@@ -420,6 +454,41 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ── Building in Public / Episodes ────────── */}
+      <section className={styles.episodesSection}>
+        <div className={styles.container}>
+          <div className={styles.eyebrow}>Building in Public</div>
+          <h2 className={styles.sectionH2}>7 episodes documenting the journey.</h2>
+          <p className={styles.sectionP}>
+            Every major build milestone gets a video — published on <strong>LinkedIn</strong>. Hover any episode to see what was built.
+          </p>
+          <div className={styles.episodeGrid}>
+            {EPISODES.map((ep) => (
+              <a
+                key={ep.num}
+                href={ep.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.episodeCard}
+              >
+                <div className={styles.epDefault}>
+                  <div className={styles.epTop}>
+                    <span className={styles.epNum}>Ep {ep.num}</span>
+                    <span className={styles.epArrow}>→</span>
+                  </div>
+                  <div className={styles.epTitle}>{ep.title}</div>
+                </div>
+                <div className={styles.epHover}>
+                  <div className={styles.epHoverNum}>Episode {ep.num}</div>
+                  <p className={styles.epHoverDesc}>{ep.desc}</p>
+                  <span className={styles.epHoverLink}>Watch on LinkedIn →</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Current State Table ───────────────────── */}
       <section className={styles.statusSection}>
         <div className={styles.container}>
@@ -530,25 +599,6 @@ export default function Landing() {
                 </div>
               );
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Building in Public / Episodes ────────── */}
-      <section className={styles.episodesSection}>
-        <div className={styles.container}>
-          <div className={styles.eyebrow}>Building in Public</div>
-          <h2 className={styles.sectionH2}>7 episodes documenting the journey.</h2>
-          <p className={styles.sectionP}>
-            Every major build milestone gets a video. Published primarily on <strong>LinkedIn</strong> — follow there for the best experience.
-          </p>
-          <div className={styles.episodeGrid}>
-            {Object.entries(EPISODE_LINKS).map(([num, url]) => (
-              <a key={num} href={url} target="_blank" rel="noopener noreferrer" className={styles.episodeCard}>
-                <span className={styles.epNum}>Ep {num}</span>
-                <span className={styles.epArrow}>→</span>
-              </a>
-            ))}
           </div>
         </div>
       </section>
