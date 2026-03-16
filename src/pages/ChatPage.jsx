@@ -150,7 +150,7 @@ function MessageBubble({ message }) {
 function TypingIndicator({ statusMsg }) {
     return (
         <div className={`${styles.messageRow} ${styles.messageRowAI}`}>
-            <div className={styles.aiAvatar}>
+            <div className={`${styles.aiAvatar} ${styles.aiAvatarPulsing}`}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 375" width="18" height="18">
                     <path fill="#ffffff" d="M 186.078125 19.484375 L 0.367188 341.148438 L 180.234375 341.148438 L 229.054688 256.585938 L 201.605469 215.015625 L 190.46875 234.308594 L 154.511719 296.59375 L 77.539062 296.59375 L 186.394531 108.039062 L 296.730469 295.972656 L 243.730469 295.972656 L 221.453125 340.527344 L 374.554688 340.527344 Z" />
                 </svg>
@@ -290,8 +290,8 @@ export default function ChatPage() {
                     if (aiMsgIndex !== null) {
                         setMessages((prev) => {
                             const updated = [...prev];
-                            updated[aiMsgIndex + 1] = {
-                                ...updated[aiMsgIndex + 1],
+                            updated[aiMsgIndex] = {
+                                ...updated[aiMsgIndex],
                                 content: fullText,
                                 streaming: true,
                             };
@@ -305,7 +305,7 @@ export default function ChatPage() {
             if (aiMsgIndex !== null) {
                 setMessages((prev) => {
                     const updated = [...prev];
-                    updated[aiMsgIndex + 1] = {
+                    updated[aiMsgIndex] = {
                         role: "assistant",
                         content: fullText,
                         streaming: false,
