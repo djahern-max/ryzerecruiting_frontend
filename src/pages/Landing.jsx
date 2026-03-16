@@ -614,7 +614,7 @@ export default function Landing() {
       <section className={styles.phasesSection}>
         <div className={styles.container}>
           <div className={styles.eyebrow}>The Roadmap</div>
-          <h2 className={styles.sectionH2}>Where we are in the build.</h2>
+          <h2 className={styles.sectionH2}>Where I am in the build.</h2>
 
           <div className={styles.phases}>
             {PHASES.map((p) => {
