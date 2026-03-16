@@ -88,12 +88,13 @@ function Auth() {
 
   function handleGoogleLogin() {
     sessionStorage.setItem('oauth_user_type', userType);
-    window.location.href = `${API_URL}/api/auth/oauth/google`;
+    window.location.href = `${API_BASE}/api/auth/oauth/google`;
+
   }
 
   function handleLinkedInLogin() {
     sessionStorage.setItem('oauth_user_type', userType);
-    window.location.href = `${API_URL}/api/auth/oauth/linkedin`;
+    window.location.href = `${API_BASE}/api/auth/oauth/linkedin`;
   }
 
   return (
