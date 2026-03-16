@@ -142,7 +142,7 @@ function EmployerRow({ profile, onUpdate }) {
 
                 </td>
 
-                <td>
+                {/* <td>
                     {profile.primary_contact_email ? (
                         <a href={`mailto:${profile.primary_contact_email}`} className={styles.emailLink}>
                             {profile.primary_contact_email}
@@ -150,7 +150,7 @@ function EmployerRow({ profile, onUpdate }) {
                     ) : (
                         <span className={styles.empty}>—</span>
                     )}
-                </td>
+                </td> */}
 
                 <td>
                     <button
@@ -166,7 +166,7 @@ function EmployerRow({ profile, onUpdate }) {
 
             {expanded && (
                 <tr className={styles.detailRow}>
-                    <td colSpan={6} className={styles.detailCell}>
+                    <td colSpan={5} className={styles.detailCell}>
                         <div className={styles.detailPanel}>
                             {/* Overview + Size/Industry */}
                             {profile.ai_company_overview && (
@@ -315,15 +315,11 @@ export default function EmployerRoster() {
             <main className={styles.main}>
                 <div className={styles.pageHeader}>
                     <div>
-                        <button className={styles.backBtn} onClick={() => navigate('/admin')} type="button">
-                            ← Dashboard
-                        </button>
                         <h2 className={styles.pageTitle}>Employer Roster</h2>
                         <p className={styles.pageSub}>
                             All companies you've engaged with — enriched with AI intelligence.
                         </p>
                     </div>
-
                     <div className={styles.countBadge}>
                         {profiles.length} {profiles.length === 1 ? 'Company' : 'Companies'}
                     </div>
@@ -346,7 +342,7 @@ export default function EmployerRoster() {
                                     <th>Industry</th>
                                     <th>Est. Size</th>
                                     <th>Status</th>
-                                    <th>Contact</th>
+                                    {/* <th>Contact</th> */}
                                     <th>Intel</th>
                                 </tr>
                             </thead>

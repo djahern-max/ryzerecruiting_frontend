@@ -150,18 +150,35 @@
 }
 
 .table thead tr {
-    background: var(--bg-50);
-    border-bottom: 1px solid var(--border-200);
+    background: #1e3a5f;
+    border-bottom: none;
 }
 
 .table th {
-    padding: 10px 16px;
+    padding: 11px 16px;
     text-align: left;
     font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-500);
+    letter-spacing: 0.06em;
+    color: #93c5fd;
+}
+
+/* Tighten page header — no back button needed */
+.pageHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+}
+
+.pageTitle {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-900);
+    margin: 0 0 0.25rem;
+    letter-spacing: -0.3px;
 }
 
 .row {
