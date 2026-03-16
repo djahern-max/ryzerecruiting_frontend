@@ -104,11 +104,9 @@ function MessageBubble({ message }) {
                         <div className={styles.bubbleText}>
                             <ReactMarkdown>{message.content}</ReactMarkdown>
                         </div>
-                        {/* Streaming cursor */}
                         {message.streaming && (
                             <span className={styles.streamCursor}>▋</span>
                         )}
-                        {/* Inline result cards */}
                         {message.candidates?.length > 0 && (
                             <div className={styles.inlineCards}>
                                 <div className={styles.inlineCardsLabel}>
@@ -133,7 +131,7 @@ function MessageBubble({ message }) {
                                 {message.employers.map((e) => (
                                     <div key={e.id} className={styles.candidateCard}>
                                         <div className={styles.cardName}>{e.company_name}</div>
-                                        {e.industry && <div className={styles.cardMeta}>{e.industry}</div>}
+                                        {e.ai_industry && <div className={styles.cardMeta}>{e.ai_industry}</div>}
                                     </div>
                                 ))}
                             </div>
@@ -145,7 +143,11 @@ function MessageBubble({ message }) {
     );
 }
 
-function TypingIndicator() {
+// ---------------------------------------------------------------------------
+// Typing indicator — accepts a dynamic statusMsg prop
+// ---------------------------------------------------------------------------
+
+function TypingIndicator({ statusMsg }) {
     return (
         <div className={`${styles.messageRow} ${styles.messageRowAI}`}>
             <div className={styles.aiAvatar}>
@@ -154,7 +156,7 @@ function TypingIndicator() {
                 </svg>
             </div>
             <div className={`${styles.bubble} ${styles.bubbleAI}`}>
-                <p className={styles.thinkingLabel}>Searching your database...</p>
+                <p className={styles.thinkingLabel}>{statusMsg}</p>
                 <div className={styles.typingBubbleInner}>
                     <span className={styles.dot} />
                     <span className={styles.dot} />
@@ -176,8 +178,9 @@ export default function ChatPage() {
 
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
-    const [loading, setLoading] = useState(false);  // tool-call phase
-    const [streaming, setStreaming] = useState(false);  // text streaming phase
+    const [loading, setLoading] = useState(false);   // tool-call phase
+    const [streaming, setStreaming] = useState(false); // text streaming phase
+    const [statusMsg, setStatusMsg] = useState("Thinking...");
     const [error, setError] = useState(null);
     const bottomRef = useRef(null);
     const inputRef = useRef(null);
@@ -192,6 +195,7 @@ export default function ChatPage() {
 
         setInput("");
         setError(null);
+        setStatusMsg("Thinking...");
 
         const userMsg = { role: "user", content: userMessage };
         const newMessages = [...messages, userMsg];
@@ -215,20 +219,18 @@ export default function ChatPage() {
                 throw new Error(data.detail || "Chat request failed");
             }
 
-            // ── Start reading the stream ──────────────────────────────────
+            // ── Start reading the stream immediately ──────────────────────
             const reader = res.body.getReader();
             const decoder = new TextDecoder();
 
-            // Add empty AI message — we'll fill it in as tokens arrive
-            const aiMsgIndex = newMessages.length;
-            const aiMsg = { role: "assistant", content: "", streaming: true };
-            setMessages([...newMessages, aiMsg]);
-            setLoading(false);
-            setStreaming(true);
+            const STATUS_PREFIX = "__STATUS__:";
+            const DATA_MARKER = "\n__DATA__\n";
 
             let buffer = "";
             let fullText = "";
             let structuredData = null;
+            let aiMsgIndex = null;
+            let phase = "loading"; // "loading" | "streaming"
 
             while (true) {
                 const { done, value } = await reader.read();
@@ -236,55 +238,85 @@ export default function ChatPage() {
 
                 buffer += decoder.decode(value, { stream: true });
 
-                // Check if the __DATA__ sentinel has arrived
-                const dataMarker = "\n__DATA__\n";
-                const markerIdx = buffer.indexOf(dataMarker);
-
-                if (markerIdx !== -1) {
-                    // Everything before the marker is text
-                    fullText += buffer.slice(0, markerIdx);
-                    // Everything after is the JSON payload
-                    const jsonStr = buffer.slice(markerIdx + dataMarker.length);
-                    try {
-                        structuredData = JSON.parse(jsonStr);
-                    } catch (e) {
-                        logger.error?.("Failed to parse structured data", e);
+                // ── Phase 1: consume STATUS lines before text begins ──────
+                if (phase === "loading") {
+                    // Drain all complete __STATUS__ lines from the front of the buffer
+                    let consumed = true;
+                    while (consumed) {
+                        consumed = false;
+                        if (buffer.startsWith(STATUS_PREFIX)) {
+                            const newlineIdx = buffer.indexOf("\n");
+                            if (newlineIdx !== -1) {
+                                const msg = buffer.slice(STATUS_PREFIX.length, newlineIdx);
+                                setStatusMsg(msg);
+                                buffer = buffer.slice(newlineIdx + 1);
+                                consumed = true;
+                            }
+                        }
                     }
-                    buffer = "";
-                } else {
-                    // No marker yet — flush everything except the last few chars
-                    // (in case the marker is split across chunks)
-                    const safeLen = Math.max(0, buffer.length - dataMarker.length);
-                    fullText += buffer.slice(0, safeLen);
-                    buffer = buffer.slice(safeLen);
+
+                    // If buffer still has content and it's not another STATUS line,
+                    // real text has started — switch to streaming phase
+                    if (buffer.length > 0 && !buffer.startsWith(STATUS_PREFIX)) {
+                        phase = "streaming";
+                        aiMsgIndex = newMessages.length;
+                        setMessages([...newMessages, { role: "assistant", content: "", streaming: true }]);
+                        setLoading(false);
+                        setStreaming(true);
+                    }
                 }
 
-                // Update the message bubble in real time
+                // ── Phase 2: accumulate streamed text and watch for __DATA__ ──
+                if (phase === "streaming") {
+                    const markerIdx = buffer.indexOf(DATA_MARKER);
+
+                    if (markerIdx !== -1) {
+                        fullText += buffer.slice(0, markerIdx);
+                        const jsonStr = buffer.slice(markerIdx + DATA_MARKER.length);
+                        try {
+                            structuredData = JSON.parse(jsonStr);
+                        } catch (e) {
+                            console.error("Failed to parse structured data", e);
+                        }
+                        buffer = "";
+                    } else {
+                        // Hold back enough chars to avoid splitting the DATA marker
+                        const safeLen = Math.max(0, buffer.length - DATA_MARKER.length);
+                        fullText += buffer.slice(0, safeLen);
+                        buffer = buffer.slice(safeLen);
+                    }
+
+                    // Update the bubble in real time
+                    if (aiMsgIndex !== null) {
+                        setMessages((prev) => {
+                            const updated = [...prev];
+                            updated[aiMsgIndex + 1] = {
+                                ...updated[aiMsgIndex + 1],
+                                content: fullText,
+                                streaming: true,
+                            };
+                            return updated;
+                        });
+                    }
+                }
+            }
+
+            // ── Stream complete — finalize message ────────────────────────
+            if (aiMsgIndex !== null) {
                 setMessages((prev) => {
                     const updated = [...prev];
                     updated[aiMsgIndex + 1] = {
-                        ...updated[aiMsgIndex + 1],
+                        role: "assistant",
                         content: fullText,
-                        streaming: true,
+                        streaming: false,
+                        candidates: structuredData?.candidates || null,
+                        employers: structuredData?.employers || null,
+                        meetings: structuredData?.meetings || null,
+                        job_orders: structuredData?.job_orders || null,
                     };
                     return updated;
                 });
             }
-
-            // ── Stream complete — finalize message ────────────────────────
-            setMessages((prev) => {
-                const updated = [...prev];
-                updated[aiMsgIndex + 1] = {
-                    role: "assistant",
-                    content: fullText,
-                    streaming: false,
-                    candidates: structuredData?.candidates || null,
-                    employers: structuredData?.employers || null,
-                    meetings: structuredData?.meetings || null,
-                    job_orders: structuredData?.job_orders || null,
-                };
-                return updated;
-            });
 
         } catch (e) {
             setError(e.message);
@@ -349,7 +381,7 @@ export default function ChatPage() {
                         {messages.map((msg, i) => (
                             <MessageBubble key={i} message={msg} />
                         ))}
-                        {loading && <TypingIndicator />}
+                        {loading && <TypingIndicator statusMsg={statusMsg} />}
                         <div ref={bottomRef} />
                     </div>
                 </main>
