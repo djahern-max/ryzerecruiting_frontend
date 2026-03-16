@@ -32,18 +32,41 @@ const loadingScreen = (
   </div>
 );
 
-function ProtectedRoute({ children }) {
+/**
+ * ProtectedRoute — requires authentication + optional role check.
+ *
+ * allowedRoles: array of user_type strings e.g. ['EMPLOYER']
+ * If the user is authenticated but the wrong role, redirect to their own
+ * dashboard rather than a dead-end 403. Admins can access everything.
+ */
+function ProtectedRoute({ children, allowedRoles = null }) {
   const { user, loading } = useAuth();
+
   if (loading) return loadingScreen;
-  if (!user) return <Navigate to="/auth" />;
+  if (!user) return <Navigate to="/auth" replace />;
+
+  // Admins can access any protected route
+  if (user.user_type === 'ADMIN') return children;
+
+  if (allowedRoles && !allowedRoles.includes(user.user_type)) {
+    // Redirect to the user's own dashboard instead of a blank 403
+    if (user.user_type === 'EMPLOYER') return <Navigate to="/employer/dashboard" replace />;
+    if (user.user_type === 'CANDIDATE') return <Navigate to="/candidate/dashboard" replace />;
+    return <Navigate to="/" replace />;
+  }
+
   return children;
 }
 
+/**
+ * AdminRoute — requires ADMIN user_type AND is_superuser flag.
+ * Separates admin auth from employer/candidate auth entirely.
+ */
 function AdminRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading) return loadingScreen;
-  if (!user) return <Navigate to="/admin/login" />;
-  if (user.user_type !== 'ADMIN' || !user.is_superuser) return <Navigate to="/" />;
+  if (!user) return <Navigate to="/admin/login" replace />;
+  if (user.user_type !== 'ADMIN' || !user.is_superuser) return <Navigate to="/" replace />;
   return children;
 }
 
@@ -56,6 +79,7 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          {/* ── Public ─────────────────────────────────────────────── */}
           <Route path="/" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/login" element={<LoginPage />} />
@@ -65,23 +89,27 @@ function App() {
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
 
-
+          {/* ── Employer — role-locked ──────────────────────────────── */}
           <Route
             path="/employer/dashboard"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['EMPLOYER']}>
                 <EmployerDashboard />
               </ProtectedRoute>
             }
           />
+
+          {/* ── Candidate — role-locked ─────────────────────────────── */}
           <Route
             path="/candidate/dashboard"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['CANDIDATE']}>
                 <CandidateDashboard />
               </ProtectedRoute>
             }
           />
+
+          {/* ── Admin — superuser only ──────────────────────────────── */}
           <Route
             path="/admin"
             element={
@@ -114,7 +142,9 @@ function App() {
               </AdminRoute>
             }
           />
-          <Route path="*" element={<Navigate to="/" />} />
+
+          {/* ── Fallback ────────────────────────────────────────────── */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
