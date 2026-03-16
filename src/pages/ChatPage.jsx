@@ -1,78 +1,140 @@
 /* src/pages/ChatPage.jsx */
-import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import styles from "./ChatPage.module.css";
+import { useEffect, useState, useRef, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
+import styles from "./ChatPage.module.css";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 // ---------------------------------------------------------------------------
-// RYZE Logo SVG (shared)
+// Helpers
 // ---------------------------------------------------------------------------
 
-// Inject keyframes once globally — required for inline style animations
-const KEYFRAMES = `@keyframes ryze-spin { to { transform: rotate(360deg); } }`;
-if (typeof document !== "undefined" && !document.getElementById("ryze-chat-keyframes")) {
-    const s = document.createElement("style");
-    s.id = "ryze-chat-keyframes";
-    s.textContent = KEYFRAMES;
-    document.head.appendChild(s);
+function groupSessionsByDate(sessions) {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
+    const weekAgo = new Date(today); weekAgo.setDate(weekAgo.getDate() - 7);
+
+    const groups = { Today: [], Yesterday: [], "This Week": [], Older: [] };
+    for (const s of sessions) {
+        const d = new Date(s.updated_at);
+        const day = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        if (day >= today) groups["Today"].push(s);
+        else if (day >= yesterday) groups["Yesterday"].push(s);
+        else if (day >= weekAgo) groups["This Week"].push(s);
+        else groups["Older"].push(s);
+    }
+    return groups;
 }
 
-function RyzeLogo({ size = 18, color = "#ffffff" }) {
+// ---------------------------------------------------------------------------
+// Sidebar
+// ---------------------------------------------------------------------------
+
+function ChatSidebar({ sessions, activeSessionId, onNewChat, onSelectSession, onDeleteSession }) {
+    const groups = groupSessionsByDate(sessions);
+    const groupOrder = ["Today", "Yesterday", "This Week", "Older"];
+
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 375" width={size} height={size}>
-            <path fill={color} d="M 186.078125 19.484375 L 0.367188 341.148438 L 180.234375 341.148438 L 229.054688 256.585938 L 201.605469 215.015625 L 190.46875 234.308594 L 154.511719 296.59375 L 77.539062 296.59375 L 186.394531 108.039062 L 296.730469 295.972656 L 243.730469 295.972656 L 221.453125 340.527344 L 374.554688 340.527344 Z" />
-        </svg>
+        <aside className={styles.sidebar}>
+            <div className={styles.sidebarHeader}>
+                <button className={styles.newChatBtn} onClick={onNewChat}>
+                    <span>+</span> New Chat
+                </button>
+            </div>
+            <div className={styles.sessionList}>
+                {groupOrder.map((group) => {
+                    const items = groups[group];
+                    if (!items.length) return null;
+                    return (
+                        <div key={group} className={styles.sessionGroup}>
+                            <div className={styles.sessionGroupLabel}>{group}</div>
+                            {items.map((s) => (
+                                <SessionItem
+                                    key={s.id}
+                                    session={s}
+                                    isActive={s.id === activeSessionId}
+                                    onSelect={() => onSelectSession(s.id)}
+                                    onDelete={() => onDeleteSession(s.id)}
+                                />
+                            ))}
+                        </div>
+                    );
+                })}
+                {sessions.length === 0 && (
+                    <div className={styles.noSessions}>No conversations yet</div>
+                )}
+            </div>
+        </aside>
+    );
+}
+
+function SessionItem({ session, isActive, onSelect, onDelete }) {
+    const [hovered, setHovered] = useState(false);
+    return (
+        <div
+            className={`${styles.sessionItem} ${isActive ? styles.sessionItemActive : ""}`}
+            onClick={onSelect}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+        >
+            <span className={styles.sessionTitle}>
+                {session.title || "New conversation"}
+            </span>
+            {hovered && (
+                <button
+                    className={styles.deleteBtn}
+                    onClick={(e) => { e.stopPropagation(); onDelete(); }}
+                    title="Delete conversation"
+                >
+                    🗑
+                </button>
+            )}
+        </div>
     );
 }
 
 // ---------------------------------------------------------------------------
-// Inline result cards
+// Cards
 // ---------------------------------------------------------------------------
 
 function CandidateCard({ candidate }) {
+    const score = candidate.score != null ? Math.round(candidate.score * 100) : null;
+    const scoreColor = score >= 80 ? "#15803d" : score >= 60 ? "#92400e" : "#6b7280";
     return (
         <div className={styles.candidateCard}>
-            <div className={styles.cardHeader}>
-                <div className={styles.cardName}>{candidate.name}</div>
-                {candidate.score != null && (
-                    <span className={styles.cardScore}>{Math.round(candidate.score * 100)}% match</span>
-                )}
-                {candidate.match_score != null && (
-                    <span className={styles.cardScore}>{candidate.match_score}% match</span>
+            <div className={styles.cardTop}>
+                <div>
+                    <div className={styles.cardName}>{candidate.name}</div>
+                    <div className={styles.cardMeta}>
+                        {candidate.current_title}
+                        {candidate.current_company ? ` · ${candidate.current_company}` : ""}
+                    </div>
+                    {candidate.location && (
+                        <div className={styles.cardLocation}>📍 {candidate.location}</div>
+                    )}
+                </div>
+                {score !== null && (
+                    <div className={styles.scoreChip} style={{ color: scoreColor, borderColor: scoreColor }}>
+                        {score}%
+                    </div>
                 )}
             </div>
-            <div className={styles.cardMeta}>
-                {candidate.current_title && <span>{candidate.current_title}</span>}
-                {candidate.current_company && <span className={styles.cardDot}>·</span>}
-                {candidate.current_company && <span>{candidate.current_company}</span>}
-            </div>
-            {candidate.location && (
-                <div className={styles.cardLocation}>📍 {candidate.location}</div>
-            )}
             <div className={styles.cardTags}>
                 {candidate.ai_career_level && (
-                    <span className={styles.tagLevel}>{candidate.ai_career_level}</span>
+                    <span className={styles.tag}>{candidate.ai_career_level}</span>
                 )}
                 {candidate.ai_certifications && (
-                    <span className={styles.tagCert}>{candidate.ai_certifications}</span>
+                    <span className={styles.tag}>{candidate.ai_certifications}</span>
                 )}
                 {candidate.ai_years_experience && (
-                    <span className={styles.tagYears}>{candidate.ai_years_experience} yrs</span>
+                    <span className={styles.tag}>{candidate.ai_years_experience} yrs</span>
                 )}
             </div>
             {candidate.ai_summary && (
-                <div className={styles.cardSummary}>{candidate.ai_summary}</div>
-            )}
-            {candidate.id && (
-                <a
-                    href={`/admin/candidates?search=${encodeURIComponent(candidate.name)}`}
-                    className={styles.cardProfileLink}
-                >
-                    View Profile →
-                </a>
+                <p className={styles.cardSummary}>{candidate.ai_summary}</p>
             )}
         </div>
     );
@@ -89,21 +151,16 @@ function MeetingCard({ meeting }) {
         <div className={styles.meetingCard}>
             <div className={styles.meetingCardLeft}>
                 <div className={styles.cardName}>{meeting.employer_name || "Unknown"}</div>
-                {meeting.company_name && (
-                    <div className={styles.cardMeta}>{meeting.company_name}</div>
+                {meeting.company_name && <div className={styles.cardMeta}>{meeting.company_name}</div>}
+                <div className={styles.meetingTime}>📅 {meeting.date} at {meeting.time_slot} EST</div>
+                {meeting.meeting_summary && (
+                    <p className={styles.cardSummary}>{meeting.meeting_summary.slice(0, 180)}…</p>
                 )}
-                <div className={styles.meetingTime}>
-                    📅 {meeting.date} at {meeting.time_slot} EST
-                </div>
             </div>
             <div className={styles.meetingCardRight}>
-                <span className={styles.meetingStatus} style={{ background: s.bg, color: s.color }}>
-                    {s.label}
-                </span>
+                <span className={styles.meetingStatus} style={{ background: s.bg, color: s.color }}>{s.label}</span>
                 {meeting.meeting_url && meeting.status === "confirmed" && (
-                    <a href={meeting.meeting_url} target="_blank" rel="noopener noreferrer" className={styles.zoomLink}>
-                        Join Zoom →
-                    </a>
+                    <a href={meeting.meeting_url} target="_blank" rel="noopener noreferrer" className={styles.zoomLink}>Join Zoom →</a>
                 )}
             </div>
         </div>
@@ -111,9 +168,31 @@ function MeetingCard({ meeting }) {
 }
 
 // ---------------------------------------------------------------------------
+// Typing indicator
+// ---------------------------------------------------------------------------
+
+function TypingIndicator({ statusMsg }) {
+    return (
+        <div className={styles.messageRow}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 375" width={28} height={28} style={{ flexShrink: 0, marginTop: 2 }}>
+                <path fill="#0a66c2" d="M 186.078125 19.484375 L 0.367188 341.148438 L 180.234375 341.148438 L 229.054688 256.585938 L 201.605469 215.015625 L 190.46875 234.308594 L 154.511719 296.59375 L 77.539062 296.59375 L 186.394531 108.039062 L 296.730469 295.972656 L 243.730469 295.972656 L 221.453125 340.527344 L 374.554688 340.527344 Z" />
+            </svg>
+            <div className={`${styles.bubble} ${styles.bubbleAI}`}>
+                <div className={styles.typingRow}>
+                    <div className={styles.dots}>
+                        <span className={styles.dot} />
+                        <span className={styles.dot} />
+                        <span className={styles.dot} />
+                    </div>
+                    <span className={styles.statusText}>{statusMsg}</span>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// ---------------------------------------------------------------------------
 // Message bubble
-// FIX 1: plain text while streaming → ReactMarkdown after complete
-// FIX 2: CandidateCard replaces profileLinks
 // ---------------------------------------------------------------------------
 
 function MessageBubble({ message }) {
@@ -131,84 +210,39 @@ function MessageBubble({ message }) {
                 ) : (
                     <>
                         <div className={styles.bubbleText}>
-                            {/* FIX 1: stream as plain text, snap to markdown on complete */}
                             {message.streaming
                                 ? <p style={{ whiteSpace: "pre-wrap", margin: 0 }}>{message.content}</p>
                                 : <ReactMarkdown>{message.content}</ReactMarkdown>
                             }
                         </div>
-                        {message.streaming && (
-                            <span className={styles.streamCursor}>▋</span>
-                        )}
+                        {message.streaming && <span className={styles.streamCursor}>▋</span>}
 
-                        {/* FIX 2: CandidateCard replaces profileLinks */}
                         {!message.streaming && message.candidates?.length > 0 && (
                             <div className={styles.inlineCards}>
-                                <div className={styles.inlineCardsLabel}>
-                                    {message.candidates.length} candidate{message.candidates.length !== 1 ? "s" : ""}
-                                </div>
-                                {message.candidates.map((c) => (
-                                    <CandidateCard key={c.id ?? c.name} candidate={c} />
-                                ))}
+                                <div className={styles.inlineCardsLabel}>{message.candidates.length} candidate{message.candidates.length !== 1 ? "s" : ""}</div>
+                                {message.candidates.map((c) => <CandidateCard key={c.id ?? c.name} candidate={c} />)}
                             </div>
                         )}
-
                         {!message.streaming && message.meetings?.length > 0 && (
                             <div className={styles.inlineCards}>
-                                <div className={styles.inlineCardsLabel}>
-                                    {message.meetings.length} meeting{message.meetings.length !== 1 ? "s" : ""}
-                                </div>
+                                <div className={styles.inlineCardsLabel}>{message.meetings.length} meeting{message.meetings.length !== 1 ? "s" : ""}</div>
                                 {message.meetings.map((m) => <MeetingCard key={m.id} meeting={m} />)}
                             </div>
                         )}
-
                         {!message.streaming && message.employers?.length > 0 && (
                             <div className={styles.inlineCards}>
-                                <div className={styles.inlineCardsLabel}>
-                                    {message.employers.length} employer{message.employers.length !== 1 ? "s" : ""}
-                                </div>
+                                <div className={styles.inlineCardsLabel}>{message.employers.length} employer{message.employers.length !== 1 ? "s" : ""}</div>
                                 {message.employers.map((e) => (
                                     <div key={e.id} className={styles.candidateCard}>
                                         <div className={styles.cardName}>{e.company_name}</div>
-                                        {e.ai_industry && <div className={styles.cardMeta}>{e.ai_industry}</div>}
+                                        <div className={styles.cardMeta}>{e.ai_industry}</div>
+                                        {e.ai_company_overview && <p className={styles.cardSummary}>{e.ai_company_overview.slice(0, 160)}…</p>}
                                     </div>
                                 ))}
                             </div>
                         )}
                     </>
                 )}
-            </div>
-        </div>
-    );
-}
-
-// ---------------------------------------------------------------------------
-// Typing indicator
-// FIX 3: spinning gradient ring around logo while thinking
-// ---------------------------------------------------------------------------
-
-function TypingIndicator({ statusMsg }) {
-    return (
-        <div className={`${styles.messageRow} ${styles.messageRowAI}`}>
-            {/* Inline styles bypass CSS Modules hashing — guaranteed to work */}
-            <div style={{ flexShrink: 0, marginTop: 2, width: 28, height: 28 }}>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 375 375"
-                    width={28}
-                    height={28}
-                    style={{ animation: "ryze-spin 0.1s linear infinite", transformOrigin: "center" }}
-                >
-                    <path fill="#0a66c2" d="M 186.078125 19.484375 L 0.367188 341.148438 L 180.234375 341.148438 L 229.054688 256.585938 L 201.605469 215.015625 L 190.46875 234.308594 L 154.511719 296.59375 L 77.539062 296.59375 L 186.394531 108.039062 L 296.730469 295.972656 L 243.730469 295.972656 L 221.453125 340.527344 L 374.554688 340.527344 Z" />
-                </svg>
-            </div>
-            <div className={`${styles.bubble} ${styles.bubbleAI}`}>
-                <p className={styles.thinkingLabel}>{statusMsg}</p>
-                <div className={styles.typingBubbleInner}>
-                    <span className={styles.dot} />
-                    <span className={styles.dot} />
-                    <span className={styles.dot} />
-                </div>
             </div>
         </div>
     );
@@ -223,19 +257,128 @@ export default function ChatPage() {
     const { user, logout } = useAuth();
     const token = localStorage.getItem("token");
 
+    // Chat state
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [streaming, setStreaming] = useState(false);
     const [statusMsg, setStatusMsg] = useState("Thinking...");
     const [error, setError] = useState(null);
+
+    // Session state
+    const [sessions, setSessions] = useState([]);
+    const [activeSessionId, setActiveSessionId] = useState(null);
+
     const bottomRef = useRef(null);
     const inputRef = useRef(null);
 
+    // ── Auto-scroll ────────────────────────────────────────────────────────
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages, loading, streaming]);
 
+    // ── Load sessions on mount ─────────────────────────────────────────────
+    useEffect(() => {
+        loadSessions();
+    }, []);
+
+    async function loadSessions() {
+        try {
+            const res = await fetch(`${API_BASE}/api/chat/sessions`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setSessions(data);
+            }
+        } catch (e) {
+            console.error("Failed to load sessions", e);
+        }
+    }
+
+    // ── Load a session's messages ──────────────────────────────────────────
+    async function loadSession(sessionId) {
+        try {
+            const res = await fetch(`${API_BASE}/api/chat/sessions/${sessionId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (!res.ok) return;
+            const data = await res.json();
+            setActiveSessionId(sessionId);
+            const restored = data.messages.map((m) => ({
+                role: m.role,
+                content: m.content,
+                streaming: false,
+                ...(m.structured_data ? JSON.parse(m.structured_data) : {}),
+            }));
+            setMessages(restored);
+            setError(null);
+        } catch (e) {
+            console.error("Failed to load session", e);
+        }
+    }
+
+    // ── New chat ───────────────────────────────────────────────────────────
+    function handleNewChat() {
+        setActiveSessionId(null);
+        setMessages([]);
+        setError(null);
+        inputRef.current?.focus();
+    }
+
+    // ── Delete session ─────────────────────────────────────────────────────
+    async function handleDeleteSession(sessionId) {
+        try {
+            await fetch(`${API_BASE}/api/chat/sessions/${sessionId}`, {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setSessions((prev) => prev.filter((s) => s.id !== sessionId));
+            if (activeSessionId === sessionId) handleNewChat();
+        } catch (e) {
+            console.error("Failed to delete session", e);
+        }
+    }
+
+    // ── Save a message to current session ─────────────────────────────────
+    async function saveMessage(sessionId, role, content, structuredData) {
+        try {
+            await fetch(`${API_BASE}/api/chat/sessions/${sessionId}/messages`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    role,
+                    content,
+                    structured_data: structuredData ? JSON.stringify(structuredData) : null,
+                }),
+            });
+        } catch (e) {
+            console.error("Failed to save message", e);
+        }
+    }
+
+    // ── Generate title after first exchange ───────────────────────────────
+    async function generateTitle(sessionId) {
+        try {
+            const res = await fetch(`${API_BASE}/api/chat/sessions/${sessionId}/generate-title`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setSessions((prev) =>
+                    prev.map((s) => s.id === sessionId ? { ...s, title: data.title } : s)
+                );
+            }
+        } catch (e) {
+            console.error("Failed to generate title", e);
+        }
+    }
+
+    // ── Send message ───────────────────────────────────────────────────────
     async function sendMessage(text) {
         const userMessage = text.trim();
         if (!userMessage || loading || streaming) return;
@@ -249,9 +392,37 @@ export default function ChatPage() {
         setMessages(newMessages);
         setLoading(true);
 
+        // Create session on first message
+        let sessionId = activeSessionId;
+        const isFirstMessage = messages.length === 0;
+        if (!sessionId) {
+            try {
+                const res = await fetch(`${API_BASE}/api/chat/sessions`, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ title: null }),
+                });
+                if (res.ok) {
+                    const session = await res.json();
+                    sessionId = session.id;
+                    setActiveSessionId(sessionId);
+                    setSessions((prev) => [session, ...prev]);
+                }
+            } catch (e) {
+                console.error("Failed to create session", e);
+            }
+        }
+
+        // Save user message
+        if (sessionId) {
+            await saveMessage(sessionId, "user", userMessage, null);
+        }
+
         try {
             const history = messages.map((m) => ({ role: m.role, content: m.content }));
-
             const res = await fetch(`${API_BASE}/api/chat`, {
                 method: "POST",
                 headers: {
@@ -268,7 +439,6 @@ export default function ChatPage() {
 
             const reader = res.body.getReader();
             const decoder = new TextDecoder();
-
             const STATUS_PREFIX = "__STATUS__:";
             const DATA_MARKER = "\n__DATA__\n";
 
@@ -298,7 +468,6 @@ export default function ChatPage() {
                             }
                         }
                     }
-
                     if (buffer.length > 0 && !buffer.startsWith(STATUS_PREFIX)) {
                         phase = "streaming";
                         aiMsgIndex = newMessages.length;
@@ -310,15 +479,10 @@ export default function ChatPage() {
 
                 if (phase === "streaming") {
                     const markerIdx = buffer.indexOf(DATA_MARKER);
-
                     if (markerIdx !== -1) {
                         fullText += buffer.slice(0, markerIdx);
                         const jsonStr = buffer.slice(markerIdx + DATA_MARKER.length);
-                        try {
-                            structuredData = JSON.parse(jsonStr);
-                        } catch (e) {
-                            console.error("Failed to parse structured data", e);
-                        }
+                        try { structuredData = JSON.parse(jsonStr); } catch (e) { console.error("Failed to parse structured data", e); }
                         buffer = "";
                     } else {
                         const safeLen = Math.max(0, buffer.length - DATA_MARKER.length);
@@ -329,18 +493,14 @@ export default function ChatPage() {
                     if (aiMsgIndex !== null) {
                         setMessages((prev) => {
                             const updated = [...prev];
-                            updated[aiMsgIndex] = {
-                                ...updated[aiMsgIndex],
-                                content: fullText,
-                                streaming: true,
-                            };
+                            updated[aiMsgIndex] = { ...updated[aiMsgIndex], content: fullText, streaming: true };
                             return updated;
                         });
                     }
                 }
             }
 
-            // Stream complete — finalize with streaming: false so markdown renders
+            // Finalize
             if (aiMsgIndex !== null) {
                 setMessages((prev) => {
                     const updated = [...prev];
@@ -355,6 +515,16 @@ export default function ChatPage() {
                     };
                     return updated;
                 });
+            }
+
+            // Save assistant message and generate title
+            if (sessionId) {
+                await saveMessage(sessionId, "assistant", fullText, structuredData);
+                if (isFirstMessage) {
+                    generateTitle(sessionId);
+                }
+                // Refresh session list to update updated_at ordering
+                loadSessions();
             }
 
         } catch (e) {
@@ -378,6 +548,7 @@ export default function ChatPage() {
 
     return (
         <div className={styles.page}>
+            {/* ── Header ── */}
             <header className={styles.header}>
                 <div className={styles.headerContent}>
                     <div className={styles.headerLeft}>
@@ -399,54 +570,59 @@ export default function ChatPage() {
                 </div>
             </header>
 
-            <div className={styles.chatLayout}>
-                <main className={styles.chatMain}>
-                    {messages.length === 0 && (
-                        <div className={styles.emptyState}>
-                            <div className={styles.emptyIcon}>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 375" width="80" height="80">
-                                    <path fill="#004aad" d="M 186.078125 19.484375 L 0.367188 341.148438 L 180.234375 341.148438 L 229.054688 256.585938 L 201.605469 215.015625 L 190.46875 234.308594 L 154.511719 296.59375 L 77.539062 296.59375 L 186.394531 108.039062 L 296.730469 295.972656 L 243.730469 295.972656 L 221.453125 340.527344 L 374.554688 340.527344 Z" />
-                                </svg>
+            {/* ── Body: sidebar + chat ── */}
+            <div className={styles.body}>
+                <ChatSidebar
+                    sessions={sessions}
+                    activeSessionId={activeSessionId}
+                    onNewChat={handleNewChat}
+                    onSelectSession={loadSession}
+                    onDeleteSession={handleDeleteSession}
+                />
+
+                <div className={styles.chatLayout}>
+                    <main className={styles.chatMain}>
+                        {messages.length === 0 && (
+                            <div className={styles.emptyState}>
+                                <div className={styles.emptyIcon}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 375" width="80" height="80">
+                                        <path fill="#004aad" d="M 186.078125 19.484375 L 0.367188 341.148438 L 180.234375 341.148438 L 229.054688 256.585938 L 201.605469 215.015625 L 190.46875 234.308594 L 154.511719 296.59375 L 77.539062 296.59375 L 186.394531 108.039062 L 296.730469 295.972656 L 243.730469 295.972656 L 221.453125 340.527344 L 374.554688 340.527344 Z" />
+                                    </svg>
+                                </div>
+                                <h2 className={styles.emptyTitle}>RYZE Intelligence</h2>
+                                <p className={styles.emptySub}>Ask anything about your candidates, employers, or schedule. Your entire recruiting database, in plain English.</p>
                             </div>
-                            <h2 className={styles.emptyTitle}>RYZE Intelligence</h2>
-                            <p className={styles.emptySub}>
-                                Ask anything about your candidates, employers, or schedule.
-                                Your entire recruiting database, in plain English.
-                            </p>
+                        )}
+                        <div className={styles.thread}>
+                            {messages.map((msg, i) => <MessageBubble key={i} message={msg} />)}
+                            {loading && <TypingIndicator statusMsg={statusMsg} />}
+                            <div ref={bottomRef} />
                         </div>
-                    )}
+                    </main>
 
-                    <div className={styles.thread}>
-                        {messages.map((msg, i) => (
-                            <MessageBubble key={i} message={msg} />
-                        ))}
-                        {loading && <TypingIndicator statusMsg={statusMsg} />}
-                        <div ref={bottomRef} />
+                    <div className={styles.inputBar}>
+                        {error && <div className={styles.errorBanner}>{error}</div>}
+                        <div className={styles.inputWrapper}>
+                            <textarea
+                                ref={inputRef}
+                                className={styles.input}
+                                placeholder="Ask about candidates, meetings, employers..."
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                rows={1}
+                                disabled={isActive}
+                            />
+                            <button
+                                className={styles.sendBtn}
+                                onClick={() => sendMessage(input)}
+                                disabled={isActive || !input.trim()}
+                            >
+                                {loading ? <span className={styles.spinner} /> : "↑"}
+                            </button>
+                        </div>
+                        <p className={styles.inputHint}>Press Enter to send · Shift+Enter for new line</p>
                     </div>
-                </main>
-
-                <div className={styles.inputBar}>
-                    {error && <div className={styles.errorBanner}>{error}</div>}
-                    <div className={styles.inputWrapper}>
-                        <textarea
-                            ref={inputRef}
-                            className={styles.input}
-                            placeholder="Ask about candidates, meetings, employers..."
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            rows={1}
-                            disabled={isActive}
-                        />
-                        <button
-                            className={styles.sendBtn}
-                            onClick={() => sendMessage(input)}
-                            disabled={isActive || !input.trim()}
-                        >
-                            {loading ? <span className={styles.spinner} /> : "↑"}
-                        </button>
-                    </div>
-                    <p className={styles.inputHint}>Press Enter to send · Shift+Enter for new line</p>
                 </div>
             </div>
         </div>
