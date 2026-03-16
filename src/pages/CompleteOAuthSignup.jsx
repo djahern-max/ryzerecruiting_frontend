@@ -38,7 +38,7 @@ function CompleteOAuthSignup() {
 
     try {
       const response = await axios.post(
-        `${API_URL}/api/auth/oauth/complete-signup?temp_token=${tempToken}&user_type=${userType}`
+        `${API_BASE}/api/auth/oauth/complete-signup?temp_token=${tempToken}&user_type=${userType}`
       );
 
       const { access_token, user } = response.data;
