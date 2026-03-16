@@ -173,10 +173,24 @@ function MeetingCard({ meeting }) {
 
 function TypingIndicator({ statusMsg }) {
     return (
-        <div className={styles.messageRow}>
-            <svg className={styles.logoPulsing} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 375" width={28} height={28} style={{ flexShrink: 0, marginTop: 2 }}>
-                <path fill="#0a66c2" d="M 186.078125 19.484375 L 0.367188 341.148438 L 180.234375 341.148438 L 229.054688 256.585938 L 201.605469 215.015625 L 190.46875 234.308594 L 154.511719 296.59375 L 77.539062 296.59375 L 186.394531 108.039062 L 296.730469 295.972656 L 243.730469 295.972656 L 221.453125 340.527344 L 374.554688 340.527344 Z" />
-            </svg>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+            <style>{`
+                @keyframes ryzeLogoPulse {
+                    0%, 100% { opacity: 1; transform: scale(1); }
+                    50% { opacity: 0.5; transform: scale(0.88); }
+                }
+            `}</style>
+            <div style={{
+                animation: "ryzeLogoPulse 1.4s ease-in-out infinite",
+                display: "flex",
+                alignItems: "center",
+                flexShrink: 0,
+                marginTop: 2,
+            }}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 375" width={28} height={28}>
+                    <path fill="#0a66c2" d="M 186.078125 19.484375 L 0.367188 341.148438 L 180.234375 341.148438 L 229.054688 256.585938 L 201.605469 215.015625 L 190.46875 234.308594 L 154.511719 296.59375 L 77.539062 296.59375 L 186.394531 108.039062 L 296.730469 295.972656 L 243.730469 295.972656 L 221.453125 340.527344 L 374.554688 340.527344 Z" />
+                </svg>
+            </div>
             <div className={`${styles.bubble} ${styles.bubbleAI}`}>
                 <div className={styles.typingRow}>
                     <div className={styles.dots}>
@@ -190,7 +204,6 @@ function TypingIndicator({ statusMsg }) {
         </div>
     );
 }
-
 // ---------------------------------------------------------------------------
 // Message bubble
 // ---------------------------------------------------------------------------

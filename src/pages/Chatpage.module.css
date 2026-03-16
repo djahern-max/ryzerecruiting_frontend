@@ -770,6 +770,8 @@
 
 .logoPulsing {
     animation: logoPulse 1.4s ease-in-out infinite;
-    transform-box: fill-box;
-    transform-origin: center;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-top: 2px;
 }
