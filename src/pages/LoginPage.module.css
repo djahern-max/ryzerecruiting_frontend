@@ -1,7 +1,6 @@
 /* src/pages/LoginPage.module.css */
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 
-/* ── Page Layout ─────────────────────────────────────────────────── */
 .page {
     min-height: 100vh;
     display: flex;
@@ -15,7 +14,6 @@
     opacity: 1;
 }
 
-/* ── Left Panel ──────────────────────────────────────────────────── */
 .left {
     width: 420px;
     flex-shrink: 0;
@@ -25,13 +23,11 @@
         radial-gradient(ellipse at 90% 10%, rgba(10, 102, 194, 0.28) 0%, transparent 50%);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     padding: 56px 52px 40px;
     position: relative;
     overflow: hidden;
 }
 
-/* subtle grid texture */
 .left::before {
     content: '';
     position: absolute;
@@ -43,9 +39,14 @@
     pointer-events: none;
 }
 
+/* leftInner fills remaining space and centers content vertically */
 .leftInner {
     position: relative;
     z-index: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .logoMark {
@@ -71,7 +72,6 @@
     max-width: 280px;
 }
 
-/* ── Feature List ────────────────────────────────────────────────── */
 .featureList {
     display: flex;
     flex-direction: column;
@@ -110,10 +110,10 @@
     box-shadow: 0 0 8px rgba(87, 160, 211, 0.6);
 }
 
-/* ── Left Footer ─────────────────────────────────────────────────── */
 .leftFooter {
     position: relative;
     z-index: 1;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -135,7 +135,6 @@
     font-size: 0.78rem;
 }
 
-/* ── Right Panel ─────────────────────────────────────────────────── */
 .right {
     flex: 1;
     background: #f5f8fc;
@@ -147,7 +146,6 @@
     gap: 20px;
 }
 
-/* ── Card ────────────────────────────────────────────────────────── */
 .card {
     background: #fff;
     border-radius: 16px;
@@ -177,7 +175,6 @@
     margin: 0;
 }
 
-/* ── OAuth Buttons ───────────────────────────────────────────────── */
 .oauthRow {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -213,7 +210,6 @@
     cursor: not-allowed;
 }
 
-/* ── Divider ─────────────────────────────────────────────────────── */
 .divider {
     display: flex;
     align-items: center;
@@ -233,7 +229,6 @@
     background: #e2eaf3;
 }
 
-/* ── Form ────────────────────────────────────────────────────────── */
 .form {
     display: flex;
     flex-direction: column;
@@ -282,7 +277,6 @@
     cursor: not-allowed;
 }
 
-/* ── User Type Toggle ────────────────────────────────────────────── */
 .typeToggle {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -319,7 +313,6 @@
     color: #fff;
 }
 
-/* ── Error ───────────────────────────────────────────────────────── */
 .errorMsg {
     font-size: 0.83rem;
     color: #c0392b;
@@ -330,7 +323,6 @@
     margin: 0;
 }
 
-/* ── Submit Button ───────────────────────────────────────────────── */
 .submitBtn {
     font-family: 'DM Sans', system-ui, sans-serif;
     font-size: 0.95rem;
@@ -362,7 +354,6 @@
     transform: none;
 }
 
-/* ── Spinner ─────────────────────────────────────────────────────── */
 .spinner {
     display: inline-block;
     width: 18px;
@@ -379,7 +370,6 @@
     }
 }
 
-/* ── Mode Switch ─────────────────────────────────────────────────── */
 .modeSwitch {
     font-size: 0.85rem;
     color: #7a98b5;
@@ -404,7 +394,6 @@
     text-decoration: underline;
 }
 
-/* ── Admin Link ──────────────────────────────────────────────────── */
 .adminLink {
     font-size: 0.78rem;
     color: #aabdd0;
@@ -416,7 +405,6 @@
     color: #7a98b5;
 }
 
-/* ── Responsive ──────────────────────────────────────────────────── */
 @media (max-width: 768px) {
     .page {
         flex-direction: column;
@@ -425,6 +413,10 @@
     .left {
         width: 100%;
         padding: 36px 28px 32px;
+    }
+
+    .leftInner {
+        justify-content: flex-start;
     }
 
     .brandTagline {
