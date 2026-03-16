@@ -4,12 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import CandidateModal from "../components/CandidateModal";
 import styles from "./CandidatesPage.module.css";
+import AdminHeader from '../components/AdminHeader';
+
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 export default function CandidatesPage() {
     const navigate = useNavigate();
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
     const token = localStorage.getItem('token');
 
     const [candidates, setCandidates] = useState([]);
@@ -82,25 +84,7 @@ export default function CandidatesPage() {
     return (
         <div className={styles.page}>
             {/* ── Header ── */}
-            <header className={styles.header}>
-                <div className={styles.headerContent}>
-                    <div className={styles.headerLeft}>
-                        <span className={styles.logo}>RYZE.ai</span>
-                        <span className={styles.adminBadge}>ADMIN</span>
-                    </div>
-                    <nav className={styles.nav}>
-                        <button className={styles.navBtn} onClick={() => navigate("/admin")}>Dashboard</button>
-                        <button className={styles.navBtn} onClick={() => navigate("/admin/employers")}>Employers</button>
-                        <button className={`${styles.navBtn} ${styles.navBtnActive}`}>Candidates</button>
-                    </nav>
-                    <div className={styles.headerRight}>
-                        <span className={styles.userName}>{user?.full_name || user?.email}</span>
-                        <button className={styles.logoutButton} onClick={logout}>
-                            <i className="fi fi-rr-sign-out-alt" />
-                        </button>
-                    </div>
-                </div>
-            </header>
+            <AdminHeader active="candidates" />
 
             <main className={styles.main}>
                 {/* ── Page Header ── */}

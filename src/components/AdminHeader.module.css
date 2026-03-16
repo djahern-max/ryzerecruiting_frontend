@@ -1,0 +1,146 @@
+/* src/components/AdminHeader.module.css */
+.header {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-200);
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.headerContent {
+    max-width: 1280px;
+    margin: 0 auto;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.logo {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--brand-800);
+    letter-spacing: -0.5px;
+    cursor: pointer;
+}
+
+.adminBadge {
+    background: #dcfce7;
+    color: #15803d;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex: 1;
+}
+
+.navLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 7px;
+    border: none;
+    background: none;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-500);
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: color 120ms, background 120ms;
+    white-space: nowrap;
+}
+
+.navLink i {
+    font-size: 13px;
+}
+
+.navLink:hover:not(:disabled) {
+    color: var(--text-900);
+    background: var(--bg-100);
+}
+
+.navLinkActive {
+    color: var(--brand-800);
+    background: #eff6ff;
+    font-weight: 600;
+}
+
+.navLinkActive:hover {
+    background: #dbeafe !important;
+}
+
+.navLinkSoon {
+    opacity: 0.4;
+    cursor: not-allowed !important;
+}
+
+.headerRight {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.userName {
+    font-size: 13px;
+    color: var(--text-600);
+    font-weight: 500;
+}
+
+.logoutBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 7px;
+    border: 1px solid var(--border-200);
+    background: white;
+    color: var(--text-400);
+    font-size: 14px;
+    cursor: pointer;
+    transition: color 120ms, border-color 120ms, background 120ms;
+}
+
+.logoutBtn:hover {
+    color: #dc2626;
+    border-color: #fca5a5;
+    background: #fef2f2;
+}
+
+@media (max-width: 900px) {
+    .nav {
+        display: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .header {
+        padding: 0 16px;
+    }
+
+    .userName {
+        display: none;
+    }
+}

@@ -11,6 +11,7 @@ import aiIcon from '../assets/icons/artificial-intelligence.svg';
 import aiNotesIcon from '../assets/icons/ai_notes.svg';
 import zoomIcon from '../assets/icons/zoom.svg';
 import letterXIcon from '../assets/icons/letter-x.svg';
+import AdminHeader from '../components/AdminHeader';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -265,7 +266,7 @@ function BookingTypeBadge({ type }) {
 // ---------------------------------------------------------------------------
 
 function AdminDashboard() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -412,37 +413,8 @@ function AdminDashboard() {
     <div className={styles.page}>
 
       {/* ── Header ──────────────────────────────────────── */}
-      <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <div className={styles.headerLeft}>
-            <span className={styles.logo}>RYZE.ai</span>
-            <span className={styles.adminBadge}>ADMIN</span>
-          </div>
 
-          <nav className={styles.headerNav}>
-            <button className={`${styles.navLink} ${styles.navLinkActive}`}>
-              <i className="fi fi-rr-apps"></i>Dashboard
-            </button>
-            <button className={styles.navLink} onClick={() => navigate('/admin/employers')}>
-              <i className="fi fi-rr-building"></i>Employers
-            </button>
-            <button className={styles.navLink} onClick={() => navigate('/admin/candidates')}>
-              <i className="fi fi-rr-users"></i>Candidates
-            </button>
-            <button className={`${styles.navLink} ${styles.navLinkSoon}`} disabled>
-              <i className="fi fi-rr-chart-histogram"></i>Reports
-            </button>
-          </nav>
-
-          <div className={styles.headerRight}>
-            <span className={styles.userName}>{user?.full_name}</span>
-            <button className={styles.logoutBtn} onClick={logout}>
-              <i className="fi fi-rr-exit"></i>
-            </button>
-          </div>
-        </div>
-      </header>
-
+      <AdminHeader active="dashboard" />
       <main className={styles.main}>
 
         {/* ── Page title + action ──────────────────────── */}

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import styles from './EmployerRoster.module.css';
+import AdminHeader from '../components/AdminHeader';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -271,7 +272,7 @@ function EmployerRow({ profile, onUpdate }) {
 }
 
 export default function EmployerRoster() {
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
     const navigate = useNavigate();
 
     const [profiles, setProfiles] = useState([]);
@@ -309,20 +310,7 @@ export default function EmployerRoster() {
 
     return (
         <div className={styles.page}>
-            <header className={styles.header}>
-                <div className={styles.headerContent}>
-                    <div className={styles.headerLeft}>
-                        <h1 className={styles.logo}>RYZE.ai</h1>
-                        <span className={styles.adminBadge}>Admin</span>
-                    </div>
-                    <div className={styles.headerRight}>
-                        <span className={styles.userName}>{user?.full_name}</span>
-                        <button className={styles.logoutButton} onClick={logout} type="button">
-                            Logout
-                        </button>
-                    </div>
-                </div>
-            </header>
+            <AdminHeader active="employers" />
 
             <main className={styles.main}>
                 <div className={styles.pageHeader}>

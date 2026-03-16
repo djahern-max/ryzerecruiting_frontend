@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useEffect, useState, useRef, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import styles from "./ChatPage.module.css";
+import AdminHeader from '../components/AdminHeader';
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
@@ -271,7 +272,7 @@ function MessageBubble({ message }) {
 
 export default function ChatPage() {
     const navigate = useNavigate();
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
     const token = localStorage.getItem("token");
 
     // Chat state
@@ -566,27 +567,8 @@ export default function ChatPage() {
     return (
         <div className={styles.page}>
             {/* ── Header ── */}
-            <header className={styles.header}>
-                <div className={styles.headerContent}>
-                    <div className={styles.headerLeft}>
-                        <span className={styles.logo}>RYZE.ai</span>
-                        <span className={styles.adminBadge}>ADMIN</span>
-                    </div>
-                    <nav className={styles.nav}>
-                        <button className={styles.navBtn} onClick={() => navigate("/admin")}>Dashboard</button>
-                        <button className={styles.navBtn} onClick={() => navigate("/admin/employers")}>Employers</button>
-                        <button className={styles.navBtn} onClick={() => navigate("/admin/candidates")}>Candidates</button>
-                        <button className={`${styles.navBtn} ${styles.navBtnActive}`}>Intelligence</button>
-                    </nav>
-                    <div className={styles.headerRight}>
-                        <span className={styles.userName}>{user?.full_name || user?.email}</span>
-                        <button className={styles.logoutButton} onClick={logout}>
-                            <i className="fi fi-rr-sign-out-alt" />
-                        </button>
-                    </div>
-                </div>
-            </header>
 
+            <AdminHeader active="intelligence" />
             {/* ── Body: sidebar + chat ── */}
             <div className={styles.body}>
                 <ChatSidebar
