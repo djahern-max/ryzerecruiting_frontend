@@ -7,7 +7,7 @@ const TermsOfService = () => {
         <div className={styles.container}>
             <div className={styles.content}>
                 <h1>Terms of Service</h1>
-                <p className={styles.lastUpdated}>Last Updated: March 14, 2026</p>
+                <p className={styles.lastUpdated}>Last Updated: March 16, 2026</p>
 
                 <section>
                     <h2>1. Agreement to Terms</h2>
@@ -103,21 +103,43 @@ const TermsOfService = () => {
                 </section>
 
                 <section>
-                    <h2>8. Third-Party Services</h2>
+                    <h2>8. SMS Notifications</h2>
+                    <p>
+                        By providing your phone number and submitting a call request through
+                        the Platform, you consent to receive transactional SMS notifications
+                        from RYZE.ai. These messages include booking confirmations, call
+                        reminders, and cancellation notices.
+                    </p>
+                    <ul>
+                        <li><strong>Message Frequency:</strong> Message frequency varies based on your booking activity. You will typically receive 2–4 messages per scheduled call (confirmation, reminders, and any cancellation notice).</li>
+                        <li><strong>Message & Data Rates:</strong> Message and data rates may apply depending on your mobile carrier and plan.</li>
+                        <li><strong>Opt-Out:</strong> <strong>Reply STOP</strong> to any message to unsubscribe. You will receive a one-time confirmation and no further messages will be sent.</li>
+                        <li><strong>Help:</strong> <strong>Reply HELP</strong> for assistance or contact us at <a href="mailto:dane@ryze.ai">dane@ryze.ai</a>.</li>
+                        <li><strong>No Marketing:</strong> We do not send marketing or promotional SMS messages. All messages are transactional only.</li>
+                        <li><strong>Third-Party Provider:</strong> SMS communications are facilitated through Twilio, Inc. Your phone number will not be shared with third parties for marketing purposes.</li>
+                    </ul>
+                    <p>
+                        For more information on how we handle your phone number, see our{' '}
+                        <a href="/privacy-policy">Privacy Policy</a>.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>9. Third-Party Services</h2>
                     <p>
                         Our Platform integrates with third-party services (such as Google and LinkedIn for authentication). Your use of these services is subject to their respective terms and privacy policies. We are not responsible for third-party services.
                     </p>
                 </section>
 
                 <section>
-                    <h2>9. Fees and Payment</h2>
+                    <h2>10. Fees and Payment</h2>
                     <p>
                         Some features of the Platform may require payment. All fees are non-refundable unless otherwise stated. We reserve the right to change our pricing at any time.
                     </p>
                 </section>
 
                 <section>
-                    <h2>10. Disclaimers</h2>
+                    <h2>11. Disclaimers</h2>
                     <p>
                         THE PLATFORM IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED. WE DO NOT GUARANTEE:
                     </p>
@@ -131,49 +153,49 @@ const TermsOfService = () => {
                 </section>
 
                 <section>
-                    <h2>11. Limitation of Liability</h2>
+                    <h2>12. Limitation of Liability</h2>
                     <p>
                         TO THE MAXIMUM EXTENT PERMITTED BY LAW, RYZE.ai SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES.
                     </p>
                 </section>
 
                 <section>
-                    <h2>12. Indemnification</h2>
+                    <h2>13. Indemnification</h2>
                     <p>
                         You agree to indemnify and hold harmless RYZE.ai from any claims, damages, losses, liabilities, and expenses arising from your use of the Platform or violation of these Terms.
                     </p>
                 </section>
 
                 <section>
-                    <h2>13. Dispute Resolution</h2>
+                    <h2>14. Dispute Resolution</h2>
                     <p>
                         Any disputes arising from these Terms or your use of the Platform shall be resolved through binding arbitration, except where prohibited by law.
                     </p>
                 </section>
 
                 <section>
-                    <h2>14. Governing Law</h2>
+                    <h2>15. Governing Law</h2>
                     <p>
                         These Terms are governed by the laws of the United States, without regard to conflict of law principles.
                     </p>
                 </section>
 
                 <section>
-                    <h2>15. Changes to Terms</h2>
+                    <h2>16. Changes to Terms</h2>
                     <p>
                         We reserve the right to modify these Terms at any time. We will notify users of material changes. Your continued use of the Platform after changes constitutes acceptance of the new Terms.
                     </p>
                 </section>
 
                 <section>
-                    <h2>16. Severability</h2>
+                    <h2>17. Severability</h2>
                     <p>
                         If any provision of these Terms is found to be unenforceable, the remaining provisions will remain in full effect.
                     </p>
                 </section>
 
                 <section>
-                    <h2>17. Contact Information</h2>
+                    <h2>18. Contact Information</h2>
                     <p>If you have questions about these Terms, please contact us:</p>
                     <ul>
                         <li>Email: <a href="mailto:dane@ryze.ai">dane@ryze.ai</a></li>
