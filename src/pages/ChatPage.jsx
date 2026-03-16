@@ -8,6 +8,18 @@ import ReactMarkdown from "react-markdown";
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 // ---------------------------------------------------------------------------
+// RYZE Logo SVG (shared)
+// ---------------------------------------------------------------------------
+
+function RyzeLogo({ size = 18, color = "#ffffff" }) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 375" width={size} height={size}>
+            <path fill={color} d="M 186.078125 19.484375 L 0.367188 341.148438 L 180.234375 341.148438 L 229.054688 256.585938 L 201.605469 215.015625 L 190.46875 234.308594 L 154.511719 296.59375 L 77.539062 296.59375 L 186.394531 108.039062 L 296.730469 295.972656 L 243.730469 295.972656 L 221.453125 340.527344 L 374.554688 340.527344 Z" />
+        </svg>
+    );
+}
+
+// ---------------------------------------------------------------------------
 // Inline result cards
 // ---------------------------------------------------------------------------
 
@@ -44,6 +56,14 @@ function CandidateCard({ candidate }) {
             </div>
             {candidate.ai_summary && (
                 <div className={styles.cardSummary}>{candidate.ai_summary}</div>
+            )}
+            {candidate.id && (
+                <a
+                    href={`/admin/candidates?search=${encodeURIComponent(candidate.name)}`}
+                    className={styles.cardProfileLink}
+                >
+                    View Profile →
+                </a>
             )}
         </div>
     );
@@ -83,6 +103,8 @@ function MeetingCard({ meeting }) {
 
 // ---------------------------------------------------------------------------
 // Message bubble
+// FIX 1: plain text while streaming → ReactMarkdown after complete
+// FIX 2: CandidateCard replaces profileLinks
 // ---------------------------------------------------------------------------
 
 function MessageBubble({ message }) {
@@ -91,9 +113,7 @@ function MessageBubble({ message }) {
         <div className={`${styles.messageRow} ${isUser ? styles.messageRowUser : styles.messageRowAI}`}>
             {!isUser && (
                 <div className={styles.aiAvatar}>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 375" width="18" height="18">
-                        <path fill="#ffffff" d="M 186.078125 19.484375 L 0.367188 341.148438 L 180.234375 341.148438 L 229.054688 256.585938 L 201.605469 215.015625 L 190.46875 234.308594 L 154.511719 296.59375 L 77.539062 296.59375 L 186.394531 108.039062 L 296.730469 295.972656 L 243.730469 295.972656 L 221.453125 340.527344 L 374.554688 340.527344 Z" />
-                    </svg>
+                    <RyzeLogo size={18} color="#ffffff" />
                 </div>
             )}
             <div className={`${styles.bubble} ${isUser ? styles.bubbleUser : styles.bubbleAI}`}>
@@ -102,26 +122,29 @@ function MessageBubble({ message }) {
                 ) : (
                     <>
                         <div className={styles.bubbleText}>
-                            <ReactMarkdown>{message.content}</ReactMarkdown>
+                            {/* FIX 1: stream as plain text, snap to markdown on complete */}
+                            {message.streaming
+                                ? <p style={{ whiteSpace: "pre-wrap", margin: 0 }}>{message.content}</p>
+                                : <ReactMarkdown>{message.content}</ReactMarkdown>
+                            }
                         </div>
                         {message.streaming && (
                             <span className={styles.streamCursor}>▋</span>
                         )}
-                        {message.candidates?.length > 0 && (
-                            <div className={styles.profileLinks}>
+
+                        {/* FIX 2: CandidateCard replaces profileLinks */}
+                        {!message.streaming && message.candidates?.length > 0 && (
+                            <div className={styles.inlineCards}>
+                                <div className={styles.inlineCardsLabel}>
+                                    {message.candidates.length} candidate{message.candidates.length !== 1 ? "s" : ""}
+                                </div>
                                 {message.candidates.map((c) => (
-                                    <a
-                                        key={c.id}
-                                        href={`/admin/candidates?search=${encodeURIComponent(c.name)}`}
-                                        className={styles.profileLink}
-                                    >
-                                        <span className={styles.profileLinkName}>{c.name}</span>
-                                        <span className={styles.profileLinkAction}>View Profile →</span>
-                                    </a>
+                                    <CandidateCard key={c.id ?? c.name} candidate={c} />
                                 ))}
                             </div>
                         )}
-                        {message.meetings?.length > 0 && (
+
+                        {!message.streaming && message.meetings?.length > 0 && (
                             <div className={styles.inlineCards}>
                                 <div className={styles.inlineCardsLabel}>
                                     {message.meetings.length} meeting{message.meetings.length !== 1 ? "s" : ""}
@@ -129,7 +152,8 @@ function MessageBubble({ message }) {
                                 {message.meetings.map((m) => <MeetingCard key={m.id} meeting={m} />)}
                             </div>
                         )}
-                        {message.employers?.length > 0 && (
+
+                        {!message.streaming && message.employers?.length > 0 && (
                             <div className={styles.inlineCards}>
                                 <div className={styles.inlineCardsLabel}>
                                     {message.employers.length} employer{message.employers.length !== 1 ? "s" : ""}
@@ -150,16 +174,18 @@ function MessageBubble({ message }) {
 }
 
 // ---------------------------------------------------------------------------
-// Typing indicator — accepts a dynamic statusMsg prop
+// Typing indicator
+// FIX 3: spinning gradient ring around logo while thinking
 // ---------------------------------------------------------------------------
 
 function TypingIndicator({ statusMsg }) {
     return (
         <div className={`${styles.messageRow} ${styles.messageRowAI}`}>
-            <div className={`${styles.aiAvatar} ${styles.aiAvatarPulsing}`}>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 375" width="18" height="18">
-                    <path fill="#ffffff" d="M 186.078125 19.484375 L 0.367188 341.148438 L 180.234375 341.148438 L 229.054688 256.585938 L 201.605469 215.015625 L 190.46875 234.308594 L 154.511719 296.59375 L 77.539062 296.59375 L 186.394531 108.039062 L 296.730469 295.972656 L 243.730469 295.972656 L 221.453125 340.527344 L 374.554688 340.527344 Z" />
-                </svg>
+            {/* Spinning ring wrapper replaces aiAvatarPulsing */}
+            <div className={styles.thinkingAvatarWrapper}>
+                <div className={styles.aiAvatar}>
+                    <RyzeLogo size={18} color="#ffffff" />
+                </div>
             </div>
             <div className={`${styles.bubble} ${styles.bubbleAI}`}>
                 <p className={styles.thinkingLabel}>{statusMsg}</p>
@@ -184,8 +210,8 @@ export default function ChatPage() {
 
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
-    const [loading, setLoading] = useState(false);   // tool-call phase
-    const [streaming, setStreaming] = useState(false); // text streaming phase
+    const [loading, setLoading] = useState(false);
+    const [streaming, setStreaming] = useState(false);
     const [statusMsg, setStatusMsg] = useState("Thinking...");
     const [error, setError] = useState(null);
     const bottomRef = useRef(null);
@@ -225,7 +251,6 @@ export default function ChatPage() {
                 throw new Error(data.detail || "Chat request failed");
             }
 
-            // ── Start reading the stream immediately ──────────────────────
             const reader = res.body.getReader();
             const decoder = new TextDecoder();
 
@@ -236,7 +261,7 @@ export default function ChatPage() {
             let fullText = "";
             let structuredData = null;
             let aiMsgIndex = null;
-            let phase = "loading"; // "loading" | "streaming"
+            let phase = "loading";
 
             while (true) {
                 const { done, value } = await reader.read();
@@ -244,9 +269,7 @@ export default function ChatPage() {
 
                 buffer += decoder.decode(value, { stream: true });
 
-                // ── Phase 1: consume STATUS lines before text begins ──────
                 if (phase === "loading") {
-                    // Drain all complete __STATUS__ lines from the front of the buffer
                     let consumed = true;
                     while (consumed) {
                         consumed = false;
@@ -261,8 +284,6 @@ export default function ChatPage() {
                         }
                     }
 
-                    // If buffer still has content and it's not another STATUS line,
-                    // real text has started — switch to streaming phase
                     if (buffer.length > 0 && !buffer.startsWith(STATUS_PREFIX)) {
                         phase = "streaming";
                         aiMsgIndex = newMessages.length;
@@ -272,7 +293,6 @@ export default function ChatPage() {
                     }
                 }
 
-                // ── Phase 2: accumulate streamed text and watch for __DATA__ ──
                 if (phase === "streaming") {
                     const markerIdx = buffer.indexOf(DATA_MARKER);
 
@@ -286,13 +306,11 @@ export default function ChatPage() {
                         }
                         buffer = "";
                     } else {
-                        // Hold back enough chars to avoid splitting the DATA marker
                         const safeLen = Math.max(0, buffer.length - DATA_MARKER.length);
                         fullText += buffer.slice(0, safeLen);
                         buffer = buffer.slice(safeLen);
                     }
 
-                    // Update the bubble in real time
                     if (aiMsgIndex !== null) {
                         setMessages((prev) => {
                             const updated = [...prev];
@@ -307,7 +325,7 @@ export default function ChatPage() {
                 }
             }
 
-            // ── Stream complete — finalize message ────────────────────────
+            // Stream complete — finalize with streaming: false so markdown renders
             if (aiMsgIndex !== null) {
                 setMessages((prev) => {
                     const updated = [...prev];
