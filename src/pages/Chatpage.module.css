@@ -589,6 +589,44 @@
     gap: 5px;
 }
 
+/* ── Profile links (chat candidate results) ── */
+.profileLinks {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.profileLink {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #f0f7ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 140ms, border-color 140ms;
+}
+
+.profileLink:hover {
+    background: #dbeafe;
+    border-color: #93c5fd;
+}
+
+.profileLinkName {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-900);
+}
+
+.profileLinkAction {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--brand-800);
+}
+
+
 @keyframes spin {
     to {
         transform: rotate(360deg);

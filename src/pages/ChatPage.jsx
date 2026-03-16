@@ -108,11 +108,17 @@ function MessageBubble({ message }) {
                             <span className={styles.streamCursor}>▋</span>
                         )}
                         {message.candidates?.length > 0 && (
-                            <div className={styles.inlineCards}>
-                                <div className={styles.inlineCardsLabel}>
-                                    {message.candidates.length} candidate{message.candidates.length !== 1 ? "s" : ""}
-                                </div>
-                                {message.candidates.map((c) => <CandidateCard key={c.id} candidate={c} />)}
+                            <div className={styles.profileLinks}>
+                                {message.candidates.map((c) => (
+                                    <a
+                                        key={c.id}
+                                        href={`/admin/candidates?search=${encodeURIComponent(c.name)}`}
+                                        className={styles.profileLink}
+                                    >
+                                        <span className={styles.profileLinkName}>{c.name}</span>
+                                        <span className={styles.profileLinkAction}>View Profile →</span>
+                                    </a>
+                                ))}
                             </div>
                         )}
                         {message.meetings?.length > 0 && (
