@@ -181,8 +181,8 @@ function MessageBubble({ message }) {
 function TypingIndicator({ statusMsg }) {
     return (
         <div className={`${styles.messageRow} ${styles.messageRowAI}`}>
-            {/* Spinning ring wrapper replaces aiAvatarPulsing */}
             <div className={styles.thinkingAvatarWrapper}>
+                <div className={styles.thinkingRing} />
                 <div className={styles.aiAvatar}>
                     <RyzeLogo size={18} color="#ffffff" />
                 </div>
