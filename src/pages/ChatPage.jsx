@@ -174,31 +174,24 @@ function MeetingCard({ meeting }) {
 function TypingIndicator({ statusMsg }) {
     return (
         <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-            <style>{`
-                @keyframes ryzeLogoPulse {
-                    0%, 100% { opacity: 1; transform: scale(1); }
-                    50% { opacity: 0.5; transform: scale(0.88); }
-                }
-            `}</style>
             <div style={{
                 animation: "ryzeLogoPulse 1.4s ease-in-out infinite",
-                display: "flex",
-                alignItems: "center",
                 flexShrink: 0,
                 marginTop: 2,
+                display: "flex",
             }}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 375" width={28} height={28}>
                     <path fill="#0a66c2" d="M 186.078125 19.484375 L 0.367188 341.148438 L 180.234375 341.148438 L 229.054688 256.585938 L 201.605469 215.015625 L 190.46875 234.308594 L 154.511719 296.59375 L 77.539062 296.59375 L 186.394531 108.039062 L 296.730469 295.972656 L 243.730469 295.972656 L 221.453125 340.527344 L 374.554688 340.527344 Z" />
                 </svg>
             </div>
             <div className={`${styles.bubble} ${styles.bubbleAI}`}>
-                <div className={styles.typingRow}>
-                    <div className={styles.dots}>
-                        <span className={styles.dot} />
-                        <span className={styles.dot} />
-                        <span className={styles.dot} />
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <div style={{ display: "flex", gap: "4px" }}>
+                        {[0, 150, 300].map((delay) => (
+                            <span key={delay} className={styles.dot} style={{ animationDelay: `${delay}ms` }} />
+                        ))}
                     </div>
-                    <span className={styles.statusText}>{statusMsg}</span>
+                    <span style={{ fontSize: "0.83rem", color: "#94a3b8", fontStyle: "italic" }}>{statusMsg}</span>
                 </div>
             </div>
         </div>
@@ -284,6 +277,20 @@ export default function ChatPage() {
 
     const bottomRef = useRef(null);
     const inputRef = useRef(null);
+
+    useEffect(() => {
+        const style = document.createElement("style");
+        style.id = "ryze-pulse-keyframe";
+        style.textContent = `
+        @keyframes ryzeLogoPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+    `;
+        if (!document.getElementById("ryze-pulse-keyframe")) {
+            document.head.appendChild(style);
+        }
+    }, []);
 
     // ── Auto-scroll ────────────────────────────────────────────────────────
     useEffect(() => {
