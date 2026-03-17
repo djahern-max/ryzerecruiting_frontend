@@ -18,6 +18,13 @@ const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 // ── Update these with your actual LinkedIn video URLs ────────────────────
 const EPISODES = [
   {
+    num: 9,
+    title: "Call Booking System Testing",
+    thumb: EP8,
+    url: "https://www.linkedin.com/posts/daneahern_building-ryzeai-episode-9-this-episode-activity-7439627919678787584-cU-f?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "In this episode I tested two key booking flows: Candidate → Recruiter and Employer → Recruiter. Both paths generate Zoom meetings, send confirmation emails, and schedule reminders automatically. The goal was to validate that the scheduling system works from both sides before building additional recruiter workflow features.",
+  },
+  {
     num: 8,
     title: "Conversational AI Interface",
     thumb: EP8,
@@ -420,7 +427,6 @@ export default function Landing() {
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <div className={styles.brand}>
-            <RyzeLogo size={28} color="#004aad" />
             <span className={styles.brandName}>RYZE.ai</span>
             <span className={styles.brandPipe}>|</span>
             <span className={styles.brandSub}>AI Intelligence Platform</span>
