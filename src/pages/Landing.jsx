@@ -20,7 +20,7 @@ const EPISODES = [
   {
     num: 9,
     title: "Call Booking System Testing",
-    thumb: EP8,
+    thumb: EP9,
     url: "https://www.linkedin.com/posts/daneahern_building-ryzeai-episode-9-this-episode-activity-7439627919678787584-cU-f?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
     desc: "In this episode I tested two key booking flows: Candidate → Recruiter and Employer → Recruiter. Both paths generate Zoom meetings, send confirmation emails, and schedule reminders automatically. The goal was to validate that the scheduling system works from both sides before building additional recruiter workflow features.",
   },
