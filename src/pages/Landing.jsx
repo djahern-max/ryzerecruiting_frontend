@@ -12,6 +12,7 @@ import EP5 from "../assets/landing_page_thumbnails/EP5.png";
 import EP6 from "../assets/landing_page_thumbnails/EP6.png";
 import EP7 from "../assets/landing_page_thumbnails/EP7.png";
 import EP8 from "../assets/landing_page_thumbnails/EP8.png";
+import EP9 from "../assets/landing_page_thumbnails/EP9.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
