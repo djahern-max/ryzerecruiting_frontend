@@ -295,6 +295,14 @@ export default function ChatPage() {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages, loading, streaming]);
 
+    // Auto-resize textarea
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.style.height = "auto";
+            inputRef.current.style.height = inputRef.current.scrollHeight + "px";
+        }
+    }, [input]);
+
     // ── Load sessions on mount ─────────────────────────────────────────────
     useEffect(() => {
         loadSessions();
@@ -402,6 +410,7 @@ export default function ChatPage() {
         if (!userMessage || loading || streaming) return;
 
         setInput("");
+        if (inputRef.current) inputRef.current.style.height = "auto";
         setError(null);
         setStatusMsg("Thinking...");
 

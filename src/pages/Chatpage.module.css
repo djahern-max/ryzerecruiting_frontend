@@ -533,8 +533,9 @@
     resize: none;
     background: transparent;
     line-height: 1.5;
-    max-height: 120px;
-    overflow-y: auto;
+    max-height: 160px;
+    overflow-y: hidden;
+    /* ← was: auto */
 }
 
 .input::placeholder {
