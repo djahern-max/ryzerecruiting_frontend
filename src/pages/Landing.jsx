@@ -13,11 +13,20 @@ import EP6 from "../assets/landing_page_thumbnails/EP6.png";
 import EP7 from "../assets/landing_page_thumbnails/EP7.png";
 import EP8 from "../assets/landing_page_thumbnails/EP8.png";
 import EP9 from "../assets/landing_page_thumbnails/EP9.png";
+import EP10 from "../assets/landing_page_thumbnails/EP10.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 // ── Update these with your actual LinkedIn video URLs ────────────────────
 const EPISODES = [
+  {
+    num: 10,
+    title: "Adding Candidates to the Platform",
+    thumb: EP10,
+    url: "https://www.linkedin.com/posts/daneahern_episode-10-of-building-ryzeai-ryze-is-a-activity-7439683948621860864-TiN_?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "RYZE now has a full candidate intake system. Upload a PDF or Word resume, paste a LinkedIn profile, or enter details manually — Claude parses the document and extracts structured profile fields automatically. Every candidate is then indexed for semantic search so RYZE Intelligence can find them by meaning, not just keywords.",
+  },
+
   {
     num: 9,
     title: "Call Booking System Testing",
@@ -600,7 +609,7 @@ export default function Landing() {
       <section className={styles.techSection}>
         <div className={styles.container}>
           <div className={styles.eyebrow}>Technical Architecture</div>
-          <h2 className={styles.sectionH2}>How RAG works in RYZE.ai.</h2>
+          <h2 className={styles.sectionH2}>10 episodes. Still building.</h2>
 
           <div className={styles.ragLoop}>
             {[
