@@ -14,10 +14,9 @@ export default function AdminHeader({ active }) {
         { key: "dashboard", label: "Dashboard", icon: "fi-rr-apps", path: "/admin" },
         { key: "employers", label: "Employers", icon: "fi-rr-building", path: "/admin/employers" },
         { key: "candidates", label: "Candidates", icon: "fi-rr-users", path: "/admin/candidates" },
-        { key: "intelligence", label: "Intelligence", icon: "fi-rr-brain", path: "/admin/chat" },
+        { key: "intelligence", label: "Intelligence", icon: "fi-rr-bolt", path: "/admin/chat" },
     ];
 
-    // Close menu on outside click
     useEffect(() => {
         function handleClickOutside(e) {
             if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -28,7 +27,6 @@ export default function AdminHeader({ active }) {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [menuOpen]);
 
-    // Close menu on route change
     function handleNav(path) {
         setMenuOpen(false);
         if (path) navigate(path);
@@ -70,7 +68,9 @@ export default function AdminHeader({ active }) {
                             onClick={() => setMenuOpen(o => !o)}
                             aria-label="Toggle navigation"
                         >
-                            <span /><span /><span />
+                            <span />
+                            <span />
+                            <span />
                         </button>
 
                         {menuOpen && (
@@ -86,7 +86,10 @@ export default function AdminHeader({ active }) {
                                     </button>
                                 ))}
                                 <div className={styles.mobileDivider} />
-                                <button className={styles.mobileLogout} onClick={() => { setMenuOpen(false); logout(); }}>
+                                <button
+                                    className={styles.mobileLogout}
+                                    onClick={() => { setMenuOpen(false); logout(); }}
+                                >
                                     <i className="fi fi-rr-exit" />
                                     Log out
                                 </button>

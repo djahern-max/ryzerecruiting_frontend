@@ -130,7 +130,6 @@
 .menuWrapper {
     position: relative;
     display: none;
-    /* shown via media query */
 }
 
 .hamburger {
@@ -142,7 +141,7 @@
     width: 36px;
     height: 36px;
     border-radius: 8px;
-    border: 1px solid var(--border-200);
+    border: 1px solid #e5e7eb;
     background: white;
     cursor: pointer;
     padding: 0;
@@ -150,23 +149,23 @@
 }
 
 .hamburger:hover {
-    background: var(--bg-100);
-    border-color: var(--border-300, #d1d5db);
+    background: #f9fafb;
+    border-color: #d1d5db;
 }
 
+/* Concrete color — avoids CSS variable resolution issues */
 .hamburger span {
     display: block;
     width: 16px;
-    height: 1.5px;
-    background: var(--text-600);
+    height: 2px;
+    background-color: #4b5563;
     border-radius: 2px;
     transition: transform 200ms ease, opacity 200ms ease;
     transform-origin: center;
 }
 
-/* Animate to X when open */
 .hamburgerOpen span:nth-child(1) {
-    transform: translateY(6.5px) rotate(45deg);
+    transform: translateY(7px) rotate(45deg);
 }
 
 .hamburgerOpen span:nth-child(2) {
@@ -175,7 +174,7 @@
 }
 
 .hamburgerOpen span:nth-child(3) {
-    transform: translateY(-6.5px) rotate(-45deg);
+    transform: translateY(-7px) rotate(-45deg);
 }
 
 /* ── Mobile dropdown menu ── */
@@ -185,7 +184,7 @@
     right: 0;
     width: 220px;
     background: #ffffff;
-    border: 1px solid var(--border-200);
+    border: 1px solid #e5e7eb;
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10), 0 2px 6px rgba(0, 0, 0, 0.06);
     padding: 8px;
@@ -242,7 +241,7 @@
 
 .mobileDivider {
     height: 1px;
-    background: var(--border-200);
+    background: #e5e7eb;
     margin: 6px 4px;
 }
 
@@ -285,7 +284,6 @@
         display: block;
     }
 
-    /* Hide the standalone logout button on mobile — it's in the dropdown */
     .logoutBtn {
         display: none;
     }
