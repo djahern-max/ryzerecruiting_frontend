@@ -4,6 +4,14 @@ import { useAuth } from "../contexts/AuthContext";
 import { useEffect, useState, useRef } from "react";
 import { Building2, BriefcaseBusiness, Binoculars } from "lucide-react";
 import styles from "./Landing.module.css";
+import EP1 from "../assets/landing_page_thumbnails/EP1.png";
+import EP2 from "../assets/landing_page_thumbnails/EP2.png";
+import EP3 from "../assets/landing_page_thumbnails/EP3.png";
+import EP4 from "../assets/landing_page_thumbnails/EP4.png";
+import EP5 from "../assets/landing_page_thumbnails/EP5.png";
+import EP6 from "../assets/landing_page_thumbnails/EP6.png";
+import EP7 from "../assets/landing_page_thumbnails/EP7.png";
+import EP8 from "../assets/landing_page_thumbnails/EP8.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
@@ -12,48 +20,56 @@ const EPISODES = [
   {
     num: 1,
     title: "Start of Series",
+    thumb: EP1,
     url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-1-start-activity-7434171807298908160-SMk2?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
     desc: "What does it actually take to build an ATS from scratch? I'm documenting the entire process as I build RYZE.ai in public. The goal: build a recruiting platform that captures the data recruiters create every day. Employer booking flow, admin dashboard, AI pre-call briefs, Zoom + Calendar integration, and OAuth login — all live on day one.",
   },
   {
     num: 2,
     title: "Preparation & Reminders",
+    thumb: EP2,
     url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-2-one-activity-7434615686380900352-RVmV?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
     desc: "One of the biggest problems in recruiting is simple: people walk into calls unprepared. This episode covers automated 15-minute reminders before every Zoom meeting and AI pre-call briefs that summarize the company you're about to speak with. Small features that slowly turn a scheduling tool into a real recruiting platform.",
   },
   {
     num: 3,
     title: "What If Your Hiring Data Was Connected?",
+    thumb: EP3,
     url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-3-what-activity-7434907747122524160-JE-O?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
     desc: "Notes in spreadsheets. Candidate history in email threads. Call outcomes on sticky notes. The data exists — it's just scattered everywhere and doing nothing. RYZE is built to capture every hire, every call, every candidate interaction from day one. Structured. Persistent. Ready for AI to turn into something useful.",
   },
   {
     num: 4,
     title: "Building the Booking System",
+    thumb: EP4,
     url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-4-booking-activity-7435763383817269248-qiZc?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
     desc: "Booking systems sound simple until you actually build one. This week I worked through four different meeting scenarios: Recruiter→Candidate, Recruiter→Employer, Candidate→Recruiter, and Employer→Recruiter. Each flow needs different fields, different logic, and different AI research rules. Small details create surprisingly complex systems.",
   },
   {
     num: 5,
     title: "End-to-End Testing",
+    thumb: EP5,
     url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-5-this-activity-7437041631528267776-gSkN?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
     desc: "This week was all about testing the entire booking system end-to-end. All four meeting flows are now working. The system generates an AI research brief before every call so recruiters walk in prepared. Building software is mostly testing, fixing bugs, and trying again — that's what this episode shows.",
   },
   {
     num: 6,
     title: "AI Meeting Notes",
+    thumb: EP6,
     url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-6-one-activity-7437906403861794816--73c?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
     desc: "Important conversations happen — and then the details disappear. Notes buried in email threads, scattered across documents, or never written down at all. This week I implemented AI Meeting Notes: after every Zoom call, the summary is automatically captured and saved to the database as part of the candidate or employer record.",
   },
   {
     num: 7,
     title: "RAG-Powered Intelligence Chat",
+    thumb: EP7,
     url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-7-this-activity-7439103131206029312-6_DF?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
     desc: "I implemented RAG-powered Intelligence Chat — ask your entire candidate database a question in plain English and get an intelligent answer back. Not keyword search. Not filters. Just a question: 'Who would be a good fit for a Controller role in Boston?' The system searches by meaning, powered by pgvector and RAG running directly inside PostgreSQL.",
   },
   {
     num: 8,
     title: "Conversational AI Interface",
+    thumb: EP8,
     url: "https://www.linkedin.com/posts/daneahern_episode-8-of-building-ryze-in-public-i-built-activity-7439362320063012864-TyTk?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
     desc: "I built a conversational AI interface connected directly to my recruiting database. Ask it who your best candidates are for a Controller role. Ask it what you discussed with a client last week. Ask it who in your pipeline has Big 4 experience. It searches. It thinks. It answers. Your data. Your pipeline. Your intelligence.",
   },
@@ -501,6 +517,9 @@ export default function Landing() {
                   rel="noopener noreferrer"
                   className={styles.episodeCard}
                 >
+                  <div className={styles.epThumbWrap}>
+                    <img src={ep.thumb} alt={`Episode ${ep.num}`} className={styles.epThumb} />
+                  </div>
                   <div className={styles.epDefault}>
                     <div className={styles.epTop}>
                       <span className={styles.epNum}>Ep {ep.num}</span>
