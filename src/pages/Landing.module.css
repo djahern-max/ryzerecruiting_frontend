@@ -835,7 +835,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 230px;
+  height: 180px;
   border-radius: 12px;
   overflow: hidden;
   text-decoration: none;
@@ -851,7 +851,7 @@
 }
 
 .epThumbWrap {
-  height: 146px;
+  height: 100%;
   overflow: hidden;
   flex-shrink: 0;
 }

@@ -509,31 +509,28 @@ export default function Landing() {
                   </CardEl>
                 );
               }
-              return (
-                <a
-                  key={ep.num}
-                  href={ep.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.episodeCard}
-                >
-                  <div className={styles.epThumbWrap}>
-                    <img src={ep.thumb} alt={`Episode ${ep.num}`} className={styles.epThumb} />
-                  </div>
-                  <div className={styles.epDefault}>
-                    <div className={styles.epTop}>
-                      <span className={styles.epNum}>Ep {ep.num}</span>
-                      <span className={styles.epArrow}>→</span>
-                    </div>
-                    <div className={styles.epTitle}>{ep.title}</div>
-                  </div>
-                  <div className={styles.epHover}>
-                    <div className={styles.epHoverNum}>Episode {ep.num}</div>
-                    <p className={styles.epHoverDesc}>{ep.desc}</p>
-                    <span className={styles.epHoverLink}>Watch on LinkedIn →</span>
-                  </div>
-                </a>
-              );
+              {
+                [...EPISODES].reverse().map((ep) => {
+                  return (
+                    <a
+                      key={ep.num}
+                      href={ep.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.episodeCard}
+                    >
+                      <div className={styles.epThumbWrap}>
+                        <img src={ep.thumb} alt={`Episode ${ep.num}`} className={styles.epThumb} />
+                      </div>
+                      <div className={styles.epHover}>
+                        <div className={styles.epHoverNum}>Episode {ep.num}</div>
+                        <p className={styles.epHoverDesc}>{ep.desc}</p>
+                        <span className={styles.epHoverLink}>Watch on LinkedIn →</span>
+                      </div>
+                    </a>
+                  );
+                })
+              }
             })}
           </div>
         </div>
