@@ -147,16 +147,35 @@ const PHASES = [
       "AI-generated session titles after first exchange (4–6 words, Claude-generated)",
     ],
   },
+
+
+
+  {
+    id: "3c",
+    title: "Platform Testing & Flow Validation",
+    status: "complete",
+    summary: "End-to-end validation of all booking flows — employer, candidate, and recruiter-initiated. Verified that confirmed bookings write correctly to the database, Zoom links generate, calendar invites send, and AI pre-call briefs persist to employer_profiles. Identified and resolved gaps before building additional UI on top.",
+    bullets: [
+      "All four booking flows tested end-to-end in production",
+      "Database writes verified for bookings, meeting summaries, and AI briefs",
+      "Employer and candidate dashboards audited for data accuracy",
+      "Booking confirmation, reminder, and cancellation flows validated",
+    ],
+  },
+
+
+
+
   {
     id: "4",
-    title: "Chat-Enhanced Intelligence",
+    title: "Employer & Candidate Dashboard Buildout",
     status: "next",
-    summary: "Zoom meeting notes and AI-generated company profiles surface directly inside RYZE Intelligence chat. Ask about a company and get their full profile, every meeting summary, and key talking points synthesized in a single response.",
+    summary: "Employer and candidate dashboards expanded beyond call scheduling into genuine value between meetings. Employers see their open roles, candidate pipeline, and company intelligence profile. Candidates see their profile status, upcoming calls, and job matches. Both dashboards give users a reason to log back in.",
     bullets: [
-      "Zoom meeting summaries queryable through chat — ask about any past call by company or candidate name",
-      "AI company profiles integrated as a chat tool — full employer intelligence on demand",
-      "Meeting history and profile data combined into unified employer context",
-      "Follow-up question chains — ask about a company, then drill into specific meetings or contacts",
+      "Employer dashboard — active job orders, candidate pipeline, company intelligence profile",
+      "Candidate dashboard — profile completeness, upcoming calls, matched opportunities",
+      "Pricing model research — usage-based credit math vs. flat monthly seat pricing",
+      "First external recruiter outreach — get one real user on the platform",
     ],
   },
   {
@@ -422,7 +441,7 @@ export default function Landing() {
         <div className={styles.heroContent}>
           <div className={styles.docTag}>
             <span className={styles.livePulse} />
-            Version 10 &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; RAG &amp; Vector Search Implementation Plan
+            Version 11 &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; Dashboard Buildout &amp; Platform Validation
           </div>
 
           <h1 className={styles.heroTitle}>
