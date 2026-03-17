@@ -240,6 +240,8 @@ const INTENT_OPTIONS = [
   { value: "following", icon: Binoculars, label: "Following the build" },
 ];
 
+
+
 function RyzeLogo({ size = 32, color = "#004aad" }) {
   // Clean triangle-only path extracted from RYZE_LOGO_V18.svg — no background rects
   return (
@@ -354,6 +356,7 @@ export default function Landing() {
   const [wlStatus, setWlStatus] = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [openPhase, setOpenPhase] = useState(null);
+  const [showAllEpisodes, setShowAllEpisodes] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -476,7 +479,6 @@ export default function Landing() {
           </div>
         </div>
       </section>
-
       {/* ── Building in Public / Episodes ────────── */}
       <section className={styles.episodesSection}>
         <div className={styles.container}>
@@ -485,31 +487,46 @@ export default function Landing() {
           <p className={styles.sectionP}>
             Every major milestone gets a video — published on <strong>LinkedIn</strong>. Hover any episode to see what was built.
           </p>
+
           <div className={styles.episodeGrid}>
-            {EPISODES.map((ep) => {
-              if (ep.comingSoon) {
-                const CardEl = ep.url ? "a" : "div";
-                const cardProps = ep.url
-                  ? { href: ep.url, target: "_blank", rel: "noopener noreferrer" }
-                  : {};
-                return (
-                  <CardEl key={ep.num} className={`${styles.episodeCard} ${styles.episodeCardComingSoon}`} {...cardProps}>
-                    <div className={styles.epDefault}>
-                      <div className={styles.epTop}>
-                        <span className={styles.epNum}>Ep {ep.num}</span>
-                        <span className={styles.epComingBadge}>Coming Soon</span>
+            {EPISODES
+              .slice(0, showAllEpisodes ? EPISODES.length : 3)
+              .map((ep) => {
+                if (ep.comingSoon) {
+                  const CardEl = ep.url ? "a" : "div";
+                  const cardProps = ep.url
+                    ? { href: ep.url, target: "_blank", rel: "noopener noreferrer" }
+                    : {};
+
+                  return (
+                    <CardEl
+                      key={ep.num}
+                      className={`${styles.episodeCard} ${styles.episodeCardComingSoon}`}
+                      {...cardProps}
+                    >
+                      <div className={styles.epDefault}>
+                        <div className={styles.epTop}>
+                          <span className={styles.epNum}>Ep {ep.num}</span>
+                          <span className={styles.epComingBadge}>Coming Soon</span>
+                        </div>
+                        <div className={styles.epTitle}>{ep.title}</div>
                       </div>
-                      <div className={styles.epTitle}>{ep.title}</div>
-                    </div>
-                    <div className={styles.epHover}>
-                      <div className={styles.epHoverNum}>Episode {ep.num} — Coming Soon</div>
-                      <p className={styles.epHoverDesc} style={{ whiteSpace: "pre-line" }}>{ep.desc}</p>
-                      {ep.url && <span className={styles.epHoverLink}>Read on LinkedIn →</span>}
-                    </div>
-                  </CardEl>
-                );
-              }
-              {
+
+                      <div className={styles.epHover}>
+                        <div className={styles.epHoverNum}>Episode {ep.num} — Coming Soon</div>
+                        <p
+                          className={styles.epHoverDesc}
+                          style={{ whiteSpace: "pre-line" }}
+                        >
+                          {ep.desc}
+                        </p>
+                        {ep.url && (
+                          <span className={styles.epHoverLink}>Read on LinkedIn →</span>
+                        )}
+                      </div>
+                    </CardEl>
+                  );
+                }
 
                 return (
                   <a
@@ -520,8 +537,13 @@ export default function Landing() {
                     className={styles.episodeCard}
                   >
                     <div className={styles.epThumbWrap}>
-                      <img src={ep.thumb} alt={`Episode ${ep.num}`} className={styles.epThumb} />
+                      <img
+                        src={ep.thumb}
+                        alt={`Episode ${ep.num}`}
+                        className={styles.epThumb}
+                      />
                     </div>
+
                     <div className={styles.epHover}>
                       <div className={styles.epHoverNum}>Episode {ep.num}</div>
                       <p className={styles.epHoverDesc}>{ep.desc}</p>
@@ -529,40 +551,24 @@ export default function Landing() {
                     </div>
                   </a>
                 );
-
-              }
-            })}
+              })}
           </div>
+
+          <button
+            className={styles.showMoreBtn}
+            onClick={() => setShowAllEpisodes((prev) => !prev)}
+          >
+            {showAllEpisodes
+              ? "Show less ↑"
+              : `Show all ${EPISODES.length} episodes ↓`}
+          </button>
         </div>
       </section>
 
-      {/* ── Current State Table ───────────────────── */}
-      <section className={styles.statusSection}>
-        <div className={styles.container}>
-          <div className={styles.eyebrow}>Current State — What Is Already Built</div>
-          <h2 className={styles.sectionH2}>
-            {liveCount} features live on production.
-          </h2>
-          <p className={styles.sectionP}>As of March 2026, the following are live and operational on ryze.ai:</p>
 
-          <div className={styles.featureTable}>
-            <div className={styles.featureTableHeader}>
-              <span>Component</span>
-              <span>Status</span>
-              <span>Notes</span>
-            </div>
-            {FEATURES.map((f, i) => (
-              <div key={i} className={`${styles.featureRow} ${f.status === "planned" ? styles.featureRowDimmed : ""}`}>
-                <span className={styles.featureName}>{f.name}</span>
-                <span className={f.status === "live" ? styles.badgeLive : styles.badgePlanned}>
-                  {f.status === "live" ? "✓ Live" : "◎ Planned"}
-                </span>
-                <span className={styles.featureNote}>{f.note}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+
+
+
 
       {/* ── Tech Stack ───────────────────────────── */}
       <section className={styles.techSection}>

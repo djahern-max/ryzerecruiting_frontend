@@ -835,7 +835,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 180px;
+  height: 220px;
   border-radius: 12px;
   overflow: hidden;
   text-decoration: none;
@@ -927,7 +927,7 @@
   opacity: 0;
   transform: translateY(8px);
   transition: opacity 200ms, transform 200ms;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .episodeCard:hover .epHover {
@@ -950,10 +950,9 @@
   line-height: 1.5;
   margin: 0;
   flex: 1;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
+  overflow: visible;
+  display: block;
+  -webkit-line-clamp: unset;
 }
 
 .epHoverLink {
@@ -961,6 +960,26 @@
   font-weight: 700;
   color: #57a0d3;
   flex-shrink: 0;
+}
+
+.showMoreBtn {
+  margin-top: 20px;
+  display: block;
+  background: none;
+  border: 1.5px solid #dce8f4;
+  border-radius: 9px;
+  padding: 0.6rem 1.4rem;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #0a66c2;
+  cursor: pointer;
+  transition: border-color 150ms, background 150ms;
+}
+
+.showMoreBtn:hover {
+  border-color: #0a66c2;
+  background: #f0f5fb;
 }
 
 /* ── Waitlist ──────────────────────────────────────────────────── */
