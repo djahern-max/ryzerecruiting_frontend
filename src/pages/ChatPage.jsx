@@ -148,28 +148,68 @@ function CandidateCard({ candidate }) {
         </div>
     );
 }
-
 function MeetingCard({ meeting }) {
+    const [expanded, setExpanded] = useState(false);
+
+    // If a summary exists the meeting already happened — show Completed
+    // regardless of what the booking status field says
     const statusColors = {
         confirmed: { bg: "#dcfce7", color: "#15803d", label: "Confirmed" },
         pending: { bg: "#fef3c7", color: "#92400e", label: "Pending" },
         cancelled: { bg: "#fee2e2", color: "#b91c1c", label: "Cancelled" },
+        completed: { bg: "#dbeafe", color: "#1d4ed8", label: "Completed" },
     };
-    const s = statusColors[meeting.status] || statusColors.pending;
+
+    const resolvedStatus = meeting.meeting_summary ? "completed" : meeting.status;
+    const s = statusColors[resolvedStatus] || statusColors.pending;
+
+    const PREVIEW_LENGTH = 180;
+    const summary = meeting.meeting_summary || "";
+    const isLong = summary.length > PREVIEW_LENGTH;
+    const displayText = expanded || !isLong
+        ? summary
+        : summary.slice(0, PREVIEW_LENGTH) + "…";
+
     return (
         <div className={styles.meetingCard}>
             <div className={styles.meetingCardLeft}>
                 <div className={styles.cardName}>{meeting.employer_name || "Unknown"}</div>
-                {meeting.company_name && <div className={styles.cardMeta}>{meeting.company_name}</div>}
-                <div className={styles.meetingTime}>📅 {meeting.date} at {meeting.time_slot} EST</div>
-                {meeting.meeting_summary && (
-                    <p className={styles.cardSummary}>{meeting.meeting_summary.slice(0, 180)}…</p>
+                {meeting.company_name && (
+                    <div className={styles.cardMeta}>{meeting.company_name}</div>
+                )}
+                <div className={styles.meetingTime}>
+                    📅 {meeting.date} at {meeting.time_slot} EST
+                </div>
+                {summary && (
+                    <>
+                        <p className={styles.cardSummary}>{displayText}</p>
+                        {isLong && (
+                            <button
+                                className={styles.expandBtn}
+                                onClick={() => setExpanded(prev => !prev)}
+                            >
+                                {expanded ? "Show less ↑" : "Show more ↓"}
+                            </button>
+                        )}
+                    </>
                 )}
             </div>
             <div className={styles.meetingCardRight}>
-                <span className={styles.meetingStatus} style={{ background: s.bg, color: s.color }}>{s.label}</span>
+                <span
+                    className={styles.meetingStatus}
+                    style={{ background: s.bg, color: s.color }}
+                >
+                    {s.label}
+                </span>
                 {meeting.meeting_url && meeting.status === "confirmed" && (
-                    <a href={meeting.meeting_url} target="_blank" rel="noopener noreferrer" className={styles.zoomLink}>Join Zoom →</a>
+                    <a
+                        href={meeting.meeting_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.zoomLink}
+                    >
+                        Join Zoom →
+                    </a>
                 )}
             </div>
         </div>
