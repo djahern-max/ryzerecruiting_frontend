@@ -26,7 +26,6 @@ const EPISODES = [
     url: "https://www.linkedin.com/posts/daneahern_episode-10-of-building-ryzeai-ryze-is-a-activity-7439683948621860864-TiN_?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
     desc: "RYZE now has a full candidate intake system. Upload a PDF or Word resume, paste a LinkedIn profile, or enter details manually — Claude parses the document and extracts structured profile fields automatically. Every candidate is then indexed for semantic search so RYZE Intelligence can find them by meaning, not just keywords.",
   },
-
   {
     num: 9,
     title: "Call Booking System Testing",
@@ -92,168 +91,12 @@ const EPISODES = [
   },
 ];
 
-const FEATURES = [
-  { name: "User authentication", status: "live", note: "OAuth (Google, LinkedIn) + traditional login, role-based routing" },
-  { name: "Employer dashboards", status: "live", note: "Booking management, company intelligence profiles" },
-  { name: "Candidate dashboards", status: "live", note: "Profile management, booking flows" },
-  { name: "Admin dashboard", status: "live", note: "Full CRUD for candidates, employers, job orders, bookings" },
-  { name: "AI pre-call briefs", status: "live", note: "Claude API generates intelligence brief before each Zoom call" },
-  { name: "AI Zoom meeting notes", status: "live", note: "Meeting summaries stored per booking" },
-  { name: "Candidate parsing", status: "live", note: "PDF upload + text paste → Claude extracts structured profile fields" },
-  { name: "Employer parsing", status: "live", note: "Job posting paste → Claude extracts company intelligence" },
-  { name: "Job order parsing", status: "live", note: "Job description paste → structured job order fields" },
-  { name: "SMS notifications", status: "live", note: "Twilio SMS for booking confirmations and reminders" },
-  { name: "PGVector extension", status: "live", note: "Installed on production Postgres 16, migration complete" },
-  { name: "Embedding columns", status: "live", note: "vector(1536) columns on candidates, employers, job_orders" },
-  { name: "Embedding service", status: "live", note: "OpenAI text-embedding-3-small integration built" },
-  { name: "Auto-embed on save", status: "live", note: "Every new/updated candidate, employer, job order auto-embeds in background" },
-  { name: "Semantic search API", status: "live", note: "3 search endpoints: /candidates, /employers, /job-orders" },
-  { name: "RYZE Intelligence chat", status: "live", note: "Conversational AI interface with 8 tools, inline candidate/meeting cards" },
-  { name: "Duplicate detection", status: "live", note: "Name + location check on candidate parse before save" },
-  { name: "Chat persistence", status: "live", note: "Sessions saved to DB, sidebar grouped by date, AI-generated titles, full thread reload" },
-];
-
-const PHASES = [
-  {
-    id: "1",
-    title: "Data Loading & Embedding",
-    status: "complete",
-    summary: "Phase 1 validated the full RAG pipeline end-to-end: 15 candidates loaded, OpenAI embeddings working, cosine similarity search returning semantically ranked results. The pgvector deserialization bug was resolved by rewriting the cosine search with raw SQL to bypass the ORM's type processor.",
-    bullets: [
-      "embedding_service.py — core RAG infrastructure, per-record background helpers",
-      "search.py — semantic search endpoints with raw SQL cosine search",
-      "candidates.py — auto-embed on POST/PATCH, file upload parse endpoint",
-    ],
-  },
-  {
-    id: "2",
-    title: "Auto-Embedding on Save",
-    status: "complete",
-    summary: "Every new or updated candidate, employer profile, and job order now auto-embeds in a background task within seconds of saving. The PATCH flow clears the old embedding immediately so the status indicator reflects pending state while the new embedding is generated.",
-    bullets: [
-      "embed_candidate_background, embed_employer_background, embed_job_order_background",
-      "BackgroundTasks wired into POST and PATCH for all three entity types",
-      "PATCH flow clears embedding before re-embedding to reflect accurate status",
-      "AI Indexed badge in candidate roster — green when embedded, amber spinner when indexing",
-    ],
-  },
-  {
-    id: "3a",
-    title: "RYZE Intelligence Chat Interface",
-    status: "complete",
-    summary: "The chat interface is live at /admin/chat. Recruiters can query the entire database in plain English. Claude uses tool_use to decide which data sources to query, retrieves live results, and returns a natural language response with inline candidate and meeting cards.",
-    bullets: [
-      "POST /api/chat — accepts message + conversation history",
-      "Agentic loop — Claude calls tools up to 5 times per query to gather data",
-      "Tool dispatch — 8 tools available, Claude selects based on query intent",
-      "Candidate results render as inline cards with match %, tags, and AI summary",
-      "Typing indicator with animated dots while Claude is processing",
-      "Session conversation history maintained so follow-up questions work",
-    ],
-  },
-  {
-    id: "3b",
-    title: "Chat Persistence",
-    status: "complete",
-    summary: "RYZE Intelligence now saves every conversation automatically — same pattern as ChatGPT and Claude.ai. Sessions persist across page refreshes, browser closes, and device switches. The sidebar groups past sessions by date and titles are auto-generated by AI after the first exchange.",
-    bullets: [
-      "Alembic migration — two new tables: chat_sessions (id, user_id, title, created_at) and chat_messages",
-      "5 new API endpoints — create, list, fetch, delete sessions + auto-title generation",
-      "Chat sidebar — past sessions grouped by Today, Yesterday, This Week, Older",
-      "Full thread reload on click — including inline candidate and meeting cards",
-      "AI-generated session titles after first exchange (4–6 words, Claude-generated)",
-    ],
-  },
 
 
-
-  {
-    id: "3c",
-    title: "Platform Testing & Flow Validation",
-    status: "complete",
-    summary: "End-to-end validation of all booking flows — employer, candidate, and recruiter-initiated. Verified that confirmed bookings write correctly to the database, Zoom links generate, calendar invites send, and AI pre-call briefs persist to employer_profiles. Identified and resolved gaps before building additional UI on top.",
-    bullets: [
-      "All four booking flows tested end-to-end in production",
-      "Database writes verified for bookings, meeting summaries, and AI briefs",
-      "Employer and candidate dashboards audited for data accuracy",
-      "Booking confirmation, reminder, and cancellation flows validated",
-    ],
-  },
+// ── Phases — fill these in when ready ───────────────────────────────────
+const PHASES = [];
 
 
-
-
-  {
-    id: "4",
-    title: "Employer & Candidate Dashboard Buildout",
-    status: "next",
-    summary: "Employer and candidate dashboards expanded beyond call scheduling into genuine value between meetings. Employers see their open roles, candidate pipeline, and company intelligence profile. Candidates see their profile status, upcoming calls, and job matches. Both dashboards give users a reason to log back in.",
-    bullets: [
-      "Employer dashboard — active job orders, candidate pipeline, company intelligence profile",
-      "Candidate dashboard — profile completeness, upcoming calls, matched opportunities",
-      "Pricing model research — usage-based credit math vs. flat monthly seat pricing",
-      "First external recruiter outreach — get one real user on the platform",
-    ],
-  },
-  {
-    id: "5",
-    title: "Candidate–Opportunity Matching",
-    status: "planned",
-    summary: "Link candidates to open job orders with semantic matching. Ask RYZE Intelligence to find the best fits for any role and get ranked candidates with match scores and reasoning — sourced entirely from your own pipeline.",
-    bullets: [
-      "Candidate-to-job-order semantic matching via vector similarity",
-      "Chat tool: 'Who are my best fits for the Controller role at Acme Corp?' → ranked results with reasoning",
-      "Candidate profiles enriched with job match scores visible in the roster",
-      "Shortlist generation — produce a ranked candidate list for any open role in seconds",
-    ],
-  },
-  {
-    id: "6",
-    title: "Go-to-Market & Operations",
-    status: "planned",
-    summary: "Streamline the platform into a working recruiting tool used daily. Refine the end-to-end workflow — from inbound lead to placed candidate — so RYZE.ai runs the business, not just supports it.",
-    bullets: [
-      "End-to-end workflow refinement from first contact to placement",
-      "Recruiter-facing UI polish — faster access to daily priorities",
-      "Pipeline reporting — placement velocity, candidate funnel, employer engagement",
-      "Platform hardening for consistent daily use as the primary recruiting OS",
-    ],
-  },
-  {
-    id: "7",
-    title: "LinkedIn Integration",
-    status: "future",
-    summary: "Phase 7 connects RYZE.ai to the broader recruiting ecosystem via LinkedIn's partner APIs.",
-    bullets: [
-      "LinkedIn Basic Job Posting API — post jobs from RYZE directly to LinkedIn company pages",
-      "Candidate import flow — structured resume upload replaces manual data entry",
-      "Apply Connect readiness — data models already structured to support LinkedIn partner integration",
-      "LinkedIn Talent Solutions partner application — submit once platform demonstrates meaningful volume",
-    ],
-  },
-  {
-    id: "8",
-    title: "RYZE.ai Platform Evolution",
-    status: "future",
-    summary: "This is where RYZE Recruiting becomes RYZE.ai. The proprietary database of accounting and finance hiring intelligence — every candidate, every company, every outcome — becomes the training substrate for a domain-specific AI that general platforms cannot replicate.",
-    bullets: [
-      "Multi-tenant architecture — other boutique recruiting firms can use RYZE.ai as their operating system",
-      "Outcome tracking — track which candidates got placed, at what salary, how long they stayed",
-      "Predictive matching — \"candidates like this typically succeed at companies like this\"",
-      "Market intelligence — anonymized aggregate data on accounting/finance compensation trends",
-      "API product — sell access to the intelligence layer to accounting firms, PE firms, and CFOs",
-    ],
-  },
-];
-
-const TECH_STACK = [
-  { label: "PostgreSQL 16 + PGVector 0.6.0", role: "Vector storage & cosine similarity search" },
-  { label: "OpenAI text-embedding-3-small", role: "1536-dim embedding generation" },
-  { label: "Anthropic Claude Opus 4", role: "All AI generation, chat responses, parsing" },
-  { label: "FastAPI + Python", role: "Backend API, async background tasks" },
-  { label: "React + Vite", role: "Frontend — chat UI with inline result cards" },
-  { label: "DigitalOcean + Gunicorn", role: "Production deployment, systemd services" },
-];
 
 const DEMO_QUERIES = [
   {
@@ -279,7 +122,6 @@ const INTENT_OPTIONS = [
 
 
 function RyzeLogo({ size = 32, color = "#004aad" }) {
-  // Clean triangle-only path extracted from RYZE_LOGO_V18.svg — no background rects
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -428,8 +270,6 @@ export default function Landing() {
     }
   }
 
-  const liveCount = FEATURES.filter(f => f.status === "live").length;
-
   return (
     <div className={styles.page}>
 
@@ -457,18 +297,18 @@ export default function Landing() {
         <div className={styles.heroContent}>
           <div className={styles.docTag}>
             <span className={styles.livePulse} />
-            Version 11 &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; Dashboard Buildout &amp; Platform Validation
+            Version 11 &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; Building in Public
           </div>
 
           <h1 className={styles.heroTitle}>
-            RYZE.ai is evolving from a recruiting tool into an
-            <em> AI-native intelligence platform.</em>
+            I'm building an AI-powered recruiting platform from scratch —
+            <em> and documenting every step.</em>
           </h1>
 
           <p className={styles.heroSub}>
-            Every candidate profile, company note, Zoom summary, and job order feeds a
-            proprietary data moat — and a conversational AI interface lets recruiters query
-            that data in plain English.
+            RYZE.ai is a live, production recruiting platform I'm building and running
+            simultaneously. Every feature ships as a video. Follow along as a scheduling
+            tool grows into a full AI intelligence layer for accounting &amp; finance recruiting.
           </p>
 
           <div className={styles.heroCtas}>
@@ -494,31 +334,13 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Why This Is Defensible ────────────────── */}
-      <section className={styles.defensibleSection}>
-        <div className={styles.container}>
-          <div className={styles.eyebrow}>Why This Is Defensible</div>
-          <div className={styles.defensibleCards}>
-            <div className={styles.defCard}>
-              <div className={styles.defNum}>01</div>
-              <p>General AI tools like ChatGPT have no access to your proprietary data.</p>
-            </div>
-            <div className={styles.defCard}>
-              <div className={styles.defNum}>02</div>
-              <p>Every candidate, company, and meeting you add makes RYZE.ai smarter — a flywheel competitors cannot replicate.</p>
-            </div>
-            <div className={styles.defCard}>
-              <div className={styles.defNum}>03</div>
-              <p>The platform compounds with use. Every placement, pattern, and outcome builds intelligence no competitor can buy.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+
+
       {/* ── Building in Public / Episodes ────────── */}
       <section className={styles.episodesSection}>
         <div className={styles.container}>
           <div className={styles.eyebrow}>Building in Public</div>
-          <h2 className={styles.sectionH2}>8 episodes. Still building.</h2>
+          <h2 className={styles.sectionH2}>10 episodes. Still building.</h2>
           <p className={styles.sectionP}>
             Every major milestone gets a video — published on <strong>LinkedIn</strong>. Hover any episode to see what was built.
           </p>
@@ -603,93 +425,46 @@ export default function Landing() {
 
 
 
-
-
-      {/* ── Tech Stack ───────────────────────────── */}
-      <section className={styles.techSection}>
-        <div className={styles.container}>
-          <div className={styles.eyebrow}>Technical Architecture</div>
-          <h2 className={styles.sectionH2}>10 episodes. Still building.</h2>
-
-          <div className={styles.ragLoop}>
-            {[
-              "User asks a question",
-              "System converts it to a vector",
-              "PGVector finds semantically similar records",
-              "Records injected into Claude's context",
-              "Claude answers using your actual data",
-            ].map((step, i, arr) => (
-              <div key={i} className={styles.ragRow}>
-                <div className={styles.ragStep}>
-                  <span className={styles.ragNum}>{i + 1}</span>
-                  <span className={styles.ragText}>{step}</span>
-                </div>
-                {i < arr.length - 1 && <div className={styles.ragArrow}>↓</div>}
-              </div>
-            ))}
-          </div>
-
-          <div className={styles.techGrid}>
-            {TECH_STACK.map((t, i) => (
-              <div key={i} className={styles.techCard}>
-                <div className={styles.techName}>{t.label}</div>
-                <div className={styles.techRole}>{t.role}</div>
-              </div>
-            ))}
-          </div>
-
-          <div className={styles.costBox}>
-            <div className={styles.costHeading}>Running cost at current scale</div>
-            <div className={styles.costRows}>
-              <div className={styles.costLine}><span>OpenAI Embeddings</span><span>~$0.01/mo</span></div>
-              <div className={styles.costLine}><span>OpenAI Chat queries</span><span>~$0.10–2/mo</span></div>
-              <div className={styles.costLine}><span>Anthropic Claude API</span><span>~$5–20/mo</span></div>
-              <div className={styles.costLine}><span>DigitalOcean server</span><span>~$18/mo</span></div>
-              <div className={`${styles.costLine} ${styles.costLineTotal}`}><span>Total</span><span>~$25–40/mo</span></div>
-            </div>
-            <p className={styles.costNote}>Scales very slowly — need 10,000+ users to hit $100/mo</p>
-          </div>
-        </div>
-      </section>
-
       {/* ── Phases / Roadmap ─────────────────────── */}
-      <section className={styles.phasesSection}>
-        <div className={styles.container}>
-          <div className={styles.eyebrow}>The Roadmap</div>
-          <h2 className={styles.sectionH2}>Where I am in the build.</h2>
+      {PHASES.length > 0 && (
+        <section className={styles.phasesSection}>
+          <div className={styles.container}>
+            <div className={styles.eyebrow}>The Roadmap</div>
+            <h2 className={styles.sectionH2}>Where I am in the build.</h2>
 
-          <div className={styles.phases}>
-            {PHASES.map((p) => {
-              const isOpen = openPhase === p.id;
-              return (
-                <div key={p.id} className={`${styles.phaseItem} ${styles[`pStatus_${p.status}`]}`}>
-                  <button className={styles.phaseToggle} onClick={() => setOpenPhase(isOpen ? null : p.id)}>
-                    <div className={styles.phaseToggleLeft}>
-                      <span className={styles.phaseIdLabel}>Phase {p.id}</span>
-                      <span className={`${styles.phasePill} ${styles[`pill_${p.status}`]}`}>
-                        {p.status === "complete" ? "✓ Complete"
-                          : p.status === "next" ? "⬡ Up Next"
-                            : p.status === "planned" ? "Planned"
-                              : "Future"}
-                      </span>
-                    </div>
-                    <span className={styles.phaseToggleTitle}>{p.title}</span>
-                    <span className={styles.phaseChevron}>{isOpen ? "−" : "+"}</span>
-                  </button>
-                  {isOpen && (
-                    <div className={styles.phaseDetail}>
-                      <p>{p.summary}</p>
-                      <ul>
-                        {p.bullets.map((b, i) => <li key={i}>{b}</li>)}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+            <div className={styles.phases}>
+              {PHASES.map((p) => {
+                const isOpen = openPhase === p.id;
+                return (
+                  <div key={p.id} className={`${styles.phaseItem} ${styles[`pStatus_${p.status}`]}`}>
+                    <button className={styles.phaseToggle} onClick={() => setOpenPhase(isOpen ? null : p.id)}>
+                      <div className={styles.phaseToggleLeft}>
+                        <span className={styles.phaseIdLabel}>Phase {p.id}</span>
+                        <span className={`${styles.phasePill} ${styles[`pill_${p.status}`]}`}>
+                          {p.status === "complete" ? "✓ Complete"
+                            : p.status === "next" ? "⬡ Up Next"
+                              : p.status === "planned" ? "Planned"
+                                : "Future"}
+                        </span>
+                      </div>
+                      <span className={styles.phaseToggleTitle}>{p.title}</span>
+                      <span className={styles.phaseChevron}>{isOpen ? "−" : "+"}</span>
+                    </button>
+                    {isOpen && (
+                      <div className={styles.phaseDetail}>
+                        <p>{p.summary}</p>
+                        <ul>
+                          {p.bullets.map((b, i) => <li key={i}>{b}</li>)}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ── Waitlist ─────────────────────────────── */}
       <section className={styles.waitlistSection} ref={waitlistRef}>
