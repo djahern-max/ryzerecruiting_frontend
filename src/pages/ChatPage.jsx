@@ -89,8 +89,8 @@ function SessionItem({ session, isActive, onSelect, onDelete }) {
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
         >
-            <span className={styles.sessionTitle}>
-                {session.title || "New conversation"}
+            <span className={styles.sessionTitle} title={s.title || "New Chat"}>
+                {s.title || "New Chat"}
             </span>
             {hovered && (
                 <button
