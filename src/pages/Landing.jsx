@@ -17,21 +17,20 @@ import EP10 from "../assets/landing_page_thumbnails/EP10.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-// ── Update these with your actual LinkedIn video URLs ────────────────────
 const EPISODES = [
   {
     num: 10,
     title: "Adding Candidates to the Platform",
     thumb: EP10,
     url: "https://www.linkedin.com/posts/daneahern_episode-10-of-building-ryzeai-ryze-is-a-activity-7439683948621860864-TiN_?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
-    desc: "RYZE now has a full candidate intake system. Upload a PDF or Word resume, paste a LinkedIn profile, or enter details manually — Claude parses the document and extracts structured profile fields automatically. Every candidate is then indexed for semantic search so RYZE Intelligence can find them by meaning, not just keywords.",
+    desc: "RYZE turns recruiting activity into proprietary intelligence. I uploaded six test resumes using three methods: copy/paste, direct document upload, and LinkedIn profile copy. RYZE parses each one into structured candidate data, generates embeddings, and lets Claude interact with the dataset conversationally. Instead of searching resumes — you're querying your own recruiting intelligence layer.",
   },
   {
     num: 9,
-    title: "Call Booking System Testing",
+    title: "End-to-End Booking Test",
     thumb: EP9,
     url: "https://www.linkedin.com/posts/daneahern_building-ryzeai-episode-9-this-episode-activity-7439627919678787584-cU-f?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
-    desc: "In this episode I tested two key booking flows: Candidate → Recruiter and Employer → Recruiter. Both paths generate Zoom meetings, send confirmation emails, and schedule reminders automatically. The goal was to validate that the scheduling system works from both sides before building additional recruiter workflow features.",
+    desc: "This episode is short. Just under 2 minutes. Candidate books a call → admin confirms → Zoom meeting creates → Calendar event creates → confirmation email sends → 15-minute reminder fires. The full booking loop, end-to-end, working in production.",
   },
   {
     num: 8,
@@ -45,7 +44,7 @@ const EPISODES = [
     title: "RAG-Powered Intelligence Chat",
     thumb: EP7,
     url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-7-this-activity-7439103131206029312-6_DF?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
-    desc: "I implemented RAG-powered Intelligence Chat — ask your entire candidate database a question in plain English and get an intelligent answer back. Not keyword search. Not filters. Just a question: 'Who would be a good fit for a Controller role in Boston?' The system searches by meaning, powered by pgvector and RAG running directly inside PostgreSQL.",
+    desc: "I implemented RAG-powered Intelligence Chat — ask your entire candidate database a question in plain English and get an intelligent answer back. Not keyword search. Not filters. Just a question: \"Who would be a good fit for a Controller role in Boston?\" The system searches by meaning, powered by pgvector and RAG running directly inside PostgreSQL.",
   },
   {
     num: 6,
@@ -66,21 +65,21 @@ const EPISODES = [
     title: "Building the Booking System",
     thumb: EP4,
     url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-4-booking-activity-7435763383817269248-qiZc?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
-    desc: "Booking systems sound simple until you actually build one. This week I worked through four different meeting scenarios: Recruiter→Candidate, Recruiter→Employer, Candidate→Recruiter, and Employer→Recruiter. Each flow needs different fields, different logic, and different AI research rules. Small details create surprisingly complex systems.",
+    desc: "Booking systems sound simple until you actually build one. This week I worked through four different meeting scenarios: Recruiter→Candidate, Recruiter→Employer, Candidate→Recruiter, and Employer→Recruiter. Each flow needs different fields, different logic, and different AI research rules. Candidates don't have company websites. Employers do. Small details create surprisingly complex systems.",
   },
   {
     num: 3,
     title: "What If Your Hiring Data Was Connected?",
     thumb: EP3,
     url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-3-what-activity-7434907747122524160-JE-O?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
-    desc: "Notes in spreadsheets. Candidate history in email threads. Call outcomes on sticky notes. The data exists — it's just scattered everywhere and doing nothing. RYZE is built to capture every hire, every call, every candidate interaction from day one. Structured. Persistent. Ready for AI to turn into something useful.",
+    desc: "Notes in spreadsheets. Candidate history in email threads. Call outcomes on sticky notes. The data exists — it's just scattered everywhere and doing nothing. I'm a CPA and Controller. I've spent years inside companies watching valuable business data get created and immediately lost. I built RYZE because I've lived this problem from both sides of the table.",
   },
   {
     num: 2,
     title: "Preparation & Reminders",
     thumb: EP2,
     url: "https://www.linkedin.com/posts/daneahern_building-ryze-in-public-episode-2-one-activity-7434615686380900352-RVmV?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
-    desc: "One of the biggest problems in recruiting is simple: people walk into calls unprepared. This episode covers automated 15-minute reminders before every Zoom meeting and AI pre-call briefs that summarize the company you're about to speak with. Small features that slowly turn a scheduling tool into a real recruiting platform.",
+    desc: "One of the biggest problems in recruiting is simple: people walk into calls unprepared. This episode covers automated 15-minute reminders before every Zoom meeting and AI pre-call briefs that summarize the company you're about to speak with. Small features like this are what slowly turn a scheduling tool into a real recruiting platform.",
   },
   {
     num: 1,
@@ -91,12 +90,64 @@ const EPISODES = [
   },
 ];
 
-
-
-// ── Phases — fill these in when ready ───────────────────────────────────
-const PHASES = [];
-
-
+const PHASES = [
+  {
+    id: "1",
+    title: "Platform Foundation",
+    status: "complete",
+    summary: "Built the core platform from scratch and deployed it to production. The foundation includes a full booking system for employer-initiated meetings, an admin dashboard, AI-generated pre-call research briefs, and all the integrations needed to run real recruiting calls — Zoom, Google Calendar, email, SMS, and OAuth login.",
+    bullets: [
+      "Employer booking flow — desktop & mobile",
+      "Admin dashboard for booking management",
+      "Zoom + Google Calendar integration — dynamic meeting creation",
+      "Email (Resend) + SMS (Twilio) notifications",
+      "OAuth login — Google & LinkedIn",
+      "AI pre-call research briefs via Claude API",
+      "Automated 15-minute reminders before every call",
+    ],
+  },
+  {
+    id: "2",
+    title: "Full Booking System",
+    status: "complete",
+    summary: "Expanded from employer-only booking into all four meeting flows a recruiting firm actually needs. Each direction — recruiter outbound and candidate/employer inbound — has its own logic, fields, and AI research rules. Tested every flow end-to-end in production before building anything on top.",
+    bullets: [
+      "4 booking flows: Recruiter→Candidate, Recruiter→Employer, Candidate→Recruiter, Employer→Recruiter",
+      "Per-flow logic — candidates and employers need different fields and AI research rules",
+      "Candidate self-booking flow",
+      "Recruiter outbound meeting invites",
+      "End-to-end production test — Zoom creates, Calendar fires, email sends, reminder triggers",
+    ],
+  },
+  {
+    id: "3",
+    title: "AI Intelligence Layer",
+    status: "complete",
+    summary: "Transformed RYZE from a scheduling tool into an intelligence platform. Every Zoom call now produces an AI-written meeting summary saved directly to the candidate or employer record. Then came the centerpiece: a conversational AI interface that lets recruiters query their entire database in plain English — powered by pgvector and RAG running inside PostgreSQL.",
+    bullets: [
+      "AI Meeting Notes — post-call summaries auto-saved via Zoom webhook",
+      "PGVector installed on production Postgres 16",
+      "RAG pipeline — semantic search by meaning, not keywords",
+      "Conversational chat interface at /admin/chat — 8 tools, agentic loop",
+      "Inline candidate and meeting cards returned with chat responses",
+      "Chat session persistence — grouped sidebar, AI-generated titles",
+    ],
+  },
+  {
+    id: "4",
+    title: "Candidate Data Pipeline",
+    status: "complete",
+    summary: "Built the full candidate intake and indexing pipeline. Recruiters can upload a PDF resume, paste a LinkedIn profile, or enter details manually — Claude parses each one into structured profile fields automatically. Every candidate is then embedded using OpenAI and indexed for semantic search, so RYZE Intelligence can find them by meaning the moment they're saved.",
+    bullets: [
+      "Candidate parsing — PDF upload, text paste, LinkedIn copy → structured fields via Claude",
+      "Duplicate detection — name + location check before saving",
+      "OpenAI text-embedding-3-small — 1536-dim embeddings on every candidate",
+      "Auto-embed on save — runs in background, status badge updates in real time",
+      "Semantic search endpoint — cosine similarity via raw SQL",
+      "Employer and job order parsing + embedding — same pipeline",
+    ],
+  },
+];
 
 const DEMO_QUERIES = [
   {
@@ -118,8 +169,6 @@ const INTENT_OPTIONS = [
   { value: "job_seeking", icon: BriefcaseBusiness, label: "I'm job hunting" },
   { value: "following", icon: Binoculars, label: "Following the build" },
 ];
-
-
 
 function RyzeLogo({ size = 32, color = "#004aad" }) {
   return (
@@ -334,8 +383,6 @@ export default function Landing() {
         </div>
       </section>
 
-
-
       {/* ── Building in Public / Episodes ────────── */}
       <section className={styles.episodesSection}>
         <div className={styles.container}>
@@ -354,7 +401,6 @@ export default function Landing() {
                   const cardProps = ep.url
                     ? { href: ep.url, target: "_blank", rel: "noopener noreferrer" }
                     : {};
-
                   return (
                     <CardEl
                       key={ep.num}
@@ -368,23 +414,16 @@ export default function Landing() {
                         </div>
                         <div className={styles.epTitle}>{ep.title}</div>
                       </div>
-
                       <div className={styles.epHover}>
                         <div className={styles.epHoverNum}>Episode {ep.num} — Coming Soon</div>
-                        <p
-                          className={styles.epHoverDesc}
-                          style={{ whiteSpace: "pre-line" }}
-                        >
+                        <p className={styles.epHoverDesc} style={{ whiteSpace: "pre-line" }}>
                           {ep.desc}
                         </p>
-                        {ep.url && (
-                          <span className={styles.epHoverLink}>Read on LinkedIn →</span>
-                        )}
+                        {ep.url && <span className={styles.epHoverLink}>Read on LinkedIn →</span>}
                       </div>
                     </CardEl>
                   );
                 }
-
                 return (
                   <a
                     key={ep.num}
@@ -394,13 +433,8 @@ export default function Landing() {
                     className={styles.episodeCard}
                   >
                     <div className={styles.epThumbWrap}>
-                      <img
-                        src={ep.thumb}
-                        alt={`Episode ${ep.num}`}
-                        className={styles.epThumb}
-                      />
+                      <img src={ep.thumb} alt={`Episode ${ep.num}`} className={styles.epThumb} />
                     </div>
-
                     <div className={styles.epHover}>
                       <div className={styles.epHoverNum}>Episode {ep.num}</div>
                       <p className={styles.epHoverDesc}>{ep.desc}</p>
@@ -415,56 +449,104 @@ export default function Landing() {
             className={styles.showMoreBtn}
             onClick={() => setShowAllEpisodes((prev) => !prev)}
           >
-            {showAllEpisodes
-              ? "Show less ↑"
-              : `Show all ${EPISODES.length} episodes ↓`}
+            {showAllEpisodes ? "Show less ↑" : `Show all ${EPISODES.length} episodes ↓`}
           </button>
         </div>
       </section>
 
+      {/* ── Phases / The Build So Far ─────────────── */}
+      <section className={styles.phasesSection}>
+        <div className={styles.container}>
+          <div className={styles.eyebrow}>The Build So Far</div>
+          <h2 className={styles.sectionH2}>Where I am in the build.</h2>
 
-
-
-      {/* ── Phases / Roadmap ─────────────────────── */}
-      {PHASES.length > 0 && (
-        <section className={styles.phasesSection}>
-          <div className={styles.container}>
-            <div className={styles.eyebrow}>The Roadmap</div>
-            <h2 className={styles.sectionH2}>Where I am in the build.</h2>
-
-            <div className={styles.phases}>
-              {PHASES.map((p) => {
-                const isOpen = openPhase === p.id;
-                return (
-                  <div key={p.id} className={`${styles.phaseItem} ${styles[`pStatus_${p.status}`]}`}>
-                    <button className={styles.phaseToggle} onClick={() => setOpenPhase(isOpen ? null : p.id)}>
-                      <div className={styles.phaseToggleLeft}>
-                        <span className={styles.phaseIdLabel}>Phase {p.id}</span>
-                        <span className={`${styles.phasePill} ${styles[`pill_${p.status}`]}`}>
-                          {p.status === "complete" ? "✓ Complete"
-                            : p.status === "next" ? "⬡ Up Next"
-                              : p.status === "planned" ? "Planned"
-                                : "Future"}
-                        </span>
-                      </div>
-                      <span className={styles.phaseToggleTitle}>{p.title}</span>
-                      <span className={styles.phaseChevron}>{isOpen ? "−" : "+"}</span>
-                    </button>
-                    {isOpen && (
-                      <div className={styles.phaseDetail}>
-                        <p>{p.summary}</p>
-                        <ul>
-                          {p.bullets.map((b, i) => <li key={i}>{b}</li>)}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+          <div className={styles.phases}>
+            {PHASES.map((p) => {
+              const isOpen = openPhase === p.id;
+              return (
+                <div key={p.id} className={`${styles.phaseItem} ${styles[`pStatus_${p.status}`]}`}>
+                  <button className={styles.phaseToggle} onClick={() => setOpenPhase(isOpen ? null : p.id)}>
+                    <div className={styles.phaseToggleLeft}>
+                      <span className={styles.phaseIdLabel}>Phase {p.id}</span>
+                      <span className={`${styles.phasePill} ${styles[`pill_${p.status}`]}`}>
+                        {p.status === "complete" ? "✓ Complete"
+                          : p.status === "next" ? "⬡ Up Next"
+                            : p.status === "planned" ? "Planned"
+                              : "Future"}
+                      </span>
+                    </div>
+                    <span className={styles.phaseToggleTitle}>{p.title}</span>
+                    <span className={styles.phaseChevron}>{isOpen ? "−" : "+"}</span>
+                  </button>
+                  {isOpen && (
+                    <div className={styles.phaseDetail}>
+                      <p>{p.summary}</p>
+                      <ul>
+                        {p.bullets.map((b, i) => <li key={i}>{b}</li>)}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
-        </section>
-      )}
+        </div>
+      </section>
+
+      {/* ── What's Next ──────────────────────────── */}
+      <section className={styles.whatsNextSection}>
+        <div className={styles.container}>
+          <div className={styles.eyebrow}>What's Next</div>
+          <h2 className={styles.sectionH2}>Still building. Here's what's coming.</h2>
+
+          <div className={styles.nextGrid}>
+
+            <div className={styles.nextCard}>
+              <div className={styles.nextNum}>EP 11</div>
+              <div className={styles.nextTitle}>Testing AI Meeting Notes End-to-End</div>
+              <p className={styles.nextDesc}>
+                The full loop — book a call, run it on Zoom, and watch the AI-generated
+                meeting summary land automatically in the database. No copy/paste. No manual
+                notes. Just a record of what was discussed, attached to the right candidate
+                or employer the moment the call ends.
+              </p>
+              <span className={styles.nextBadge}>Recording soon</span>
+            </div>
+
+            <div className={styles.nextCard}>
+              <div className={styles.nextNum}>Phase 5</div>
+              <div className={styles.nextTitle}>Candidate & Employer Dashboards</div>
+              <p className={styles.nextDesc}>
+                Candidates will see exactly how their profile looks to employers — what's
+                strong, what's missing, what RYZE Intelligence says about them. Employers
+                will see potential candidate matches against their open roles and a preview
+                of how their job postings appear on the platform. Both dashboards give users
+                a reason to log back in between calls.
+              </p>
+              <span className={styles.nextBadge}>In progress</span>
+            </div>
+
+            <div className={styles.nextCard}>
+              <div className={styles.nextNum}>Beyond</div>
+              <div className={styles.nextTitle}>Honestly? Still Figuring It Out.</div>
+              <p className={styles.nextDesc}>
+                I know what the next two episodes look like. After that, the roadmap is
+                driven by what I learn as I run this platform in the real world.  The problems that surface in actual use determine what gets
+                built next. Follow along and you'll find out when I do.
+              </p>
+              <a
+                href="https://www.linkedin.com/in/daneahern/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.nextBadgeFollow}
+              >
+                Follow to find out →
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </section>
 
       {/* ── Waitlist ─────────────────────────────── */}
       <section className={styles.waitlistSection} ref={waitlistRef}>
