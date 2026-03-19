@@ -1,0 +1,407 @@
+/* src/pages/admin/DBExplorer.module.css */
+
+.page {
+    min-height: 100vh;
+    background: #0b1526;
+    color: #e0e4ef;
+    font-family: "DM Sans", sans-serif;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 185px 1fr;
+    height: calc(100vh - 60px);
+    overflow: hidden;
+}
+
+/* ── Sidebar ─────────────────────────────────────── */
+.sidebar {
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 18px 0;
+    background: rgba(0, 0, 0, 0.25);
+    overflow-y: auto;
+}
+
+.sidebarLabel {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.22);
+    padding: 0 16px 10px;
+    margin: 0;
+}
+
+.tableBtn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 12px;
+    transition: background 0.1s, color 0.1s;
+}
+
+.tableBtn:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.tableBtnActive {
+    background: rgba(87, 160, 211, 0.12);
+    color: #57a0d3;
+}
+
+.tableName {
+    font-family: "DM Mono", monospace;
+    font-size: 12px;
+}
+
+.tableCount {
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 20px;
+    background: rgba(87, 160, 211, 0.18);
+    color: #57a0d3;
+}
+
+/* ── Main ────────────────────────────────────────── */
+.main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    flex-shrink: 0;
+}
+
+.activeTable {
+    font-family: "DM Mono", monospace;
+    font-size: 14px;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+.searchForm {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    max-width: 360px;
+}
+
+.searchInput {
+    flex: 1;
+    padding: 6px 11px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #e0e4ef;
+    font-size: 13px;
+    font-family: "DM Sans", sans-serif;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.searchInput:focus {
+    border-color: rgba(87, 160, 211, 0.5);
+}
+
+.searchInput::placeholder {
+    color: rgba(255, 255, 255, 0.22);
+}
+
+.searchBtn {
+    padding: 6px 13px;
+    background: rgba(87, 160, 211, 0.15);
+    border: 1px solid rgba(87, 160, 211, 0.3);
+    border-radius: 6px;
+    color: #57a0d3;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: "DM Sans", sans-serif;
+    transition: background 0.1s;
+}
+
+.searchBtn:hover {
+    background: rgba(87, 160, 211, 0.25);
+}
+
+.clearBtn {
+    padding: 6px 9px;
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.clearBtn:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.countLabel {
+    margin-left: auto;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.22);
+    flex-shrink: 0;
+}
+
+.refreshBtn {
+    padding: 5px 8px;
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.28);
+    font-size: 14px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: color 0.1s;
+}
+
+.refreshBtn:hover {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* ── Column headers ──────────────────────────────── */
+.colHeader {
+    display: grid;
+    gap: 10px;
+    padding: 6px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+}
+
+.colLabel {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.22);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ── Records ─────────────────────────────────────── */
+.records {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.row {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    cursor: pointer;
+    padding: 0 20px;
+    transition: background 0.1s;
+}
+
+.row:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.rowExpanded {
+    background: rgba(87, 160, 211, 0.04);
+    border-left: 2px solid rgba(87, 160, 211, 0.35);
+}
+
+.rowSummary {
+    display: grid;
+    gap: 10px;
+    padding: 9px 0;
+    align-items: center;
+}
+
+.cell {
+    font-size: 13px;
+    color: #c8cdd8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ── Detail panel ────────────────────────────────── */
+.detailPanel {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 12px 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.detailRow {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    gap: 0 14px;
+    align-items: start;
+}
+
+.detailKey {
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.25);
+    padding-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.detailVal {
+    font-size: 13px;
+    color: #e0e4ef;
+    word-break: break-word;
+}
+
+.expandBtn {
+    font-size: 11px;
+    color: #57a0d3;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: "DM Sans", sans-serif;
+    opacity: 0.7;
+    transition: opacity 0.1s;
+}
+
+.expandBtn:hover {
+    opacity: 1;
+}
+
+.longText {
+    font-family: "DM Mono", monospace;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    white-space: pre-wrap;
+    word-break: break-word;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin: 6px 0 0;
+    max-height: 220px;
+    overflow-y: auto;
+    line-height: 1.5;
+}
+
+/* ── Footer ──────────────────────────────────────── */
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    flex-shrink: 0;
+}
+
+.pgBtn {
+    padding: 6px 14px;
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 12px;
+    cursor: pointer;
+    font-family: "DM Sans", sans-serif;
+    transition: background 0.1s, color 0.1s;
+}
+
+.pgBtn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.pgBtn:disabled {
+    opacity: 0.25;
+    cursor: default;
+}
+
+.pgLabel {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.22);
+}
+
+/* ── Field helpers ───────────────────────────────── */
+.nullVal {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.18);
+}
+
+.timestamp {
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.38);
+}
+
+.truncated {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+/* ── Badges ──────────────────────────────────────── */
+.badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 20px;
+}
+
+.badgeGreen {
+    background: rgba(74, 222, 128, 0.12);
+    color: #4ade80;
+}
+
+.badgeBlue {
+    background: rgba(87, 160, 211, 0.15);
+    color: #57a0d3;
+}
+
+.badgeAmber {
+    background: rgba(251, 191, 36, 0.12);
+    color: #fbbf24;
+}
+
+.badgeTeal {
+    background: rgba(45, 212, 191, 0.12);
+    color: #2dd4bf;
+}
+
+.badgeRed {
+    background: rgba(248, 113, 113, 0.12);
+    color: #f87171;
+}
+
+.badgeGray {
+    background: rgba(255, 255, 255, 0.07);
+    color: rgba(255, 255, 255, 0.38);
+}
+
+/* ── State messages ──────────────────────────────── */
+.stateMsg {
+    padding: 40px 20px;
+    text-align: center;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.errorMsg {
+    padding: 16px 20px;
+    font-size: 13px;
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.07);
+    border-bottom: 1px solid rgba(248, 113, 113, 0.12);
+}
