@@ -133,7 +133,10 @@ export default function DBExplorer() {
         try {
             const params = new URLSearchParams({ table: activeTable, limit: String(PAGE_SIZE), offset: String(offset) });
             if (search) params.set("search", search);
-            const res = await fetch(`${API_BASE}/admin/db/explorer?${params}`, { credentials: "include" });
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_BASE}/admin/db/explorer?${params}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
             if (!res.ok) {
                 const d = await res.json().catch(() => ({}));
                 throw new Error(d.detail || `Request failed (${res.status})`);
