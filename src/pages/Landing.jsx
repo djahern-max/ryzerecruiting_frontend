@@ -160,15 +160,15 @@ const PHASES = [
 const DEMO_QUERIES = [
   {
     q: "Do I have any meetings this morning?",
-    a: "You have 2 confirmed calls today. 9:00 AM — Sarah Chen, Controller candidate, Big 4 background. 11:30 AM — Marcus Rivera, CFO at Acme Corp re: VP Finance search.",
+    a: "2 confirmed calls today. 9:00 AM — Sarah Chen, Controller candidate. 11:30 AM — Marcus Rivera, CFO at Acme Corp.",
   },
   {
-    q: "Recommend 3 strong CPA candidates for the Controller role at Acme Corp.",
-    a: "Top matches: 1. Jennifer Walsh, CPA — 94% match. Senior Manager at Deloitte, 12 yrs exp, NetSuite certified. 2. David Kim, CPA — 89% match. Controller at Series B startup, IPO-ready experience. 3. Priya Patel, CPA — 85% match. Big 4 audit manager transitioning into industry.",
+    q: "Recommend 3 CPAs for the Controller role at Acme.",
+    a: "1. Jennifer Walsh, CPA — 94% match. Big 4, NetSuite certified.\n2. David Kim, CPA — 89% match. Controller, IPO experience.\n3. Priya Patel, CPA — 85% match. Audit manager, going industry.",
   },
   {
-    q: "What do we know about Deloitte's hiring patterns?",
-    a: "Based on 4 Deloitte-background candidates in your pipeline: alumni typically target $130–160K base. Strong preference for structured environments. 3 of 4 cited \"better work-life balance\" as primary motivator.",
+    q: "What do we know about Deloitte candidates?",
+    a: "4 Deloitte alumni in your pipeline. Avg target: $130–160K. Top reason for leaving: better work-life balance.",
   },
 ];
 
