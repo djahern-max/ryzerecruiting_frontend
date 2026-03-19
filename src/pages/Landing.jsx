@@ -160,11 +160,11 @@ const PHASES = [
 const DEMO_QUERIES = [
   {
     q: "Do I have any meetings this morning?",
-    a: "2 confirmed calls today. 9:00 AM — Sarah Chen, Controller candidate. 11:30 AM — Marcus Rivera, CFO at Acme Corp.",
+    a: "2 confirmed calls today. 9:00 AM — Sarah Chen, Controller candidate. 11:30 AM — Marcus Rivera, CFO",
   },
   {
-    q: "Recommend 3 CPAs for the Controller role at Acme.",
-    a: "1. Jennifer Walsh, CPA — 94% match. Big 4, NetSuite certified.\n2. David Kim, CPA — 89% match. Controller, IPO experience.\n3. Priya Patel, CPA — 85% match. Audit manager, going industry.",
+    q: "Recommend a CPA for the Controller role at Acme.",
+    a: "1. Jennifer Walsh, CPA — 94% match. Big 4, NetSuite certified.",
   },
   {
     q: "What do we know about Deloitte candidates?",
