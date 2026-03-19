@@ -5,21 +5,23 @@ import styles from "./DBExplorer.module.css";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-const TABLES = ["bookings", "employer_profiles", "users", "waitlist"];
+const TABLES = [
+    "bookings", "candidates", "employer_profiles",
+    "job_orders", "chat_sessions", "chat_messages",
+    "users", "waitlist", "contacts",
+];
 
 const SUMMARY_COLS = {
-    bookings: [
-        "id", "booking_type", "status", "employer_name",
-        "company_name", "date", "time_slot", "call_outcome",
-    ],
-    employer_profiles: [
-        "id", "company_name", "contact_name", "industry",
-        "contact_email", "embedding_status",
-    ],
-    users: ["id", "email", "name", "user_type", "provider", "created_at"],
+    bookings: ["id", "booking_type", "status", "employer_name", "company_name", "date", "time_slot", "call_outcome"],
+    candidates: ["id", "name", "current_title", "current_company", "location", "ai_career_level", "created_at"],
+    employer_profiles: ["id", "company_name", "ai_industry", "primary_contact_email", "relationship_status", "created_at"],
+    job_orders: ["id", "title", "location", "status", "salary_min", "salary_max", "created_at"],
+    chat_sessions: ["id", "user_id", "title", "created_at", "updated_at"],
+    chat_messages: ["id", "session_id", "role", "content", "created_at"],
+    users: ["id", "email", "full_name", "user_type", "oauth_provider", "created_at"],
     waitlist: ["id", "email", "intent", "source", "created_at"],
+    contacts: ["id", "name", "email", "message"],
 };
-
 const STATUS_FIELDS = new Set([
     "status", "embedding_status", "user_type",
     "intent", "provider", "booking_type", "call_outcome",
