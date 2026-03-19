@@ -22,6 +22,7 @@ const SUMMARY_COLS = {
     waitlist: ["id", "email", "intent", "source", "created_at"],
     contacts: ["id", "name", "email", "message"],
 };
+
 const STATUS_FIELDS = new Set([
     "status", "embedding_status", "user_type",
     "intent", "provider", "booking_type", "call_outcome",
@@ -135,7 +136,7 @@ export default function DBExplorer() {
         try {
             const params = new URLSearchParams({ table: activeTable, limit: String(PAGE_SIZE), offset: String(offset) });
             if (search) params.set("search", search);
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem("token");
             const res = await fetch(`${API_BASE}/admin/db/explorer?${params}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -164,7 +165,7 @@ export default function DBExplorer() {
     const summaryCols = SUMMARY_COLS[activeTable] || columns.slice(0, 6);
     const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
     const currentPage = Math.floor(offset / PAGE_SIZE) + 1;
-    const colTemplate = `repeat(${summaryCols.length}, minmax(0, 1fr))`;
+    const colTemplate = `repeat(${summaryCols.length}, minmax(160px, 1fr))`;
 
     return (
         <div className={styles.page}>
@@ -174,9 +175,15 @@ export default function DBExplorer() {
                 <aside className={styles.sidebar}>
                     <p className={styles.sidebarLabel}>Tables</p>
                     {TABLES.map((t) => (
-                        <button key={t} className={`${styles.tableBtn} ${t === activeTable ? styles.tableBtnActive : ""}`} onClick={() => switchTable(t)}>
+                        <button
+                            key={t}
+                            className={`${styles.tableBtn} ${t === activeTable ? styles.tableBtnActive : ""}`}
+                            onClick={() => switchTable(t)}
+                        >
                             <span className={styles.tableName}>{t}</span>
-                            {t === activeTable && total > 0 && <span className={styles.tableCount}>{total.toLocaleString()}</span>}
+                            {t === activeTable && total > 0 && (
+                                <span className={styles.tableCount}>{total.toLocaleString()}</span>
+                            )}
                         </button>
                     ))}
                 </aside>
@@ -185,48 +192,81 @@ export default function DBExplorer() {
                     <div className={styles.toolbar}>
                         <span className={styles.activeTable}>{activeTable}</span>
                         <form onSubmit={submitSearch} className={styles.searchForm}>
-                            <input className={styles.searchInput} value={searchInput} onChange={(e) => setSearchInput(e.target.value)} placeholder="Search…" />
+                            <input
+                                className={styles.searchInput}
+                                value={searchInput}
+                                onChange={(e) => setSearchInput(e.target.value)}
+                                placeholder="Search…"
+                            />
                             <button type="submit" className={styles.searchBtn}>Go</button>
-                            {search && <button type="button" className={styles.clearBtn} onClick={clearSearch}>✕</button>}
+                            {search && (
+                                <button type="button" className={styles.clearBtn} onClick={clearSearch}>✕</button>
+                            )}
                         </form>
-                        <span className={styles.countLabel}>{loading ? "…" : `${total.toLocaleString()} rows`}</span>
+                        <span className={styles.countLabel}>
+                            {loading ? "…" : `${total.toLocaleString()} rows`}
+                        </span>
                         <button className={styles.refreshBtn} onClick={fetchData} title="Refresh">↻</button>
                     </div>
 
-                    {!loading && records.length > 0 && (
-                        <div className={styles.colHeader} style={{ gridTemplateColumns: colTemplate }}>
-                            {summaryCols.map((col) => <div key={col} className={styles.colLabel}>{col}</div>)}
-                        </div>
-                    )}
-
-                    <div className={styles.records}>
-                        {error && <div className={styles.errorMsg}>⚠ {error}</div>}
-                        {loading && <div className={styles.stateMsg}>Loading…</div>}
-                        {!loading && !error && records.length === 0 && <div className={styles.stateMsg}>No records found.</div>}
-
-                        {!loading && records.map((row) => {
-                            const isExpanded = expandedId === row.id;
-                            return (
-                                <div key={row.id} className={`${styles.row} ${isExpanded ? styles.rowExpanded : ""}`} onClick={() => toggleRow(row.id)}>
-                                    <div className={styles.rowSummary} style={{ gridTemplateColumns: colTemplate }}>
-                                        {summaryCols.map((col) => (
-                                            <div key={col} className={styles.cell}>
-                                                {col === "meeting_transcript"
-                                                    ? <TranscriptBadge value={row[col]} />
-                                                    : <FieldValue fieldKey={col} value={row[col]} />}
-                                            </div>
-                                        ))}
-                                    </div>
-                                    {isExpanded && <DetailPanel row={row} columns={columns} />}
+                    <div className={styles.tableScroll}>
+                        <div className={styles.tableInner}>
+                            {!loading && records.length > 0 && (
+                                <div className={styles.colHeader} style={{ gridTemplateColumns: colTemplate }}>
+                                    {summaryCols.map((col) => (
+                                        <div key={col} className={styles.colLabel}>{col}</div>
+                                    ))}
                                 </div>
-                            );
-                        })}
+                            )}
+
+                            <div className={styles.records}>
+                                {error && <div className={styles.errorMsg}>⚠ {error}</div>}
+                                {loading && <div className={styles.stateMsg}>Loading…</div>}
+                                {!loading && !error && records.length === 0 && (
+                                    <div className={styles.stateMsg}>No records found.</div>
+                                )}
+
+                                {!loading && records.map((row) => {
+                                    const isExpanded = expandedId === row.id;
+                                    return (
+                                        <div
+                                            key={row.id}
+                                            className={`${styles.row} ${isExpanded ? styles.rowExpanded : ""}`}
+                                            onClick={() => toggleRow(row.id)}
+                                        >
+                                            <div className={styles.rowSummary} style={{ gridTemplateColumns: colTemplate }}>
+                                                {summaryCols.map((col) => (
+                                                    <div key={col} className={styles.cell}>
+                                                        {col === "meeting_transcript"
+                                                            ? <TranscriptBadge value={row[col]} />
+                                                            : <FieldValue fieldKey={col} value={row[col]} />}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            {isExpanded && <DetailPanel row={row} columns={columns} />}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </div>
 
                     <div className={styles.footer}>
-                        <button className={styles.pgBtn} onClick={() => { setOffset(Math.max(0, offset - PAGE_SIZE)); setExpandedId(null); }} disabled={offset === 0}>← Prev</button>
+                        <button
+                            className={styles.pgBtn}
+                            onClick={() => { setOffset(Math.max(0, offset - PAGE_SIZE)); setExpandedId(null); }}
+                            disabled={offset === 0}
+                        >
+                            ← Prev
+                        </button>
                         <span className={styles.pgLabel}>Page {currentPage} of {totalPages}</span>
-                        <button className={styles.pgBtn} onClick={() => { setOffset(offset + PAGE_SIZE); setExpandedId(null); }} disabled={offset + PAGE_SIZE >= total}>Next →</button>
+                        <button
+                            className={styles.pgBtn}
+                            onClick={() => { setOffset(offset + PAGE_SIZE); setExpandedId(null); }}
+                            disabled={offset + PAGE_SIZE >= total}
+                        >
+                            Next →
+                        </button>
                     </div>
                 </main>
             </div>

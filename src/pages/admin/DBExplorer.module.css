@@ -2,32 +2,33 @@
 
 .page {
     min-height: 100vh;
-    background: #0b1526;
-    color: #e0e4ef;
+    background: #f6f9fc;
+    color: #1a2e44;
     font-family: "DM Sans", sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
 .layout {
     display: grid;
-    grid-template-columns: 185px 1fr;
+    grid-template-columns: 200px 1fr;
     height: calc(100vh - 60px);
     overflow: hidden;
 }
 
 /* ── Sidebar ─────────────────────────────────────── */
 .sidebar {
-    border-right: 1px solid rgba(255, 255, 255, 0.07);
+    border-right: 1px solid #dce8f4;
     padding: 18px 0;
-    background: rgba(0, 0, 0, 0.25);
+    background: #ffffff;
     overflow-y: auto;
 }
 
 .sidebarLabel {
     font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.07em;
+    font-weight: 700;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.22);
+    color: #7a98b5;
     padding: 0 16px 10px;
     margin: 0;
 }
@@ -42,19 +43,23 @@
     border: none;
     cursor: pointer;
     text-align: left;
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 12px;
-    transition: background 0.1s, color 0.1s;
+    color: #5a7a95;
+    font-size: 12.5px;
+    font-family: "DM Sans", sans-serif;
+    transition: background 0.12s, color 0.12s;
+    border-left: 2px solid transparent;
 }
 
 .tableBtn:hover {
-    background: rgba(255, 255, 255, 0.04);
-    color: rgba(255, 255, 255, 0.7);
+    background: #f0f5fb;
+    color: #1a2e44;
 }
 
 .tableBtnActive {
-    background: rgba(87, 160, 211, 0.12);
-    color: #57a0d3;
+    background: #edf4fb;
+    color: #0a66c2;
+    border-left-color: #0a66c2;
+    font-weight: 600;
 }
 
 .tableName {
@@ -66,8 +71,9 @@
     font-size: 10px;
     padding: 1px 7px;
     border-radius: 20px;
-    background: rgba(87, 160, 211, 0.18);
-    color: #57a0d3;
+    background: rgba(10, 102, 194, 0.1);
+    color: #0a66c2;
+    font-weight: 600;
 }
 
 /* ── Main ────────────────────────────────────────── */
@@ -75,6 +81,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    background: #f6f9fc;
 }
 
 .toolbar {
@@ -82,14 +89,16 @@
     align-items: center;
     gap: 12px;
     padding: 11px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    border-bottom: 1px solid #dce8f4;
+    background: #ffffff;
     flex-shrink: 0;
 }
 
 .activeTable {
     font-family: "DM Mono", monospace;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
+    color: #1a2e44;
     flex-shrink: 0;
 }
 
@@ -104,94 +113,113 @@
 .searchInput {
     flex: 1;
     padding: 6px 11px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
-    color: #e0e4ef;
+    background: #f6f9fc;
+    border: 1px solid #dce8f4;
+    border-radius: 7px;
+    color: #1a2e44;
     font-size: 13px;
     font-family: "DM Sans", sans-serif;
     outline: none;
-    transition: border-color 0.15s;
+    transition: border-color 0.15s, box-shadow 0.15s;
 }
 
 .searchInput:focus {
-    border-color: rgba(87, 160, 211, 0.5);
+    border-color: #0a66c2;
+    box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.08);
+    background: #ffffff;
 }
 
 .searchInput::placeholder {
-    color: rgba(255, 255, 255, 0.22);
+    color: #a0b4c8;
 }
 
 .searchBtn {
     padding: 6px 13px;
-    background: rgba(87, 160, 211, 0.15);
-    border: 1px solid rgba(87, 160, 211, 0.3);
-    border-radius: 6px;
-    color: #57a0d3;
+    background: #0a66c2;
+    border: 1px solid #0a66c2;
+    border-radius: 7px;
+    color: #ffffff;
     font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
     font-family: "DM Sans", sans-serif;
-    transition: background 0.1s;
+    transition: background 0.12s;
 }
 
 .searchBtn:hover {
-    background: rgba(87, 160, 211, 0.25);
+    background: #004182;
+    border-color: #004182;
 }
 
 .clearBtn {
     padding: 6px 9px;
     background: none;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
-    color: rgba(255, 255, 255, 0.3);
+    border: 1px solid #dce8f4;
+    border-radius: 7px;
+    color: #7a98b5;
     font-size: 11px;
     cursor: pointer;
-    transition: background 0.1s;
+    font-family: "DM Sans", sans-serif;
+    transition: background 0.12s, color 0.12s;
 }
 
 .clearBtn:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: #f0f5fb;
+    color: #1a2e44;
 }
 
 .countLabel {
     margin-left: auto;
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.22);
+    color: #7a98b5;
+    font-weight: 500;
     flex-shrink: 0;
 }
 
 .refreshBtn {
     padding: 5px 8px;
     background: none;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 6px;
-    color: rgba(255, 255, 255, 0.28);
+    border: 1px solid #dce8f4;
+    border-radius: 7px;
+    color: #a0b4c8;
     font-size: 14px;
     cursor: pointer;
     flex-shrink: 0;
-    transition: color 0.1s;
+    transition: color 0.12s, background 0.12s;
 }
 
 .refreshBtn:hover {
-    color: rgba(255, 255, 255, 0.7);
+    color: #0a66c2;
+    background: #f0f5fb;
+}
+
+/* ── Table scroll container ───────────────────────── */
+.tableScroll {
+    flex: 1;
+    overflow: auto;
+}
+
+.tableInner {
+    min-width: fit-content;
+    width: 100%;
 }
 
 /* ── Column headers ──────────────────────────────── */
 .colHeader {
     display: grid;
     gap: 10px;
-    padding: 6px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    background: rgba(0, 0, 0, 0.2);
+    padding: 7px 20px;
+    border-bottom: 1px solid #e8eef5;
+    background: #f0f5fb;
     flex-shrink: 0;
 }
 
 .colLabel {
     font-size: 10px;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: rgba(255, 255, 255, 0.22);
+    letter-spacing: 0.06em;
+    color: #7a98b5;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -199,36 +227,36 @@
 
 /* ── Records ─────────────────────────────────────── */
 .records {
-    flex: 1;
-    overflow-y: auto;
+    width: 100%;
 }
 
 .row {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid #e8eef5;
     cursor: pointer;
     padding: 0 20px;
+    background: #ffffff;
     transition: background 0.1s;
 }
 
 .row:hover {
-    background: rgba(255, 255, 255, 0.02);
+    background: #f6f9fc;
 }
 
 .rowExpanded {
-    background: rgba(87, 160, 211, 0.04);
-    border-left: 2px solid rgba(87, 160, 211, 0.35);
+    background: #edf4fb;
+    border-left: 3px solid #0a66c2;
 }
 
 .rowSummary {
     display: grid;
     gap: 10px;
-    padding: 9px 0;
+    padding: 10px 0;
     align-items: center;
 }
 
 .cell {
     font-size: 13px;
-    color: #c8cdd8;
+    color: #2e4a65;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -236,7 +264,7 @@
 
 /* ── Detail panel ────────────────────────────────── */
 .detailPanel {
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid #dce8f4;
     padding: 12px 0 16px;
     display: flex;
     flex-direction: column;
@@ -253,7 +281,7 @@
 .detailKey {
     font-family: "DM Mono", monospace;
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.25);
+    color: #a0b4c8;
     padding-top: 2px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -262,19 +290,20 @@
 
 .detailVal {
     font-size: 13px;
-    color: #e0e4ef;
+    color: #1a2e44;
     word-break: break-word;
 }
 
 .expandBtn {
     font-size: 11px;
-    color: #57a0d3;
+    color: #0a66c2;
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
     font-family: "DM Sans", sans-serif;
-    opacity: 0.7;
+    font-weight: 600;
+    opacity: 0.75;
     transition: opacity 0.1s;
 }
 
@@ -285,12 +314,12 @@
 .longText {
     font-family: "DM Mono", monospace;
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.5);
+    color: #5a7a95;
     white-space: pre-wrap;
     word-break: break-word;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 6px;
+    background: #f6f9fc;
+    border: 1px solid #dce8f4;
+    border-radius: 7px;
     padding: 10px 12px;
     margin: 6px 0 0;
     max-height: 220px;
@@ -304,104 +333,108 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    border-top: 1px solid #dce8f4;
+    background: #ffffff;
     flex-shrink: 0;
 }
 
 .pgBtn {
-    padding: 6px 14px;
+    padding: 6px 16px;
     background: none;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
-    color: rgba(255, 255, 255, 0.4);
+    border: 1px solid #dce8f4;
+    border-radius: 7px;
+    color: #5a7a95;
     font-size: 12px;
+    font-weight: 600;
     cursor: pointer;
     font-family: "DM Sans", sans-serif;
-    transition: background 0.1s, color 0.1s;
+    transition: background 0.12s, color 0.12s, border-color 0.12s;
 }
 
 .pgBtn:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.8);
+    background: #f0f5fb;
+    color: #0a66c2;
+    border-color: #b8cfe8;
 }
 
 .pgBtn:disabled {
-    opacity: 0.25;
+    opacity: 0.3;
     cursor: default;
 }
 
 .pgLabel {
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.22);
+    color: #7a98b5;
+    font-weight: 500;
 }
 
 /* ── Field helpers ───────────────────────────────── */
 .nullVal {
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.18);
+    color: #c8d8e8;
 }
 
 .timestamp {
     font-family: "DM Mono", monospace;
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.38);
+    color: #7a98b5;
 }
 
 .truncated {
-    color: rgba(255, 255, 255, 0.55);
+    color: #5a7a95;
 }
 
 /* ── Badges ──────────────────────────────────────── */
 .badge {
     display: inline-block;
     font-size: 11px;
-    font-weight: 500;
-    padding: 2px 8px;
+    font-weight: 600;
+    padding: 2px 9px;
     border-radius: 20px;
 }
 
 .badgeGreen {
-    background: rgba(74, 222, 128, 0.12);
-    color: #4ade80;
+    background: rgba(22, 163, 74, 0.1);
+    color: #16a34a;
 }
 
 .badgeBlue {
-    background: rgba(87, 160, 211, 0.15);
-    color: #57a0d3;
+    background: rgba(10, 102, 194, 0.1);
+    color: #0a66c2;
 }
 
 .badgeAmber {
-    background: rgba(251, 191, 36, 0.12);
-    color: #fbbf24;
+    background: rgba(217, 119, 6, 0.1);
+    color: #b45309;
 }
 
 .badgeTeal {
-    background: rgba(45, 212, 191, 0.12);
-    color: #2dd4bf;
+    background: rgba(13, 148, 136, 0.1);
+    color: #0d9488;
 }
 
 .badgeRed {
-    background: rgba(248, 113, 113, 0.12);
-    color: #f87171;
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
 }
 
 .badgeGray {
-    background: rgba(255, 255, 255, 0.07);
-    color: rgba(255, 255, 255, 0.38);
+    background: rgba(100, 116, 139, 0.08);
+    color: #64748b;
 }
 
 /* ── State messages ──────────────────────────────── */
 .stateMsg {
-    padding: 40px 20px;
+    padding: 48px 20px;
     text-align: center;
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.2);
+    color: #a0b4c8;
 }
 
 .errorMsg {
-    padding: 16px 20px;
+    padding: 14px 20px;
     font-size: 13px;
-    color: #f87171;
-    background: rgba(248, 113, 113, 0.07);
-    border-bottom: 1px solid rgba(248, 113, 113, 0.12);
+    color: #dc2626;
+    background: rgba(220, 38, 38, 0.05);
+    border-bottom: 1px solid rgba(220, 38, 38, 0.12);
 }
