@@ -14,10 +14,18 @@ import EP7 from "../assets/landing_page_thumbnails/EP7.png";
 import EP8 from "../assets/landing_page_thumbnails/EP8.png";
 import EP9 from "../assets/landing_page_thumbnails/EP9.png";
 import EP10 from "../assets/landing_page_thumbnails/EP10.png";
+import EP11 from "../assets/landing_page_thumbnails/EP11.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 const EPISODES = [
+  {
+    num: 11,
+    title: "Does the AI Actually Learn?",
+    thumb: EP11,
+    url: "https://www.linkedin.com/posts/daneahern_episode-11-of-building-ryze-this-is-bob-activity-7440383984909340672-ilXO?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "Bob Callahan is finishing his accounting degree at night while working construction during the day. I played both roles — recruiter and candidate — on a real Zoom call. Then I asked RYZE Intelligence 6 questions. Some worked. Some failed completely. The system knew about the call OR the resume. Never both — until we connected them. One foreign key. That's all it took. More data. Smarter AI.",
+  },
   {
     num: 10,
     title: "Adding Candidates to the Platform",
@@ -387,7 +395,7 @@ export default function Landing() {
       <section className={styles.episodesSection}>
         <div className={styles.container}>
           <div className={styles.eyebrow}>Building in Public</div>
-          <h2 className={styles.sectionH2}>10 episodes. Still building.</h2>
+          <h2 className={styles.sectionH2}>11 episodes. Still building.</h2>
           <p className={styles.sectionP}>
             Every major milestone gets a video — published on <strong>LinkedIn</strong>. Hover any episode to see what was built.
           </p>
@@ -514,17 +522,19 @@ export default function Landing() {
             </div>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>Phase 5</div>
-              <div className={styles.nextTitle}>Candidate & Employer Dashboards</div>
+              <div className={styles.nextNum}>EP 12</div>
+              <div className={styles.nextTitle}>Unlocking Zoom — What Can It Really Do?</div>
               <p className={styles.nextDesc}>
-                Candidates will see exactly how their profile looks to employers — what's
-                strong, what's missing, what RYZE Intelligence says about them. Employers
-                will see potential candidate matches against their open roles and a preview
-                of how their job postings appear on the platform. Both dashboards give users
-                a reason to log back in between calls.
+                Episode 11 revealed a gap: the transcript never saved. Episode 12 goes
+                deep into Zoom's API to find out why — and what else it's capable of.
+                Can RYZE use Zoom to send marketing material to prospects? Can it trigger
+                follow-up sequences after a call ends? The webhook is just the beginning.
+                This episode maps out what's actually possible.
               </p>
-              <span className={styles.nextBadge}>In progress</span>
+              <span className={styles.nextBadge}>Up next</span>
             </div>
+
+
 
             <div className={styles.nextCard}>
               <div className={styles.nextNum}>Beyond</div>
