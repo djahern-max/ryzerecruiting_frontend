@@ -16,6 +16,7 @@ import TermsOfService from './pages/TermsOfService';
 import EmployerRoster from './pages/EmployerRoster';
 import CandidatesPage from './pages/CandidatesPage';
 import ChatPage from './pages/ChatPage';
+import DBExplorer from './pages/admin/DBExplorer';
 
 const loadingScreen = (
   <div style={{
@@ -139,6 +140,14 @@ function App() {
             element={
               <AdminRoute>
                 <ChatPage />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/db-explorer"
+            element={
+              <AdminRoute>
+                <DBExplorer />
               </AdminRoute>
             }
           />
