@@ -518,7 +518,7 @@ export default function Landing() {
                 notes. Just a record of what was discussed, attached to the right candidate
                 or employer the moment the call ends.
               </p>
-              <span className={styles.nextBadge}>Recording soon</span>
+              <span className={styles.nextBadgePosted}>✓ Posted · March 19, 2026</span>
             </div>
 
             <div className={styles.nextCard}>
@@ -536,23 +536,7 @@ export default function Landing() {
 
 
 
-            <div className={styles.nextCard}>
-              <div className={styles.nextNum}>Beyond</div>
-              <div className={styles.nextTitle}>Honestly? Still Figuring It Out.</div>
-              <p className={styles.nextDesc}>
-                I know what the next two episodes look like. After that, the roadmap is
-                driven by what I learn as I run this platform in the real world.  The problems that surface in actual use determine what gets
-                built next. Follow along and you'll find out when I do.
-              </p>
-              <a
-                href="https://www.linkedin.com/in/daneahern/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.nextBadgeFollow}
-              >
-                Follow to find out →
-              </a>
-            </div>
+
 
           </div>
         </div>

@@ -10,6 +10,8 @@
   color: #1a2e44;
   background: #fff;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  /* add this */
 }
 
 /* ── Header ────────────────────────────────────────────────────── */
@@ -872,6 +874,19 @@
   font-weight: 700;
   color: #0a66c2;
   background: #e8f2fc;
+  border-radius: 100px;
+  padding: 3px 10px;
+  width: fit-content;
+  margin-top: 4px;
+}
+
+.nextBadgePosted {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #1a7f4b;
+  background: #e6f7ef;
+  border: 1px solid #b8e6ce;
   border-radius: 100px;
   padding: 3px 10px;
   width: fit-content;
