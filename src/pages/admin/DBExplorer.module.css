@@ -1,5 +1,4 @@
 /* src/pages/admin/DBExplorer.module.css */
-
 .page {
     min-height: 100vh;
     background: #f6f9fc;
@@ -15,7 +14,7 @@
     overflow: hidden;
 }
 
-/* ── Sidebar ─────────────────────────────────────── */
+/* ── Sidebar */
 .sidebar {
     border-right: 1px solid #dce8f4;
     padding: 18px 0;
@@ -71,12 +70,17 @@
     font-size: 10px;
     padding: 1px 7px;
     border-radius: 20px;
-    background: rgba(10, 102, 194, 0.1);
-    color: #0a66c2;
+    background: rgba(100, 116, 139, 0.08);
+    color: #7a98b5;
     font-weight: 600;
 }
 
-/* ── Main ────────────────────────────────────────── */
+.tableCountActive {
+    background: rgba(10, 102, 194, 0.1);
+    color: #0a66c2;
+}
+
+/* ── Main */
 .main {
     display: flex;
     flex-direction: column;
@@ -87,7 +91,7 @@
 .toolbar {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     padding: 11px 20px;
     border-bottom: 1px solid #dce8f4;
     background: #ffffff;
@@ -107,7 +111,7 @@
     align-items: center;
     gap: 6px;
     flex: 1;
-    max-width: 360px;
+    max-width: 320px;
 }
 
 .searchInput {
@@ -168,6 +172,55 @@
     color: #1a2e44;
 }
 
+.filterToggleBtn {
+    padding: 5px 10px;
+    background: none;
+    border: 1px solid #dce8f4;
+    border-radius: 7px;
+    color: #7a98b5;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: "DM Sans", sans-serif;
+    flex-shrink: 0;
+    transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+
+.filterToggleBtn:hover {
+    background: #f0f5fb;
+    color: #1a2e44;
+}
+
+.filterToggleBtnActive {
+    background: rgba(10, 102, 194, 0.07);
+    border-color: #b0cce8;
+    color: #0a66c2;
+}
+
+.exportBtn {
+    padding: 5px 12px;
+    background: none;
+    border: 1px solid #dce8f4;
+    border-radius: 7px;
+    color: #5a7a95;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: "DM Sans", sans-serif;
+    flex-shrink: 0;
+    transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+
+.exportBtn:hover:not(:disabled) {
+    background: #f0f5fb;
+    color: #0a66c2;
+    border-color: #b0cce8;
+}
+
+.exportBtn:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
 .countLabel {
     margin-left: auto;
     font-size: 12px;
@@ -193,7 +246,46 @@
     background: #f0f5fb;
 }
 
-/* ── Table scroll container ───────────────────────── */
+/* ── Filter bar */
+.filterBar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    background: #f0f5fb;
+    border-bottom: 1px solid #dce8f4;
+    flex-shrink: 0;
+}
+
+.filterLabel {
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    color: #7a98b5;
+    flex-shrink: 0;
+}
+
+.filterInput {
+    padding: 5px 9px;
+    background: #ffffff;
+    border: 1px solid #dce8f4;
+    border-radius: 6px;
+    color: #1a2e44;
+    font-size: 12px;
+    font-family: "DM Sans", sans-serif;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.filterInput:focus {
+    border-color: #0a66c2;
+}
+
+.filterSep {
+    font-size: 12px;
+    color: #a0b4c8;
+}
+
+/* ── Scroll + table */
 .tableScroll {
     flex: 1;
     overflow: auto;
@@ -204,7 +296,6 @@
     width: 100%;
 }
 
-/* ── Column headers ──────────────────────────────── */
 .colHeader {
     display: grid;
     gap: 10px;
@@ -212,6 +303,9 @@
     border-bottom: 1px solid #e8eef5;
     background: #f0f5fb;
     flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 .colLabel {
@@ -225,7 +319,23 @@
     white-space: nowrap;
 }
 
-/* ── Records ─────────────────────────────────────── */
+.colLabelSortable {
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.12s;
+}
+
+.colLabelSortable:hover {
+    color: #0a66c2;
+}
+
+.sortIndicator {
+    font-size: 10px;
+    color: #0a66c2;
+    font-weight: 700;
+}
+
+/* ── Rows */
 .records {
     width: 100%;
 }
@@ -262,13 +372,142 @@
     white-space: nowrap;
 }
 
-/* ── Detail panel ────────────────────────────────── */
+/* ── Detail panel */
 .detailPanel {
     border-top: 1px solid #dce8f4;
-    padding: 12px 0 16px;
+    padding: 4px 0 16px;
     display: flex;
     flex-direction: column;
     gap: 5px;
+}
+
+.detailActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0 8px;
+    flex-wrap: wrap;
+}
+
+.editBtn {
+    padding: 5px 12px;
+    background: rgba(10, 102, 194, 0.07);
+    border: 1px solid rgba(10, 102, 194, 0.2);
+    border-radius: 6px;
+    color: #0a66c2;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: "DM Sans", sans-serif;
+    transition: background 0.12s;
+}
+
+.editBtn:hover {
+    background: rgba(10, 102, 194, 0.12);
+}
+
+.saveBtn {
+    padding: 5px 14px;
+    background: #0a66c2;
+    border: 1px solid #0a66c2;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: "DM Sans", sans-serif;
+    transition: background 0.12s;
+}
+
+.saveBtn:hover:not(:disabled) {
+    background: #004182;
+}
+
+.saveBtn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.cancelEditBtn {
+    padding: 5px 12px;
+    background: none;
+    border: 1px solid #dce8f4;
+    border-radius: 6px;
+    color: #7a98b5;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: "DM Sans", sans-serif;
+    transition: background 0.12s, color 0.12s;
+}
+
+.cancelEditBtn:hover {
+    background: #f0f5fb;
+    color: #1a2e44;
+}
+
+.deleteBtn {
+    padding: 5px 12px;
+    background: none;
+    border: 1px solid rgba(220, 38, 38, 0.2);
+    border-radius: 6px;
+    color: #dc2626;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: "DM Sans", sans-serif;
+    transition: background 0.12s;
+    margin-left: auto;
+}
+
+.deleteBtn:hover {
+    background: rgba(220, 38, 38, 0.06);
+}
+
+.deleteConfirm {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 7px 10px;
+    background: rgba(220, 38, 38, 0.04);
+    border: 1px solid rgba(220, 38, 38, 0.15);
+    border-radius: 7px;
+    width: 100%;
+}
+
+.deleteConfirmText {
+    font-size: 12px;
+    color: #dc2626;
+    font-weight: 500;
+    flex: 1;
+}
+
+.confirmDeleteBtn {
+    padding: 4px 12px;
+    background: #dc2626;
+    border: 1px solid #dc2626;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: "DM Sans", sans-serif;
+}
+
+.confirmDeleteBtn:hover:not(:disabled) {
+    background: #b91c1c;
+}
+
+.confirmDeleteBtn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.actionError {
+    font-size: 11px;
+    color: #dc2626;
+    font-weight: 500;
 }
 
 .detailRow {
@@ -288,12 +527,59 @@
     white-space: nowrap;
 }
 
+.detailKeyEditing {
+    color: #0a66c2;
+    font-weight: 700;
+}
+
 .detailVal {
     font-size: 13px;
     color: #1a2e44;
     word-break: break-word;
 }
 
+/* ── Edit inputs */
+.editInput {
+    width: 100%;
+    padding: 5px 9px;
+    background: #ffffff;
+    border: 1px solid #b0cce8;
+    border-radius: 5px;
+    color: #1a2e44;
+    font-size: 13px;
+    font-family: "DM Sans", sans-serif;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.editInput:focus {
+    border-color: #0a66c2;
+    box-shadow: 0 0 0 2px rgba(10, 102, 194, 0.1);
+}
+
+.editTextarea {
+    width: 100%;
+    padding: 7px 9px;
+    background: #ffffff;
+    border: 1px solid #b0cce8;
+    border-radius: 5px;
+    color: #1a2e44;
+    font-size: 13px;
+    font-family: "DM Mono", monospace;
+    outline: none;
+    box-sizing: border-box;
+    resize: vertical;
+    line-height: 1.5;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.editTextarea:focus {
+    border-color: #0a66c2;
+    box-shadow: 0 0 0 2px rgba(10, 102, 194, 0.1);
+}
+
+/* ── Long text / expand */
 .expandBtn {
     font-size: 11px;
     color: #0a66c2;
@@ -327,7 +613,27 @@
     line-height: 1.5;
 }
 
-/* ── Footer ──────────────────────────────────────── */
+/* ── FK link */
+.fkLink {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #0a66c2;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: "DM Mono", monospace;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.1s;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.fkLink:hover {
+    opacity: 1;
+}
+
+/* ── Footer */
 .footer {
     display: flex;
     align-items: center;
@@ -368,7 +674,7 @@
     font-weight: 500;
 }
 
-/* ── Field helpers ───────────────────────────────── */
+/* ── Field helpers */
 .nullVal {
     font-size: 12px;
     color: #c8d8e8;
@@ -384,7 +690,7 @@
     color: #5a7a95;
 }
 
-/* ── Badges ──────────────────────────────────────── */
+/* ── Badges */
 .badge {
     display: inline-block;
     font-size: 11px;
@@ -423,7 +729,7 @@
     color: #64748b;
 }
 
-/* ── State messages ──────────────────────────────── */
+/* ── State messages */
 .stateMsg {
     padding: 48px 20px;
     text-align: center;
