@@ -11,14 +11,16 @@ const TABLES = [
     "users", "waitlist", "contacts",
 ];
 
+// ── CHANGED: added ai_years_experience to candidates, website_url to
+//   employer_profiles, employer_profile_id to job_orders, tenant_id to users
 const SUMMARY_COLS = {
     bookings: ["id", "booking_type", "status", "employer_name", "company_name", "date", "time_slot", "call_outcome"],
-    candidates: ["id", "name", "current_title", "current_company", "location", "ai_career_level", "created_at"],
-    employer_profiles: ["id", "company_name", "ai_industry", "primary_contact_email", "relationship_status", "created_at"],
-    job_orders: ["id", "title", "location", "status", "salary_min", "salary_max", "created_at"],
+    candidates: ["id", "name", "current_title", "current_company", "location", "ai_career_level", "ai_years_experience", "created_at"],
+    employer_profiles: ["id", "company_name", "website_url", "ai_industry", "primary_contact_email", "relationship_status", "created_at"],
+    job_orders: ["id", "title", "location", "status", "salary_min", "salary_max", "employer_profile_id", "created_at"],
     chat_sessions: ["id", "user_id", "title", "created_at", "updated_at"],
     chat_messages: ["id", "session_id", "role", "content", "created_at"],
-    users: ["id", "email", "full_name", "user_type", "oauth_provider", "created_at"],
+    users: ["id", "email", "full_name", "user_type", "oauth_provider", "tenant_id", "created_at"],
     waitlist: ["id", "email", "intent", "source", "created_at"],
     contacts: ["id", "name", "email", "message"],
 };
@@ -28,6 +30,7 @@ const STATUS_FIELDS = new Set([
     "intent", "provider", "booking_type", "call_outcome",
 ]);
 
+// ── CHANGED: added job_order statuses (open, filled, on_hold)
 const BADGE_COLORS = {
     pending: "amber", confirmed: "green", cancelled: "red",
     completed: "green", complete: "green", failed: "red",
@@ -37,12 +40,27 @@ const BADGE_COLORS = {
     inbound: "blue", outbound_employer: "teal",
     outbound_candidate: "teal", inbound_candidate: "blue",
     placed: "green", not_a_fit: "red", follow_up: "amber", no_show: "red",
+    // job_orders
+    open: "green", filled: "blue", on_hold: "amber",
 };
 
+// ── CHANGED: expanded to cover all text blob fields across all tables
 const LONG_TEXT_FIELDS = new Set([
+    // bookings
     "meeting_summary", "meeting_next_steps", "meeting_transcript",
-    "meeting_keywords", "call_notes", "ai_hiring_needs",
-    "ai_culture_notes", "ai_talking_points",
+    "meeting_keywords", "call_notes",
+    // candidates
+    "ai_summary", "ai_experience", "ai_education",
+    "ai_outreach_message", "linkedin_raw_text", "notes",
+    // employer_profiles
+    "ai_company_overview", "ai_hiring_needs", "ai_talking_points",
+    "ai_red_flags", "ai_brief_raw", "recruiter_notes", "raw_text",
+    // job_orders
+    "requirements",
+    // chat
+    "content", "structured_data",
+    // contacts
+    "message",
 ]);
 
 function FieldValue({ fieldKey, value }) {
