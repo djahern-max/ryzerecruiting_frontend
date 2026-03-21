@@ -5,6 +5,7 @@ import CandidateModal from "./CandidateModal";
 import styles from "./IntelligenceMessage.module.css";
 import CandidateResultCard from "./CandidateResultCard";
 import EmployerResultCard from "./EmployerResultCard";
+import { useNavigate } from "react-router-dom";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
@@ -15,6 +16,7 @@ export default function IntelligenceMessage({ message }) {
     const [fetchedEmployers, setFetchedEmployers] = useState(null);
     const [loadingCards, setLoadingCards] = useState(false);
     const [selectedCandidate, setSelectedCandidate] = useState(null);
+    const navigate = useNavigate();
 
     const candidateIds = message.candidates || [];
     const employerIds = message.employers || [];
@@ -140,7 +142,7 @@ export default function IntelligenceMessage({ message }) {
                                 <EmployerResultCard
                                     key={e.id}
                                     employer={e}
-                                    onViewEmployer={() => {/* Step 5 — wire to EmployerRoster */ }}
+                                    onViewEmployer={(employer) => navigate(`/admin/employers?expand=${employer.id}`)}
                                 />
                             ))}
                         </div>

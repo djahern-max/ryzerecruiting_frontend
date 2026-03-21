@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import styles from './EmployerRoster.module.css';
 import AdminHeader from '../components/AdminHeader';
+import { useNavigate, useLocation } from "react-router-dom";
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -24,8 +25,8 @@ const STATUS_STYLES = {
     not_a_fit: { background: '#fee2e2', color: '#b91c1c', border: '1px solid #fca5a5' },
 };
 
-function EmployerRow({ profile, onUpdate }) {
-    const [expanded, setExpanded] = useState(false);
+function EmployerRow({ profile, onUpdate, defaultExpanded = false }) {
+    const [expanded, setExpanded] = useState(defaultExpanded);
     const [notes, setNotes] = useState(profile.recruiter_notes || '');
     const [editingNotes, setEditingNotes] = useState(false);
     const [savingNotes, setSavingNotes] = useState(false);
@@ -274,10 +275,17 @@ function EmployerRow({ profile, onUpdate }) {
 export default function EmployerRoster() {
     const { user } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [profiles, setProfiles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const [expandedId, setExpandedId] = useState(() => {
+        const params = new URLSearchParams(location.search);
+        const id = params.get("expand");
+        return id ? parseInt(id) : null;
+    });
 
     useEffect(() => {
         async function fetchProfiles() {
@@ -347,8 +355,13 @@ export default function EmployerRoster() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {profiles.map(profile => (
-                                    <EmployerRow key={profile.id} profile={profile} onUpdate={handleUpdate} />
+                                {profiles.map((profile) => (
+                                    <EmployerRow
+                                        key={profile.id}
+                                        profile={profile}
+                                        onUpdate={handleUpdate}
+                                        defaultExpanded={expandedId === profile.id}
+                                    />
                                 ))}
                             </tbody>
                         </table>
