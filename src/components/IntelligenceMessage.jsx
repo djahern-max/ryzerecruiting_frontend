@@ -90,10 +90,15 @@ export default function IntelligenceMessage({ message }) {
     }
 
     // Build the "See More" button label
-    const parts = [];
-    if (candidateIds.length > 0) parts.push(`${candidateIds.length} candidate${candidateIds.length !== 1 ? "s" : ""}`);
-    if (employerIds.length > 0) parts.push(`${employerIds.length} employer${employerIds.length !== 1 ? "s" : ""}`);
-    const toggleLabel = expanded ? "See Less ↑" : `See More (${parts.join(", ")}) ↓`;
+    // REPLACE WITH
+    const candidateLabel = candidateIds.length > 0
+        ? `${candidateIds.length} Candidate${candidateIds.length !== 1 ? "s" : ""}`
+        : null;
+    const employerLabel = employerIds.length > 0
+        ? `${employerIds.length} Employer${employerIds.length !== 1 ? "s" : ""}`
+        : null;
+    const countLabel = [candidateLabel, employerLabel].filter(Boolean).join(" & ");
+    const toggleLabel = expanded ? "Hide ↑" : `View ${countLabel} ↓`;
 
     return (
         <div className={styles.wrapper}>
