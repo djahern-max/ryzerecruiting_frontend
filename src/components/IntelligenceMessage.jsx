@@ -3,51 +3,11 @@ import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import CandidateModal from "./CandidateModal";
 import styles from "./IntelligenceMessage.module.css";
+import CandidateResultCard from "./CandidateResultCard";
+import EmployerResultCard from "./EmployerResultCard";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-const CAREER_LEVEL_COLORS = {
-    junior: { bg: "#f0fdf4", color: "#15803d", border: "#bbf7d0" },
-    mid: { bg: "#eff6ff", color: "#1d4ed8", border: "#bfdbfe" },
-    senior: { bg: "#faf5ff", color: "#7c3aed", border: "#e9d5ff" },
-    executive: { bg: "#fff7ed", color: "#c2410c", border: "#fed7aa" },
-};
-
-function CandidateResultCard({ candidate, onViewProfile }) {
-    const level = candidate.ai_career_level?.toLowerCase();
-    const levelStyle = CAREER_LEVEL_COLORS[level] || CAREER_LEVEL_COLORS.mid;
-    const hasCPA = candidate.ai_certifications?.toUpperCase().includes("CPA");
-    const hasCFA = candidate.ai_certifications?.toUpperCase().includes("CFA");
-
-    return (
-        <div className={styles.resultCard}>
-            <div className={styles.cardMain}>
-                <div className={styles.cardName}>{candidate.name}</div>
-                <div className={styles.cardMeta}>
-                    {candidate.current_title}
-                    {candidate.current_company && (
-                        <><span className={styles.cardDot}>·</span>{candidate.current_company}</>
-                    )}
-                </div>
-                {candidate.location && (
-                    <div className={styles.cardLocation}>{candidate.location}</div>
-                )}
-                <div className={styles.cardBadges}>
-                    {level && (
-                        <span className={styles.badge} style={{ background: levelStyle.bg, color: levelStyle.color, borderColor: levelStyle.border }}>
-                            {level.charAt(0).toUpperCase() + level.slice(1)}
-                        </span>
-                    )}
-                    {hasCPA && <span className={styles.badgeCert}>CPA</span>}
-                    {hasCFA && <span className={styles.badgeCert}>CFA</span>}
-                </div>
-            </div>
-            <button className={styles.viewProfileBtn} onClick={() => onViewProfile(candidate)}>
-                View Profile →
-            </button>
-        </div>
-    );
-}
 
 export default function IntelligenceMessage({ message }) {
     const [expanded, setExpanded] = useState(false);
@@ -60,6 +20,7 @@ export default function IntelligenceMessage({ message }) {
     const employerIds = message.employers || [];
     const hasCards = candidateIds.length > 0 || employerIds.length > 0;
 
+    // UPDATE handleToggle — add employer fetching
     async function handleToggle() {
         if (expanded) {
             setExpanded(false);
@@ -67,22 +28,41 @@ export default function IntelligenceMessage({ message }) {
         }
 
         setExpanded(true);
+        const token = localStorage.getItem("token");
 
-        // Only fetch if we haven't already
+        const fetches = [];
+
         if (fetchedCandidates === null && candidateIds.length > 0) {
-            setLoadingCards(true);
-            try {
-                const token = localStorage.getItem("token");
-                const results = await Promise.all(
+            fetches.push(
+                Promise.all(
                     candidateIds.map((id) =>
                         fetch(`${API_BASE}/api/candidates/${id}`, {
                             headers: { Authorization: `Bearer ${token}` },
                         }).then((r) => r.ok ? r.json() : null)
                     )
-                );
-                setFetchedCandidates(results.filter(Boolean));
+                ).then((results) => setFetchedCandidates(results.filter(Boolean)))
+            );
+        }
+
+        if (fetchedEmployers === null && employerIds.length > 0) {
+            fetches.push(
+                Promise.all(
+                    employerIds.map((id) =>
+                        fetch(`${API_BASE}/api/employer-profiles/${id}`, {
+                            headers: { Authorization: `Bearer ${token}` },
+                        }).then((r) => r.ok ? r.json() : null)
+                    )
+                ).then((results) => setFetchedEmployers(results.filter(Boolean)))
+            );
+        }
+
+        if (fetches.length > 0) {
+            setLoadingCards(true);
+            try {
+                await Promise.all(fetches);
             } catch (e) {
-                setFetchedCandidates([]);
+                setFetchedCandidates(fetchedCandidates ?? []);
+                setFetchedEmployers(fetchedEmployers ?? []);
             } finally {
                 setLoadingCards(false);
             }
@@ -134,6 +114,7 @@ export default function IntelligenceMessage({ message }) {
             )}
 
             {/* ── Expanded cards ── */}
+
             {expanded && (
                 <div className={styles.cardsSection}>
                     {loadingCards && (
@@ -153,9 +134,19 @@ export default function IntelligenceMessage({ message }) {
                     {!loadingCards && fetchedCandidates?.length === 0 && candidateIds.length > 0 && (
                         <div className={styles.cardsEmpty}>Could not load candidate profiles.</div>
                     )}
+                    {!loadingCards && fetchedEmployers?.length > 0 && (
+                        <div className={styles.cardsList}>
+                            {fetchedEmployers.map((e) => (
+                                <EmployerResultCard
+                                    key={e.id}
+                                    employer={e}
+                                    onViewEmployer={() => {/* Step 5 — wire to EmployerRoster */ }}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
             )}
-
             {/* ── Candidate modal ── */}
             {selectedCandidate && (
                 <CandidateModal

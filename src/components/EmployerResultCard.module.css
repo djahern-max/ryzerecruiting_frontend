@@ -1,0 +1,79 @@
+/* src/components/EmployerResultCard.module.css */
+
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--surface-50, #f8faff);
+    border: 1.5px solid var(--border-100, #e2e8f0);
+    border-radius: 10px;
+    padding: 12px 14px;
+    transition: border-color 150ms;
+}
+
+.card:hover {
+    border-color: var(--brand-300, #93c5fd);
+}
+
+.cardMain {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.cardName {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-900);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cardMeta {
+    font-size: 0.82rem;
+    color: var(--text-600);
+}
+
+.cardSize {
+    font-size: 0.78rem;
+    color: var(--text-500);
+}
+
+.cardBadges {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: 20px;
+    border: 1px solid;
+    padding: 2px 8px;
+}
+
+.viewEmployerBtn {
+    flex-shrink: 0;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--brand-600, #0a66c2);
+    background: none;
+    border: 1px solid var(--brand-200, #bfdbfe);
+    border-radius: 7px;
+    padding: 5px 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 150ms, border-color 150ms;
+}
+
+.viewEmployerBtn:hover {
+    background: var(--brand-50, #eff6ff);
+    border-color: var(--brand-400, #3b82f6);
+}
