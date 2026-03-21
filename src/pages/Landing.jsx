@@ -525,18 +525,6 @@ export default function Landing() {
           <div className={styles.nextGrid}>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 11</div>
-              <div className={styles.nextTitle}>Testing AI Meeting Notes End-to-End</div>
-              <p className={styles.nextDesc}>
-                The full loop — book a call, run it on Zoom, and watch the AI-generated
-                meeting summary land automatically in the database. No copy/paste. No manual
-                notes. Just a record of what was discussed, attached to the right candidate
-                or employer the moment the call ends.
-              </p>
-              <span className={styles.nextBadgePosted}>✓ Posted · March 19, 2026</span>
-            </div>
-
-            <div className={styles.nextCard}>
               <div className={styles.nextNum}>EP 12</div>
               <div className={styles.nextTitle}>The DB Explorer — A Tool That Became a Feature</div>
               <p className={styles.nextDesc}>
