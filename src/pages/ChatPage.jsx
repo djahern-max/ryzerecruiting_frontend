@@ -5,6 +5,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import styles from "./ChatPage.module.css";
 import AdminHeader from '../components/AdminHeader';
+import IntelligenceMessage from "../components/IntelligenceMessage";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
@@ -266,40 +267,8 @@ function MessageBubble({ message }) {
                 {isUser ? (
                     <p className={styles.bubbleText}>{message.content}</p>
                 ) : (
-                    <>
-                        <div className={styles.bubbleText}>
-                            {message.streaming
-                                ? <p style={{ whiteSpace: "pre-wrap", margin: 0 }}>{message.content}</p>
-                                : <ReactMarkdown>{message.content}</ReactMarkdown>
-                            }
-                        </div>
-                        {message.streaming && <span className={styles.streamCursor}>▋</span>}
 
-                        {!message.streaming && message.candidates?.length > 0 && (
-                            <div className={styles.inlineCards}>
-                                <div className={styles.inlineCardsLabel}>{message.candidates.length} candidate{message.candidates.length !== 1 ? "s" : ""}</div>
-                                {message.candidates.map((c) => <CandidateCard key={c.id ?? c.name} candidate={c} />)}
-                            </div>
-                        )}
-                        {!message.streaming && message.meetings?.length > 0 && (
-                            <div className={styles.inlineCards}>
-                                <div className={styles.inlineCardsLabel}>{message.meetings.length} meeting{message.meetings.length !== 1 ? "s" : ""}</div>
-                                {message.meetings.map((m) => <MeetingCard key={m.id} meeting={m} />)}
-                            </div>
-                        )}
-                        {!message.streaming && message.employers?.length > 0 && (
-                            <div className={styles.inlineCards}>
-                                <div className={styles.inlineCardsLabel}>{message.employers.length} employer{message.employers.length !== 1 ? "s" : ""}</div>
-                                {message.employers.map((e) => (
-                                    <div key={e.id} className={styles.candidateCard}>
-                                        <div className={styles.cardName}>{e.company_name}</div>
-                                        <div className={styles.cardMeta}>{e.ai_industry}</div>
-                                        {e.ai_company_overview && <p className={styles.cardSummary}>{e.ai_company_overview.slice(0, 160)}…</p>}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </>
+                    <IntelligenceMessage message={message} />
                 )}
             </div>
         </div>

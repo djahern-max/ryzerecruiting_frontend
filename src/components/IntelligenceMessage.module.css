@@ -1,0 +1,216 @@
+/* src/components/IntelligenceMessage.module.css */
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* ── Prose ── */
+.prose {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--text-900);
+}
+
+.prose p {
+    margin: 0 0 0.6em;
+}
+
+.prose p:last-child {
+    margin-bottom: 0;
+}
+
+.streamCursor {
+    display: inline-block;
+    animation: blink 0.9s steps(1) infinite;
+    color: var(--brand-500, #0a66c2);
+    font-weight: 300;
+    margin-left: 2px;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+/* ── Meetings ── */
+.meetingSection {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.meetingRow {
+    font-size: 0.85rem;
+    color: var(--text-600);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.meetingName {
+    font-weight: 600;
+    color: var(--text-800);
+}
+
+.meetingDot {
+    color: var(--text-300);
+}
+
+.meetingMeta {
+    color: var(--text-600);
+}
+
+.meetingTime {
+    color: var(--text-500);
+}
+
+/* ── See More toggle ── */
+.seeMoreBtn {
+    align-self: flex-start;
+    margin-top: 14px;
+    background: none;
+    border: 1px solid var(--border-200, #e2e8f0);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-500, #64748b);
+    cursor: pointer;
+    transition: border-color 150ms, color 150ms, background 150ms;
+}
+
+.seeMoreBtn:hover {
+    border-color: var(--brand-400, #3b82f6);
+    color: var(--brand-600, #0a66c2);
+    background: var(--brand-50, #eff6ff);
+}
+
+/* ── Cards section ── */
+.cardsSection {
+    margin-top: 12px;
+}
+
+.cardsList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cardsLoading,
+.cardsEmpty {
+    font-size: 0.82rem;
+    color: var(--text-400);
+    font-style: italic;
+    padding: 8px 0;
+}
+
+/* ── Candidate result card ── */
+.resultCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--surface-50, #f8faff);
+    border: 1.5px solid var(--border-100, #e2e8f0);
+    border-radius: 10px;
+    padding: 12px 14px;
+    transition: border-color 150ms;
+}
+
+.resultCard:hover {
+    border-color: var(--brand-300, #93c5fd);
+}
+
+.cardMain {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.cardName {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-900);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cardMeta {
+    font-size: 0.82rem;
+    color: var(--text-600);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.cardDot {
+    color: var(--text-300);
+}
+
+.cardLocation {
+    font-size: 0.78rem;
+    color: var(--text-500);
+}
+
+.cardBadges {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: 20px;
+    border: 1px solid;
+    padding: 2px 8px;
+    text-transform: capitalize;
+}
+
+.badgeCert {
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 20px;
+    border: 1px solid #bfdbfe;
+    padding: 2px 8px;
+    background: #eff6ff;
+    color: #1e40af;
+}
+
+/* ── View Profile button ── */
+.viewProfileBtn {
+    flex-shrink: 0;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--brand-600, #0a66c2);
+    background: none;
+    border: 1px solid var(--brand-200, #bfdbfe);
+    border-radius: 7px;
+    padding: 5px 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 150ms, border-color 150ms;
+}
+
+.viewProfileBtn:hover {
+    background: var(--brand-50, #eff6ff);
+    border-color: var(--brand-400, #3b82f6);
+}
