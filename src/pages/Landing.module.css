@@ -11,7 +11,7 @@
   background: #fff;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-  /* add this */
+
 }
 
 /* ── Header ────────────────────────────────────────────────────── */
@@ -252,9 +252,9 @@
   padding: 20px 16px;
   min-height: 200px;
   height: 200px;
-  /* add this — locks the height */
+
   overflow: hidden;
-  /* add this — clips instead of expanding */
+
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -295,7 +295,7 @@
   border-radius: 12px 2px 12px 12px;
   max-width: 85%;
   width: 85%;
-  /* add this */
+
 }
 
 .demoMsgAiBubble {
@@ -307,7 +307,7 @@
   border-radius: 2px 12px 12px 12px;
   max-width: 90%;
   width: 90%;
-  /* add this */
+
 }
 
 .demoThinking {

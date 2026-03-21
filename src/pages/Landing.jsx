@@ -155,6 +155,21 @@ const PHASES = [
       "Employer and job order parsing + embedding — same pipeline",
     ],
   },
+  {
+    id: "5",
+    title: "Intelligence UI Redesign",
+    status: "complete",
+    summary: "Redesigned the Intelligence feature from a card-heavy database browser into a prose-first recruiting assistant. The AI now responds like a senior recruiter — natural, confident paragraphs first, with structured candidate and employer cards available on demand behind a toggle.",
+    bullets: [
+      "Prose-first AI responses — senior recruiter voice, no markdown or field labels",
+      "Updated system prompt — returns conversational prose + structured ID references",
+      "IntelligenceMessage.jsx — new component replacing inline card rendering",
+      "CandidateResultCard.jsx — compact card with career level + cert badges",
+      "EmployerResultCard.jsx — compact card with relationship status badge",
+      "View Candidates / View Employers toggle — lazy-fetches fresh data on demand",
+      "View Profile links to CandidateModal · View Employer navigates to EmployerRoster",
+    ],
+  },
 ];
 
 const DEMO_QUERIES = [
@@ -523,22 +538,45 @@ export default function Landing() {
 
             <div className={styles.nextCard}>
               <div className={styles.nextNum}>EP 12</div>
-              <div className={styles.nextTitle}>Unlocking Zoom — What Can It Really Do?</div>
+              <div className={styles.nextTitle}>The DB Explorer — A Tool That Became a Feature</div>
               <p className={styles.nextDesc}>
-                Episode 11 revealed a gap: the transcript never saved. Episode 12 goes
-                deep into Zoom's API to find out why — and what else it's capable of.
-                Can RYZE use Zoom to send marketing material to prospects? Can it trigger
-                follow-up sequences after a call ends? The webhook is just the beginning.
-                This episode maps out what's actually possible.
+                I built the DB Explorer as a personal debugging tool — a way to see exactly
+                what was in the database without writing SQL by hand. It worked so well it
+                shipped as a feature. This episode is about the moment a utility becomes
+                something worth keeping.
               </p>
               <span className={styles.nextBadge}>Up next</span>
             </div>
 
+            <div className={styles.nextCard}>
+              <div className={styles.nextNum}>EP 13</div>
+              <div className={styles.nextTitle}>Fixing the Zoom Webhook — Getting the Transcript</div>
+              <p className={styles.nextDesc}>
+                Episode 11 revealed a gap: the meeting transcript never saved after the call.
+                This episode goes deep into Zoom's webhook system to find out why — and fixes
+                it. The goal is a complete post-call record: summary, notes, and full transcript
+                attached to the right candidate or employer automatically.
+              </p>
+              <span className={styles.nextBadge}>Coming soon</span>
+            </div>
 
-
-
+            <div className={styles.nextCard}>
+              <div className={styles.nextNum}>EP 14 & 15</div>
+              <div className={styles.nextTitle}>Candidate & Employer Profiles — Built for Clients</div>
+              <p className={styles.nextDesc}>
+                Right now profiles live inside admin edit modals. The next step is building
+                full read-only profile pages — the kind you'd share with a client. Candidate
+                profiles with AI summaries, experience, and outreach. Employer profiles with
+                intelligence briefs, hiring needs, and talking points. Both linked directly
+                from Intelligence chat results.
+              </p>
+              <span className={styles.nextBadge}>Coming soon</span>
+            </div>
 
           </div>
+
+
+
         </div>
       </section>
 
