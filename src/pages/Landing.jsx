@@ -15,10 +15,18 @@ import EP8 from "../assets/landing_page_thumbnails/EP8.png";
 import EP9 from "../assets/landing_page_thumbnails/EP9.png";
 import EP10 from "../assets/landing_page_thumbnails/EP10.png";
 import EP11 from "../assets/landing_page_thumbnails/EP11.png";
+import EP12 from "../assets/landing_page_thumbnails/EP12.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 const EPISODES = [
+  {
+    num: 12,
+    title: "The DB Explorer — A Tool That Became a Feature",
+    thumb: EP12,
+    url: "https://www.linkedin.com/posts/daneahern_i-built-the-db-explorer-as-a-debugging-tool-activity-7441418508527226880-Qs3o?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "I built the DB Explorer as a personal debugging tool — a way to see exactly what was in my database without writing SQL by hand. It worked so well I kept using it every day. So I shipped it. Browse any table, search, sort, filter by date, edit records inline, jump between related records by foreign key, see embedding status, and export to CSV. A utility that became a permanent feature.",
+  },
   {
     num: 11,
     title: "Does the AI Actually Learn?",
@@ -168,6 +176,21 @@ const PHASES = [
       "EmployerResultCard.jsx — compact card with relationship status badge",
       "View Candidates / View Employers toggle — lazy-fetches fresh data on demand",
       "View Profile links to CandidateModal · View Employer navigates to EmployerRoster",
+    ],
+  },
+  {
+    id: "6",
+    title: "DB Explorer",
+    status: "complete",
+    summary: "Built the DB Explorer as a personal debugging tool — a way to inspect the production database without writing raw SQL. It proved so useful during development that it shipped as a permanent admin feature. Gives any technical user full visibility into every table, record, and relationship in the system.",
+    bullets: [
+      "Browse all 9 tables — bookings, candidates, employers, job orders, users, waitlist, chat sessions, chat messages, contacts",
+      "Search, sort, and date range filtering per table",
+      "Inline edit — patch editable fields directly from the UI",
+      "Delete with confirmation — hard delete with row count update",
+      "Foreign key navigation — click any ID to jump to related record",
+      "Embedding badges — visual status for which records have vectors",
+      "CSV export — download the current filtered view",
     ],
   },
 ];
@@ -369,7 +392,7 @@ export default function Landing() {
         <div className={styles.heroContent}>
           <div className={styles.docTag}>
             <span className={styles.livePulse} />
-            Version 11 &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; Building in Public
+            Version 12 &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; Building in Public
           </div>
 
           <h1 className={styles.heroTitle}>
@@ -410,7 +433,7 @@ export default function Landing() {
       <section className={styles.episodesSection}>
         <div className={styles.container}>
           <div className={styles.eyebrow}>Building in Public</div>
-          <h2 className={styles.sectionH2}>11 episodes. Still building.</h2>
+          <h2 className={styles.sectionH2}>{EPISODES.length} episodes. Still building.</h2>
           <p className={styles.sectionP}>
             Every major milestone gets a video — published on <strong>LinkedIn</strong>. Hover any episode to see what was built.
           </p>
@@ -525,18 +548,6 @@ export default function Landing() {
           <div className={styles.nextGrid}>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 12</div>
-              <div className={styles.nextTitle}>The DB Explorer — A Tool That Became a Feature</div>
-              <p className={styles.nextDesc}>
-                I built the DB Explorer as a personal debugging tool — a way to see exactly
-                what was in the database without writing SQL by hand. It worked so well it
-                shipped as a feature. This episode is about the moment a utility becomes
-                something worth keeping.
-              </p>
-              <span className={styles.nextBadge}>Up next</span>
-            </div>
-
-            <div className={styles.nextCard}>
               <div className={styles.nextNum}>EP 13</div>
               <div className={styles.nextTitle}>Fixing the Zoom Webhook — Getting the Transcript</div>
               <p className={styles.nextDesc}>
@@ -545,12 +556,12 @@ export default function Landing() {
                 it. The goal is a complete post-call record: summary, notes, and full transcript
                 attached to the right candidate or employer automatically.
               </p>
-              <span className={styles.nextBadge}>Coming soon</span>
+              <span className={styles.nextBadge}>Up next</span>
             </div>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 14 & 15</div>
-              <div className={styles.nextTitle}>Candidate & Employer Profiles — Built for Clients</div>
+              <div className={styles.nextNum}>EP 14 &amp; 15</div>
+              <div className={styles.nextTitle}>Candidate &amp; Employer Profiles — Built for Clients</div>
               <p className={styles.nextDesc}>
                 Right now profiles live inside admin edit modals. The next step is building
                 full read-only profile pages — the kind you'd share with a client. Candidate
@@ -562,8 +573,6 @@ export default function Landing() {
             </div>
 
           </div>
-
-
 
         </div>
       </section>
@@ -636,7 +645,7 @@ export default function Landing() {
             <a href="/terms">Terms</a>
             <a href="https://www.linkedin.com/in/daneahern/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           </div>
-          <p className={styles.footerCopy}>© 2026 RYZE.ai · Built by Daniel Ahern, CPA · Version 11</p>
+          <p className={styles.footerCopy}>© 2026 RYZE.ai · Built by Daniel Ahern, CPA · Version 12</p>
         </div>
         <a href="/admin/login" className={styles.adminGhost}>Admin</a>
       </footer>
