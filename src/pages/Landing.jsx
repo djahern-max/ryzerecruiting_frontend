@@ -561,7 +561,7 @@ export default function Landing() {
 
             <div className={styles.nextCard}>
               <div className={styles.nextNum}>EP 14 &amp; 15</div>
-              <div className={styles.nextTitle}>Candidate &amp; Employer Profiles — Built for Clients</div>
+              <div className={styles.nextTitle}>Candidate &amp; Employer Profiles</div>
               <p className={styles.nextDesc}>
                 Right now profiles live inside admin edit modals. The next step is building
                 full read-only profile pages — the kind you'd share with a client. Candidate
