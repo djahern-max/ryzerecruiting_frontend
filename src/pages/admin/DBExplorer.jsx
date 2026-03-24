@@ -8,7 +8,7 @@ const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 const TABLES = [
     "bookings", "candidates", "employer_profiles",
     "job_orders", "chat_sessions", "chat_messages",
-    "users", "waitlist", "contacts",
+    "users", "waitlist", "contacts", "webhook_logs",
 ];
 
 const SUMMARY_COLS = {
@@ -21,6 +21,7 @@ const SUMMARY_COLS = {
     users: ["id", "email", "full_name", "user_type", "oauth_provider", "tenant_id", "created_at"],
     waitlist: ["id", "email", "intent", "source", "created_at"],
     contacts: ["id", "name", "email", "message"],
+    webhook_logs: ["id", "event", "meeting_id", "booking_found", "result", "received_at"],
 };
 
 const EDITABLE_COLS = {
@@ -33,6 +34,7 @@ const EDITABLE_COLS = {
     chat_sessions: [],
     chat_messages: [],
     contacts: [],
+    webhook_logs: [],
 };
 
 const FK_MAP = {
@@ -55,6 +57,7 @@ const BADGE_COLORS = {
     outbound_candidate: "teal", inbound_candidate: "blue",
     placed: "green", not_a_fit: "red", follow_up: "amber", no_show: "red",
     open: "green", filled: "blue", on_hold: "amber",
+    yes: "green", no: "red", "n/a": "gray",
 };
 
 const LONG_TEXT_FIELDS = new Set([
@@ -62,12 +65,17 @@ const LONG_TEXT_FIELDS = new Set([
     "ai_summary", "ai_experience", "ai_education", "ai_outreach_message", "linkedin_raw_text", "notes",
     "ai_company_overview", "ai_hiring_needs", "ai_talking_points", "ai_red_flags", "ai_brief_raw", "recruiter_notes", "raw_text",
     "requirements", "content", "structured_data", "message",
+    "raw_payload",
 ]);
 
 function FieldValue({ fieldKey, value, onFkClick }) {
     if (value === null || value === undefined || value === "") return <span className={styles.nullVal}>—</span>;
     if (typeof value === "boolean") return <span className={`${styles.badge} ${value ? styles.badgeGreen : styles.badgeGray}`}>{String(value)}</span>;
     if (STATUS_FIELDS.has(fieldKey)) {
+        const color = BADGE_COLORS[String(value)] || "gray";
+        return <span className={`${styles.badge} ${styles["badge" + color.charAt(0).toUpperCase() + color.slice(1)]}`}>{String(value)}</span>;
+    }
+    if (fieldKey === "booking_found") {
         const color = BADGE_COLORS[String(value)] || "gray";
         return <span className={`${styles.badge} ${styles["badge" + color.charAt(0).toUpperCase() + color.slice(1)]}`}>{String(value)}</span>;
     }
