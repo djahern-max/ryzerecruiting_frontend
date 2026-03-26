@@ -201,6 +201,20 @@ const PHASES = [
       "CSV export — download the current filtered view",
     ],
   },
+  {
+    id: "7",
+    title: "Zoom Webhook & Transcript Pipeline",
+    status: "complete",
+    summary: "Debugged and completed the post-call data pipeline. Zoom fires three separate webhook events after a meeting ends — meeting.ended, recording.completed, and recording.transcript_completed — and they don't arrive at the same time. The webhook handler was only listening to the first two. This phase adds the missing handler, fixes the download token location in the payload, and ensures the full transcript is automatically saved to the correct candidate or employer record after every call.",
+    bullets: [
+      "Identified all three Zoom post-call webhook events and their timing differences",
+      "Added recording.transcript_completed handler — the event that fires when the .vtt file is ready",
+      "Fixed download token extraction — Zoom moved it in the payload between event types",
+      "Transcript auto-saves to the candidate or employer record on every completed call",
+      "1946 chars recorded to the database on first successful end-to-end test",
+      "RYZE Intelligence now has access to the full conversation — not just the AI summary",
+    ],
+  },
 ];
 
 const DEMO_QUERIES = [
