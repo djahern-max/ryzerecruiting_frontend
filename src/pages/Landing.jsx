@@ -16,10 +16,18 @@ import EP9 from "../assets/landing_page_thumbnails/EP9.png";
 import EP10 from "../assets/landing_page_thumbnails/EP10.png";
 import EP11 from "../assets/landing_page_thumbnails/EP11.png";
 import EP12 from "../assets/landing_page_thumbnails/EP12.png";
+import EP13 from "../assets/landing_page_thumbnails/EP13.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 const EPISODES = [
+  {
+    num: 13,
+    title: "Fixing the Zoom Webhook — Getting the Transcript",
+    thumb: EP13,
+    url: "https://www.linkedin.com/posts/daneahern_episode-13-fixing-the-zoom-webhook-getting-ugcPost-7442718641017511936-FK50?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "Zoom fires three separate events after a meeting ends — and they don't all arrive at the same time. My webhook was only listening to the first two. The third one — recording.transcript_completed — was arriving, getting logged as 'unhandled event,' and doing nothing. One new handler. One bug fix on where Zoom puts the download token. Deploy. Test. 1946 chars saved to the database.",
+  },
   {
     num: 12,
     title: "The DB Explorer — A Tool That Became a Feature",
@@ -392,7 +400,7 @@ export default function Landing() {
         <div className={styles.heroContent}>
           <div className={styles.docTag}>
             <span className={styles.livePulse} />
-            Version 12 &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; Building in Public
+            Version 13 &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; Building in Public
           </div>
 
           <h1 className={styles.heroTitle}>
@@ -546,19 +554,6 @@ export default function Landing() {
           <h2 className={styles.sectionH2}>Still building. Here's what's coming.</h2>
 
           <div className={styles.nextGrid}>
-
-            <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 13</div>
-              <div className={styles.nextTitle}>Fixing the Zoom Webhook — Getting the Transcript</div>
-              <p className={styles.nextDesc}>
-                Episode 11 revealed a gap: the meeting transcript never saved after the call.
-                This episode goes deep into Zoom's webhook system to find out why — and fixes
-                it. The goal is a complete post-call record: summary, notes, and full transcript
-                attached to the right candidate or employer automatically.
-              </p>
-              <span className={styles.nextBadge}>Up next</span>
-            </div>
-
             <div className={styles.nextCard}>
               <div className={styles.nextNum}>EP 14 &amp; 15</div>
               <div className={styles.nextTitle}>Candidate &amp; Employer Profiles</div>
@@ -569,8 +564,20 @@ export default function Landing() {
                 intelligence briefs, hiring needs, and talking points. Both linked directly
                 from Intelligence chat results.
               </p>
+              <span className={styles.nextBadge}>Up next</span>
+            </div>
+
+            <div className={styles.nextCard}>
+              <div className={styles.nextNum}>EP 16</div>
+              <div className={styles.nextTitle}>Job Orders &amp; Candidate Matching</div>
+              <p className={styles.nextDesc}>
+                Building out the job order pipeline — post a role, parse it into structured
+                fields, embed it, and let RYZE Intelligence match candidates to open positions
+                semantically. The recruiter asks who fits. The platform answers.
+              </p>
               <span className={styles.nextBadge}>Coming soon</span>
             </div>
+
 
           </div>
 
@@ -645,7 +652,7 @@ export default function Landing() {
             <a href="/terms">Terms</a>
             <a href="https://www.linkedin.com/in/daneahern/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           </div>
-          <p className={styles.footerCopy}>© 2026 RYZE.ai · Built by Daniel Ahern, CPA · Version 12</p>
+          <p className={styles.footerCopy}>© 2026 RYZE.ai · Built by Daniel Ahern, CPA · Version 13</p>
         </div>
         <a href="/admin/login" className={styles.adminGhost}>Admin</a>
       </footer>
