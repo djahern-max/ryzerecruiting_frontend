@@ -74,7 +74,7 @@ export default function EmployerDashboard() {
       fetch(`${API_BASE}/api/bookings/my`, { headers })
         .then(r => r.ok ? r.json() : [])
         .then(data => setMyBookings(data))
-        .catch(() => {})
+        .catch(() => { })
         .finally(() => setBookingsLoading(false));
 
       // Employer profile (linked by email)
@@ -88,7 +88,7 @@ export default function EmployerDashboard() {
       fetch(`${API_BASE}/api/job-orders/open`)
         .then(r => r.ok ? r.json() : [])
         .then(data => setOpenRoles(data))
-        .catch(() => {})
+        .catch(() => { })
         .finally(() => setRolesLoading(false));
     }
     fetchAll();
@@ -114,10 +114,10 @@ export default function EmployerDashboard() {
         <div className={styles.banner}>
           <div className={styles.bannerLeft}>
             <span className={styles.bannerBadge}>Employer</span>
-            <h1 className={styles.bannerTitle}>
-              Welcome back, {firstName}.
-              {profile && <span className={styles.companyName}> · {profile.company_name}</span>}
-            </h1>
+            <h1 className={styles.bannerTitle}>Welcome back, {firstName}.</h1>
+            {profile && <p className={styles.companyLine}>{profile.company_name}</p>}
+
+
             <p className={styles.bannerSub}>
               Your hiring dashboard — powered by RYZE.ai.
             </p>
@@ -127,48 +127,7 @@ export default function EmployerDashboard() {
           </div>
         </div>
 
-        {/* ── Company Intelligence Brief ── */}
-        {!profileLoading && profile && (
-          <section className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <h3 className={styles.sectionTitle}>Your Company Brief</h3>
-              <p className={styles.sectionSub}>RYZE intelligence on {profile.company_name}</p>
-            </div>
-            <div className={styles.briefCard}>
-              <div className={styles.briefHeader}>
-                <div className={styles.briefLogo}>{profile.company_name.charAt(0)}</div>
-                <div className={styles.briefCompanyInfo}>
-                  <div className={styles.briefCompany}>{profile.company_name}</div>
-                  <div className={styles.briefMeta}>
-                    {profile.ai_industry && <span>{profile.ai_industry}</span>}
-                    {profile.ai_industry && profile.ai_company_size && <span className={styles.metaDot}>·</span>}
-                    {profile.ai_company_size && <span>{profile.ai_company_size}</span>}
-                  </div>
-                </div>
-                {profile.relationship_status && (
-                  <span className={`${styles.relBadge} ${styles[`rel_${profile.relationship_status.toLowerCase()}`]}`}>
-                    {profile.relationship_status}
-                  </span>
-                )}
-              </div>
 
-              {profile.ai_company_overview && (
-                <p className={styles.briefOverview}>{profile.ai_company_overview}</p>
-              )}
-
-              {profile.ai_hiring_needs?.length > 0 && (
-                <div className={styles.briefSection}>
-                  <div className={styles.briefLabel}>Current Hiring Needs</div>
-                  <ul className={styles.needsList}>
-                    {profile.ai_hiring_needs.map((need, i) => (
-                      <li key={i}>{need}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          </section>
-        )}
 
         {/* ── My Open Roles ── */}
         {!rolesLoading && myRoles.length > 0 && (

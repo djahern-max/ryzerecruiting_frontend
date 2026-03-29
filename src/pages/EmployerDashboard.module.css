@@ -26,8 +26,13 @@
     gap: 2rem;
 }
 
-.bannerLeft { flex: 1; }
-.bannerRight { flex-shrink: 0; }
+.bannerLeft {
+    flex: 1;
+}
+
+.bannerRight {
+    flex-shrink: 0;
+}
 
 .bannerBadge {
     display: inline-block;
@@ -51,9 +56,11 @@
     letter-spacing: -0.4px;
 }
 
-.companyName {
-    color: var(--brand-700);
+.companyLine {
+    font-size: 1rem;
     font-weight: 700;
+    color: var(--brand-700);
+    margin: 2px 0 5px;
 }
 
 .bannerSub {
@@ -64,9 +71,13 @@
 }
 
 /* ── Section ─────────────────────────────────────────── */
-.section { margin-bottom: 1.75rem; }
+.section {
+    margin-bottom: 1.75rem;
+}
 
-.sectionHeader { margin-bottom: 0.875rem; }
+.sectionHeader {
+    margin-bottom: 0.875rem;
+}
 
 .sectionTitle {
     font-size: 0.95rem;
@@ -112,7 +123,10 @@
     flex-shrink: 0;
 }
 
-.briefCompanyInfo { flex: 1; min-width: 0; }
+.briefCompanyInfo {
+    flex: 1;
+    min-width: 0;
+}
 
 .briefCompany {
     font-size: 1rem;
@@ -129,7 +143,9 @@
     gap: 5px;
 }
 
-.metaDot { color: var(--text-300); }
+.metaDot {
+    color: var(--text-300);
+}
 
 .relBadge {
     font-size: 0.7rem;
@@ -141,10 +157,29 @@
     text-transform: capitalize;
 }
 
-.rel_active   { background: #f0fdf4; color: #15803d; border-color: #bbf7d0; }
-.rel_prospect { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
-.rel_warm     { background: #fff7ed; color: #c2410c; border-color: #fed7aa; }
-.rel_inactive { background: #f8fafc; color: #64748b; border-color: #e2e8f0; }
+.rel_active {
+    background: #f0fdf4;
+    color: #15803d;
+    border-color: #bbf7d0;
+}
+
+.rel_prospect {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+}
+
+.rel_warm {
+    background: #fff7ed;
+    color: #c2410c;
+    border-color: #fed7aa;
+}
+
+.rel_inactive {
+    background: #f8fafc;
+    color: #64748b;
+    border-color: #e2e8f0;
+}
 
 .briefOverview {
     font-size: 0.875rem;
@@ -153,7 +188,9 @@
     margin: 0 0 1rem;
 }
 
-.briefSection { margin-top: 0.75rem; }
+.briefSection {
+    margin-top: 0.75rem;
+}
 
 .briefLabel {
     font-size: 0.7rem;
@@ -203,8 +240,15 @@
     transform: translateY(-1px);
 }
 
-.jobCardMain { flex: 1; min-width: 0; }
-.jobCardRight { flex-shrink: 0; padding-top: 2px; }
+.jobCardMain {
+    flex: 1;
+    min-width: 0;
+}
+
+.jobCardRight {
+    flex-shrink: 0;
+    padding-top: 2px;
+}
 
 .jobTitle {
     font-size: 0.95rem;
@@ -222,7 +266,9 @@
     margin-bottom: 4px;
 }
 
-.jobDot { color: var(--text-300); }
+.jobDot {
+    color: var(--text-300);
+}
 
 .jobReq {
     font-size: 0.8rem;
@@ -300,9 +346,18 @@
     transform: translateY(-1px);
 }
 
-.callCard_confirmed { border-left-color: #16a34a; }
-.callCard_pending   { border-left-color: #d97706; }
-.callCard_cancelled { border-left-color: #dc2626; opacity: 0.6; }
+.callCard_confirmed {
+    border-left-color: #16a34a;
+}
+
+.callCard_pending {
+    border-left-color: #d97706;
+}
+
+.callCard_cancelled {
+    border-left-color: #dc2626;
+    opacity: 0.6;
+}
 
 .callCardLeft {
     flex: 1;
@@ -311,7 +366,9 @@
     gap: 3px;
 }
 
-.callCardRight { flex-shrink: 0; }
+.callCardRight {
+    flex-shrink: 0;
+}
 
 .callStatus {
     font-size: 0.75rem;
@@ -319,15 +376,25 @@
     margin-bottom: 5px;
 }
 
-.statusConfirmed, .statusPending, .statusCancelled {
+.statusConfirmed,
+.statusPending,
+.statusCancelled {
     display: inline-flex;
     align-items: center;
     gap: 5px;
 }
 
-.statusConfirmed { color: #16a34a; }
-.statusPending   { color: #d97706; }
-.statusCancelled { color: #dc2626; }
+.statusConfirmed {
+    color: #16a34a;
+}
+
+.statusPending {
+    color: #d97706;
+}
+
+.statusCancelled {
+    color: #dc2626;
+}
 
 .statusIcon {
     width: 14px;
@@ -439,11 +506,15 @@
     color: var(--text-400);
 }
 
-.comingSoonItem i { font-size: 11px; }
+.comingSoonItem i {
+    font-size: 11px;
+}
 
 /* ── Responsive ──────────────────────────────────────── */
 @media (max-width: 640px) {
-    .main { padding: 1.25rem 1rem 3rem; }
+    .main {
+        padding: 1.25rem 1rem 3rem;
+    }
 
     .banner {
         flex-direction: column;
@@ -452,22 +523,32 @@
         gap: 1.25rem;
     }
 
-    .bannerTitle { font-size: 1.2rem; }
-    .bannerRight { width: 100%; }
+    .bannerTitle {
+        font-size: 1.2rem;
+    }
+
+    .bannerRight {
+        width: 100%;
+    }
 
     .callCard {
         flex-direction: column;
         align-items: flex-start;
     }
 
-    .callCardRight { width: 100%; }
+    .callCardRight {
+        width: 100%;
+    }
 
     .zoomButton {
         width: 100%;
         justify-content: center;
     }
 
-    .comingSoon { flex-direction: column; align-items: flex-start; }
+    .comingSoon {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 
     .comingSoonLabel {
         border-right: none;
