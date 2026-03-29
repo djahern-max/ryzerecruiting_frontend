@@ -183,23 +183,30 @@ export default function CandidateDashboard() {
   const [candidateProfile, setCandidateProfile] = useState(null);
 
   useEffect(() => {
-    const headers = { Authorization: `Bearer ${token}` };
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Cache-Control': 'no-cache',
+    };
+    const fetchInit = (auth = true) => ({
+      headers: auth ? headers : {},
+      cache: 'no-store'
+    });
 
     // Bookings
-    fetch(`${API_BASE}/api/bookings/my`, { headers })
+    fetch(`${API_BASE}/api/bookings/my`, { headers, cache: 'no-store' })
       .then(r => r.ok ? r.json() : [])
       .then(data => setMyBookings(data))
       .catch(() => { })
       .finally(() => setBookingsLoading(false));
 
     // Candidate profile (for embedding status)
-    fetch(`${API_BASE}/api/candidates/me`, { headers })
+    fetch(`${API_BASE}/api/candidates/me`, { headers, cache: 'no-store' })
       .then(r => r.ok ? r.json() : null)
       .then(data => setCandidateProfile(data))
       .catch(() => setCandidateProfile(null));
 
     // AI-ranked job matches (EP15)
-    fetch(`${API_BASE}/api/candidates/me/job-matches`, { headers })
+    fetch(`${API_BASE}/api/candidates/me/job-matches`, { headers, cache: 'no-store' })
       .then(r => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.json();

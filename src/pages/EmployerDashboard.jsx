@@ -235,14 +235,14 @@ export default function EmployerDashboard() {
       const headers = { Authorization: `Bearer ${token}` };
 
       // Bookings
-      fetch(`${API_BASE}/api/bookings/my`, { headers })
+      fetch(`${API_BASE}/api/bookings/my`, { headers, cache: 'no-store' })
         .then(r => r.ok ? r.json() : [])
         .then(data => setMyBookings(data))
         .catch(() => { })
         .finally(() => setBookingsLoading(false));
 
       // Employer profile (linked by email)
-      fetch(`${API_BASE}/api/employer-profiles/me`, { headers })
+      fetch(`${API_BASE}/api/employer-profiles/me`, { headers, cache: 'no-store' })
         .then(r => r.ok ? r.json() : null)
         .then(data => setProfile(data))
         .catch(() => setProfile(null))
@@ -275,7 +275,7 @@ export default function EmployerDashboard() {
     // Fetch candidate matches for all job orders in parallel
     Promise.all(
       myRoles.map(job =>
-        fetch(`${API_BASE}/api/job-orders/${job.id}/candidate-matches?limit=5`, { headers })
+        fetch(`${API_BASE}/api/job-orders/${job.id}/candidate-matches?limit=5`, { headers, cache: 'no-store' })
           .then(r => r.ok ? r.json() : [])
           .catch(() => [])
           .then(matches => ({ jobId: job.id, matches }))
