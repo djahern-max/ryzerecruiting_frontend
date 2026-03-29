@@ -18,7 +18,7 @@
     border: 1px solid var(--border-200);
     border-radius: 14px;
     padding: 1.75rem 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.75rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
@@ -26,9 +26,8 @@
     gap: 2rem;
 }
 
-.bannerLeft {
-    flex: 1;
-}
+.bannerLeft { flex: 1; }
+.bannerRight { flex-shrink: 0; }
 
 .bannerBadge {
     display: inline-block;
@@ -56,12 +55,7 @@
     font-size: 0.875rem;
     color: var(--text-500);
     margin: 0;
-    max-width: 480px;
     line-height: 1.5;
-}
-
-.bannerRight {
-    flex-shrink: 0;
 }
 
 .scheduleBtn {
@@ -88,9 +82,7 @@
     box-shadow: 0 4px 14px rgba(10, 102, 194, 0.38);
 }
 
-.scheduleBtn:active {
-    transform: scale(0.97);
-}
+.scheduleBtn i { font-size: 14px; }
 
 .scheduleBtnSm {
     display: inline-flex;
@@ -107,18 +99,12 @@
     transition: background 140ms;
 }
 
-.scheduleBtnSm:hover {
-    background: #004182;
-}
+.scheduleBtnSm:hover { background: #004182; }
 
 /* ── Section ─────────────────────────────────────────── */
-.section {
-    margin-bottom: 2.5rem;
-}
+.section { margin-bottom: 1.75rem; }
 
-.sectionHeader {
-    margin-bottom: 1rem;
-}
+.sectionHeader { margin-bottom: 0.875rem; }
 
 .sectionTitle {
     font-size: 0.95rem;
@@ -132,6 +118,128 @@
     font-size: 0.825rem;
     color: var(--text-400);
     margin: 0;
+}
+
+/* ── Opportunity Cards ───────────────────────────────── */
+.opportunityList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.opportunityCard {
+    background: white;
+    border: 1px solid var(--border-200);
+    border-left: 4px solid var(--brand-400, #60a5fa);
+    border-radius: 12px;
+    padding: 1.1rem 1.4rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 140ms, transform 140ms;
+}
+
+.opportunityCard:hover {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+.oppCardTop {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.875rem;
+}
+
+.oppCardMain { flex: 1; min-width: 0; }
+
+.oppTitle {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-900);
+    margin-bottom: 4px;
+}
+
+.oppMeta {
+    font-size: 0.8rem;
+    color: var(--text-500);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+
+.oppMeta i { font-size: 10px; }
+
+.oppDot { color: var(--text-300); }
+
+.oppReq {
+    font-size: 0.8rem;
+    color: var(--text-500);
+    margin: 0;
+    line-height: 1.55;
+}
+
+.oppBadge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    background: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+    border-radius: 20px;
+    padding: 3px 9px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    margin-top: 2px;
+}
+
+.oppCardFooter {
+    border-top: 1px solid var(--border-100, #f1f5f9);
+    padding-top: 0.75rem;
+}
+
+.applyBtn {
+    background: none;
+    border: none;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--brand-700, #1d4ed8);
+    cursor: pointer;
+    padding: 0;
+    transition: color 140ms;
+}
+
+.applyBtn:hover { color: var(--brand-900, #1e3a8a); }
+
+/* ── Roles loading / empty ───────────────────────────── */
+.rolesLoading {
+    padding: 24px;
+    color: var(--text-400);
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.rolesEmpty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 48px 24px;
+    background: white;
+    border: 1px dashed var(--border-200);
+    border-radius: 12px;
+    color: var(--text-400);
+    font-size: 14px;
+    text-align: center;
+}
+
+.rolesEmpty p { margin: 0; }
+
+.rolesEmptyIcon {
+    font-size: 2rem;
+    color: var(--text-300);
 }
 
 /* ── Calls Empty ─────────────────────────────────────── */
@@ -192,18 +300,9 @@
     transform: translateY(-1px);
 }
 
-.callCard_confirmed {
-    border-left-color: #16a34a;
-}
-
-.callCard_pending {
-    border-left-color: #d97706;
-}
-
-.callCard_cancelled {
-    border-left-color: #dc2626;
-    opacity: 0.6;
-}
+.callCard_confirmed { border-left-color: #16a34a; }
+.callCard_pending   { border-left-color: #d97706; }
+.callCard_cancelled { border-left-color: #dc2626; opacity: 0.6; }
 
 .callCardLeft {
     flex: 1;
@@ -212,42 +311,25 @@
     gap: 3px;
 }
 
-.callCardRight {
-    flex-shrink: 0;
-}
+.callCardRight { flex-shrink: 0; }
 
-/* ── Status ──────────────────────────────────────────── */
 .callStatus {
     font-size: 0.75rem;
     font-weight: 700;
     margin-bottom: 5px;
 }
 
-.statusConfirmed,
-.statusPending,
-.statusCancelled {
+.statusConfirmed, .statusPending, .statusCancelled {
     display: inline-flex;
     align-items: center;
     gap: 5px;
 }
 
-.statusConfirmed {
-    color: #16a34a;
-}
+.statusConfirmed { color: #16a34a; }
+.statusPending   { color: #d97706; }
+.statusCancelled { color: #dc2626; }
 
-.statusPending {
-    color: #d97706;
-}
-
-.statusCancelled {
-    color: #dc2626;
-}
-
-.statusIcon {
-    width: 14px;
-    height: 14px;
-    object-fit: contain;
-}
+.statusIcon { width: 14px; height: 14px; object-fit: contain; }
 
 .callDate {
     font-size: 1rem;
@@ -278,9 +360,7 @@
     font-family: var(--font-sans);
 }
 
-.rebookLink:hover {
-    text-decoration: underline;
-}
+.rebookLink:hover { text-decoration: underline; }
 
 /* ── Zoom Button ─────────────────────────────────────── */
 .zoomButton {
@@ -305,12 +385,7 @@
     transform: translateY(-1px);
 }
 
-.zoomIcon {
-    width: 22px;
-    height: 22px;
-    object-fit: contain;
-    flex-shrink: 0;
-}
+.zoomIcon { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
 
 .pendingPill {
     display: inline-flex;
@@ -325,7 +400,7 @@
     color: #92400e;
 }
 
-/* ── Coming Soon Strip ───────────────────────────────── */
+/* ── Coming Soon ─────────────────────────────────────── */
 .comingSoon {
     display: flex;
     align-items: center;
@@ -368,15 +443,11 @@
     color: var(--text-400);
 }
 
-.comingSoonItem i {
-    font-size: 11px;
-}
+.comingSoonItem i { font-size: 11px; }
 
 /* ── Responsive ──────────────────────────────────────── */
 @media (max-width: 640px) {
-    .main {
-        padding: 1.25rem 1rem 3rem;
-    }
+    .main { padding: 1.25rem 1rem 3rem; }
 
     .banner {
         flex-direction: column;
@@ -385,38 +456,22 @@
         gap: 1.25rem;
     }
 
-    .bannerTitle {
-        font-size: 1.2rem;
-    }
+    .bannerTitle { font-size: 1.2rem; }
 
-    .scheduleBtn,
-    .bannerRight {
-        width: 100%;
-    }
+    .scheduleBtn, .bannerRight { width: 100%; }
+    .scheduleBtn { justify-content: center; }
 
-    .scheduleBtn {
-        justify-content: center;
-        width: 100%;
-    }
+    .oppCardTop { flex-direction: column; }
 
     .callCard {
         flex-direction: column;
         align-items: flex-start;
     }
 
-    .callCardRight {
-        width: 100%;
-    }
+    .callCardRight { width: 100%; }
+    .zoomButton { width: 100%; justify-content: center; }
 
-    .zoomButton {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .comingSoon {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+    .comingSoon { flex-direction: column; align-items: flex-start; }
 
     .comingSoonLabel {
         border-right: none;
