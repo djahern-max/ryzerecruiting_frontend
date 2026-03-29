@@ -118,9 +118,7 @@ export default function EmployerDashboard() {
             {profile && <p className={styles.companyLine}>{profile.company_name}</p>}
 
 
-            <p className={styles.bannerSub}>
-              Your hiring dashboard — powered by RYZE.ai.
-            </p>
+
           </div>
           <div className={styles.bannerRight}>
             <ScheduleCallButton variant="primary" size="md" label="Schedule a Call" />
@@ -220,18 +218,7 @@ export default function EmployerDashboard() {
           )}
         </section>
 
-        {/* ── Coming Soon ── */}
-        <div className={styles.comingSoon}>
-          <span className={styles.comingSoonLabel}>Coming soon</span>
-          <div className={styles.comingSoonItems}>
-            {COMING_SOON.map(item => (
-              <div key={item.label} className={styles.comingSoonItem}>
-                <i className={item.icon} />
-                <span>{item.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+
 
       </main>
     </div>
