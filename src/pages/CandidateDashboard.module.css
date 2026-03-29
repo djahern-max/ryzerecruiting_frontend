@@ -1,11 +1,9 @@
-/* src/pages/CandidateDashboard.module.css */
-
-/* ── Layout ─────────────────────────────────────────────────────────────── */
+/* src/pages/CandidateDashboard.module.css — Light Theme */
 
 .page {
   min-height: 100vh;
-  background: #0b0f1a;
-  color: #e2e8f0;
+  background: #f1f5f9;
+  color: #0f172a;
   font-family: 'DM Sans', sans-serif;
 }
 
@@ -18,17 +16,18 @@
   gap: 40px;
 }
 
-/* ── Welcome Banner ─────────────────────────────────────────────────────── */
+/* ── Banner ─────────────────────────────────────────────────────────────── */
 
 .banner {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 24px;
-  background: linear-gradient(135deg, #111827 0%, #1a2235 100%);
-  border: 1px solid #1e293b;
+  background: #fff;
+  border: 1px solid #e2e8f0;
   border-radius: 16px;
   padding: 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .bannerLeft {
@@ -40,9 +39,9 @@
 .bannerBadge {
   display: inline-block;
   padding: 4px 12px;
-  background: rgba(59, 130, 246, 0.15);
-  color: #60a5fa;
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
@@ -55,7 +54,7 @@
   font-family: 'DM Serif Display', serif;
   font-size: 28px;
   font-weight: 400;
-  color: #f1f5f9;
+  color: #0f172a;
   margin: 0;
   line-height: 1.2;
 }
@@ -77,7 +76,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 18px;
-  background: #3b82f6;
+  background: #2563eb;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -87,7 +86,10 @@
   transition: background 0.15s;
   white-space: nowrap;
 }
-.scheduleBtn:hover { background: #2563eb; }
+
+.scheduleBtn:hover {
+  background: #1d4ed8;
+}
 
 /* ── Sections ───────────────────────────────────────────────────────────── */
 
@@ -113,7 +115,7 @@
 .sectionTitle {
   font-size: 18px;
   font-weight: 700;
-  color: #f1f5f9;
+  color: #0f172a;
   margin: 0;
 }
 
@@ -123,20 +125,17 @@
   margin: 0;
 }
 
-/* ── AI Ranked badge ────────────────────────────────────────────────────── */
-
 .aiRankedBadge {
   display: flex;
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: rgba(139, 92, 246, 0.12);
-  color: #a78bfa;
-  border: 1px solid rgba(139, 92, 246, 0.25);
+  background: #f5f3ff;
+  color: #7c3aed;
+  border: 1px solid #ddd6fe;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.04em;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -147,24 +146,23 @@
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  background: rgba(245, 158, 11, 0.08);
-  border: 1px solid rgba(245, 158, 11, 0.2);
+  background: #fffbeb;
+  border: 1px solid #fde68a;
   border-radius: 12px;
   padding: 16px 20px;
-  color: #f59e0b;
+  color: #92400e;
 }
 
 .indexingTitle {
   font-size: 14px;
   font-weight: 600;
-  color: #fbbf24;
+  color: #78350f;
   margin-bottom: 4px;
 }
 
 .indexingText {
   font-size: 13px;
   color: #92400e;
-  color: rgba(251, 191, 36, 0.7);
 }
 
 /* ── Calls ──────────────────────────────────────────────────────────────── */
@@ -172,10 +170,10 @@
 .callsEmpty {
   padding: 20px;
   text-align: center;
-  color: #475569;
+  color: #94a3b8;
   font-size: 14px;
-  background: #111827;
-  border: 1px solid #1e293b;
+  background: #fff;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
 }
 
@@ -190,16 +188,21 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  background: #111827;
-  border: 1px solid #1e293b;
+  background: #fff;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 20px 24px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .callCardLeft {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+.callCardRight {
+  flex-shrink: 0;
 }
 
 .callStatusPill {
@@ -212,14 +215,26 @@
   text-transform: uppercase;
   width: fit-content;
 }
-.pill_confirmed { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-.pill_pending   { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
-.pill_cancelled { background: rgba(100, 116, 139, 0.15); color: #94a3b8; }
+
+.pill_confirmed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.pill_pending {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.pill_cancelled {
+  background: #f1f5f9;
+  color: #64748b;
+}
 
 .callTitle {
   font-size: 15px;
   font-weight: 600;
-  color: #f1f5f9;
+  color: #0f172a;
 }
 
 .callMeta {
@@ -233,14 +248,10 @@
   margin: 0;
 }
 
-.callCardRight {
-  flex-shrink: 0;
-}
-
 .rebookLink {
   background: none;
   border: none;
-  color: #60a5fa;
+  color: #2563eb;
   font-size: 13px;
   cursor: pointer;
   padding: 0;
@@ -260,7 +271,10 @@
   text-decoration: none;
   transition: background 0.15s;
 }
-.zoomButton:hover { background: #1d4ed8; }
+
+.zoomButton:hover {
+  background: #1d4ed8;
+}
 
 .zoomIcon {
   width: 18px;
@@ -273,9 +287,9 @@
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  background: rgba(245, 158, 11, 0.1);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.2);
+  background: #fef9c3;
+  color: #854d0e;
+  border: 1px solid #fde68a;
   border-radius: 8px;
   font-size: 12px;
   font-weight: 600;
@@ -289,7 +303,7 @@
   align-items: center;
   gap: 12px;
   padding: 48px 24px;
-  color: #475569;
+  color: #94a3b8;
   font-size: 14px;
 }
 
@@ -297,19 +311,36 @@
   display: flex;
   gap: 8px;
 }
+
 .rolesLoadingDots span {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: #2563eb;
   animation: dotPulse 1.4s ease-in-out infinite both;
 }
-.rolesLoadingDots span:nth-child(2) { animation-delay: 0.2s; }
-.rolesLoadingDots span:nth-child(3) { animation-delay: 0.4s; }
+
+.rolesLoadingDots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.rolesLoadingDots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
 
 @keyframes dotPulse {
-  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-  40% { transform: scale(1); opacity: 1; }
+
+  0%,
+  80%,
+  100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .rolesEmpty {
@@ -318,32 +349,36 @@
   align-items: center;
   gap: 12px;
   padding: 48px 24px;
-  background: #111827;
-  border: 1px solid #1e293b;
+  background: #fff;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   text-align: center;
-  color: #475569;
+  color: #94a3b8;
   font-size: 14px;
 }
 
 .rolesEmptyIcon {
   font-size: 32px;
-  color: #1e293b;
+  color: #cbd5e1;
 }
 
 .scheduleBtnSm {
   padding: 8px 16px;
   background: transparent;
-  border: 1px solid #334155;
-  color: #94a3b8;
+  border: 1px solid #cbd5e1;
+  color: #64748b;
   border-radius: 8px;
   font-size: 13px;
   cursor: pointer;
   transition: border-color 0.15s, color 0.15s;
 }
-.scheduleBtnSm:hover { border-color: #60a5fa; color: #60a5fa; }
 
-/* ── Match list ──────────────────────────────────────────────────────────── */
+.scheduleBtnSm:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+/* ── Match list & cards ─────────────────────────────────────────────────── */
 
 .matchList {
   display: flex;
@@ -351,27 +386,33 @@
   gap: 16px;
 }
 
-/* ── Match Card ──────────────────────────────────────────────────────────── */
-
 .matchCard {
-  background: #111827;
-  border: 1px solid #1e293b;
+  background: #fff;
+  border: 1px solid #e2e8f0;
   border-radius: 14px;
   overflow: hidden;
-  transition: border-color 0.2s, transform 0.15s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s, transform 0.15s;
 }
+
 .matchCard:hover {
-  border-color: #334155;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.09);
   transform: translateY(-1px);
 }
 
-/* Tier-specific border accents */
-.tier_high { border-color: rgba(16, 185, 129, 0.25); }
-.tier_mid  { border-color: rgba(59, 130, 246, 0.25); }
-.tier_low  { border-color: #1e293b; }
+.tier_high {
+  border-left: 4px solid #16a34a;
+}
 
-/* ── Score Strip ─────────────────────────────────────────────────────────── */
+.tier_mid {
+  border-left: 4px solid #2563eb;
+}
 
+.tier_low {
+  border-left: 4px solid #cbd5e1;
+}
+
+/* Score strip */
 .scoreStrip {
   display: flex;
   align-items: center;
@@ -379,9 +420,20 @@
   padding: 10px 20px;
 }
 
-.scoreStrip_high { background: rgba(16, 185, 129, 0.08); border-bottom: 1px solid rgba(16, 185, 129, 0.15); }
-.scoreStrip_mid  { background: rgba(59, 130, 246, 0.08); border-bottom: 1px solid rgba(59, 130, 246, 0.15); }
-.scoreStrip_low  { background: rgba(100, 116, 139, 0.06); border-bottom: 1px solid rgba(100, 116, 139, 0.1); }
+.scoreStrip_high {
+  background: #f0fdf4;
+  border-bottom: 1px solid #bbf7d0;
+}
+
+.scoreStrip_mid {
+  background: #eff6ff;
+  border-bottom: 1px solid #bfdbfe;
+}
+
+.scoreStrip_low {
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
 
 .scoreLeft {
   display: flex;
@@ -398,9 +450,20 @@
   white-space: nowrap;
 }
 
-.scoreBadge_high { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-.scoreBadge_mid  { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
-.scoreBadge_low  { background: rgba(100, 116, 139, 0.12); color: #94a3b8; }
+.scoreBadge_high {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.scoreBadge_mid {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.scoreBadge_low {
+  background: #f1f5f9;
+  color: #64748b;
+}
 
 .topPickBadge {
   display: flex;
@@ -408,14 +471,13 @@
   gap: 4px;
   font-size: 11px;
   font-weight: 600;
-  color: #f59e0b;
-  letter-spacing: 0.04em;
+  color: #d97706;
 }
 
 .scoreBar {
   flex: 1;
-  height: 4px;
-  background: rgba(255,255,255,0.05);
+  height: 5px;
+  background: #e2e8f0;
   border-radius: 999px;
   overflow: hidden;
 }
@@ -426,12 +488,19 @@
   transition: width 0.6s ease;
 }
 
-.scoreBarFill_high { background: #10b981; }
-.scoreBarFill_mid  { background: #3b82f6; }
-.scoreBarFill_low  { background: #475569; }
+.scoreBarFill_high {
+  background: #16a34a;
+}
 
-/* ── Match Card Body ────────────────────────────────────────────────────── */
+.scoreBarFill_mid {
+  background: #2563eb;
+}
 
+.scoreBarFill_low {
+  background: #94a3b8;
+}
+
+/* Card body */
 .matchCardBody {
   padding: 20px 24px;
   display: flex;
@@ -455,7 +524,7 @@
 .matchTitle {
   font-size: 17px;
   font-weight: 700;
-  color: #f1f5f9;
+  color: #0f172a;
   margin: 0;
 }
 
@@ -476,9 +545,9 @@
 .openBadge {
   flex-shrink: 0;
   padding: 4px 10px;
-  background: rgba(16, 185, 129, 0.1);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
   border-radius: 999px;
   font-size: 11px;
   font-weight: 600;
@@ -494,7 +563,7 @@
 
 .matchReqsText {
   font-size: 14px;
-  color: #94a3b8;
+  color: #475569;
   line-height: 1.6;
   margin: 0;
 }
@@ -502,7 +571,7 @@
 .matchToggle {
   background: none;
   border: none;
-  color: #60a5fa;
+  color: #2563eb;
   font-size: 13px;
   cursor: pointer;
   padding: 0;
@@ -516,16 +585,17 @@
 .applyBtn {
   padding: 10px 20px;
   background: transparent;
-  border: 1px solid #3b82f6;
-  color: #60a5fa;
+  border: 1px solid #2563eb;
+  color: #2563eb;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
+
 .applyBtn:hover {
-  background: #3b82f6;
+  background: #2563eb;
   color: #fff;
 }
 
@@ -537,9 +607,25 @@
     gap: 20px;
     padding: 24px;
   }
-  .bannerTitle { font-size: 22px; }
-  .sectionHeaderTop { flex-direction: column; }
-  .callCard { flex-direction: column; align-items: flex-start; }
-  .scoreStrip { flex-wrap: wrap; }
-  .scoreBar { min-width: 100%; }
+
+  .bannerTitle {
+    font-size: 22px;
+  }
+
+  .sectionHeaderTop {
+    flex-direction: column;
+  }
+
+  .callCard {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .scoreStrip {
+    flex-wrap: wrap;
+  }
+
+  .scoreBar {
+    min-width: 100%;
+  }
 }
