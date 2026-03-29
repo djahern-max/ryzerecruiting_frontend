@@ -3,8 +3,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import BookingModal from '../components/BookingModal';
-import ScheduleCallButton from '../components/ScheduleCallButton';
-import zoomIcon from '../assets/zoom-icon.png';
+import zoomIcon from '../assets/icons/zoom.svg';
 import styles from './CandidateDashboard.module.css';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
