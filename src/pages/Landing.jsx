@@ -20,9 +20,17 @@ import EP13 from "../assets/landing_page_thumbnails/EP13.png";
 import EP14 from "../assets/landing_page_thumbnails/EP14.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
-const CURRENT_VERSION = 13;
+const CURRENT_VERSION = 14;
 
 const EPISODES = [
+  {
+    num: 14,
+    title: "Candidate & Employer Dashboards",
+    thumb: EP14,
+    url: "https://www.linkedin.com/posts/daneahern_ep14-of-building-ryzeai-candidate-and-ugcPost-7444089991846121474-ixgX?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "Built out the Candidate and Employer dashboards end-to-end — with static data first. Candidates see their profile, upcoming calls, and open job opportunities. Employers see their company brief, linked job orders, and candidate activity. Getting the structure and layout right before wiring in live AI matching in the next episode.",
+  },
+
   {
     num: 13,
     title: "Fixing the Zoom Webhook — Getting the Transcript",
@@ -231,7 +239,20 @@ const PHASES = [
       "Auth consolidated to /auth — single login entry point with admin access link",
       "Two new API endpoints: GET /api/employer-profiles/me and GET /api/job-orders/open",
     ],
+    {
+    id: "9",
+    title: "Candidate & Employer Dashboards",
+    status: "complete",
+    summary: "Built the Candidate and Employer dashboard views — the first dedicated experience for each user type outside of the admin panel. Candidate dashboards show profile details, upcoming scheduled calls, and open job opportunities. Employer dashboards show the company brief, linked job orders, and candidate activity. Built with static data first to lock in the layout and structure before connecting live AI matching.",
+    bullets: [
+      "Candidate dashboard — profile summary, upcoming calls, open job opportunities",
+      "Employer dashboard — company brief, linked job orders, candidate activity",
+      "Separate authenticated routes for candidate and employer user types",
+      "Static data layer — structure and layout validated before live data wiring",
+      "Foundation in place for AI-powered matching in the next phase",
+    ],
   },
+
 
 ];
 
@@ -585,19 +606,20 @@ export default function Landing() {
           <div className={styles.nextGrid}>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 14</div>
-              <div className={styles.nextTitle}>Job Orders &amp; Candidate Matching</div>
+              <div className={styles.nextNum}>EP 15</div>
+              <div className={styles.nextTitle}>AI Candidate &amp; Employer Matching</div>
               <p className={styles.nextDesc}>
-                The recruiter sees AI-ranked candidate matches for every open role — powered by
-                the same pgvector embeddings already running in production. One click pushes a
-                candidate to an employer's dashboard or a job to a candidate's dashboard.
-                Manual approval on AI-generated rankings. Fast to act on, easy to improve.
+                The dashboards go live with real AI-powered data. Candidates see
+                job opportunities ranked by fit — matched against open roles using
+                pgvector embeddings. Employers see ranked candidate suggestions for
+                every open position. The static placeholders come out, the
+                intelligence layer comes in.
               </p>
               <span className={styles.nextBadge}>Up next</span>
             </div>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 15</div>
+              <div className={styles.nextNum}>EP 16</div>
               <div className={styles.nextTitle}>Stripe Billing &amp; Subscription</div>
               <p className={styles.nextDesc}>
                 $99/month recruiter subscription via Stripe. Includes usage-based
@@ -609,13 +631,13 @@ export default function Landing() {
             </div>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 16</div>
-              <div className={styles.nextTitle}>Invitation System &amp; Beta Launch</div>
+              <div className={styles.nextNum}>EP 17</div>
+              <div className={styles.nextTitle}>Multi-Tenant Architecture Testing</div>
               <p className={styles.nextDesc}>
-                Recruiters get access via invitation only. A 7-day free trial on signup,
-                then the subscription kicks in. This episode also marks the transition
-                from build-in-public landing page to a production application — RYZE.ai
-                goes live as a real product.
+                Before opening RYZE to real recruiters, the multi-tenant architecture
+                gets a full stress test — isolated data per account, permission boundaries,
+                and concurrent session behavior across user types. Making sure the
+                foundation holds before the doors open.
               </p>
               <span className={styles.nextBadge}>Coming soon</span>
             </div>
