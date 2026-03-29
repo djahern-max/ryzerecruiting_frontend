@@ -187,10 +187,6 @@ export default function CandidateDashboard() {
       Authorization: `Bearer ${token}`,
       'Cache-Control': 'no-cache',
     };
-    const fetchInit = (auth = true) => ({
-      headers: auth ? headers : {},
-      cache: 'no-store'
-    });
 
     // Bookings
     fetch(`${API_BASE}/api/bookings/my`, { headers, cache: 'no-store' })
@@ -199,13 +195,13 @@ export default function CandidateDashboard() {
       .catch(() => { })
       .finally(() => setBookingsLoading(false));
 
-    // Candidate profile (for embedding status)
+    // Candidate profile (for embedding status badge)
     fetch(`${API_BASE}/api/candidates/me`, { headers, cache: 'no-store' })
       .then(r => r.ok ? r.json() : null)
       .then(data => setCandidateProfile(data))
-      .catch(() => setCandidateProfile(null));
+      .catch(() => { });
 
-    // AI-ranked job matches (EP15)
+    // AI-ranked job matches
     fetch(`${API_BASE}/api/candidates/me/job-matches`, { headers, cache: 'no-store' })
       .then(r => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
@@ -214,14 +210,14 @@ export default function CandidateDashboard() {
       .then(data => setMatchedRoles(data))
       .catch(err => {
         setRolesError(err.message);
-        // Fallback to unranked open roles
-        fetch(`${API_BASE}/api/job-orders/open`)
+        // Fallback to unranked open roles if matching fails
+        fetch(`${API_BASE}/api/job-orders/open`, { cache: 'no-store' })
           .then(r => r.ok ? r.json() : [])
           .then(data => setMatchedRoles(data))
           .catch(() => { });
       })
       .finally(() => setRolesLoading(false));
-  }, [token]);
+  }, [token]); deb
 
   const isRanked = matchedRoles.length > 0 && matchedRoles[0].match_score !== null;
   const hasEmbedding = candidateProfile?.has_embedding ?? null;
