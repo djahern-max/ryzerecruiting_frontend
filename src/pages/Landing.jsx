@@ -17,6 +17,7 @@ import EP10 from "../assets/landing_page_thumbnails/EP10.png";
 import EP11 from "../assets/landing_page_thumbnails/EP11.png";
 import EP12 from "../assets/landing_page_thumbnails/EP12.png";
 import EP13 from "../assets/landing_page_thumbnails/EP13.png";
+import EP14 from "../assets/landing_page_thumbnails/EP14.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 const CURRENT_VERSION = 13;
