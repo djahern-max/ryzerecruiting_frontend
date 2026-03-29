@@ -78,14 +78,14 @@ export default function CandidateDashboard() {
     })
       .then(r => r.ok ? r.json() : [])
       .then(data => setMyBookings(data))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setBookingsLoading(false));
 
     // Open job orders — public endpoint, no auth needed
     fetch(`${API_BASE}/api/job-orders/open`)
       .then(r => r.ok ? r.json() : [])
       .then(data => setOpenRoles(data))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setRolesLoading(false));
   }, [token]);
 
@@ -113,42 +113,6 @@ export default function CandidateDashboard() {
             </button>
           </div>
         </div>
-
-        {/* ── Open Opportunities ── */}
-        <section className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <h3 className={styles.sectionTitle}>Open Opportunities</h3>
-            <p className={styles.sectionSub}>
-              {rolesLoading
-                ? 'Loading roles…'
-                : openRoles.length > 0
-                  ? `${openRoles.length} active role${openRoles.length !== 1 ? 's' : ''} in accounting & finance`
-                  : 'New roles added regularly — check back soon'}
-            </p>
-          </div>
-
-          {rolesLoading ? (
-            <div className={styles.rolesLoading}>Loading opportunities…</div>
-          ) : openRoles.length === 0 ? (
-            <div className={styles.rolesEmpty}>
-              <i className={`fi fi-rr-briefcase ${styles.rolesEmptyIcon}`} />
-              <p>No open roles right now — check back soon.</p>
-              <button className={styles.scheduleBtnSm} onClick={() => setBookingOpen(true)}>
-                Talk to a Recruiter
-              </button>
-            </div>
-          ) : (
-            <div className={styles.opportunityList}>
-              {openRoles.map(job => (
-                <JobOpportunityCard
-                  key={job.id}
-                  job={job}
-                  onSchedule={() => setBookingOpen(true)}
-                />
-              ))}
-            </div>
-          )}
-        </section>
 
         {/* ── My Scheduled Calls ── */}
         <section className={styles.section}>
@@ -236,18 +200,45 @@ export default function CandidateDashboard() {
           )}
         </section>
 
-        {/* ── Coming Soon ── */}
-        <div className={styles.comingSoon}>
-          <span className={styles.comingSoonLabel}>Coming soon</span>
-          <div className={styles.comingSoonItems}>
-            {COMING_SOON.map(item => (
-              <div key={item.label} className={styles.comingSoonItem}>
-                <i className={item.icon} />
-                <span>{item.label}</span>
-              </div>
-            ))}
+
+        {/* ── Open Opportunities ── */}
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <h3 className={styles.sectionTitle}>Open Opportunities</h3>
+            <p className={styles.sectionSub}>
+              {rolesLoading
+                ? 'Loading roles…'
+                : openRoles.length > 0
+                  ? `${openRoles.length} active role${openRoles.length !== 1 ? 's' : ''} in accounting & finance`
+                  : 'New roles added regularly — check back soon'}
+            </p>
           </div>
-        </div>
+
+          {rolesLoading ? (
+            <div className={styles.rolesLoading}>Loading opportunities…</div>
+          ) : openRoles.length === 0 ? (
+            <div className={styles.rolesEmpty}>
+              <i className={`fi fi-rr-briefcase ${styles.rolesEmptyIcon}`} />
+              <p>No open roles right now — check back soon.</p>
+              <button className={styles.scheduleBtnSm} onClick={() => setBookingOpen(true)}>
+                Talk to a Recruiter
+              </button>
+            </div>
+          ) : (
+            <div className={styles.opportunityList}>
+              {openRoles.map(job => (
+                <JobOpportunityCard
+                  key={job.id}
+                  job={job}
+                  onSchedule={() => setBookingOpen(true)}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+
+
+
 
       </main>
 
