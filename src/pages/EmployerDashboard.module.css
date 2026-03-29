@@ -510,6 +510,23 @@
     font-size: 11px;
 }
 
+.jobToggle {
+    background: none;
+    border: none;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--brand-600, #2563eb);
+    cursor: pointer;
+    padding: 4px 0 0;
+    display: block;
+}
+
+.jobToggle:hover {
+    color: var(--brand-800);
+}
+
+
 /* ── Responsive ──────────────────────────────────────── */
 @media (max-width: 640px) {
     .main {

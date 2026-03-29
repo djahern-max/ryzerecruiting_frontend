@@ -32,6 +32,10 @@ function formatSalary(min, max) {
 
 function JobCard({ job }) {
   const salary = formatSalary(job.salary_min, job.salary_max);
+  const [expanded, setExpanded] = useState(false);
+  const TRUNCATE = 120;
+  const isLong = job.requirements && job.requirements.length > TRUNCATE;
+
   return (
     <div className={styles.jobCard}>
       <div className={styles.jobCardMain}>
@@ -42,7 +46,21 @@ function JobCard({ job }) {
           {salary && <span>{salary}</span>}
         </div>
         {job.requirements && (
-          <p className={styles.jobReq}>{job.requirements.slice(0, 120)}{job.requirements.length > 120 ? '…' : ''}</p>
+          <>
+            <p className={styles.jobReq}>
+              {expanded || !isLong
+                ? job.requirements
+                : `${job.requirements.slice(0, TRUNCATE)}…`}
+            </p>
+            {isLong && (
+              <button
+                className={styles.jobToggle}
+                onClick={() => setExpanded(p => !p)}
+              >
+                {expanded ? 'Show less ↑' : 'Read more ↓'}
+              </button>
+            )}
+          </>
         )}
       </div>
       <div className={styles.jobCardRight}>
@@ -51,7 +69,6 @@ function JobCard({ job }) {
     </div>
   );
 }
-
 export default function EmployerDashboard() {
   const { user } = useAuth();
   const token = localStorage.getItem('token');
