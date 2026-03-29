@@ -340,6 +340,27 @@
   margin-top: -0.25rem;
 }
 
+.adminAccess {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-100, #f1f5f9);
+  text-align: center;
+}
+
+.adminAccessLink {
+  font-size: 0.78rem;
+  color: var(--text-400, #94a3b8);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 150ms ease;
+}
+
+.adminAccessLink:hover {
+  color: var(--text-600, #475569);
+  text-decoration: underline;
+}
+
+
 @media (max-width: 640px) {
   .authPage {
     padding: 1rem;
