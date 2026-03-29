@@ -216,6 +216,22 @@ const PHASES = [
       "RYZE Intelligence now has access to the full conversation — not just the AI summary",
     ],
   },
+  {
+    id: "8",
+    title: "Candidate & Employer Profile Pages",
+    status: "complete",
+    summary: "Replaced edit modals with full read-only profile pages built for sharing with clients. Candidate profiles include AI summary, experience, education, outreach message, skills, and recruiter notes. Employer profiles include company overview, hiring needs, talking points, red flags, and linked job orders. Both accessible directly from Intelligence chat results. Consolidated the auth flow to a single entry point at /auth with admin login access.",
+    bullets: [
+      "CandidateProfile page at /admin/candidates/:id — shareable, read-only",
+      "EmployerProfile page at /admin/employers/:id — shareable, read-only",
+      "Intelligence chat 'View Profile' now navigates to profile pages instead of edit modals",
+      "Employer dashboard — company brief + linked open roles pulled from live data",
+      "Candidate dashboard — open job opportunities from live job orders + scheduled calls",
+      "Auth consolidated to /auth — single login entry point with admin access link",
+      "Two new API endpoints: GET /api/employer-profiles/me and GET /api/job-orders/open",
+    ],
+  },
+
 ];
 
 const DEMO_QUERIES = [
@@ -566,87 +582,44 @@ export default function Landing() {
           <h2 className={styles.sectionH2}>Still building. Here's what's coming.</h2>
 
           <div className={styles.nextGrid}>
+
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 14 &amp; 15</div>
-              <div className={styles.nextTitle}>Candidate &amp; Employer Profiles</div>
+              <div className={styles.nextNum}>EP 14</div>
+              <div className={styles.nextTitle}>Job Orders &amp; Candidate Matching</div>
               <p className={styles.nextDesc}>
-                Right now profiles live inside admin edit modals. The next step is building
-                full read-only profile pages — the kind you'd share with a client. Candidate
-                profiles with AI summaries, experience, and outreach. Employer profiles with
-                intelligence briefs, hiring needs, and talking points. Both linked directly
-                from Intelligence chat results.
+                The recruiter sees AI-ranked candidate matches for every open role — powered by
+                the same pgvector embeddings already running in production. One click pushes a
+                candidate to an employer's dashboard or a job to a candidate's dashboard.
+                Manual approval on AI-generated rankings. Fast to act on, easy to improve.
               </p>
               <span className={styles.nextBadge}>Up next</span>
             </div>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 16</div>
-              <div className={styles.nextTitle}>Job Orders &amp; Candidate Matching</div>
+              <div className={styles.nextNum}>EP 15</div>
+              <div className={styles.nextTitle}>Stripe Billing &amp; Subscription</div>
               <p className={styles.nextDesc}>
-                Building out the job order pipeline — post a role, parse it into structured
-                fields, embed it, and let RYZE Intelligence match candidates to open positions
-                semantically. The recruiter asks who fits. The platform answers.
+                $99/month recruiter subscription via Stripe. Includes usage-based
+                overflow protection — if API costs exceed the base plan in a billing
+                period, usage is billed in $20 increments automatically. No surprise
+                bills. No manual intervention.
               </p>
               <span className={styles.nextBadge}>Coming soon</span>
             </div>
+
+            <div className={styles.nextCard}>
+              <div className={styles.nextNum}>EP 16</div>
+              <div className={styles.nextTitle}>Invitation System &amp; Beta Launch</div>
+              <p className={styles.nextDesc}>
+                Recruiters get access via invitation only. A 7-day free trial on signup,
+                then the subscription kicks in. This episode also marks the transition
+                from build-in-public landing page to a production application — RYZE.ai
+                goes live as a real product.
+              </p>
+              <span className={styles.nextBadge}>Coming soon</span>
+            </div>
+
           </div>
-
-        </div>
-      </section>
-
-      {/* ── Waitlist ─────────────────────────────── */}
-      <section className={styles.waitlistSection} ref={waitlistRef}>
-        <div className={styles.waitlistInner}>
-          <div className={styles.eyebrow} style={{ color: "#57a0d3" }}>Get Early Access</div>
-          <h2 className={styles.waitlistTitle}>Join the waitlist.</h2>
-          <p className={styles.waitlistSub}>
-            RYZE.ai is currently in private beta. Accounting &amp; finance professionals,
-            hiring managers, and anyone following the build — tell us who you are.
-          </p>
-
-          {wlStatus === "success" ? (
-            <div className={styles.successState}>
-              <span className={styles.successCheck}>✓</span>
-              <div>
-                <p className={styles.successTitle}>You're on the list.</p>
-                <p className={styles.successSub}>We'll reach out when your spot opens up.</p>
-              </div>
-            </div>
-          ) : (
-            <div className={styles.wlForm}>
-              <div className={styles.intentRow}>
-                {INTENT_OPTIONS.map(({ value, icon: Icon, label }) => (
-                  <button
-                    key={value}
-                    type="button"
-                    className={`${styles.intentBtn} ${intent === value ? styles.intentBtnOn : ""}`}
-                    onClick={() => setIntent(p => p === value ? null : value)}
-                    disabled={wlStatus === "loading"}
-                  >
-                    <Icon size={22} strokeWidth={1.5} />
-                    <span>{label}</span>
-                  </button>
-                ))}
-              </div>
-              <div className={styles.emailRow}>
-                <input
-                  className={`${styles.emailInput} ${errorMsg ? styles.emailInputErr : ""}`}
-                  type="email"
-                  placeholder="your@email.com"
-                  value={email}
-                  onChange={e => { setEmail(e.target.value); setErrorMsg(""); }}
-                  onKeyDown={e => e.key === "Enter" && handleWaitlist()}
-                  disabled={wlStatus === "loading"}
-                />
-                <button className={styles.notifyBtn} onClick={handleWaitlist} disabled={wlStatus === "loading"}>
-                  {wlStatus === "loading" ? <span className={styles.spinner} /> : "Notify Me →"}
-                </button>
-              </div>
-              {errorMsg && <p className={styles.errMsg}>{errorMsg}</p>}
-            </div>
-          )}
-
-          <p className={styles.trustLine}>No spam. No pressure. Just a heads-up when we open the doors.</p>
         </div>
       </section>
 
