@@ -239,7 +239,8 @@ const PHASES = [
       "Auth consolidated to /auth — single login entry point with admin access link",
       "Two new API endpoints: GET /api/employer-profiles/me and GET /api/job-orders/open",
     ],
-    {
+  },
+  {
     id: "9",
     title: "Candidate & Employer Dashboards",
     status: "complete",
