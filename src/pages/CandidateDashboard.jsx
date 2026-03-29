@@ -217,7 +217,7 @@ export default function CandidateDashboard() {
           .catch(() => { });
       })
       .finally(() => setRolesLoading(false));
-  }, [token]); deb
+  }, [token]);
 
   const isRanked = matchedRoles.length > 0 && matchedRoles[0].match_score !== null;
   const hasEmbedding = candidateProfile?.has_embedding ?? null;
