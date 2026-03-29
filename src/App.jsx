@@ -17,6 +17,8 @@ import EmployerRoster from './pages/EmployerRoster';
 import CandidatesPage from './pages/CandidatesPage';
 import ChatPage from './pages/ChatPage';
 import DBExplorer from './pages/admin/DBExplorer';
+import CandidateProfile from './pages/CandidateProfile';
+import EmployerProfile from './pages/EmployerProfile';
 
 const loadingScreen = (
   <div style={{
@@ -128,10 +130,26 @@ function App() {
             }
           />
           <Route
+            path="/admin/employers/:id"
+            element={
+              <AdminRoute>
+                <EmployerProfile />
+              </AdminRoute>
+            }
+          />
+          <Route
             path="/admin/candidates"
             element={
               <AdminRoute>
                 <CandidatesPage />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/candidates/:id"
+            element={
+              <AdminRoute>
+                <CandidateProfile />
               </AdminRoute>
             }
           />

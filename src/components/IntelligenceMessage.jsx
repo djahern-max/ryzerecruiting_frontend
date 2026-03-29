@@ -1,7 +1,6 @@
 /* src/components/IntelligenceMessage.jsx */
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
-import CandidateModal from "./CandidateModal";
 import styles from "./IntelligenceMessage.module.css";
 import CandidateResultCard from "./CandidateResultCard";
 import EmployerResultCard from "./EmployerResultCard";
@@ -15,14 +14,12 @@ export default function IntelligenceMessage({ message }) {
     const [fetchedCandidates, setFetchedCandidates] = useState(null);
     const [fetchedEmployers, setFetchedEmployers] = useState(null);
     const [loadingCards, setLoadingCards] = useState(false);
-    const [selectedCandidate, setSelectedCandidate] = useState(null);
     const navigate = useNavigate();
 
     const candidateIds = message.candidates || [];
     const employerIds = message.employers || [];
     const hasCards = candidateIds.length > 0 || employerIds.length > 0;
 
-    // UPDATE handleToggle — add employer fetching
     async function handleToggle() {
         if (expanded) {
             setExpanded(false);
@@ -71,44 +68,33 @@ export default function IntelligenceMessage({ message }) {
         }
     }
 
-    // Build the "See More" button label
-    // REPLACE WITH
     const candidateLabel = candidateIds.length > 0
         ? `${candidateIds.length} Candidate${candidateIds.length !== 1 ? "s" : ""}`
         : null;
     const employerLabel = employerIds.length > 0
         ? `${employerIds.length} Employer${employerIds.length !== 1 ? "s" : ""}`
         : null;
-    const countLabel = [candidateLabel, employerLabel].filter(Boolean).join(" & ");
-    const toggleLabel = expanded ? "Hide ↑" : `View ${countLabel} ↓`;
+
+    const parts = [candidateLabel, employerLabel].filter(Boolean);
+    const toggleLabel = expanded
+        ? "Hide ↑"
+        : `View ${parts.join(" & ")} →`;
 
     return (
-        <div className={styles.wrapper}>
-            {/* ── Prose ── */}
-            <div className={styles.prose}>
-                {message.streaming
-                    ? <p style={{ whiteSpace: "pre-wrap", margin: 0 }}>{message.content}</p>
-                    : <ReactMarkdown>{message.content}</ReactMarkdown>
-                }
-                {message.streaming && <span className={styles.streamCursor}>▋</span>}
-            </div>
+        <div className={styles.messageWrap}>
+            <ReactMarkdown
+                className={styles.prose}
+                components={{
+                    p: ({ children }) => <p className={styles.p}>{children}</p>,
+                    strong: ({ children }) => <strong className={styles.strong}>{children}</strong>,
+                    ul: ({ children }) => <ul className={styles.ul}>{children}</ul>,
+                    li: ({ children }) => <li className={styles.li}>{children}</li>,
+                }}
+            >
+                {message.content}
+            </ReactMarkdown>
 
-            {/* ── Meetings (always shown, unchanged) ── */}
-            {!message.streaming && message.meetings?.length > 0 && (
-                <div className={styles.meetingSection}>
-                    {message.meetings.map((m) => (
-                        <div key={m.id} className={styles.meetingRow}>
-                            <span className={styles.meetingName}>{m.employer_name}</span>
-                            <span className={styles.meetingDot}>·</span>
-                            <span className={styles.meetingMeta}>{m.company_name}</span>
-                            <span className={styles.meetingDot}>·</span>
-                            <span className={styles.meetingTime}>{m.time_slot}</span>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {/* ── See More toggle ── */}
+            {/* ── Toggle ── */}
             {!message.streaming && hasCards && (
                 <button className={styles.seeMoreBtn} onClick={handleToggle}>
                     {toggleLabel}
@@ -116,7 +102,6 @@ export default function IntelligenceMessage({ message }) {
             )}
 
             {/* ── Expanded cards ── */}
-
             {expanded && (
                 <div className={styles.cardsSection}>
                     {loadingCards && (
@@ -128,7 +113,7 @@ export default function IntelligenceMessage({ message }) {
                                 <CandidateResultCard
                                     key={c.id}
                                     candidate={c}
-                                    onViewProfile={setSelectedCandidate}
+                                    onViewProfile={(candidate) => navigate(`/admin/candidates/${candidate.id}`)}
                                 />
                             ))}
                         </div>
@@ -142,20 +127,12 @@ export default function IntelligenceMessage({ message }) {
                                 <EmployerResultCard
                                     key={e.id}
                                     employer={e}
-                                    onViewEmployer={(employer) => navigate(`/admin/employers?expand=${employer.id}`)}
+                                    onViewEmployer={(employer) => navigate(`/admin/employers/${employer.id}`)}
                                 />
                             ))}
                         </div>
                     )}
                 </div>
-            )}
-            {/* ── Candidate modal ── */}
-            {selectedCandidate && (
-                <CandidateModal
-                    candidate={selectedCandidate}
-                    onClose={() => setSelectedCandidate(null)}
-                    onSaved={(updated) => setSelectedCandidate(updated)}
-                />
             )}
         </div>
     );
