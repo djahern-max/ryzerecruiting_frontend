@@ -423,11 +423,8 @@ export default function Landing() {
           </h1>
 
           <p className={styles.heroSub}>
-            RYZE.ai is a live, production recruiting platform I'm building and running
-            simultaneously. Every feature ships as a video. Follow along as a scheduling
-            tool grows into a full AI intelligence layer for accounting &amp; finance recruiting.
+            RYZE.ai is a recruiting platform I’m building and documenting in real time. Every feature ships as a video—follow along as a simple scheduling tool grows into a full AI intelligence layer for modern recruiting.
           </p>
-
           <div className={styles.heroCtas}>
             <button
               className={styles.ctaPrimary}
