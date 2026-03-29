@@ -32,6 +32,10 @@ function formatSalary(min, max) {
 
 function JobOpportunityCard({ job, onSchedule }) {
   const salary = formatSalary(job.salary_min, job.salary_max);
+  const [expanded, setExpanded] = useState(false);
+  const TRUNCATE = 140;
+  const isLong = job.requirements && job.requirements.length > TRUNCATE;
+
   return (
     <div className={styles.opportunityCard}>
       <div className={styles.oppCardTop}>
@@ -43,9 +47,21 @@ function JobOpportunityCard({ job, onSchedule }) {
             {salary && <span><i className="fi fi-rr-dollar" /> {salary}</span>}
           </div>
           {job.requirements && (
-            <p className={styles.oppReq}>
-              {job.requirements.slice(0, 140)}{job.requirements.length > 140 ? '…' : ''}
-            </p>
+            <>
+              <p className={styles.oppReq}>
+                {expanded || !isLong
+                  ? job.requirements
+                  : `${job.requirements.slice(0, TRUNCATE)}…`}
+              </p>
+              {isLong && (
+                <button
+                  className={styles.oppToggle}
+                  onClick={() => setExpanded(p => !p)}
+                >
+                  {expanded ? 'Show less ↑' : 'Read more ↓'}
+                </button>
+              )}
+            </>
           )}
         </div>
         <span className={styles.oppBadge}>Open</span>
