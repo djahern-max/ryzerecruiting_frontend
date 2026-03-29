@@ -102,17 +102,20 @@ const TermsOfService = () => {
                     </ul>
                 </section>
 
+
                 <section>
                     <h2>8. SMS Notifications</h2>
                     <p>
-                        By providing your phone number and submitting a call request through
-                        the Platform, you consent to receive transactional SMS notifications
-                        from RYZE.ai. These messages include booking confirmations, call
-                        reminders, and cancellation notices.
+                        By providing your phone number and checking the SMS consent box on our booking
+                        form, you explicitly consent to receive transactional SMS notifications from
+                        RYZE GROUP, Inc. (RYZE.ai). These messages include booking confirmations, call
+                        reminders, and cancellation notices. No SMS messages are sent without this
+                        explicit opt-in.
                     </p>
                     <ul>
+                        <li><strong>Sender:</strong> RYZE GROUP, Inc. d/b/a RYZE.ai</li>
                         <li><strong>Message Frequency:</strong> Message frequency varies based on your booking activity. You will typically receive 2–4 messages per scheduled call (confirmation, reminders, and any cancellation notice).</li>
-                        <li><strong>Message & Data Rates:</strong> Message and data rates may apply depending on your mobile carrier and plan.</li>
+                        <li><strong>Message &amp; Data Rates:</strong> Message and data rates may apply depending on your mobile carrier and plan.</li>
                         <li><strong>Opt-Out:</strong> <strong>Reply STOP</strong> to any message to unsubscribe. You will receive a one-time confirmation and no further messages will be sent.</li>
                         <li><strong>Help:</strong> <strong>Reply HELP</strong> for assistance or contact us at <a href="mailto:dane@ryze.ai">dane@ryze.ai</a>.</li>
                         <li><strong>No Marketing:</strong> We do not send marketing or promotional SMS messages. All messages are transactional only.</li>
@@ -120,9 +123,11 @@ const TermsOfService = () => {
                     </ul>
                     <p>
                         For more information on how we handle your phone number, see our{' '}
-                        <a href="/privacy-policy">Privacy Policy</a>.
+                        <a href="/privacy">Privacy Policy</a>.
                     </p>
                 </section>
+
+
 
                 <section>
                     <h2>9. Third-Party Services</h2>

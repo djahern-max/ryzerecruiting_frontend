@@ -350,12 +350,14 @@ export default function BookingCard({ variant = "employer" }) {
               className={styles.smsCheckbox}
             />
             <span>
-              I agree to receive SMS notifications from RYZE.ai regarding my booking,
-              including confirmations, reminders, and cancellations. Message and data rates may
-              apply. Reply STOP to opt out.
+              I agree to receive SMS appointment reminders and booking notifications from
+              RYZE GROUP, Inc. (RYZE.ai). Message frequency varies. Message and data rates
+              may apply. Reply STOP to opt out.{" "}
+              <a href="/privacy" target="_blank" rel="noopener noreferrer">
+                Privacy Policy
+              </a>
             </span>
           </label>
-
           {error && <p className={styles.error}>{error}</p>}
 
           <button

@@ -19,6 +19,7 @@ import EP12 from "../assets/landing_page_thumbnails/EP12.png";
 import EP13 from "../assets/landing_page_thumbnails/EP13.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const CURRENT_VERSION = 13;
 
 const EPISODES = [
   {
@@ -414,7 +415,7 @@ export default function Landing() {
         <div className={styles.heroContent}>
           <div className={styles.docTag}>
             <span className={styles.livePulse} />
-            Version 13 &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; Building in Public
+            Version {CURRENT_VERSION} &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; Building in Public
           </div>
 
           <h1 className={styles.heroTitle}>
@@ -423,7 +424,7 @@ export default function Landing() {
           </h1>
 
           <p className={styles.heroSub}>
-            RYZE.ai is a recruiting platform I’m building and documenting in real time. Every feature ships as a video—follow along as a simple scheduling tool grows into a full AI intelligence layer for modern recruiting.
+            RYZE.ai is a recruiting platform I'm building and documenting in real time. Every feature ships as a video—follow along as a simple scheduling tool grows into a full AI intelligence layer for modern recruiting.
           </p>
           <div className={styles.heroCtas}>
             <button
@@ -588,8 +589,6 @@ export default function Landing() {
               </p>
               <span className={styles.nextBadge}>Coming soon</span>
             </div>
-
-
           </div>
 
         </div>
@@ -663,7 +662,7 @@ export default function Landing() {
             <a href="/terms">Terms</a>
             <a href="https://www.linkedin.com/in/daneahern/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           </div>
-          <p className={styles.footerCopy}>© 2026 RYZE.ai · Built by Daniel Ahern, CPA · Version 13</p>
+          <p className={styles.footerCopy}>© 2026 RYZE GROUP, Inc. d/b/a RYZE.ai · Built by Daniel Ahern, CPA · Version {CURRENT_VERSION}</p>
         </div>
         <a href="/admin/login" className={styles.adminGhost}>Admin</a>
       </footer>
