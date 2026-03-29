@@ -6,7 +6,7 @@ import ScheduleCallButton from '../components/ScheduleCallButton';
 import zoomIcon from '../assets/icons/zoom.svg';
 import styles from './EmployerDashboard.module.css';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const TRUNCATE = 200;
 
 // ---------------------------------------------------------------------------
