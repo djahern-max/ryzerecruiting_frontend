@@ -621,24 +621,24 @@ export default function Landing() {
 
             <div className={styles.nextCard}>
               <div className={styles.nextNum}>EP 16</div>
-              <div className={styles.nextTitle}>Stripe Billing &amp; Subscription</div>
-              <p className={styles.nextDesc}>
-                $99/month recruiter subscription via Stripe. Includes usage-based
-                overflow protection — if API costs exceed the base plan in a billing
-                period, usage is billed in $20 increments automatically. No surprise
-                bills. No manual intervention.
-              </p>
-              <span className={styles.nextBadge}>Coming soon</span>
-            </div>
-
-            <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 17</div>
               <div className={styles.nextTitle}>Multi-Tenant Architecture Testing</div>
               <p className={styles.nextDesc}>
                 Before opening RYZE to real recruiters, the multi-tenant architecture
                 gets a full stress test — isolated data per account, permission boundaries,
                 and concurrent session behavior across user types. Making sure the
                 foundation holds before the doors open.
+              </p>
+              <span className={styles.nextBadge}>Coming soon</span>
+            </div>
+
+            <div className={styles.nextCard}>
+              <div className={styles.nextNum}>EP 17</div>
+              <div className={styles.nextTitle}>Stripe Billing &amp; Subscription</div>
+              <p className={styles.nextDesc}>
+                $99/month recruiter subscription via Stripe. Includes usage-based
+                overflow protection — if API costs exceed the base plan in a billing
+                period, usage is billed in $20 increments automatically. No surprise
+                bills. No manual intervention.
               </p>
               <span className={styles.nextBadge}>Coming soon</span>
             </div>
