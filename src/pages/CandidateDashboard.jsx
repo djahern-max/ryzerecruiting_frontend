@@ -50,7 +50,7 @@ function getScoreTier(score) {
 }
 
 // ---------------------------------------------------------------------------
-// JobMatchCard — ranked job opportunity with AI score
+// JobMatchCard
 // ---------------------------------------------------------------------------
 
 const TRUNCATE = 220;
@@ -58,7 +58,7 @@ const TRUNCATE = 220;
 function JobMatchCard({ job, onSchedule, rank }) {
   const [expanded, setExpanded] = useState(false);
   const isLong = job.requirements && job.requirements.length > TRUNCATE;
-  const hasScore = job.match_score !== null && job.match_score !== undefined;
+  const hasScore = job.match_score != null;
   const pct = hasScore ? getScorePercent(job.match_score) : null;
   const tier = hasScore ? getScoreTier(job.match_score) : null;
   const salary = formatSalary(job.salary_min, job.salary_max);
@@ -66,7 +66,6 @@ function JobMatchCard({ job, onSchedule, rank }) {
   return (
     <div className={`${styles.matchCard} ${hasScore ? styles[`tier_${tier}`] : ''}`}>
 
-      {/* Score strip */}
       {hasScore && (
         <div className={`${styles.scoreStrip} ${styles[`scoreStrip_${tier}`]}`}>
           <div className={styles.scoreLeft}>
@@ -89,7 +88,6 @@ function JobMatchCard({ job, onSchedule, rank }) {
       )}
 
       <div className={styles.matchCardBody}>
-        {/* Header row */}
         <div className={styles.matchCardHeader}>
           <div className={styles.matchCardLeft}>
             <h3 className={styles.matchTitle}>{job.title}</h3>
@@ -111,7 +109,6 @@ function JobMatchCard({ job, onSchedule, rank }) {
           <span className={styles.openBadge}>Open</span>
         </div>
 
-        {/* Requirements */}
         {job.requirements && (
           <div className={styles.matchReqs}>
             <p className={styles.matchReqsText}>
@@ -120,39 +117,17 @@ function JobMatchCard({ job, onSchedule, rank }) {
                 : `${job.requirements.slice(0, TRUNCATE)}…`}
             </p>
             {isLong && (
-              <button
-                className={styles.matchToggle}
-                onClick={() => setExpanded(p => !p)}
-              >
+              <button className={styles.matchToggle} onClick={() => setExpanded(p => !p)}>
                 {expanded ? 'Show less ↑' : 'Read more ↓'}
               </button>
             )}
           </div>
         )}
 
-        {/* CTA */}
         <div className={styles.matchCardFooter}>
           <button className={styles.applyBtn} onClick={onSchedule}>
             Schedule an Intro Call →
           </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// No-embedding notice
-// ---------------------------------------------------------------------------
-
-function IndexingNotice() {
-  return (
-    <div className={styles.indexingNotice}>
-      <i className="fi fi-rr-hourglass" style={{ fontSize: '20px' }} />
-      <div>
-        <div className={styles.indexingTitle}>Your profile is being analyzed</div>
-        <div className={styles.indexingText}>
-          AI matching will be ready shortly. Jobs are shown below — check back soon for personalized rankings.
         </div>
       </div>
     </div>
@@ -174,19 +149,15 @@ export default function CandidateDashboard() {
   const [myBookings, setMyBookings] = useState([]);
   const [bookingsLoading, setBookingsLoading] = useState(true);
 
-  // AI-matched job opportunities
-  const [matchedRoles, setMatchedRoles] = useState([]);
-  const [rolesLoading, setRolesLoading] = useState(true);
-  const [rolesError, setRolesError] = useState(null);
+  // Candidate profile — null = no profile, false = loading
+  const [candidateProfile, setCandidateProfile] = useState(false);
 
-  // Candidate profile (to show embedding status)
-  const [candidateProfile, setCandidateProfile] = useState(null);
+  // Matched roles — only populated when profile exists
+  const [matchedRoles, setMatchedRoles] = useState([]);
+  const [rolesLoading, setRolesLoading] = useState(false);
 
   useEffect(() => {
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      'Cache-Control': 'no-cache',
-    };
+    const headers = { Authorization: `Bearer ${token}`, 'Cache-Control': 'no-cache' };
 
     // Bookings
     fetch(`${API_BASE}/api/bookings/my`, { headers, cache: 'no-store' })
@@ -195,32 +166,40 @@ export default function CandidateDashboard() {
       .catch(() => { })
       .finally(() => setBookingsLoading(false));
 
-    // Candidate profile (for embedding status badge)
+    // Candidate profile — sets null if 404, no fallback
     fetch(`${API_BASE}/api/candidates/me`, { headers, cache: 'no-store' })
-      .then(r => r.ok ? r.json() : null)
+      .then(r => {
+        if (r.status === 404) return null;
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
       .then(data => setCandidateProfile(data))
-      .catch(() => { });
+      .catch(() => setCandidateProfile(null));
 
-    // AI-ranked job matches
+  }, [token]);
+
+  // Only fetch matches once we know a profile exists
+  useEffect(() => {
+    if (candidateProfile === false) return; // still loading
+    if (candidateProfile === null) return;  // no profile — don't fetch
+
+    const headers = { Authorization: `Bearer ${token}`, 'Cache-Control': 'no-cache' };
+    setRolesLoading(true);
+
     fetch(`${API_BASE}/api/candidates/me/job-matches`, { headers, cache: 'no-store' })
       .then(r => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.json();
       })
       .then(data => setMatchedRoles(data))
-      .catch(err => {
-        setRolesError(err.message);
-        // Fallback to unranked open roles if matching fails
-        fetch(`${API_BASE}/api/job-orders/open`, { cache: 'no-store' })
-          .then(r => r.ok ? r.json() : [])
-          .then(data => setMatchedRoles(data))
-          .catch(() => { });
-      })
+      .catch(() => setMatchedRoles([]))
       .finally(() => setRolesLoading(false));
-  }, [token]);
 
-  const isRanked = matchedRoles.length > 0 && matchedRoles[0].match_score !== null;
-  const hasEmbedding = candidateProfile?.has_embedding ?? null;
+  }, [candidateProfile, token]);
+
+  const profileLoading = candidateProfile === false;
+  const hasProfile = candidateProfile !== false && candidateProfile !== null;
+  const isRanked = matchedRoles.length > 0 && matchedRoles[0].match_score != null;
 
   return (
     <div className={styles.page}>
@@ -317,13 +296,11 @@ export default function CandidateDashboard() {
                   {isRanked ? 'Matched Opportunities' : 'Open Opportunities'}
                 </h3>
                 <p className={styles.sectionSub}>
-                  {rolesLoading
+                  {profileLoading || rolesLoading
                     ? 'Running AI matching…'
                     : isRanked
                       ? `${matchedRoles.length} role${matchedRoles.length !== 1 ? 's' : ''} ranked by AI fit for your profile`
-                      : matchedRoles.length > 0
-                        ? `${matchedRoles.length} active role${matchedRoles.length !== 1 ? 's' : ''} in accounting & finance`
-                        : 'New roles added regularly — check back soon'}
+                      : 'Your profile is being set up — check back soon'}
                 </p>
               </div>
               {isRanked && (
@@ -333,24 +310,27 @@ export default function CandidateDashboard() {
                 </span>
               )}
             </div>
-
-            {/* No-embedding notice */}
-            {!rolesLoading && hasEmbedding === false && (
-              <IndexingNotice />
-            )}
           </div>
 
-          {rolesLoading ? (
+          {profileLoading || rolesLoading ? (
             <div className={styles.rolesLoading}>
               <div className={styles.rolesLoadingDots}>
                 <span /><span /><span />
               </div>
               <p>Running AI match analysis…</p>
             </div>
+          ) : !hasProfile ? (
+            <div className={styles.rolesEmpty}>
+              <i className={`fi fi-rr-user-add ${styles.rolesEmptyIcon}`} />
+              <p>No profile found. Contact RYZE to get set up.</p>
+              <button className={styles.scheduleBtnSm} onClick={() => setBookingOpen(true)}>
+                Talk to a Recruiter
+              </button>
+            </div>
           ) : matchedRoles.length === 0 ? (
             <div className={styles.rolesEmpty}>
               <i className={`fi fi-rr-briefcase ${styles.rolesEmptyIcon}`} />
-              <p>No open roles right now — check back soon.</p>
+              <p>No matched roles right now — check back soon.</p>
               <button className={styles.scheduleBtnSm} onClick={() => setBookingOpen(true)}>
                 Talk to a Recruiter
               </button>
