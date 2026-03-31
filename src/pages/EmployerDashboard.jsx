@@ -249,7 +249,7 @@ export default function EmployerDashboard() {
         .finally(() => setProfileLoading(false));
 
       // Open job orders (public)
-      fetch(`${API_BASE}/api/job-orders/open`, { cache: 'no-store' })
+      fetch(`${API_BASE}/api/job-orders/open`, { headers, cache: 'no-store' })
         .then(r => r.ok ? r.json() : [])
         .then(data => setOpenRoles(data))
         .catch(() => { })
