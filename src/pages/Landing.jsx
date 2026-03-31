@@ -647,6 +647,68 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ── Waitlist ─────────────────────────────── */}
+      <section className={styles.waitlistSection} ref={waitlistRef}>
+        <div className={styles.waitlistInner}>
+          <h2 className={styles.waitlistTitle}>Stay in the loop.</h2>
+          <p className={styles.waitlistSub}>
+            Get notified when RYZE opens to recruiters — and follow along as each new feature ships.
+          </p>
+
+          {wlStatus === "success" ? (
+            <>
+              <div className={styles.successState}>
+                <div className={styles.successCheck}>✓</div>
+                <div>
+                  <p className={styles.successTitle}>You're on the list.</p>
+                  <p className={styles.successSub}>We'll reach out when RYZE is ready for you.</p>
+                </div>
+              </div>
+              <p className={styles.trustLine}>No spam. Unsubscribe any time.</p>
+            </>
+          ) : (
+            <div className={styles.wlForm}>
+              <div className={styles.intentRow}>
+                {INTENT_OPTIONS.map(({ value, icon: Icon, label }) => (
+                  <button
+                    key={value}
+                    type="button"
+                    className={`${styles.intentBtn} ${intent === value ? styles.intentBtnOn : ""}`}
+                    onClick={() => setIntent(v => v === value ? null : value)}
+                    disabled={wlStatus === "loading"}
+                  >
+                    <Icon size={18} />
+                    {label}
+                  </button>
+                ))}
+              </div>
+
+              <div className={styles.emailRow}>
+                <input
+                  type="email"
+                  placeholder="you@company.com"
+                  value={email}
+                  onChange={e => { setEmail(e.target.value); setErrorMsg(""); }}
+                  className={`${styles.emailInput} ${errorMsg ? styles.emailInputErr : ""}`}
+                  disabled={wlStatus === "loading"}
+                  onKeyDown={e => e.key === "Enter" && handleWaitlist()}
+                />
+                <button
+                  className={styles.notifyBtn}
+                  onClick={handleWaitlist}
+                  disabled={wlStatus === "loading"}
+                >
+                  {wlStatus === "loading" ? <span className={styles.spinner} /> : "Notify Me"}
+                </button>
+              </div>
+
+              {errorMsg && <p className={styles.errMsg}>{errorMsg}</p>}
+              <p className={styles.trustLine}>No spam. Unsubscribe any time.</p>
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* ── Footer ───────────────────────────────── */}
       <footer className={styles.footer}>
         <div className={styles.footerInner}>
