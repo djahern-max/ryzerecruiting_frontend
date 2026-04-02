@@ -20,6 +20,7 @@ import CandidateProfile from './pages/CandidateProfile';
 import EmployerProfile from './pages/EmployerProfile';
 import UpgradePage from './pages/UpgradePage';
 import BillingSuccess from './pages/BillingSuccess';
+import InviteForm from './pages/admin/InviteForm';
 
 const loadingScreen = (
   <div style={{
@@ -168,6 +169,14 @@ function App() {
             element={
               <AdminRoute>
                 <DBExplorer />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/invite"
+            element={
+              <AdminRoute>
+                <InviteForm />
               </AdminRoute>
             }
           />
