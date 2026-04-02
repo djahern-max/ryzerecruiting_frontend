@@ -18,6 +18,8 @@ import ChatPage from './pages/ChatPage';
 import DBExplorer from './pages/admin/DBExplorer';
 import CandidateProfile from './pages/CandidateProfile';
 import EmployerProfile from './pages/EmployerProfile';
+import UpgradePage from './pages/UpgradePage';
+import BillingSuccess from './pages/BillingSuccess';
 
 const loadingScreen = (
   <div style={{
@@ -89,6 +91,8 @@ function App() {
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/upgrade" element={<UpgradePage />} />
+          <Route path="/billing/success" element={<BillingSuccess />} />
 
           {/* ── Employer — role-locked ──────────────────────────────── */}
           <Route
