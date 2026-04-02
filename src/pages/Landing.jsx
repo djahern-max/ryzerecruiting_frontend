@@ -20,33 +20,24 @@ import EP13 from "../assets/landing_page_thumbnails/EP13.png";
 import EP14 from "../assets/landing_page_thumbnails/EP14.png";
 import EP15 from "../assets/landing_page_thumbnails/EP15.png";
 import EP16 from "../assets/landing_page_thumbnails/EP16.png";
-import EP17 from "../assets/landing_page_thumbnails/EP17.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
-const CURRENT_VERSION = 17;
+const CURRENT_VERSION = 16;
 
 const EPISODES = [
   {
-    num: 17,
-    title: "Invite System, Free Trial & Stripe Billing",
-    comingSoon: true,
-    thumb: EP17,
-    desc: "EP17 opens the doors. Admin can invite a recruiting firm in one action — tenant created, credentials emailed, 30-day trial starts. Stripe handles the conversion: $99/month, hosted checkout, webhook-driven activation. The full sequence from zero to paying customer runs in under 5 minutes on camera.",
-  },
-  {
     num: 16,
-    title: "Multi-Tenant Architecture — Proving the Walls Hold",
-    comingSoon: true,
+    title: "Multi-Tenant Architecture Testing",
     thumb: EP16,
-    url: "https://www.linkedin.com/posts/daneahern_building-ryzeai-in-public-ep16-before-ugcPost-7445042623633018880-dQcM?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
-    desc: "Before opening RYZE to real recruiters, the multi-tenant architecture gets a full stress test. Two firms log in simultaneously — complete data isolation verified at every layer. No data leaks. No cross-tenant visibility. The foundation holds.",
+    url: "https://www.linkedin.com/in/daneahern/",
+    desc: "Before opening RYZE to real recruiters, the multi-tenant isolation layer gets a full stress test. Every table carries a tenant_id column. Every query filters by the authenticated user's tenant. Cross-tenant data access blocked and verified end-to-end. The walls hold.",
   },
   {
     num: 15,
     title: "AI Candidate & Employer Matching",
-    comingSoon: true,
     thumb: EP15,
-    desc: "The dashboards go live with real AI-powered data. Candidates see job opportunities ranked by fit — matched against open roles using pgvector embeddings. Employers see ranked candidate suggestions for every open position. The static placeholders come out, the intelligence layer comes in.",
+    url: "https://www.linkedin.com/in/daneahern/",
+    desc: "The dashboards go live with real intelligence. Candidate and employer dashboards now show AI-powered matches using pgvector cosine similarity — candidates see job opportunities ranked by fit, employers see ranked candidate suggestions for every open position. The static placeholders are gone.",
   },
   {
     num: 14,
@@ -55,6 +46,7 @@ const EPISODES = [
     url: "https://www.linkedin.com/posts/daneahern_ep14-of-building-ryzeai-candidate-and-ugcPost-7444089991846121474-ixgX?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
     desc: "Built out the Candidate and Employer dashboards end-to-end — with static data first. Candidates see their profile, upcoming calls, and open job opportunities. Employers see their company brief, linked job orders, and candidate activity. Getting the structure and layout right before wiring in live AI matching in the next episode.",
   },
+
   {
     num: 13,
     title: "Fixing the Zoom Webhook — Getting the Transcript",
@@ -279,33 +271,32 @@ const PHASES = [
   },
   {
     id: "10",
-    title: "AI Matching & Multi-Tenant Architecture",
+    title: "AI Candidate & Employer Matching",
     status: "complete",
-    summary: "Wired the dashboards to live AI-powered data using pgvector cosine similarity — candidates see ranked job opportunities, employers see ranked candidate suggestions. Then stress-tested the entire multi-tenant architecture with two firms running simultaneously to verify complete data isolation before opening the platform to real users.",
+    summary: "Wired live AI matching into both dashboards using pgvector cosine similarity. Candidates see open job opportunities ranked by fit against their embedded profile. Employers see candidate suggestions ranked by match score for every open position. The static placeholder layer was replaced with real-time intelligence pulled directly from the database.",
     bullets: [
-      "pgvector cosine similarity matching — candidate-to-job and job-to-candidate",
-      "Live AI matching on both Candidate and Employer dashboards",
-      "Multi-tenant row-level isolation — every query scoped to tenant_id",
-      "Concurrent session testing — two firms, zero data leakage",
-      "Cross-tenant 404 pattern — wrong-tenant requests return not found, not forbidden",
-      "audit_tenant_coverage.py — automated script verifies every endpoint is tenant-scoped",
+      "pgvector cosine similarity — candidate embeddings matched against job order embeddings",
+      "Candidate dashboard — open roles ranked by fit score in real time",
+      "Employer dashboard — candidate suggestions ranked per open position",
+      "Match scores surfaced in the UI — not just ranked, but scored",
+      "Static placeholder data fully removed from both dashboards",
     ],
   },
   {
     id: "11",
-    title: "Invite System, Free Trial & Stripe Billing",
-    status: "next",
-    summary: "EP17 opens the doors. A single admin action creates a new tenant, generates credentials, and fires a branded welcome email — 30-day trial starts immediately. Stripe handles the conversion: $99/month subscription, hosted checkout, webhook-driven activation. Trial enforcement returns 402 on expiry, intercepted globally by the frontend with an upgrade prompt.",
+    title: "Multi-Tenant Architecture",
+    status: "complete",
+    summary: "Stress-tested the multi-tenant isolation layer before opening RYZE to external recruiters. Every table carries a tenant_id column, every query filters by the authenticated user's tenant, and cross-tenant data access was systematically blocked and verified end-to-end. The isolation model is confirmed solid — no data leaks across tenants under any tested condition.",
     bullets: [
-      "Tenants table — tracks trial status, Stripe customer ID, and subscription ID",
-      "POST /api/admin/invite — creates tenant + user + fires welcome email in one action",
-      "30-day free trial with automatic enforcement at expiry",
-      "Stripe Checkout — $99/month recurring, hosted payment page",
-      "Webhook handler — checkout.session.completed activates tenant, subscription.deleted cancels",
-      "402 intercept — expired trial redirects to upgrade page globally via apiFetch",
-      "UpgradePage.jsx — clean upgrade prompt with plan details and Stripe redirect",
+      "tenant_id column on every table — row-level isolation across the full schema",
+      "Every query scoped to the authenticated user's tenant — no exceptions",
+      "Cross-tenant access attempts blocked and verified end-to-end",
+      "Admin, candidate, and employer user types each tested in isolation",
+      "Concurrent session behavior verified across multiple tenant contexts",
+      "Foundation confirmed solid before the invite system opens the doors",
     ],
   },
+
 ];
 
 const DEMO_QUERIES = [
@@ -563,27 +554,19 @@ export default function Landing() {
                       className={`${styles.episodeCard} ${styles.episodeCardComingSoon}`}
                       {...cardProps}
                     >
-                      {ep.thumb ? (
-                        <div className={styles.epThumbWrap}>
-                          <img src={ep.thumb} alt={`Episode ${ep.num}`} className={styles.epThumb} />
+                      <div className={styles.epDefault}>
+                        <div className={styles.epTop}>
+                          <span className={styles.epNum}>Ep {ep.num}</span>
+                          <span className={styles.epComingBadge}>Coming Soon</span>
                         </div>
-                      ) : (
-                        <div className={styles.epDefault}>
-                          <div className={styles.epTop}>
-                            <span className={styles.epNum}>Ep {ep.num}</span>
-                            <span className={styles.epComingBadge}>
-                              {ep.num === 17 ? "Filming Now" : ep.url ? "Posted" : "Coming Soon"}
-                            </span>
-                          </div>
-                          <div className={styles.epTitle}>{ep.title}</div>
-                        </div>
-                      )}
+                        <div className={styles.epTitle}>{ep.title}</div>
+                      </div>
                       <div className={styles.epHover}>
-                        <div className={styles.epHoverNum}>Episode {ep.num}{ep.num === 17 ? " — Filming Now" : ep.url ? " — Posted" : " — Coming Soon"}</div>
+                        <div className={styles.epHoverNum}>Episode {ep.num} — Coming Soon</div>
                         <p className={styles.epHoverDesc} style={{ whiteSpace: "pre-line" }}>
                           {ep.desc}
                         </p>
-                        {ep.url && <span className={styles.epHoverLink}>Watch on LinkedIn →</span>}
+                        {ep.url && <span className={styles.epHoverLink}>Read on LinkedIn →</span>}
                       </div>
                     </CardEl>
                   );
@@ -661,49 +644,42 @@ export default function Landing() {
       <section className={styles.whatsNextSection}>
         <div className={styles.container}>
           <div className={styles.eyebrow}>What's Next</div>
-          <h2 className={styles.sectionH2}>MVP is live. Here's what comes next.</h2>
+          <h2 className={styles.sectionH2}>Still building. Here's what's coming.</h2>
 
           <div className={styles.nextGrid}>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 18</div>
-              <div className={styles.nextTitle}>First External Recruiters</div>
+              <div className={styles.nextNum}>EP 17</div>
+              <div className={styles.nextTitle}>Invite System, Free Trial &amp; Stripe Billing</div>
               <p className={styles.nextDesc}>
-                RYZE goes live with real recruiting firms. First invites go out,
-                first firms log in, first real pipelines get built. Watching how
-                actual recruiters use the platform — and what breaks first.
+                EP16 proved the walls hold. EP17 opens the doors. A new admin
+                invite flow onboards any recruiting firm in one action — creates
+                their tenant, starts a 30-day free trial, and fires a branded
+                welcome email. Stripe converts trial users to $99/month
+                subscribers. A complete firm goes from zero to paying customer
+                in under 5 minutes.
               </p>
               <span className={styles.nextBadge}>Up next</span>
             </div>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 19</div>
-              <div className={styles.nextTitle}>Dashboard Polish & UX</div>
+              <div className={styles.nextNum}>EP 18</div>
+              <div className={styles.nextTitle}>First External Recruiters</div>
               <p className={styles.nextDesc}>
-                Based on real recruiter feedback from EP18 — fixing friction points,
-                improving the candidate and employer dashboard experience, and
-                making the platform feel production-ready.
-              </p>
-              <span className={styles.nextBadge}>Coming soon</span>
-            </div>
-
-            <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 20</div>
-              <div className={styles.nextTitle}>LinkedIn Integration</div>
-              <p className={styles.nextDesc}>
-                Connecting the platform directly to LinkedIn — import candidates
-                from search results, pull employer data, and surface RYZE
-                intelligence alongside the recruiter's existing workflow.
+                The invite system ships and the first real recruiting firms get
+                access. Onboarding feedback shapes the next round of polish —
+                what breaks, what's missing, what gets in the way. The platform
+                stops being a proof of concept and starts being a product.
               </p>
               <span className={styles.nextBadge}>Coming soon</span>
             </div>
 
           </div>
         </div>
-      </section >
+      </section>
 
       {/* ── Waitlist ─────────────────────────────── */}
-      < section className={styles.waitlistSection} ref={waitlistRef} >
+      <section className={styles.waitlistSection} ref={waitlistRef}>
         <div className={styles.waitlistInner}>
           <h2 className={styles.waitlistTitle}>Stay in the loop.</h2>
           <p className={styles.waitlistSub}>
@@ -762,10 +738,10 @@ export default function Landing() {
             </div>
           )}
         </div>
-      </section >
+      </section>
 
       {/* ── Footer ───────────────────────────────── */}
-      < footer className={styles.footer} >
+      <footer className={styles.footer}>
         <div className={styles.footerInner}>
           <div className={styles.footerBrand}>
             <RyzeLogo size={16} color="#57a0d3" />
@@ -779,7 +755,7 @@ export default function Landing() {
           <p className={styles.footerCopy}>© 2026 RYZE GROUP, Inc. d/b/a RYZE.ai · Version {CURRENT_VERSION}</p>
         </div>
         <a href="/admin/login" className={styles.adminGhost}>Admin</a>
-      </footer >
-    </div >
+      </footer>
+    </div>
   );
 }
