@@ -18,6 +18,9 @@ import EP11 from "../assets/landing_page_thumbnails/EP11.png";
 import EP12 from "../assets/landing_page_thumbnails/EP12.png";
 import EP13 from "../assets/landing_page_thumbnails/EP13.png";
 import EP14 from "../assets/landing_page_thumbnails/EP14.png";
+import EP15 from "../assets/landing_page_thumbnails/EP15.png";
+import EP16 from "../assets/landing_page_thumbnails/EP16.png";
+import EP17 from "../assets/landing_page_thumbnails/EP17.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 const CURRENT_VERSION = 17;
@@ -27,12 +30,14 @@ const EPISODES = [
     num: 17,
     title: "Invite System, Free Trial & Stripe Billing",
     comingSoon: true,
+    thumb: EP17,
     desc: "EP17 opens the doors. Admin can invite a recruiting firm in one action — tenant created, credentials emailed, 30-day trial starts. Stripe handles the conversion: $99/month, hosted checkout, webhook-driven activation. The full sequence from zero to paying customer runs in under 5 minutes on camera.",
   },
   {
     num: 16,
     title: "Multi-Tenant Architecture — Proving the Walls Hold",
     comingSoon: true,
+    thumb: EP16,
     url: "https://www.linkedin.com/posts/daneahern_building-ryzeai-in-public-ep16-before-ugcPost-7445042623633018880-dQcM?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
     desc: "Before opening RYZE to real recruiters, the multi-tenant architecture gets a full stress test. Two firms log in simultaneously — complete data isolation verified at every layer. No data leaks. No cross-tenant visibility. The foundation holds.",
   },
@@ -40,6 +45,7 @@ const EPISODES = [
     num: 15,
     title: "AI Candidate & Employer Matching",
     comingSoon: true,
+    thumb: EP15,
     desc: "The dashboards go live with real AI-powered data. Candidates see job opportunities ranked by fit — matched against open roles using pgvector embeddings. Employers see ranked candidate suggestions for every open position. The static placeholders come out, the intelligence layer comes in.",
   },
   {
@@ -557,15 +563,21 @@ export default function Landing() {
                       className={`${styles.episodeCard} ${styles.episodeCardComingSoon}`}
                       {...cardProps}
                     >
-                      <div className={styles.epDefault}>
-                        <div className={styles.epTop}>
-                          <span className={styles.epNum}>Ep {ep.num}</span>
-                          <span className={styles.epComingBadge}>
-                            {ep.num === 17 ? "Filming Now" : ep.url ? "Posted" : "Coming Soon"}
-                          </span>
+                      {ep.thumb ? (
+                        <div className={styles.epThumbWrap}>
+                          <img src={ep.thumb} alt={`Episode ${ep.num}`} className={styles.epThumb} />
                         </div>
-                        <div className={styles.epTitle}>{ep.title}</div>
-                      </div>
+                      ) : (
+                        <div className={styles.epDefault}>
+                          <div className={styles.epTop}>
+                            <span className={styles.epNum}>Ep {ep.num}</span>
+                            <span className={styles.epComingBadge}>
+                              {ep.num === 17 ? "Filming Now" : ep.url ? "Posted" : "Coming Soon"}
+                            </span>
+                          </div>
+                          <div className={styles.epTitle}>{ep.title}</div>
+                        </div>
+                      )}
                       <div className={styles.epHover}>
                         <div className={styles.epHoverNum}>Episode {ep.num}{ep.num === 17 ? " — Filming Now" : ep.url ? " — Posted" : " — Coming Soon"}</div>
                         <p className={styles.epHoverDesc} style={{ whiteSpace: "pre-line" }}>
