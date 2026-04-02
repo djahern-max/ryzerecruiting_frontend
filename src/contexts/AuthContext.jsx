@@ -16,6 +16,27 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // ── Global 402 interceptor ───────────────────────────────────────────────
+  // Any API response with status 402 means the tenant's trial has expired
+  // or their subscription is inactive. Redirect to /upgrade immediately.
+  // The UpgradePage handles the Stripe checkout redirect from there.
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      response => response,
+      error => {
+        if (error.response?.status === 402) {
+          // Don't redirect if already on the upgrade or billing pages
+          const path = window.location.pathname;
+          if (!path.startsWith('/upgrade') && !path.startsWith('/billing')) {
+            window.location.href = '/upgrade';
+          }
+        }
+        return Promise.reject(error);
+      }
+    );
+    return () => axios.interceptors.response.eject(interceptor);
+  }, []);
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -59,7 +80,6 @@ export function AuthProvider({ children }) {
     } catch (error) {
       console.error('Login failed:', error);
       const detail = error.response?.data?.detail;
-      // FastAPI validation errors return an array — extract the first message
       const message = Array.isArray(detail)
         ? detail[0]?.msg || 'Invalid input'
         : typeof detail === 'string'
@@ -68,6 +88,7 @@ export function AuthProvider({ children }) {
       return { success: false, error: message };
     }
   }
+
   async function register(email, password, fullName, userType) {
     try {
       await axios.post(`${API_URL}/api/auth/register`, {
@@ -81,7 +102,6 @@ export function AuthProvider({ children }) {
     } catch (error) {
       console.error('Registration failed:', error);
       const detail = error.response?.data?.detail;
-
       const message = Array.isArray(detail)
         ? detail[0]?.msg || 'Invalid input'
         : typeof detail === 'string'
