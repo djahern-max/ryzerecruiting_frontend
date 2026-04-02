@@ -12,6 +12,7 @@ import aiNotesIcon from '../assets/icons/ai_notes.svg';
 import zoomIcon from '../assets/icons/zoom.svg';
 import letterXIcon from '../assets/icons/letter-x.svg';
 import AdminHeader from '../components/AdminHeader';
+import { apiFetch } from '../services/api';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -428,7 +429,7 @@ function AdminDashboard() {
   async function fetchBookings() {
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`${API_BASE}/api/bookings`, {
+      const res = await apiFetch(`${API_BASE}/api/bookings`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error('Failed to load bookings');
@@ -445,7 +446,7 @@ function AdminDashboard() {
     setUpdatingId(bookingId);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`${API_BASE}/api/bookings/${bookingId}/status`, {
+      const res = await apiFetch(`${API_BASE}/api/bookings/${bookingId}/status`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
@@ -470,7 +471,7 @@ function AdminDashboard() {
     if (!window.confirm('Permanently delete this booking?')) return;
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`${API_BASE}/api/bookings/${bookingId}`, {
+      const res = await apiFetch(`${API_BASE}/api/bookings/${bookingId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });

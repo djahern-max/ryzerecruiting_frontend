@@ -1,0 +1,189 @@
+/* src/pages/UpgradePage.module.css */
+
+.page {
+    min-height: 100vh;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 48px 40px;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.logo {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0a66c2;
+    letter-spacing: -0.5px;
+    margin-bottom: 28px;
+}
+
+.iconWrap {
+    width: 64px;
+    height: 64px;
+    background: #fef3c7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 1.75rem;
+    color: #d97706;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 12px;
+}
+
+.sub {
+    font-size: 0.95rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin: 0 0 28px;
+}
+
+/* ── Plan card ─────────────────────────────────────────────── */
+
+.planCard {
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.planHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.planName {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #1e3a5f;
+}
+
+.planBadge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #0a66c2;
+    background: #e8f2fc;
+    border-radius: 100px;
+    padding: 2px 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.planPrice {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 20px;
+}
+
+.planAmount {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1;
+}
+
+.planPer {
+    font-size: 1rem;
+    color: #64748b;
+}
+
+.planFeatures {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.planFeatures li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.875rem;
+    color: #334155;
+}
+
+.planFeatures li i {
+    color: #16a34a;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+/* ── Buttons ───────────────────────────────────────────────── */
+
+.upgradeBtn {
+    width: 100%;
+    padding: 14px;
+    background: #0a66c2;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 200ms;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.upgradeBtn:hover:not(:disabled) {
+    background: #0958a8;
+}
+
+.upgradeBtn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.upgradeBtnLoading {
+    background: #0958a8;
+}
+
+.logoutLink {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 0.875rem;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+}
+
+.logoutLink:hover {
+    color: #64748b;
+}
+
+.error {
+    background: #fee2e2;
+    color: #b91c1c;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 0.875rem;
+    margin-bottom: 16px;
+    text-align: left;
+}
