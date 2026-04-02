@@ -53,6 +53,152 @@ function getAvailableSlots(selectedDate) {
 }
 
 // ---------------------------------------------------------------------------
+// Invite Firm Modal (EP17)
+// ---------------------------------------------------------------------------
+
+function InviteFirmModal({ onClose }) {
+  const [form, setForm] = useState({
+    company_name: '',
+    full_name: '',
+    email: '',
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+  }
+
+  async function handleSubmit() {
+    setError(null);
+    if (!form.company_name || !form.full_name || !form.email) {
+      setError('All fields are required.');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE}/api/admin/invite`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.detail || 'Failed to send invite');
+      }
+      const data = await res.json();
+      setSuccess(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <div className={styles.modalOverlay}>
+      <div className={styles.modal}>
+        <div className={styles.modalHeader}>
+          <h2 className={styles.modalTitle}>Invite a Recruiting Firm</h2>
+          <button className={styles.modalClose} onClick={onClose} aria-label="Close">
+            <img src={letterXIcon} alt="Close" className={styles.modalCloseIcon} />
+          </button>
+        </div>
+
+        <div className={styles.modalBody}>
+          {success ? (
+            <div className={styles.inviteSuccess}>
+              <div className={styles.inviteSuccessIcon}>✓</div>
+              <p className={styles.inviteSuccessTitle}>Invite sent!</p>
+              <p className={styles.inviteSuccessDetail}>
+                <strong>{form.email}</strong> has been invited.<br />
+                Tenant: <code>{success.tenant_slug}</code><br />
+                Trial ends: {success.trial_ends_at}
+              </p>
+              <button className={styles.modalCancelBtn} onClick={onClose}>Close</button>
+            </div>
+          ) : (
+            <>
+              <p className={styles.inviteSubtext}>
+                Creates a new tenant account and emails login credentials with a 30-day free trial.
+              </p>
+
+              <div className={styles.fieldGroup}>
+                <label className={styles.fieldLabel}>
+                  Company Name <span className={styles.required}>*</span>
+                </label>
+                <input
+                  className={styles.fieldInput}
+                  type="text"
+                  name="company_name"
+                  value={form.company_name}
+                  onChange={handleChange}
+                  placeholder="Acme Recruiting"
+                />
+              </div>
+
+              <div className={styles.fieldGroup}>
+                <label className={styles.fieldLabel}>
+                  Contact Name <span className={styles.required}>*</span>
+                </label>
+                <input
+                  className={styles.fieldInput}
+                  type="text"
+                  name="full_name"
+                  value={form.full_name}
+                  onChange={handleChange}
+                  placeholder="Jane Smith"
+                />
+              </div>
+
+              <div className={styles.fieldGroup}>
+                <label className={styles.fieldLabel}>
+                  Email <span className={styles.required}>*</span>
+                </label>
+                <input
+                  className={styles.fieldInput}
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  placeholder="jane@acmerecruiting.com"
+                />
+              </div>
+
+              {error && <div className={styles.modalError}>{error}</div>}
+            </>
+          )}
+        </div>
+
+        {!success && (
+          <div className={styles.modalFooter}>
+            <button className={styles.modalCancelBtn} onClick={onClose} disabled={submitting}>
+              Cancel
+            </button>
+            <button
+              className={`${styles.modalSubmitBtn} ${submitting ? styles.modalSubmitBtnLoading : ''}`}
+              onClick={handleSubmit}
+              disabled={submitting}
+            >
+              {submitting
+                ? <><i className="fi fi-rr-time" style={{ marginRight: '6px' }}></i>Sending…</>
+                : <><i className="fi fi-rr-paper-plane" style={{ marginRight: '6px' }}></i>Send Invite</>
+              }
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Send Meeting Invite Modal
 // ---------------------------------------------------------------------------
 
@@ -274,6 +420,7 @@ function AdminDashboard() {
   const [expandedBriefId, setExpandedBriefId] = useState(null);
   const [expandedSummaryId, setExpandedSummaryId] = useState(null);
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [showInviteFirmModal, setShowInviteFirmModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => { fetchBookings(); }, []);
@@ -413,17 +560,20 @@ function AdminDashboard() {
     <div className={styles.page}>
 
       {/* ── Header ──────────────────────────────────────── */}
-
       <AdminHeader active="dashboard" />
       <main className={styles.main}>
 
-        {/* ── Page title + action ──────────────────────── */}
+        {/* ── Page title + actions ─────────────────────── */}
         <div className={styles.pageTop}>
           <div>
             <h1 className={styles.pageTitle}>Booking Management</h1>
             <p className={styles.pageSub}>Welcome back, {firstName}. Here's your pipeline.</p>
           </div>
           <div className={styles.pageTopRight}>
+            <button className={styles.inviteFirmBtn} onClick={() => setShowInviteFirmModal(true)}>
+              <i className="fi fi-rr-building"></i>
+              Invite Firm
+            </button>
             <button className={styles.inviteBtn} onClick={() => setShowInviteModal(true)}>
               <i className="fi fi-rr-paper-plane"></i>
               Send Invite
@@ -653,6 +803,12 @@ function AdminDashboard() {
         <SendInviteModal
           onClose={() => setShowInviteModal(false)}
           onSuccess={handleInviteSuccess}
+        />
+      )}
+
+      {showInviteFirmModal && (
+        <InviteFirmModal
+          onClose={() => setShowInviteFirmModal(false)}
         />
       )}
     </div>

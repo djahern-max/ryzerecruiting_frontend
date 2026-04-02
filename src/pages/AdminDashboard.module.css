@@ -1140,6 +1140,26 @@
   animation: pulse 1.2s ease-in-out infinite;
 }
 
+.inviteFirmBtn {
+  /* same as inviteBtn but green to visually distinguish it */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 200ms;
+}
+
+.inviteFirmBtn:hover {
+  background: #15803d;
+}
+
 /* ══════════════════════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════════════════════ */
@@ -1215,4 +1235,35 @@
   .modalOverlay {
     padding: 12px;
   }
+}
+
+.inviteSuccess {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.inviteSuccessIcon {
+  font-size: 2rem;
+  color: #16a34a;
+  margin-bottom: 8px;
+}
+
+.inviteSuccessTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.inviteSuccessDetail {
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.inviteSubtext {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0 0 20px;
 }
