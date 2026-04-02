@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import BookingModal from '../components/BookingModal';
 import zoomIcon from '../assets/icons/zoom.svg';
 import styles from './CandidateDashboard.module.css';
+import { apiFetch } from '../services/api';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -160,14 +161,14 @@ export default function CandidateDashboard() {
     const headers = { Authorization: `Bearer ${token}`, 'Cache-Control': 'no-cache' };
 
     // Bookings
-    fetch(`${API_BASE}/api/bookings/my`, { headers, cache: 'no-store' })
+    apiFetch(`${API_BASE}/api/bookings/my`, { headers, cache: 'no-store' })
       .then(r => r.ok ? r.json() : [])
       .then(data => setMyBookings(data))
       .catch(() => { })
       .finally(() => setBookingsLoading(false));
 
     // Candidate profile — sets null if 404, no fallback
-    fetch(`${API_BASE}/api/candidates/me`, { headers, cache: 'no-store' })
+    apiFetch(`${API_BASE}/api/candidates/me`, { headers, cache: 'no-store' })
       .then(r => {
         if (r.status === 404) return null;
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
@@ -186,7 +187,7 @@ export default function CandidateDashboard() {
     const headers = { Authorization: `Bearer ${token}`, 'Cache-Control': 'no-cache' };
     setRolesLoading(true);
 
-    fetch(`${API_BASE}/api/candidates/me/job-matches`, { headers, cache: 'no-store' })
+    apiFetch(`${API_BASE}/api/candidates/me/job-matches`, { headers, cache: 'no-store' })
       .then(r => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.json();

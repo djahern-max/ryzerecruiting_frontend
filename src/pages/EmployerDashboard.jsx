@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import ScheduleCallButton from '../components/ScheduleCallButton';
 import zoomIcon from '../assets/icons/zoom.svg';
 import styles from './EmployerDashboard.module.css';
+import { apiFetch } from '../services/api';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const TRUNCATE = 200;
@@ -235,21 +236,21 @@ export default function EmployerDashboard() {
       const headers = { Authorization: `Bearer ${token}` };
 
       // Bookings
-      fetch(`${API_BASE}/api/bookings/my`, { headers, cache: 'no-store' })
+      apiFetch(`${API_BASE}/api/bookings/my`, { headers, cache: 'no-store' })
         .then(r => r.ok ? r.json() : [])
         .then(data => setMyBookings(data))
         .catch(() => { })
         .finally(() => setBookingsLoading(false));
 
       // Employer profile (linked by email)
-      fetch(`${API_BASE}/api/employer-profiles/me`, { headers, cache: 'no-store' })
+      apiFetch(`${API_BASE}/api/employer-profiles/me`, { headers, cache: 'no-store' })
         .then(r => r.ok ? r.json() : null)
         .then(data => setProfile(data))
         .catch(() => setProfile(null))
         .finally(() => setProfileLoading(false));
 
       // Open job orders (public)
-      fetch(`${API_BASE}/api/job-orders/open`, { headers, cache: 'no-store' })
+      apiFetch(`${API_BASE}/api/job-orders/open`, { headers, cache: 'no-store' })
         .then(r => r.ok ? r.json() : [])
         .then(data => setOpenRoles(data))
         .catch(() => { })
@@ -275,7 +276,7 @@ export default function EmployerDashboard() {
     // Fetch candidate matches for all job orders in parallel
     Promise.all(
       myRoles.map(job =>
-        fetch(`${API_BASE}/api/job-orders/${job.id}/candidate-matches?limit=5`, { headers, cache: 'no-store' })
+        apiFetch(`${API_BASE}/api/job-orders/${job.id}/candidate-matches?limit=5`, { headers, cache: 'no-store' })
           .then(r => r.ok ? r.json() : [])
           .catch(() => [])
           .then(matches => ({ jobId: job.id, matches }))
