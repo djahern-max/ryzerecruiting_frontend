@@ -31,14 +31,14 @@
 .iconWrap {
     width: 64px;
     height: 64px;
-    background: #fef3c7;
+    background: #f1f5f9;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 20px;
     font-size: 1.75rem;
-    color: #d97706;
+    color: #475569;
 }
 
 .title {

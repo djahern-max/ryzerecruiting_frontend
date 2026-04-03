@@ -60,7 +60,7 @@ export default function UpgradePage() {
                 <div className={styles.planCard}>
                     <div className={styles.planHeader}>
                         <span className={styles.planName}>RYZE.ai Recruiting Platform</span>
-                        <span className={styles.planBadge}>Most popular</span>
+
                     </div>
                     <div className={styles.planPrice}>
                         <span className={styles.planAmount}>$99</span>
