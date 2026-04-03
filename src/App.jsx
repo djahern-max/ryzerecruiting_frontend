@@ -21,6 +21,7 @@ import EmployerProfile from './pages/EmployerProfile';
 import UpgradePage from './pages/UpgradePage';
 import BillingSuccess from './pages/BillingSuccess';
 import InviteForm from './pages/admin/InviteForm';
+import ChangePassword from './pages/ChangePassword';
 
 const loadingScreen = (
   <div style={{
@@ -178,6 +179,14 @@ function App() {
               <AdminRoute>
                 <InviteForm />
               </AdminRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <ChangePassword />
+              </ProtectedRoute>
             }
           />
 

@@ -97,6 +97,24 @@
   background: #fef2f2;
 }
 
+.settingsBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #64748b;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 6px;
+  transition: color 150ms, background 150ms;
+}
+
+.settingsBtn:hover {
+  color: #0a66c2;
+  background: #f0f5fb;
+}
+
 /* ── Responsive ────────────────────────────────────── */
 @media (max-width: 640px) {
   .header {

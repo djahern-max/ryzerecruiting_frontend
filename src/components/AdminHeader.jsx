@@ -85,8 +85,16 @@ export default function AdminHeader({ active }) {
                     ))}
                 </nav>
 
+
                 <div className={styles.headerRight}>
                     <TrialBadge />
+                    <button
+                        className={styles.settingsBtn}
+                        onClick={() => navigate('/settings')}
+                        title="Account Settings"
+                    >
+                        <i className="fi fi-rr-settings" />
+                    </button>
                     <span className={styles.userName}>{user?.full_name}</span>
                     <button className={styles.logoutBtn} onClick={logout} title="Logout">
                         <i className="fi fi-rr-exit" />

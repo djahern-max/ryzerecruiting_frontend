@@ -45,6 +45,13 @@ function Header() {
                 {user.full_name || user.email}
               </span>
               <button
+                className={styles.settingsBtn}
+                onClick={() => navigate('/settings')}
+                title="Account Settings"
+              >
+                <i className="fi fi-rr-settings" />
+              </button>
+              <button
                 className={styles.logoutBtn}
                 onClick={handleLogout}
                 title="Logout"
