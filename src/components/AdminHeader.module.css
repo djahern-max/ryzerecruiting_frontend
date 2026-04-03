@@ -275,7 +275,19 @@
 }
 
 /* ── Trial Badge ───────────────────────────────────────────── */
-
+.trialBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #475569;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 100px;
+    padding: 0.25rem 0.7rem;
+    white-space: nowrap;
+}
 
 .trialBadgeUrgent {
     color: #991b1b;
