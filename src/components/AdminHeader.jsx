@@ -4,6 +4,35 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import styles from "./AdminHeader.module.css";
 
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
+function TrialBadge() {
+    const [billing, setBilling] = useState(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+        fetch(`${API_BASE}/api/billing/status`, {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+            .then(r => r.ok ? r.json() : null)
+            .then(data => setBilling(data))
+            .catch(() => null);
+    }, []);
+
+    if (!billing || billing.status === "active") return null;
+
+    const days = billing.days_remaining ?? 0;
+    const urgent = days <= 7;
+
+    return (
+        <span className={`${styles.trialBadge} ${urgent ? styles.trialBadgeUrgent : ""}`}>
+            <span className={styles.trialDot} />
+            {days > 0 ? `Trial · ${days}d left` : "Trial expired"}
+        </span>
+    );
+}
+
 export default function AdminHeader({ active }) {
     const navigate = useNavigate();
     const { user, logout } = useAuth();
@@ -57,6 +86,7 @@ export default function AdminHeader({ active }) {
                 </nav>
 
                 <div className={styles.headerRight}>
+                    <TrialBadge />
                     <span className={styles.userName}>{user?.full_name}</span>
                     <button className={styles.logoutBtn} onClick={logout} title="Logout">
                         <i className="fi fi-rr-exit" />
