@@ -578,7 +578,10 @@ function AdminDashboard() {
                 Invite Firm
               </button>
             )}
-            <button className={styles.inviteBtn} onClick={() => setShowInviteModal(true)}></button>
+            <button className={styles.inviteBtn} onClick={() => setShowInviteModal(true)}>
+              <i className="fi fi-rr-paper-plane"></i>
+              Send Invite
+            </button>
           </div>
 
         </div>
