@@ -570,19 +570,17 @@ function AdminDashboard() {
             <h1 className={styles.pageTitle}>Booking Management</h1>
             <p className={styles.pageSub}>Welcome back, {firstName}. Here's your pipeline.</p>
           </div>
+
           <div className={styles.pageTopRight}>
-            <button className={styles.inviteFirmBtn} onClick={() => setShowInviteFirmModal(true)}>
-              <i className="fi fi-rr-building"></i>
-              Invite Firm
-            </button>
-            <button className={styles.inviteBtn} onClick={() => setShowInviteModal(true)}>
-              <i className="fi fi-rr-paper-plane"></i>
-              Send Invite
-            </button>
-            <div className={styles.liveBadge}>
-              <span className={styles.liveDot}></span>Live
-            </div>
+            {user?.tenant_id === 'ryze' && (
+              <button className={styles.inviteFirmBtn} onClick={() => setShowInviteFirmModal(true)}>
+                <i className="fi fi-rr-building"></i>
+                Invite Firm
+              </button>
+            )}
+            <button className={styles.inviteBtn} onClick={() => setShowInviteModal(true)}></button>
           </div>
+
         </div>
 
         {/* ── Stats ───────────────────────────────────── */}
