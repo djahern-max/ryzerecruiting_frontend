@@ -173,7 +173,7 @@ function App() {
             }
           />
           <Route
-            path="/admin/invite"
+            path="/ryze/invite"
             element={
               <AdminRoute>
                 <InviteForm />
