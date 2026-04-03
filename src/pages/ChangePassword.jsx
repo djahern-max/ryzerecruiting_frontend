@@ -100,6 +100,7 @@ export default function ChangePassword() {
                             onChange={handleChange}
                             placeholder="Enter current password"
                             disabled={status === 'loading'}
+                            autoComplete="current-password"
                         />
                     </div>
 
@@ -113,6 +114,7 @@ export default function ChangePassword() {
                             onChange={handleChange}
                             placeholder="At least 8 characters"
                             disabled={status === 'loading'}
+                            autoComplete="new-password"
                         />
                     </div>
 
@@ -127,6 +129,7 @@ export default function ChangePassword() {
                             placeholder="Repeat new password"
                             disabled={status === 'loading'}
                             onKeyDown={e => e.key === 'Enter' && handleSubmit()}
+                            autoComplete="new-password"
                         />
                     </div>
 
