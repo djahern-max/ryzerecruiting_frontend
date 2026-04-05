@@ -750,7 +750,7 @@ function AdminDashboard() {
                                   {booking.employer_email}
                                 </a>
                               </td>
-                              <td className={styles.phone}>{booking.phone || '—'}</td>
+                              <td className={styles.phone}>{formatPhone(booking.phone)}</td>
                               <td>
                                 {booking.meeting_url ? (
                                   <a href={booking.meeting_url} target="_blank" rel="noreferrer" className={styles.zoomLink} title="Join Zoom Meeting">
