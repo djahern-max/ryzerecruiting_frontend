@@ -1197,6 +1197,18 @@
   color: #5b21b6;
 }
 
+.candidateNameLink {
+  color: #7c3aed;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 150ms;
+}
+
+.candidateNameLink:hover {
+  color: #5b21b6;
+  text-decoration: underline;
+}
+
 
 /* ══════════════════════════════════════════════════════
    RESPONSIVE

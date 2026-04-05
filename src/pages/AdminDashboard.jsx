@@ -520,22 +520,16 @@ function AdminDashboard() {
                         className={`${styles.row} ${expandedBriefId === booking.id || expandedSummaryId === booking.id ? styles.rowExpanded : ''}`}
                       >
                         <td className={styles.nameCell}>
-                          {booking.employer_name}
-                          {/* EP17 — subtle indicator that a candidate profile exists */}
-                          {(booking.booking_type === 'outbound_candidate' || booking.booking_type === 'inbound_candidate') && booking.candidate_id && (
-
-
-                            <div
+                          {(booking.booking_type === 'outbound_candidate' || booking.booking_type === 'inbound_candidate') && booking.candidate_id ? (
+                            <span
                               onClick={() => navigate(`/admin/candidates/${booking.candidate_id}`)}
-                              className={styles.profileNameLink}
+                              className={styles.candidateNameLink}
                               title="View candidate profile"
                             >
-                              <img src={profileIcon} alt="" className={styles.profileIconInline} />
-                              Profile ↗
-                            </div>
-
-
-
+                              {booking.employer_name}
+                            </span>
+                          ) : (
+                            booking.employer_name
                           )}
                         </td>
                         <td>
@@ -613,16 +607,6 @@ function AdminDashboard() {
                   <div className={styles.cardHeader}>
                     <div className={styles.cardName}>
                       {booking.employer_name}
-                      {(booking.booking_type === 'outbound_candidate' || booking.booking_type === 'inbound_candidate') && booking.candidate_id && (
-                        <span
-                          onClick={() => navigate(`/admin/candidates/${booking.candidate_id}`)}
-                          className={styles.profileNameLink}
-                          style={{ marginLeft: '8px' }}
-                        >
-                          <img src={profileIcon} alt="" className={styles.profileIconInline} />
-                          Profile ↗
-                        </span>
-                      )}
                     </div>
                     <span className={`${styles.statusBadge} ${STATUS_COLORS[booking.status]}`}>
                       {STATUS_LABELS[booking.status]}
