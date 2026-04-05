@@ -513,7 +513,7 @@ function AdminDashboard() {
             <div className={styles.sectionBlock}>
               <div className={styles.sectionHeading}>
                 <img src={candidateBookingsIcon} alt="Candidate Bookings" style={{ width: '42px', height: '42px' }} />
-                <span className={styles.sectionLabel}>Candidates</span>
+                <span className={styles.sectionLabel} style={{ fontStyle: 'italic' }}>Candidates</span>
               </div>
 
               {candidateBookings.length === 0 ? (
@@ -679,7 +679,7 @@ function AdminDashboard() {
             <div className={styles.sectionBlock}>
               <div className={styles.sectionHeading}>
                 <img src={employerBookingsIcon} alt="Employer Bookings" style={{ width: '42px', height: '42px' }} />
-                <span className={styles.sectionLabel}>Employers</span>
+                <span className={styles.sectionLabel} style={{ fontStyle: 'italic' }}>Employers</span>
               </div>
 
 
