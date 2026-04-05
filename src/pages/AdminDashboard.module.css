@@ -198,17 +198,22 @@
 }
 
 .pageTitle {
-  font-size: 1.35rem;
+  font-size: 1.6rem;
   font-weight: 800;
   color: var(--text-900);
-  margin: 0 0 3px;
-  letter-spacing: -0.4px;
+  margin: 0 0 5px;
+  letter-spacing: -0.6px;
+  border-left: 3px solid var(--brand-800);
+  padding-left: 12px;
+  line-height: 1.2;
 }
 
 .pageSub {
-  font-size: 0.875rem;
-  color: var(--text-500);
-  margin: 0;
+  font-size: 0.825rem;
+  color: var(--text-400);
+  margin: 0 0 0 15px;
+  font-style: italic;
+  letter-spacing: 0.01em;
 }
 
 .pageTopRight {
@@ -313,7 +318,7 @@
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: var(--bg-100);
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -323,18 +328,27 @@
 }
 
 .statIconPending {
-  background: #fffbeb;
+  background: transparent;
   color: #d97706;
 }
 
 .statIconConfirmed {
-  background: #f0fdf4;
+  background: transparent;
   color: #16a34a;
 }
 
 .statIconCancelled {
-  background: #fef2f2;
+  background: transparent;
   color: #dc2626;
+}
+
+.sectionLabel {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-400);
+  letter-spacing: 0.02em;
+  margin-left: 10px;
+  align-self: center;
 }
 
 .statInfo {
