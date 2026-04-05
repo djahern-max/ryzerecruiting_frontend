@@ -259,6 +259,7 @@ function SendInviteModal({ onClose, onSuccess }) {
 function BookingTypeBadge({ type }) {
   if (type === 'outbound_employer') return <span className={styles.badgeOutboundEmployer}>Employer · Out</span>;
   if (type === 'outbound_candidate') return <span className={styles.badgeOutboundCandidate}>Candidate · Out</span>;
+  if (type === 'inbound_candidate') return <span className={styles.badgeOutboundCandidate}>Candidate · In</span>;
   return <span className={styles.badgeInbound}>Inbound</span>;
 }
 
@@ -351,9 +352,13 @@ function AdminDashboard() {
   const cancelled = bookings.filter(b => b.status === 'cancelled');
   const firstName = user?.full_name?.split(' ')[0] || 'there';
 
+  // ---------------------------------------------------------------------------
+  // Action Buttons — now accepts navigate for candidate profile links
+  // ---------------------------------------------------------------------------
   function ActionButtons({ booking }) {
     const busy = updatingId === booking.id;
     const isConfirming = busy && booking.status === 'pending';
+    const isCandidateBooking = booking.booking_type === 'outbound_candidate' || booking.booking_type === 'inbound_candidate';
 
     return (
       <div className={styles.actions}>
@@ -377,6 +382,18 @@ function AdminDashboard() {
           </button>
         )}
 
+        {/* EP17 — View candidate profile link for confirmed candidate bookings */}
+        {isCandidateBooking && booking.candidate_id && (
+          <button
+            className={`${styles.iconBtn}`}
+            onClick={() => navigate(`/admin/candidates/${booking.candidate_id}`)}
+            title="View candidate profile"
+            style={{ color: '#7c3aed' }}
+          >
+            <i className="fi fi-rr-user" style={{ fontSize: '14px' }} />
+          </button>
+        )}
+
         {booking.status !== 'confirmed' && (
           <button
             className={`${styles.confirmBtn} ${isConfirming ? styles.confirmBtnLoading : ''}`}
@@ -384,7 +401,7 @@ function AdminDashboard() {
             onClick={() => updateStatus(booking.id, 'confirmed')}
           >
             {isConfirming
-              ? <><i className="fi fi-rr-time" style={{ marginRight: '4px' }}></i>Researching…</>
+              ? <><i className="fi fi-rr-time" style={{ marginRight: '4px' }}></i>Confirming…</>
               : <><i className="fi fi-rr-check" style={{ marginRight: '4px' }}></i>Confirm</>
             }
           </button>
@@ -425,13 +442,11 @@ function AdminDashboard() {
           </div>
 
           <div className={styles.pageTopRight}>
-
             <button className={styles.inviteBtn} onClick={() => setShowInviteModal(true)}>
               <i className="fi fi-rr-paper-plane"></i>
               Send Invite
             </button>
           </div>
-
         </div>
 
         {/* ── Stats ───────────────────────────────────── */}
@@ -504,7 +519,29 @@ function AdminDashboard() {
                         key={booking.id}
                         className={`${styles.row} ${expandedBriefId === booking.id || expandedSummaryId === booking.id ? styles.rowExpanded : ''}`}
                       >
-                        <td className={styles.nameCell}>{booking.employer_name}</td>
+                        <td className={styles.nameCell}>
+                          {booking.employer_name}
+                          {/* EP17 — subtle indicator that a candidate profile exists */}
+                          {(booking.booking_type === 'outbound_candidate' || booking.booking_type === 'inbound_candidate') && booking.candidate_id && (
+                            <div
+                              onClick={() => navigate(`/admin/candidates/${booking.candidate_id}`)}
+                              style={{
+                                marginTop: '3px',
+                                fontSize: '11px',
+                                fontWeight: 600,
+                                color: '#7c3aed',
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '3px',
+                              }}
+                              title="View candidate profile"
+                            >
+                              <i className="fi fi-rr-user" style={{ fontSize: '10px' }} />
+                              Profile ↗
+                            </div>
+                          )}
+                        </td>
                         <td>
                           {booking.company_name && <div className={styles.companyName}>{booking.company_name}</div>}
                           {booking.website_url && (
@@ -578,7 +615,23 @@ function AdminDashboard() {
               {bookings.map((booking) => (
                 <div key={booking.id} className={styles.bookingCard}>
                   <div className={styles.cardHeader}>
-                    <div className={styles.cardName}>{booking.employer_name}</div>
+                    <div className={styles.cardName}>
+                      {booking.employer_name}
+                      {(booking.booking_type === 'outbound_candidate' || booking.booking_type === 'inbound_candidate') && booking.candidate_id && (
+                        <span
+                          onClick={() => navigate(`/admin/candidates/${booking.candidate_id}`)}
+                          style={{
+                            marginLeft: '8px',
+                            fontSize: '11px',
+                            fontWeight: 600,
+                            color: '#7c3aed',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          Profile ↗
+                        </span>
+                      )}
+                    </div>
                     <span className={`${styles.statusBadge} ${STATUS_COLORS[booking.status]}`}>
                       {STATUS_LABELS[booking.status]}
                     </span>

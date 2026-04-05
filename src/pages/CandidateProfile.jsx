@@ -65,6 +65,7 @@ export default function CandidateProfile() {
     const [error, setError] = useState(null);
     const [editOpen, setEditOpen] = useState(false);
     const [outreachExpanded, setOutreachExpanded] = useState(false);
+    const [transcriptExpanded, setTranscriptExpanded] = useState(false);
 
     useEffect(() => {
         async function fetchCandidate() {
@@ -113,6 +114,8 @@ export default function CandidateProfile() {
     const hasCPA = candidate.ai_certifications?.toUpperCase().includes("CPA");
     const hasCFA = candidate.ai_certifications?.toUpperCase().includes("CFA");
     const hasCMA = candidate.ai_certifications?.toUpperCase().includes("CMA");
+    const isFromCall = candidate.source === "booking";
+    const isStub = isFromCall && !candidate.ai_summary && !candidate.current_title;
 
     return (
         <div className={styles.page}>
@@ -129,12 +132,30 @@ export default function CandidateProfile() {
                         >
                             ← Back
                         </button>
-                        <button
-                            className={styles.editBtn}
-                            onClick={() => setEditOpen(true)}
-                        >
-                            ✏ Edit Profile
-                        </button>
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                            {/* Enrich with Resume — shown for call-sourced stubs that haven't been parsed yet */}
+                            {isFromCall && (
+                                <button
+                                    className={styles.editBtn}
+                                    onClick={() => setEditOpen(true)}
+                                    style={{
+                                        background: '#f5f3ff',
+                                        color: '#7c3aed',
+                                        border: '1px solid #ddd6fe',
+                                    }}
+                                    title="Add resume or LinkedIn profile to enrich this candidate"
+                                >
+                                    <i className="fi fi-rr-add" style={{ marginRight: '6px', fontSize: '13px' }} />
+                                    Enrich Profile
+                                </button>
+                            )}
+                            <button
+                                className={styles.editBtn}
+                                onClick={() => setEditOpen(true)}
+                            >
+                                ✏ Edit Profile
+                            </button>
+                        </div>
                     </div>
 
                     <div className={styles.headerMain}>
@@ -161,6 +182,24 @@ export default function CandidateProfile() {
                                 </div>
                             )}
                             <div className={styles.headerBadges}>
+                                {/* Source badge — shown when auto-created from a booking */}
+                                {isFromCall && (
+                                    <span style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '5px',
+                                        fontSize: '12px',
+                                        fontWeight: 600,
+                                        color: '#7c3aed',
+                                        background: '#f5f3ff',
+                                        border: '1px solid #ddd6fe',
+                                        borderRadius: '6px',
+                                        padding: '3px 8px',
+                                    }}>
+                                        <i className="fi fi-rr-phone-call" style={{ fontSize: '11px' }} />
+                                        Created from Call
+                                    </span>
+                                )}
                                 {levelLabel && levelStyle && (
                                     <span
                                         className={styles.levelBadge}
@@ -195,6 +234,48 @@ export default function CandidateProfile() {
                     {/* ── Main Column ── */}
                     <div className={styles.mainCol}>
 
+                        {/* Stub notice — shown when call-sourced and not yet enriched */}
+                        {isStub && (
+                            <div style={{
+                                background: '#faf5ff',
+                                border: '1px solid #e9d5ff',
+                                borderRadius: '10px',
+                                padding: '16px 20px',
+                                marginBottom: '16px',
+                                display: 'flex',
+                                alignItems: 'flex-start',
+                                gap: '12px',
+                            }}>
+                                <i className="fi fi-rr-info" style={{ color: '#7c3aed', marginTop: '2px', flexShrink: 0 }} />
+                                <div>
+                                    <div style={{ fontWeight: 600, color: '#6d28d9', fontSize: '14px', marginBottom: '4px' }}>
+                                        Profile created from a scheduled call
+                                    </div>
+                                    <div style={{ color: '#7c3aed', fontSize: '13px', lineHeight: 1.5 }}>
+                                        This candidate was automatically added when the call was confirmed.
+                                        Upload a resume or paste their LinkedIn profile to enrich the record with full details.
+                                    </div>
+                                    <button
+                                        onClick={() => setEditOpen(true)}
+                                        style={{
+                                            marginTop: '10px',
+                                            background: '#7c3aed',
+                                            color: '#fff',
+                                            border: 'none',
+                                            borderRadius: '6px',
+                                            padding: '7px 14px',
+                                            fontSize: '13px',
+                                            fontWeight: 600,
+                                            cursor: 'pointer',
+                                            fontFamily: 'inherit',
+                                        }}
+                                    >
+                                        Enrich Profile →
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
                         {candidate.ai_summary && (
                             <Section title="AI Summary">
                                 <p className={styles.summaryText}>{candidate.ai_summary}</p>
@@ -226,6 +307,85 @@ export default function CandidateProfile() {
                                         {outreachExpanded ? "Show less ↑" : "Show full message ↓"}
                                     </button>
                                 </div>
+                            </Section>
+                        )}
+
+                        {/* ── Call Transcript ── */}
+                        {candidate.meeting_transcript && (
+                            <Section title="Call Transcript">
+                                <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    marginBottom: '10px',
+                                }}>
+                                    <span style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '4px',
+                                        fontSize: '11px',
+                                        fontWeight: 600,
+                                        color: '#0369a1',
+                                        background: '#e0f2fe',
+                                        border: '1px solid #bae6fd',
+                                        borderRadius: '4px',
+                                        padding: '2px 7px',
+                                    }}>
+                                        <i className="fi fi-rr-rec" style={{ fontSize: '10px' }} />
+                                        Zoom Recording
+                                    </span>
+                                    <span style={{ fontSize: '12px', color: '#9ca3af' }}>
+                                        {candidate.meeting_transcript.length.toLocaleString()} chars
+                                    </span>
+                                </div>
+                                <div style={{
+                                    position: 'relative',
+                                    maxHeight: transcriptExpanded ? 'none' : '240px',
+                                    overflow: transcriptExpanded ? 'visible' : 'hidden',
+                                }}>
+                                    <pre style={{
+                                        fontFamily: 'inherit',
+                                        fontSize: '13px',
+                                        lineHeight: 1.65,
+                                        color: '#374151',
+                                        whiteSpace: 'pre-wrap',
+                                        wordBreak: 'break-word',
+                                        margin: 0,
+                                        background: '#f8fafc',
+                                        border: '1px solid #e2e8f0',
+                                        borderRadius: '8px',
+                                        padding: '14px 16px',
+                                    }}>
+                                        {candidate.meeting_transcript}
+                                    </pre>
+                                    {!transcriptExpanded && (
+                                        <div style={{
+                                            position: 'absolute',
+                                            bottom: 0,
+                                            left: 0,
+                                            right: 0,
+                                            height: '60px',
+                                            background: 'linear-gradient(to bottom, transparent, #fff)',
+                                            pointerEvents: 'none',
+                                        }} />
+                                    )}
+                                </div>
+                                <button
+                                    onClick={() => setTranscriptExpanded(p => !p)}
+                                    style={{
+                                        marginTop: '8px',
+                                        background: 'none',
+                                        border: 'none',
+                                        color: '#2563eb',
+                                        fontSize: '13px',
+                                        fontWeight: 600,
+                                        cursor: 'pointer',
+                                        padding: '0',
+                                        fontFamily: 'inherit',
+                                    }}
+                                >
+                                    {transcriptExpanded ? "Show less ↑" : "Show full transcript ↓"}
+                                </button>
                             </Section>
                         )}
 
@@ -271,28 +431,38 @@ export default function CandidateProfile() {
                             </Section>
                         )}
 
-                        {candidate.ai_parsed_at && (
-                            <Section title="Profile Details">
-                                <div className={styles.infoList}>
+                        <Section title="Profile Details">
+                            <div className={styles.infoList}>
+                                <InfoRow
+                                    label="Source"
+                                    value={isFromCall ? "From Call" : "Manual Entry"}
+                                />
+                                {candidate.ai_parsed_at && (
                                     <InfoRow
                                         label="Parsed"
                                         value={new Date(candidate.ai_parsed_at).toLocaleDateString("en-US", {
                                             month: "short", day: "numeric", year: "numeric"
                                         })}
                                     />
+                                )}
+                                <InfoRow
+                                    label="Added"
+                                    value={new Date(candidate.created_at).toLocaleDateString("en-US", {
+                                        month: "short", day: "numeric", year: "numeric"
+                                    })}
+                                />
+                                <InfoRow
+                                    label="AI Search"
+                                    value={candidate.embedded_at ? "✓ Indexed" : "Not indexed"}
+                                />
+                                {candidate.meeting_transcript && (
                                     <InfoRow
-                                        label="Added"
-                                        value={new Date(candidate.created_at).toLocaleDateString("en-US", {
-                                            month: "short", day: "numeric", year: "numeric"
-                                        })}
+                                        label="Transcript"
+                                        value="✓ Available"
                                     />
-                                    <InfoRow
-                                        label="AI Search"
-                                        value={candidate.embedded_at ? "✓ Indexed" : "Not indexed"}
-                                    />
-                                </div>
-                            </Section>
-                        )}
+                                )}
+                            </div>
+                        </Section>
 
                     </div>
                 </div>

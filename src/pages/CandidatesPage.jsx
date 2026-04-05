@@ -80,6 +80,7 @@ export default function CandidatesPage() {
     });
 
     const indexedCount = candidates.filter((c) => c.embedded_at).length;
+    const fromCallCount = candidates.filter((c) => c.source === "booking").length;
 
     return (
         <div className={styles.page}>
@@ -94,10 +95,22 @@ export default function CandidatesPage() {
                         <p className={styles.pageSub}>
                             {candidates.length} candidate{candidates.length !== 1 ? "s" : ""} in your database
                             {candidates.length > 0 && (
-                                <span className={styles.indexedStat}>
-                                    <span className={styles.indexedDot} />
-                                    {indexedCount} of {candidates.length} AI indexed and searchable
-                                </span>
+                                <>
+                                    <span className={styles.indexedStat}>
+                                        <span className={styles.indexedDot} />
+                                        {indexedCount} of {candidates.length} AI indexed and searchable
+                                    </span>
+                                    {fromCallCount > 0 && (
+                                        <span style={{
+                                            marginLeft: '12px',
+                                            fontSize: '12px',
+                                            color: '#7c3aed',
+                                            fontWeight: 500,
+                                        }}>
+                                            · {fromCallCount} from calls
+                                        </span>
+                                    )}
+                                </>
                             )}
                         </p>
                     </div>
@@ -150,6 +163,7 @@ export default function CandidatesPage() {
                                         setExpandedId={setExpandedId}
                                         openEdit={openEdit}
                                         handleDelete={handleDelete}
+                                        navigate={navigate}
                                         styles={styles}
                                     />
                                 ))}
@@ -171,12 +185,44 @@ export default function CandidatesPage() {
     );
 }
 
-function FragmentRow({ candidate: c, expandedId, setExpandedId, openEdit, handleDelete, styles }) {
+function FragmentRow({ candidate: c, expandedId, setExpandedId, openEdit, handleDelete, navigate, styles }) {
+    const isFromCall = c.source === "booking";
+
     return (
         <>
             <tr className={`${styles.row} ${expandedId === c.id ? styles.rowExpanded : ""}`}>
                 <td>
-                    <div className={styles.candidateName}>{c.name}</div>
+                    {/* Name — clickable, navigates to full profile */}
+                    <div
+                        className={styles.candidateName}
+                        onClick={() => navigate(`/admin/candidates/${c.id}`)}
+                        style={{ cursor: 'pointer' }}
+                        title="View full profile"
+                    >
+                        {c.name}
+                    </div>
+
+                    {/* Source badge — shown when auto-created from a confirmed call */}
+                    {isFromCall && (
+                        <span style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            marginTop: '3px',
+                            fontSize: '11px',
+                            fontWeight: 600,
+                            color: '#7c3aed',
+                            background: '#f5f3ff',
+                            border: '1px solid #ddd6fe',
+                            borderRadius: '4px',
+                            padding: '1px 6px',
+                            letterSpacing: '0.01em',
+                        }}>
+                            <i className="fi fi-rr-phone-call" style={{ fontSize: '10px' }} />
+                            From Call
+                        </span>
+                    )}
+
                     {c.linkedin_url && (
                         <a href={c.linkedin_url} target="_blank" rel="noopener noreferrer" className={styles.linkedinLink}>
                             LinkedIn ↗
@@ -217,6 +263,13 @@ function FragmentRow({ candidate: c, expandedId, setExpandedId, openEdit, handle
 
                 <td>
                     <div className={styles.actions}>
+                        <button
+                            className={styles.editBtn}
+                            onClick={() => navigate(`/admin/candidates/${c.id}`)}
+                            title="View full profile"
+                        >
+                            Profile
+                        </button>
                         <button className={styles.editBtn} onClick={() => openEdit(c)}>Edit</button>
                         <button className={styles.deleteBtn} onClick={() => handleDelete(c.id)}>Delete</button>
                     </div>
