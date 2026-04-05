@@ -453,9 +453,8 @@ function AdminDashboard() {
             <p className={styles.pageSub}>Welcome back, {firstName}. Here's your pipeline.</p>
           </div>
           <div className={styles.pageTopRight}>
-            <button className={styles.inviteBtn} onClick={() => setShowInviteModal(true)}>
-              <img src={sendInviteIcon} alt="" style={{ width: '15px', height: '15px', filter: 'brightness(0) invert(1)' }} />
-              Send Invite
+            <button className={styles.inviteBtn} onClick={() => setShowInviteModal(true)} title="Send Invite">
+              <img src={sendInviteIcon} alt="Send Invite" style={{ width: '22px', height: '22px' }} />
             </button>
           </div>
         </div>

@@ -224,29 +224,22 @@
 .inviteBtn {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  background: var(--brand-800);
-  color: white;
+  justify-content: center;
+  background: none;
   border: none;
-  border-radius: 8px;
-  padding: 8px 18px;
-  font-size: 13px;
-  font-weight: 700;
-  font-family: var(--font-sans);
+  padding: 6px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(10, 102, 194, 0.28);
-  transition: background 140ms, box-shadow 140ms, transform 140ms;
-  white-space: nowrap;
+  border-radius: 8px;
+  transition: background 140ms, transform 140ms;
 }
 
 .inviteBtn:hover {
-  background: #004182;
-  box-shadow: 0 4px 14px rgba(10, 102, 194, 0.4);
+  background: var(--bg-100);
   transform: translateY(-1px);
 }
 
 .inviteBtn:active {
-  transform: scale(0.97);
+  transform: scale(0.93);
 }
 
 .liveBadge {
