@@ -34,8 +34,26 @@ const CAREER_LEVEL_OPTIONS = [
     { value: "c-suite", label: "C-Suite" },
 ];
 
-export default function CandidateModal({ candidate, token, onSaved, onClose }) {
+/**
+ * CandidateModal
+ *
+ * Props:
+ *   candidate    — existing candidate object (edit mode) or null (add mode)
+ *   token        — auth token
+ *   onSaved      — callback after successful save (receives updated candidate)
+ *   onClose      — callback to close modal
+ *   enrichMode   — (optional) when true, shows the Parse tab even for existing
+ *                  candidates so a call-sourced stub can be enriched with a
+ *                  resume or LinkedIn paste without losing the existing record
+ */
+export default function CandidateModal({ candidate, token, onSaved, onClose, enrichMode = false }) {
     const isEdit = !!candidate;
+
+    // In enrichMode we show the parse tab and start there.
+    // In normal edit mode we go straight to manual.
+    // In add mode we default to parse.
+    const initialTab = enrichMode ? "parse" : (isEdit ? "manual" : "parse");
+
     const [form, setForm] = useState(EMPTY_FORM);
     const [parseText, setParseText] = useState("");
     const [parseMode, setParseMode] = useState("file");
@@ -45,11 +63,21 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState(null);
     const [parseError, setParseError] = useState(null);
-    const [activeTab, setActiveTab] = useState("manual");
+    const [activeTab, setActiveTab] = useState(initialTab);
     const [skillInput, setSkillInput] = useState("");
     const [duplicates, setDuplicates] = useState([]);
     const [duplicateDismissed, setDuplicateDismissed] = useState(false);
     const fileInputRef = useRef(null);
+
+    // Whether to show the parse tab at all
+    const showParseTabs = !isEdit || enrichMode;
+
+    // Modal title
+    const modalTitle = enrichMode
+        ? `Enrich — ${candidate?.name}`
+        : isEdit
+            ? `Edit — ${candidate?.name}`
+            : "Add Candidate";
 
     useEffect(() => {
         if (candidate) {
@@ -84,11 +112,15 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
             });
             if (res.ok) {
                 const matches = await res.json();
-                setDuplicates(matches);
+                // In enrich mode, exclude the current candidate from duplicate results
+                const filtered = isEdit
+                    ? matches.filter(m => m.id !== candidate.id)
+                    : matches;
+                setDuplicates(filtered);
                 setDuplicateDismissed(false);
             }
         } catch {
-            // non-fatal — silently ignore
+            // non-fatal
         }
     }
 
@@ -129,29 +161,52 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
     }
 
     function applyParsedResult(parsed) {
-        const newForm = {
-            name: parsed.name || "",
-            email: parsed.email || "",
-            phone: parsed.phone || "",
-            linkedin_url: parsed.linkedin_url || "",
-            linkedin_raw_text: parsed.linkedin_raw_text || parseText || "",
-            current_title: parsed.current_title || "",
-            current_company: parsed.current_company || "",
-            location: parsed.location || "",
-            notes: "",
-            ai_summary: parsed.ai_summary || "",
-            ai_career_level: parsed.ai_career_level || "",
-            ai_experience: parsed.ai_experience || "",
-            ai_education: parsed.ai_education || "",
-            ai_certifications: parsed.ai_certifications || "",
-            ai_skills: parsed.ai_skills || [],
-            ai_years_experience: parsed.ai_years_experience || "",
-        };
-        setForm(newForm);
-        setActiveTab("manual");
+        // In enrich mode, merge parsed data onto the existing form values.
+        // Only overwrite a field if the parsed result has a non-empty value —
+        // preserves existing data (e.g. recruiter notes, phone) that the
+        // resume/LinkedIn paste won't contain.
+        if (enrichMode && candidate) {
+            setForm(prev => ({
+                ...prev,
+                name: parsed.name || prev.name,
+                email: parsed.email || prev.email,
+                phone: parsed.phone || prev.phone,
+                linkedin_url: parsed.linkedin_url || prev.linkedin_url,
+                linkedin_raw_text: parsed.linkedin_raw_text || parseText || prev.linkedin_raw_text,
+                current_title: parsed.current_title || prev.current_title,
+                current_company: parsed.current_company || prev.current_company,
+                location: parsed.location || prev.location,
+                ai_summary: parsed.ai_summary || prev.ai_summary,
+                ai_career_level: parsed.ai_career_level || prev.ai_career_level,
+                ai_experience: parsed.ai_experience || prev.ai_experience,
+                ai_education: parsed.ai_education || prev.ai_education,
+                ai_certifications: parsed.ai_certifications || prev.ai_certifications,
+                ai_skills: parsed.ai_skills?.length ? parsed.ai_skills : prev.ai_skills,
+                ai_years_experience: parsed.ai_years_experience || prev.ai_years_experience,
+            }));
+        } else {
+            setForm({
+                name: parsed.name || "",
+                email: parsed.email || "",
+                phone: parsed.phone || "",
+                linkedin_url: parsed.linkedin_url || "",
+                linkedin_raw_text: parsed.linkedin_raw_text || parseText || "",
+                current_title: parsed.current_title || "",
+                current_company: parsed.current_company || "",
+                location: parsed.location || "",
+                notes: "",
+                ai_summary: parsed.ai_summary || "",
+                ai_career_level: parsed.ai_career_level || "",
+                ai_experience: parsed.ai_experience || "",
+                ai_education: parsed.ai_education || "",
+                ai_certifications: parsed.ai_certifications || "",
+                ai_skills: parsed.ai_skills || [],
+                ai_years_experience: parsed.ai_years_experience || "",
+            });
+        }
 
-        // Check for duplicates using parsed name + location
-        if (parsed.name) {
+        setActiveTab("manual");
+        if (parsed.name && !isEdit) {
             checkForDuplicates(parsed.name, parsed.location);
         }
     }
@@ -224,7 +279,7 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                 const data = await res.json().catch(() => ({}));
                 throw new Error(data.detail || "Save failed");
             }
-            onSaved();
+            onSaved(await res.json());
         } catch (e) {
             setError(e.message);
         } finally {
@@ -240,26 +295,24 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
 
                 {/* ── Header ── */}
                 <div className={styles.modalHeader}>
-                    <h2 className={styles.modalTitle}>
-                        {isEdit ? `Edit — ${candidate.name}` : "Add Candidate"}
-                    </h2>
+                    <h2 className={styles.modalTitle}>{modalTitle}</h2>
                     <button className={styles.closeBtn} onClick={onClose}>✕</button>
                 </div>
 
-                {/* ── Tabs ── */}
-                {!isEdit && (
+                {/* ── Tabs — shown for add mode and enrich mode ── */}
+                {showParseTabs && (
                     <div className={styles.tabs}>
                         <button
                             className={`${styles.tab} ${activeTab === "parse" ? styles.tabActive : ""}`}
                             onClick={() => setActiveTab("parse")}
                         >
-                            ⚡ Parse from Resume
+                            ⚡ {enrichMode ? "Enrich from Resume / LinkedIn" : "Parse from Resume"}
                         </button>
                         <button
                             className={`${styles.tab} ${activeTab === "manual" ? styles.tabActive : ""}`}
                             onClick={() => setActiveTab("manual")}
                         >
-                            Manual Entry
+                            {enrichMode ? "Review & Save" : "Manual Entry"}
                         </button>
                     </div>
                 )}
@@ -297,8 +350,26 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                         </div>
                     )}
 
+                    {/* ── Enrich mode hint ── */}
+                    {enrichMode && activeTab === "parse" && (
+                        <div style={{
+                            background: '#f5f3ff',
+                            border: '1px solid #e9d5ff',
+                            borderRadius: '8px',
+                            padding: '12px 14px',
+                            marginBottom: '16px',
+                            fontSize: '13px',
+                            color: '#6d28d9',
+                            lineHeight: 1.5,
+                        }}>
+                            <strong>Enriching an existing profile.</strong> Parsed data will be merged into the current record —
+                            existing fields are only overwritten if the resume or LinkedIn profile contains a value for them.
+                            Recruiter notes and contact details you've already saved will be preserved.
+                        </div>
+                    )}
+
                     {/* ── Parse Tab ── */}
-                    {activeTab === "parse" && !isEdit && (
+                    {activeTab === "parse" && showParseTabs && (
                         <div className={styles.parseSection}>
                             <div className={styles.parseModeToggle}>
                                 <button
@@ -365,11 +436,11 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                             {parseMode === "text" && (
                                 <>
                                     <p className={styles.parseInstructions}>
-                                        Paste a resume, bio, or LinkedIn profile text below. Claude will extract their details automatically.
+                                        Paste a resume, bio, or LinkedIn profile (select all → copy → paste). Claude will extract their details automatically.
                                     </p>
                                     <textarea
                                         className={styles.parseTextarea}
-                                        placeholder="Paste resume or candidate profile text here..."
+                                        placeholder="Paste resume or LinkedIn profile here..."
                                         value={parseText}
                                         onChange={(e) => setParseText(e.target.value)}
                                         rows={10}
@@ -386,6 +457,20 @@ export default function CandidateModal({ candidate, token, onSaved, onClose }) {
                     {/* ── Manual / Review Tab ── */}
                     {activeTab === "manual" && (
                         <div className={styles.formSections}>
+
+                            {enrichMode && (
+                                <div style={{
+                                    background: '#f0fdf4',
+                                    border: '1px solid #bbf7d0',
+                                    borderRadius: '8px',
+                                    padding: '10px 14px',
+                                    marginBottom: '16px',
+                                    fontSize: '13px',
+                                    color: '#15803d',
+                                }}>
+                                    ✓ Profile parsed — review the fields below and click <strong>Save Changes</strong> to update this candidate.
+                                </div>
+                            )}
 
                             <div className={styles.sectionBlock}>
                                 <div className={styles.sectionHeader}>Basic Info</div>

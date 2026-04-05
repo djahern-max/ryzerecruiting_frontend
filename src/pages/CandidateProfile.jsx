@@ -8,13 +8,13 @@ import styles from "./CandidateProfile.module.css";
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 const CAREER_LEVEL_COLORS = {
-    entry:     { bg: "#f0fdf4", color: "#15803d", border: "#bbf7d0" },
-    junior:    { bg: "#f0fdf4", color: "#15803d", border: "#bbf7d0" },
-    mid:       { bg: "#eff6ff", color: "#1d4ed8", border: "#bfdbfe" },
-    senior:    { bg: "#faf5ff", color: "#7c3aed", border: "#e9d5ff" },
-    manager:   { bg: "#fff7ed", color: "#c2410c", border: "#fed7aa" },
-    director:  { bg: "#fff7ed", color: "#c2410c", border: "#fed7aa" },
-    vp:        { bg: "#fef2f2", color: "#b91c1c", border: "#fecaca" },
+    entry: { bg: "#f0fdf4", color: "#15803d", border: "#bbf7d0" },
+    junior: { bg: "#f0fdf4", color: "#15803d", border: "#bbf7d0" },
+    mid: { bg: "#eff6ff", color: "#1d4ed8", border: "#bfdbfe" },
+    senior: { bg: "#faf5ff", color: "#7c3aed", border: "#e9d5ff" },
+    manager: { bg: "#fff7ed", color: "#c2410c", border: "#fed7aa" },
+    director: { bg: "#fff7ed", color: "#c2410c", border: "#fed7aa" },
+    vp: { bg: "#fef2f2", color: "#b91c1c", border: "#fecaca" },
     "c-suite": { bg: "#0f172a", color: "#f8fafc", border: "#1e293b" },
     executive: { bg: "#0f172a", color: "#f8fafc", border: "#1e293b" },
 };
@@ -63,7 +63,11 @@ export default function CandidateProfile() {
     const [candidate, setCandidate] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    // Two separate modal modes — never open both at once
     const [editOpen, setEditOpen] = useState(false);
+    const [enrichOpen, setEnrichOpen] = useState(false);
+
     const [outreachExpanded, setOutreachExpanded] = useState(false);
     const [transcriptExpanded, setTranscriptExpanded] = useState(false);
 
@@ -83,6 +87,12 @@ export default function CandidateProfile() {
         }
         fetchCandidate();
     }, [id, token]);
+
+    function handleSaved(updated) {
+        setCandidate(updated);
+        setEditOpen(false);
+        setEnrichOpen(false);
+    }
 
     if (loading) {
         return (
@@ -115,6 +125,10 @@ export default function CandidateProfile() {
     const hasCFA = candidate.ai_certifications?.toUpperCase().includes("CFA");
     const hasCMA = candidate.ai_certifications?.toUpperCase().includes("CMA");
     const isFromCall = candidate.source === "booking";
+
+    // A stub is a call-sourced candidate that hasn't been enriched yet —
+    // no AI summary and no current title means the only data we have is
+    // what was on the booking (name, email, phone).
     const isStub = isFromCall && !candidate.ai_summary && !candidate.current_title;
 
     return (
@@ -126,24 +140,21 @@ export default function CandidateProfile() {
                 <div className={styles.profileHeaderInner}>
 
                     <div className={styles.headerTop}>
-                        <button
-                            className={styles.backLink}
-                            onClick={() => navigate(-1)}
-                        >
+                        <button className={styles.backLink} onClick={() => navigate(-1)}>
                             ← Back
                         </button>
+
+                        {/* Header actions — Enrich shown only for call-sourced, Edit always shown */}
                         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                            {/* Enrich with Resume — shown for call-sourced stubs that haven't been parsed yet */}
                             {isFromCall && (
                                 <button
                                     className={styles.editBtn}
-                                    onClick={() => setEditOpen(true)}
+                                    onClick={() => setEnrichOpen(true)}
                                     style={{
                                         background: '#f5f3ff',
                                         color: '#7c3aed',
                                         border: '1px solid #ddd6fe',
                                     }}
-                                    title="Add resume or LinkedIn profile to enrich this candidate"
                                 >
                                     <i className="fi fi-rr-add" style={{ marginRight: '6px', fontSize: '13px' }} />
                                     Enrich Profile
@@ -165,15 +176,11 @@ export default function CandidateProfile() {
                         <div className={styles.headerInfo}>
                             <h1 className={styles.candidateName}>{candidate.name}</h1>
                             <div className={styles.candidateMeta}>
-                                {candidate.current_title && (
-                                    <span>{candidate.current_title}</span>
-                                )}
+                                {candidate.current_title && <span>{candidate.current_title}</span>}
                                 {candidate.current_title && candidate.current_company && (
                                     <span className={styles.metaDot}>·</span>
                                 )}
-                                {candidate.current_company && (
-                                    <span>{candidate.current_company}</span>
-                                )}
+                                {candidate.current_company && <span>{candidate.current_company}</span>}
                             </div>
                             {candidate.location && (
                                 <div className={styles.candidateLocation}>
@@ -182,7 +189,6 @@ export default function CandidateProfile() {
                                 </div>
                             )}
                             <div className={styles.headerBadges}>
-                                {/* Source badge — shown when auto-created from a booking */}
                                 {isFromCall && (
                                     <span style={{
                                         display: 'inline-flex',
@@ -256,7 +262,7 @@ export default function CandidateProfile() {
                                         Upload a resume or paste their LinkedIn profile to enrich the record with full details.
                                     </div>
                                     <button
-                                        onClick={() => setEditOpen(true)}
+                                        onClick={() => setEnrichOpen(true)}
                                         style={{
                                             marginTop: '10px',
                                             background: '#7c3aed',
@@ -456,10 +462,7 @@ export default function CandidateProfile() {
                                     value={candidate.embedded_at ? "✓ Indexed" : "Not indexed"}
                                 />
                                 {candidate.meeting_transcript && (
-                                    <InfoRow
-                                        label="Transcript"
-                                        value="✓ Available"
-                                    />
+                                    <InfoRow label="Transcript" value="✓ Available" />
                                 )}
                             </div>
                         </Section>
@@ -468,15 +471,23 @@ export default function CandidateProfile() {
                 </div>
             </div>
 
-            {/* ── Edit Modal ── */}
+            {/* ── Enrich Modal — parse tab, merges into existing record ── */}
+            {enrichOpen && (
+                <CandidateModal
+                    candidate={candidate}
+                    token={token}
+                    enrichMode={true}
+                    onSaved={handleSaved}
+                    onClose={() => setEnrichOpen(false)}
+                />
+            )}
+
+            {/* ── Edit Modal — manual form only ── */}
             {editOpen && (
                 <CandidateModal
                     candidate={candidate}
                     token={token}
-                    onSaved={(updated) => {
-                        setCandidate(updated);
-                        setEditOpen(false);
-                    }}
+                    onSaved={handleSaved}
                     onClose={() => setEditOpen(false)}
                 />
             )}
