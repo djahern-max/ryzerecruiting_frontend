@@ -61,6 +61,18 @@ function getAvailableSlots(selectedDate) {
   });
 }
 
+function formatPhone(phone) {
+  if (!phone) return '—';
+  const digits = phone.replace(/\D/g, '');
+  if (digits.length === 10) {
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  }
+  if (digits.length === 11 && digits[0] === '1') {
+    return `(${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7)}`;
+  }
+  return phone; // fallback: return as-is if unrecognized format
+}
+
 // ---------------------------------------------------------------------------
 // Send Meeting Invite Modal
 // ---------------------------------------------------------------------------
@@ -567,7 +579,7 @@ function AdminDashboard() {
                                   {booking.employer_email}
                                 </a>
                               </td>
-                              <td className={styles.phone}>{booking.phone || '—'}</td>
+                              <td className={styles.phone}>{formatPhone(booking.phone)}</td>
                               <td>
                                 {booking.meeting_url ? (
                                   <a href={booking.meeting_url} target="_blank" rel="noreferrer" className={styles.zoomLink} title="Join Zoom Meeting">
@@ -635,7 +647,7 @@ function AdminDashboard() {
                           </div>
                           <div className={styles.cardField}>
                             <span className={styles.cardLabel}>Phone</span>
-                            <span className={styles.cardValue}>{booking.phone || '—'}</span>
+                            <span className={styles.cardValue}>{formatPhone(booking.phone)}</span>
                           </div>
                           <div className={styles.cardField}>
                             <span className={styles.cardLabel}>Type</span>
