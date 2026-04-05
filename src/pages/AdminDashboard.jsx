@@ -13,6 +13,7 @@ import zoomIcon from '../assets/icons/zoom.svg';
 import letterXIcon from '../assets/icons/letter-x.svg';
 import AdminHeader from '../components/AdminHeader';
 import { apiFetch } from '../services/api';
+import profileIcon from '../assets/icons/profile.svg';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -388,9 +389,8 @@ function AdminDashboard() {
             className={`${styles.iconBtn}`}
             onClick={() => navigate(`/admin/candidates/${booking.candidate_id}`)}
             title="View candidate profile"
-            style={{ color: '#7c3aed' }}
           >
-            <i className="fi fi-rr-user" style={{ fontSize: '14px' }} />
+            <img src={profileIcon} alt="Profile" className={styles.profileIcon} />
           </button>
         )}
 
@@ -523,23 +523,19 @@ function AdminDashboard() {
                           {booking.employer_name}
                           {/* EP17 — subtle indicator that a candidate profile exists */}
                           {(booking.booking_type === 'outbound_candidate' || booking.booking_type === 'inbound_candidate') && booking.candidate_id && (
+
+
                             <div
                               onClick={() => navigate(`/admin/candidates/${booking.candidate_id}`)}
-                              style={{
-                                marginTop: '3px',
-                                fontSize: '11px',
-                                fontWeight: 600,
-                                color: '#7c3aed',
-                                cursor: 'pointer',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '3px',
-                              }}
+                              className={styles.profileNameLink}
                               title="View candidate profile"
                             >
-                              <i className="fi fi-rr-user" style={{ fontSize: '10px' }} />
+                              <img src={profileIcon} alt="" className={styles.profileIconInline} />
                               Profile ↗
                             </div>
+
+
+
                           )}
                         </td>
                         <td>
@@ -620,14 +616,10 @@ function AdminDashboard() {
                       {(booking.booking_type === 'outbound_candidate' || booking.booking_type === 'inbound_candidate') && booking.candidate_id && (
                         <span
                           onClick={() => navigate(`/admin/candidates/${booking.candidate_id}`)}
-                          style={{
-                            marginLeft: '8px',
-                            fontSize: '11px',
-                            fontWeight: 600,
-                            color: '#7c3aed',
-                            cursor: 'pointer',
-                          }}
+                          className={styles.profileNameLink}
+                          style={{ marginLeft: '8px' }}
                         >
+                          <img src={profileIcon} alt="" className={styles.profileIconInline} />
                           Profile ↗
                         </span>
                       )}

@@ -1160,6 +1160,44 @@
   background: #15803d;
 }
 
+/* ── Profile Icon (FlatIcon) ───────────────────────────────────── */
+.profileIcon {
+  width: 20px;
+  height: 20px;
+  /* purple to match candidate context */
+  filter: invert(27%) sepia(60%) saturate(800%) hue-rotate(245deg) brightness(90%);
+  transition: filter 150ms, transform 150ms;
+}
+
+.profileIcon:hover {
+  filter: invert(20%) sepia(80%) saturate(1000%) hue-rotate(245deg) brightness(85%);
+  transform: scale(1.12);
+}
+
+.profileIconInline {
+  width: 10px;
+  height: 10px;
+  filter: invert(27%) sepia(60%) saturate(800%) hue-rotate(245deg) brightness(90%);
+  vertical-align: middle;
+}
+
+.profileNameLink {
+  margin-top: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #7c3aed;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  transition: color 150ms;
+}
+
+.profileNameLink:hover {
+  color: #5b21b6;
+}
+
+
 /* ══════════════════════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════════════════════ */
