@@ -16,6 +16,10 @@ import { apiFetch } from '../services/api';
 import profileIcon from '../assets/icons/profile.svg';
 import candidateBookingsIcon from '../assets/icons/candidate_bookings.svg';
 import employerBookingsIcon from '../assets/icons/employer_bookings.svg';
+import calendarIcon from '../assets/icons/calendar.svg';
+import pendingIcon from '../assets/icons/pending.svg';
+import confirmedIcon from '../assets/icons/confirmed.svg';
+import cancelledIcon from '../assets/icons/cancelled.svg';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -458,28 +462,36 @@ function AdminDashboard() {
         {/* ── Stats ───────────────────────────────────── */}
         <div className={styles.statsRow}>
           <div className={styles.statCard}>
-            <div className={styles.statIcon}><i className="fi fi-rr-calendar"></i></div>
+            <div className={styles.statIcon}>
+              <img src={calendarIcon} alt="" style={{ width: '22px', height: '22px' }} />
+            </div>
             <div className={styles.statInfo}>
               <span className={styles.statNumber}>{bookings.length}</span>
               <span className={styles.statLabel}>Total</span>
             </div>
           </div>
           <div className={styles.statCard}>
-            <div className={`${styles.statIcon} ${styles.statIconPending}`}><i className="fi fi-rr-clock"></i></div>
+            <div className={`${styles.statIcon} ${styles.statIconPending}`}>
+              <img src={pendingIcon} alt="" style={{ width: '22px', height: '22px' }} />
+            </div>
             <div className={styles.statInfo}>
               <span className={`${styles.statNumber} ${styles.statPending}`}>{pending.length}</span>
               <span className={styles.statLabel}>Pending</span>
             </div>
           </div>
           <div className={styles.statCard}>
-            <div className={`${styles.statIcon} ${styles.statIconConfirmed}`}><i className="fi fi-rr-check-circle"></i></div>
+            <div className={`${styles.statIcon} ${styles.statIconConfirmed}`}>
+              <img src={confirmedIcon} alt="" style={{ width: '22px', height: '22px' }} />
+            </div>
             <div className={styles.statInfo}>
               <span className={`${styles.statNumber} ${styles.statConfirmed}`}>{confirmed.length}</span>
               <span className={styles.statLabel}>Confirmed</span>
             </div>
           </div>
           <div className={styles.statCard}>
-            <div className={`${styles.statIcon} ${styles.statIconCancelled}`}><i className="fi fi-rr-ban"></i></div>
+            <div className={`${styles.statIcon} ${styles.statIconCancelled}`}>
+              <img src={cancelledIcon} alt="" style={{ width: '22px', height: '22px' }} />
+            </div>
             <div className={styles.statInfo}>
               <span className={`${styles.statNumber} ${styles.statCancelled}`}>{cancelled.length}</span>
               <span className={styles.statLabel}>Cancelled</span>
