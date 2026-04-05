@@ -20,6 +20,7 @@ import calendarIcon from '../assets/icons/calendar.svg';
 import pendingIcon from '../assets/icons/pending.svg';
 import confirmedIcon from '../assets/icons/confirmed.svg';
 import cancelledIcon from '../assets/icons/cancelled.svg';
+import sendInviteIcon from '../assets/icons/send_invite.svg';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -453,7 +454,7 @@ function AdminDashboard() {
           </div>
           <div className={styles.pageTopRight}>
             <button className={styles.inviteBtn} onClick={() => setShowInviteModal(true)}>
-              <i className="fi fi-rr-paper-plane"></i>
+              <img src={sendInviteIcon} alt="" style={{ width: '15px', height: '15px', filter: 'brightness(0) invert(1)' }} />
               Send Invite
             </button>
           </div>
