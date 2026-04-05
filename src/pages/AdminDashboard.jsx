@@ -454,7 +454,7 @@ function AdminDashboard() {
           </div>
           <div className={styles.pageTopRight}>
             <button className={styles.inviteBtn} onClick={() => setShowInviteModal(true)} title="Send Invite">
-              <img src={sendInviteIcon} alt="Send Invite" style={{ width: '22px', height: '22px' }} />
+              <img src={sendInviteIcon} alt="Send Invite" style={{ width: '32px', height: '32px' }} />
             </button>
           </div>
         </div>
