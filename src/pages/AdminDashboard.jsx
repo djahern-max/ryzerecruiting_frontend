@@ -348,13 +348,19 @@ function AdminDashboard() {
     });
   }
 
+  // ── Derived counts (inside component so bookings state is in scope) ──
   const pending = bookings.filter(b => b.status === 'pending');
   const confirmed = bookings.filter(b => b.status === 'confirmed');
   const cancelled = bookings.filter(b => b.status === 'cancelled');
+  const candidateBookings = bookings.filter(
+    b => b.booking_type === 'outbound_candidate' || b.booking_type === 'inbound_candidate'
+  );
+  const employerBookings = bookings.filter(b => b.booking_type === 'outbound_employer');
+
   const firstName = user?.full_name?.split(' ')[0] || 'there';
 
   // ---------------------------------------------------------------------------
-  // Action Buttons — now accepts navigate for candidate profile links
+  // Action Buttons
   // ---------------------------------------------------------------------------
   function ActionButtons({ booking }) {
     const busy = updatingId === booking.id;
@@ -383,7 +389,6 @@ function AdminDashboard() {
           </button>
         )}
 
-        {/* EP17 — View candidate profile link for confirmed candidate bookings */}
         {isCandidateBooking && booking.candidate_id && (
           <button
             className={`${styles.iconBtn}`}
@@ -440,7 +445,6 @@ function AdminDashboard() {
             <h1 className={styles.pageTitle}>Booking Management</h1>
             <p className={styles.pageSub}>Welcome back, {firstName}. Here's your pipeline.</p>
           </div>
-
           <div className={styles.pageTopRight}>
             <button className={styles.inviteBtn} onClick={() => setShowInviteModal(true)}>
               <i className="fi fi-rr-paper-plane"></i>
@@ -489,190 +493,358 @@ function AdminDashboard() {
           </div>
         ) : error ? (
           <div className={styles.errorState}>{error}</div>
-        ) : bookings.length === 0 ? (
-          <div className={styles.emptyState}>
-            <i className="fi fi-rr-calendar" style={{ marginRight: '10px', fontSize: '1.25rem' }}></i>
-            No bookings yet. Send your first invite above.
-          </div>
         ) : (
           <>
-            {/* Desktop table */}
-            <div className={styles.tableWrapper}>
-              <table className={styles.table}>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Company</th>
-                    <th>Date &amp; Time</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Meeting</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {bookings.map((booking) => (
-                    <>
-                      <tr
-                        key={booking.id}
-                        className={`${styles.row} ${expandedBriefId === booking.id || expandedSummaryId === booking.id ? styles.rowExpanded : ''}`}
-                      >
-                        <td className={styles.nameCell}>
-                          {(booking.booking_type === 'outbound_candidate' || booking.booking_type === 'inbound_candidate') && booking.candidate_id ? (
-                            <span
-                              onClick={() => navigate(`/admin/candidates/${booking.candidate_id}`)}
-                              className={styles.candidateNameLink}
-                              title="View candidate profile"
+            {/* ── Candidate Bookings ── */}
+            <div className={styles.sectionBlock}>
+              <div className={styles.sectionHeading}>
+                <i className="fi fi-rr-user" style={{ marginRight: '8px' }}></i>
+                Candidate Bookings
+                <span className={styles.sectionCount}>{candidateBookings.length}</span>
+              </div>
+
+              {candidateBookings.length === 0 ? (
+                <div className={styles.emptyState}>
+                  <i className="fi fi-rr-calendar" style={{ marginRight: '10px', fontSize: '1.25rem' }}></i>
+                  No candidate bookings yet.
+                </div>
+              ) : (
+                <>
+                  {/* Desktop table */}
+                  <div className={styles.tableWrapper}>
+                    <table className={styles.table}>
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Date &amp; Time</th>
+                          <th>Email</th>
+                          <th>Phone</th>
+                          <th>Meeting</th>
+                          <th>Type</th>
+                          <th>Status</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {candidateBookings.map((booking) => (
+                          <>
+                            <tr
+                              key={booking.id}
+                              className={`${styles.row} ${expandedBriefId === booking.id || expandedSummaryId === booking.id ? styles.rowExpanded : ''}`}
                             >
-                              {booking.employer_name}
-                            </span>
-                          ) : (
-                            booking.employer_name
-                          )}
-                        </td>
-                        <td>
-                          {booking.company_name && <div className={styles.companyName}>{booking.company_name}</div>}
-                          {booking.website_url && (
-                            <a
-                              href={booking.website_url.startsWith('http') ? booking.website_url : `https://${booking.website_url}`}
-                              className={styles.websiteLink}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              {booking.website_url.replace(/^https?:\/\//, '')}
-                            </a>
-                          )}
-                        </td>
-                        <td>
-                          <div className={styles.dateText}>{formatDate(booking.date)}</div>
-                          <div className={styles.timeText}>{booking.time_slot} EST</div>
-                        </td>
-                        <td>
-                          <a href={`mailto:${booking.employer_email}`} className={styles.emailLink}>
-                            {booking.employer_email}
-                          </a>
-                        </td>
-                        <td className={styles.phone}>{booking.phone || '—'}</td>
-                        <td>
-                          {booking.meeting_url ? (
-                            <a href={booking.meeting_url} target="_blank" rel="noreferrer" className={styles.zoomLink} title="Join Zoom Meeting">
-                              <img src={zoomIcon} alt="" className={styles.zoomIcon} />
-                            </a>
-                          ) : (
-                            <span className={styles.zoomPending}>—</span>
-                          )}
-                        </td>
-                        <td><BookingTypeBadge type={booking.booking_type} /></td>
-                        <td>
+                              <td className={styles.nameCell}>
+                                {booking.candidate_id ? (
+                                  <span
+                                    onClick={() => navigate(`/admin/candidates/${booking.candidate_id}`)}
+                                    className={styles.candidateNameLink}
+                                    title="View candidate profile"
+                                  >
+                                    {booking.employer_name}
+                                  </span>
+                                ) : (
+                                  booking.employer_name
+                                )}
+                              </td>
+                              <td>
+                                <div className={styles.dateText}>{formatDate(booking.date)}</div>
+                                <div className={styles.timeText}>{booking.time_slot} EST</div>
+                              </td>
+                              <td>
+                                <a href={`mailto:${booking.employer_email}`} className={styles.emailLink}>
+                                  {booking.employer_email}
+                                </a>
+                              </td>
+                              <td className={styles.phone}>{booking.phone || '—'}</td>
+                              <td>
+                                {booking.meeting_url ? (
+                                  <a href={booking.meeting_url} target="_blank" rel="noreferrer" className={styles.zoomLink} title="Join Zoom Meeting">
+                                    <img src={zoomIcon} alt="" className={styles.zoomIcon} />
+                                  </a>
+                                ) : (
+                                  <span className={styles.zoomPending}>—</span>
+                                )}
+                              </td>
+                              <td><BookingTypeBadge type={booking.booking_type} /></td>
+                              <td>
+                                <span className={`${styles.statusBadge} ${STATUS_COLORS[booking.status]}`}>
+                                  {STATUS_LABELS[booking.status]}
+                                </span>
+                              </td>
+                              <td><ActionButtons booking={booking} /></td>
+                            </tr>
+
+                            {expandedBriefId === booking.id && booking.employer_profile_id && (
+                              <tr key={`brief-${booking.id}`} className={styles.expandedRow}>
+                                <td colSpan={8} className={styles.expandedCell}>
+                                  <IntelligenceBrief
+                                    profileId={booking.employer_profile_id}
+                                    onClose={() => setExpandedBriefId(null)}
+                                  />
+                                </td>
+                              </tr>
+                            )}
+
+                            {expandedSummaryId === booking.id && booking.meeting_summary && (
+                              <tr key={`summary-${booking.id}`} className={styles.expandedRow}>
+                                <td colSpan={8} className={styles.expandedCell}>
+                                  <MeetingSummaryPanel
+                                    booking={booking}
+                                    onClose={() => setExpandedSummaryId(null)}
+                                  />
+                                </td>
+                              </tr>
+                            )}
+                          </>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Mobile cards */}
+                  <div className={styles.cardList}>
+                    {candidateBookings.map((booking) => (
+                      <div key={booking.id} className={styles.bookingCard}>
+                        <div className={styles.cardHeader}>
+                          <div className={styles.cardName}>{booking.employer_name}</div>
                           <span className={`${styles.statusBadge} ${STATUS_COLORS[booking.status]}`}>
                             {STATUS_LABELS[booking.status]}
                           </span>
-                        </td>
-                        <td><ActionButtons booking={booking} /></td>
-                      </tr>
-
-                      {expandedBriefId === booking.id && booking.employer_profile_id && (
-                        <tr key={`brief-${booking.id}`} className={styles.expandedRow}>
-                          <td colSpan={9} className={styles.expandedCell}>
-                            <IntelligenceBrief
-                              profileId={booking.employer_profile_id}
-                              onClose={() => setExpandedBriefId(null)}
-                            />
-                          </td>
-                        </tr>
-                      )}
-
-                      {expandedSummaryId === booking.id && booking.meeting_summary && (
-                        <tr key={`summary-${booking.id}`} className={styles.expandedRow}>
-                          <td colSpan={9} className={styles.expandedCell}>
-                            <MeetingSummaryPanel
-                              booking={booking}
-                              onClose={() => setExpandedSummaryId(null)}
-                            />
-                          </td>
-                        </tr>
-                      )}
-                    </>
-                  ))}
-                </tbody>
-              </table>
+                        </div>
+                        <div className={styles.cardBody}>
+                          <div className={styles.cardField}>
+                            <span className={styles.cardLabel}>Date &amp; Time</span>
+                            <span className={styles.cardValue}>{formatDate(booking.date)}</span>
+                            <span className={styles.timeText}>{booking.time_slot} EST</span>
+                          </div>
+                          <div className={styles.cardField}>
+                            <span className={styles.cardLabel}>Email</span>
+                            <a href={`mailto:${booking.employer_email}`} className={styles.emailLink}>{booking.employer_email}</a>
+                          </div>
+                          <div className={styles.cardField}>
+                            <span className={styles.cardLabel}>Phone</span>
+                            <span className={styles.cardValue}>{booking.phone || '—'}</span>
+                          </div>
+                          <div className={styles.cardField}>
+                            <span className={styles.cardLabel}>Type</span>
+                            <BookingTypeBadge type={booking.booking_type} />
+                          </div>
+                          <div className={styles.cardField}>
+                            <span className={styles.cardLabel}>Meeting</span>
+                            {booking.meeting_url ? (
+                              <a href={booking.meeting_url} target="_blank" rel="noreferrer" className={styles.zoomLinkMobile}>
+                                <img src={zoomIcon} alt="" style={{ width: '18px', height: '18px' }} />
+                                <span>Join Zoom</span>
+                              </a>
+                            ) : (
+                              <span className={styles.zoomPending}>Pending</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className={styles.cardFooter}>
+                          <ActionButtons booking={booking} />
+                        </div>
+                        {expandedBriefId === booking.id && booking.employer_profile_id && (
+                          <IntelligenceBrief
+                            profileId={booking.employer_profile_id}
+                            onClose={() => setExpandedBriefId(null)}
+                          />
+                        )}
+                        {expandedSummaryId === booking.id && booking.meeting_summary && (
+                          <MeetingSummaryPanel
+                            booking={booking}
+                            onClose={() => setExpandedSummaryId(null)}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
 
-            {/* Mobile cards */}
-            <div className={styles.cardList}>
-              {bookings.map((booking) => (
-                <div key={booking.id} className={styles.bookingCard}>
-                  <div className={styles.cardHeader}>
-                    <div className={styles.cardName}>
-                      {booking.employer_name}
-                    </div>
-                    <span className={`${styles.statusBadge} ${STATUS_COLORS[booking.status]}`}>
-                      {STATUS_LABELS[booking.status]}
-                    </span>
-                  </div>
-                  <div className={styles.cardBody}>
-                    <div className={styles.cardField}>
-                      <span className={styles.cardLabel}>Company</span>
-                      <span className={styles.cardValue}>{booking.company_name || '—'}</span>
-                      {booking.website_url && (
-                        <a
-                          href={booking.website_url.startsWith('http') ? booking.website_url : `https://${booking.website_url}`}
-                          className={styles.websiteLink}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {booking.website_url.replace(/^https?:\/\//, '')}
-                        </a>
-                      )}
-                    </div>
-                    <div className={styles.cardField}>
-                      <span className={styles.cardLabel}>Date &amp; Time</span>
-                      <span className={styles.cardValue}>{formatDate(booking.date)}</span>
-                      <span className={styles.timeText}>{booking.time_slot} EST</span>
-                    </div>
-                    <div className={styles.cardField}>
-                      <span className={styles.cardLabel}>Email</span>
-                      <a href={`mailto:${booking.employer_email}`} className={styles.emailLink}>{booking.employer_email}</a>
-                    </div>
-                    <div className={styles.cardField}>
-                      <span className={styles.cardLabel}>Phone</span>
-                      <span className={styles.cardValue}>{booking.phone || '—'}</span>
-                    </div>
-                    <div className={styles.cardField}>
-                      <span className={styles.cardLabel}>Type</span>
-                      <BookingTypeBadge type={booking.booking_type} />
-                    </div>
-                    <div className={styles.cardField}>
-                      <span className={styles.cardLabel}>Meeting</span>
-                      {booking.meeting_url ? (
-                        <a href={booking.meeting_url} target="_blank" rel="noreferrer" className={styles.zoomLinkMobile}>
-                          <img src={zoomIcon} alt="" style={{ width: '18px', height: '18px' }} />
-                          <span>Join Zoom</span>
-                        </a>
-                      ) : (
-                        <span className={styles.zoomPending}>Pending</span>
-                      )}
-                    </div>
-                  </div>
-                  <div className={styles.cardFooter}>
-                    <ActionButtons booking={booking} />
-                  </div>
-                  {expandedBriefId === booking.id && booking.employer_profile_id && (
-                    <IntelligenceBrief
-                      profileId={booking.employer_profile_id}
-                      onClose={() => setExpandedBriefId(null)}
-                    />
-                  )}
-                  {expandedSummaryId === booking.id && booking.meeting_summary && (
-                    <MeetingSummaryPanel
-                      booking={booking}
-                      onClose={() => setExpandedSummaryId(null)}
-                    />
-                  )}
+            {/* ── Employer Bookings ── */}
+            <div className={styles.sectionBlock}>
+              <div className={styles.sectionHeading}>
+                <i className="fi fi-rr-briefcase" style={{ marginRight: '8px' }}></i>
+                Employer Bookings
+                <span className={styles.sectionCount}>{employerBookings.length}</span>
+              </div>
+
+              {employerBookings.length === 0 ? (
+                <div className={styles.emptyState}>
+                  <i className="fi fi-rr-calendar" style={{ marginRight: '10px', fontSize: '1.25rem' }}></i>
+                  No employer bookings yet.
                 </div>
-              ))}
+              ) : (
+                <>
+                  {/* Desktop table */}
+                  <div className={styles.tableWrapper}>
+                    <table className={styles.table}>
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Company</th>
+                          <th>Date &amp; Time</th>
+                          <th>Email</th>
+                          <th>Phone</th>
+                          <th>Meeting</th>
+                          <th>Type</th>
+                          <th>Status</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {employerBookings.map((booking) => (
+                          <>
+                            <tr
+                              key={booking.id}
+                              className={`${styles.row} ${expandedBriefId === booking.id || expandedSummaryId === booking.id ? styles.rowExpanded : ''}`}
+                            >
+                              <td className={styles.nameCell}>{booking.employer_name}</td>
+                              <td>
+                                {booking.company_name && (
+                                  <div className={styles.companyName}>{booking.company_name}</div>
+                                )}
+                                {booking.website_url && (
+                                  <a
+                                    href={booking.website_url.startsWith('http') ? booking.website_url : `https://${booking.website_url}`}
+                                    className={styles.websiteLink}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                  >
+                                    {booking.website_url.replace(/^https?:\/\//, '')}
+                                  </a>
+                                )}
+                              </td>
+                              <td>
+                                <div className={styles.dateText}>{formatDate(booking.date)}</div>
+                                <div className={styles.timeText}>{booking.time_slot} EST</div>
+                              </td>
+                              <td>
+                                <a href={`mailto:${booking.employer_email}`} className={styles.emailLink}>
+                                  {booking.employer_email}
+                                </a>
+                              </td>
+                              <td className={styles.phone}>{booking.phone || '—'}</td>
+                              <td>
+                                {booking.meeting_url ? (
+                                  <a href={booking.meeting_url} target="_blank" rel="noreferrer" className={styles.zoomLink} title="Join Zoom Meeting">
+                                    <img src={zoomIcon} alt="" className={styles.zoomIcon} />
+                                  </a>
+                                ) : (
+                                  <span className={styles.zoomPending}>—</span>
+                                )}
+                              </td>
+                              <td><BookingTypeBadge type={booking.booking_type} /></td>
+                              <td>
+                                <span className={`${styles.statusBadge} ${STATUS_COLORS[booking.status]}`}>
+                                  {STATUS_LABELS[booking.status]}
+                                </span>
+                              </td>
+                              <td><ActionButtons booking={booking} /></td>
+                            </tr>
+
+                            {expandedBriefId === booking.id && booking.employer_profile_id && (
+                              <tr key={`brief-${booking.id}`} className={styles.expandedRow}>
+                                <td colSpan={9} className={styles.expandedCell}>
+                                  <IntelligenceBrief
+                                    profileId={booking.employer_profile_id}
+                                    onClose={() => setExpandedBriefId(null)}
+                                  />
+                                </td>
+                              </tr>
+                            )}
+
+                            {expandedSummaryId === booking.id && booking.meeting_summary && (
+                              <tr key={`summary-${booking.id}`} className={styles.expandedRow}>
+                                <td colSpan={9} className={styles.expandedCell}>
+                                  <MeetingSummaryPanel
+                                    booking={booking}
+                                    onClose={() => setExpandedSummaryId(null)}
+                                  />
+                                </td>
+                              </tr>
+                            )}
+                          </>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Mobile cards */}
+                  <div className={styles.cardList}>
+                    {employerBookings.map((booking) => (
+                      <div key={booking.id} className={styles.bookingCard}>
+                        <div className={styles.cardHeader}>
+                          <div className={styles.cardName}>{booking.employer_name}</div>
+                          <span className={`${styles.statusBadge} ${STATUS_COLORS[booking.status]}`}>
+                            {STATUS_LABELS[booking.status]}
+                          </span>
+                        </div>
+                        <div className={styles.cardBody}>
+                          <div className={styles.cardField}>
+                            <span className={styles.cardLabel}>Company</span>
+                            <span className={styles.cardValue}>{booking.company_name || '—'}</span>
+                            {booking.website_url && (
+                              <a
+                                href={booking.website_url.startsWith('http') ? booking.website_url : `https://${booking.website_url}`}
+                                className={styles.websiteLink}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                {booking.website_url.replace(/^https?:\/\//, '')}
+                              </a>
+                            )}
+                          </div>
+                          <div className={styles.cardField}>
+                            <span className={styles.cardLabel}>Date &amp; Time</span>
+                            <span className={styles.cardValue}>{formatDate(booking.date)}</span>
+                            <span className={styles.timeText}>{booking.time_slot} EST</span>
+                          </div>
+                          <div className={styles.cardField}>
+                            <span className={styles.cardLabel}>Email</span>
+                            <a href={`mailto:${booking.employer_email}`} className={styles.emailLink}>{booking.employer_email}</a>
+                          </div>
+                          <div className={styles.cardField}>
+                            <span className={styles.cardLabel}>Phone</span>
+                            <span className={styles.cardValue}>{booking.phone || '—'}</span>
+                          </div>
+                          <div className={styles.cardField}>
+                            <span className={styles.cardLabel}>Type</span>
+                            <BookingTypeBadge type={booking.booking_type} />
+                          </div>
+                          <div className={styles.cardField}>
+                            <span className={styles.cardLabel}>Meeting</span>
+                            {booking.meeting_url ? (
+                              <a href={booking.meeting_url} target="_blank" rel="noreferrer" className={styles.zoomLinkMobile}>
+                                <img src={zoomIcon} alt="" style={{ width: '18px', height: '18px' }} />
+                                <span>Join Zoom</span>
+                              </a>
+                            ) : (
+                              <span className={styles.zoomPending}>Pending</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className={styles.cardFooter}>
+                          <ActionButtons booking={booking} />
+                        </div>
+                        {expandedBriefId === booking.id && booking.employer_profile_id && (
+                          <IntelligenceBrief
+                            profileId={booking.employer_profile_id}
+                            onClose={() => setExpandedBriefId(null)}
+                          />
+                        )}
+                        {expandedSummaryId === booking.id && booking.meeting_summary && (
+                          <MeetingSummaryPanel
+                            booking={booking}
+                            onClose={() => setExpandedSummaryId(null)}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </>
         )}
