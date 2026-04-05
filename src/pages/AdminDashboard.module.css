@@ -1168,9 +1168,8 @@
 
 /* ── Profile Icon (FlatIcon) ───────────────────────────────────── */
 .profileIcon {
-  width: 20px;
-  height: 20px;
-  /* purple to match candidate context */
+  width: 26px;
+  height: 26px;
   filter: invert(27%) sepia(60%) saturate(800%) hue-rotate(245deg) brightness(90%);
   transition: filter 150ms, transform 150ms;
 }
