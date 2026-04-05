@@ -14,6 +14,8 @@ import letterXIcon from '../assets/icons/letter-x.svg';
 import AdminHeader from '../components/AdminHeader';
 import { apiFetch } from '../services/api';
 import profileIcon from '../assets/icons/profile.svg';
+import candidateBookingsIcon from '../assets/icons/candidate_bookings.svg';
+import employerBookingsIcon from '../assets/icons/employer_bookings.svg';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -498,7 +500,7 @@ function AdminDashboard() {
             {/* ── Candidate Bookings ── */}
             <div className={styles.sectionBlock}>
               <div className={styles.sectionHeading}>
-                <i className="fi fi-rr-user" style={{ marginRight: '8px' }}></i>
+                <img src={candidateBookingsIcon} alt="" style={{ width: '16px', height: '16px', marginRight: '8px' }} />
                 Candidate Bookings
                 <span className={styles.sectionCount}>{candidateBookings.length}</span>
               </div>
@@ -665,7 +667,7 @@ function AdminDashboard() {
             {/* ── Employer Bookings ── */}
             <div className={styles.sectionBlock}>
               <div className={styles.sectionHeading}>
-                <i className="fi fi-rr-briefcase" style={{ marginRight: '8px' }}></i>
+                <img src={employerBookingsIcon} alt="" style={{ width: '16px', height: '16px', marginRight: '8px' }} />
                 Employer Bookings
                 <span className={styles.sectionCount}>{employerBookings.length}</span>
               </div>
