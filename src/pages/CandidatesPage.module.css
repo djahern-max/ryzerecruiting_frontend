@@ -511,3 +511,27 @@
     border-radius: var(--radius);
     font-size: 14px;
 }
+
+.addIconBtn {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: opacity 140ms, transform 140ms;
+    flex-shrink: 0;
+}
+
+.addIconBtn:hover {
+    opacity: 0.75;
+    transform: scale(1.08);
+}
+
+.addIcon {
+    width: 36px;
+    height: 36px;
+    display: block;
+}

@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import CandidateModal from "../components/CandidateModal";
 import styles from "./CandidatesPage.module.css";
 import AdminHeader from '../components/AdminHeader';
+import addCandidateIcon from '../assets/icons/add-candidate.svg';
 
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
@@ -114,7 +115,9 @@ export default function CandidatesPage() {
                             )}
                         </p>
                     </div>
-                    <button className={styles.addBtn} onClick={openAdd}>+ Add Candidate</button>
+                    <button className={styles.addIconBtn} onClick={openAdd} title="Add Candidate">
+                        <img src={addCandidateIcon} alt="Add Candidate" className={styles.addIcon} />
+                    </button>
                 </div>
 
                 {/* ── Search ── */}
