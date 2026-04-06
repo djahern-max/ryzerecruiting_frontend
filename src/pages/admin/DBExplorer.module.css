@@ -1,6 +1,7 @@
 /* src/pages/admin/DBExplorer.module.css */
 .page {
-    min-height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
     background: #f6f9fc;
     color: #1a2e44;
     font-family: "DM Sans", sans-serif;
@@ -10,7 +11,7 @@
 .layout {
     display: grid;
     grid-template-columns: 200px 1fr;
-    height: calc(100vh - 60px);
+    height: 100%;
     overflow: hidden;
 }
 
@@ -851,10 +852,14 @@
    ═══════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
 
+    .tableInner {
+        min-width: fit-content;
+    }
+
     /* Collapse the grid — main takes full width */
     .layout {
         grid-template-columns: 1fr;
-        height: calc(100vh - 56px);
+        height: 100%;
     }
 
     /* Sidebar becomes a fixed off-canvas drawer */
@@ -933,6 +938,10 @@
     /* Filter bar wraps nicely */
     .filterBar {
         padding: 8px 12px;
+    }
+
+    .main {
+        overflow: hidden;
     }
 
     .filterInput {
