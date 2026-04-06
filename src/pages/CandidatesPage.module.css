@@ -6,109 +6,6 @@
     font-family: var(--font-sans);
 }
 
-/* ── Header ── */
-.header {
-    background: white;
-    border-bottom: 1px solid var(--border-200);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.headerContent {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 24px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-}
-
-.headerLeft {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-}
-
-.logo {
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: var(--brand-800);
-    letter-spacing: -0.3px;
-}
-
-.adminBadge {
-    font-size: 0.7rem;
-    font-weight: 700;
-    background: var(--brand-100, #dbeafe);
-    color: var(--brand-800);
-    border: 1px solid var(--brand-200, #bfdbfe);
-    padding: 2px 8px;
-    border-radius: 20px;
-    letter-spacing: 0.3px;
-}
-
-.nav {
-    display: flex;
-    gap: 4px;
-}
-
-.navBtn {
-    background: none;
-    border: none;
-    color: var(--text-500);
-    font-size: 0.875rem;
-    font-weight: 600;
-    font-family: var(--font-sans);
-    padding: 6px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 140ms, color 140ms;
-}
-
-.navBtn:hover {
-    background: var(--bg-100);
-    color: var(--text-900);
-}
-
-.navBtnActive {
-    background: var(--bg-100);
-    color: var(--brand-800);
-}
-
-.headerRight {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-shrink: 0;
-}
-
-.userName {
-    font-size: 0.875rem;
-    color: var(--text-600, #475569);
-}
-
-.logoutButton {
-    background: none;
-    border: 1px solid var(--border-300, #cbd5e1);
-    color: var(--text-600, #475569);
-    border-radius: 8px;
-    padding: 5px 10px;
-    font-size: 0.875rem;
-    font-family: var(--font-sans);
-    cursor: pointer;
-    transition: background 140ms;
-    display: flex;
-    align-items: center;
-}
-
-.logoutButton:hover {
-    background: var(--bg-100);
-}
-
 /* ── Main ── */
 .main {
     max-width: 1280px;
@@ -164,23 +61,69 @@
     flex-shrink: 0;
 }
 
-.addBtn {
-    background: var(--brand-800);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 20px;
-    font-size: 0.9rem;
+.fromCallStat {
+    font-size: 12px;
+    color: #7c3aed;
+    font-weight: 500;
+}
+
+/* ── Index All button ── */
+.indexAllBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.75rem;
     font-weight: 700;
-    font-family: var(--font-sans);
+    color: #0a66c2;
+    background: #eff6ff;
+    border: 1.5px solid #bfdbfe;
+    border-radius: 20px;
+    padding: 3px 12px;
     cursor: pointer;
+    font-family: var(--font-sans);
+    transition: background 140ms, border-color 140ms;
     white-space: nowrap;
-    transition: opacity 140ms;
+}
+
+.indexAllBtn:hover:not(:disabled) {
+    background: #dbeafe;
+    border-color: #93c5fd;
+}
+
+.indexAllBtn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.embedAllMsg {
+    font-size: 0.75rem;
+    color: #0a66c2;
+    font-style: italic;
+}
+
+/* ── Add icon button ── */
+.addIconBtn {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: opacity 140ms, transform 140ms;
     flex-shrink: 0;
 }
 
-.addBtn:hover {
-    opacity: 0.9;
+.addIconBtn:hover {
+    opacity: 0.75;
+    transform: scale(1.08);
+}
+
+.addIcon {
+    width: 36px;
+    height: 36px;
+    display: block;
 }
 
 /* ── Search ── */
@@ -291,6 +234,21 @@
     text-decoration: underline;
 }
 
+.fromCallBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #7c3aed;
+    background: #f5f3ff;
+    border: 1px solid #ddd6fe;
+    border-radius: 4px;
+    padding: 1px 6px;
+    letter-spacing: 0.01em;
+}
+
 .empty {
     color: var(--text-300, #cbd5e1);
 }
@@ -301,25 +259,49 @@
     font-style: italic;
 }
 
+/* ── Embed / AI Search column ── */
+.embedCell {
+    min-width: 80px;
+}
+
+/* Indexed — static, no pointer */
 .statusIcon {
     width: 28px;
     height: 28px;
     display: block;
 }
 
-.statusIconPending {
+/* Not indexed — clickable, subtle pulse to invite interaction */
+.statusIconClickable {
     width: 28px;
     height: 28px;
     display: block;
-    opacity: 0.5;
-    animation: pulse 2s ease-in-out infinite;
+    cursor: pointer;
+    opacity: 0.6;
+    animation: pulse 2.5s ease-in-out infinite;
+    transition: opacity 140ms, transform 140ms;
+}
+
+.statusIconClickable:hover {
+    opacity: 1;
+    transform: scale(1.15);
+    animation: none;
+}
+
+/* Actively embedding — spin */
+.statusIconSpinning {
+    width: 28px;
+    height: 28px;
+    display: block;
+    opacity: 0.7;
+    animation: spin 1s linear infinite;
 }
 
 @keyframes pulse {
 
     0%,
     100% {
-        opacity: 0.5;
+        opacity: 0.6;
     }
 
     50% {
@@ -327,28 +309,71 @@
     }
 }
 
-.addIconBtn {
-    background: none;
-    border: none;
-    padding: 4px;
-    cursor: pointer;
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ── Inline embed confirmation ── */
+.embedConfirm {
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    transition: opacity 140ms, transform 140ms;
-    flex-shrink: 0;
+    gap: 6px;
+    animation: fadeIn 120ms ease;
 }
 
-.addIconBtn:hover {
-    opacity: 0.75;
-    transform: scale(1.08);
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-3px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.addIcon {
-    width: 36px;
-    height: 36px;
-    display: block;
+.embedConfirmText {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #0a66c2;
+    white-space: nowrap;
+}
+
+.embedConfirmYes {
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: #0a66c2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 3px 8px;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: background 140ms;
+}
+
+.embedConfirmYes:hover {
+    background: #004182;
+}
+
+.embedConfirmNo {
+    font-size: 0.72rem;
+    font-weight: 600;
+    background: none;
+    color: var(--text-400);
+    border: 1px solid var(--border-200);
+    border-radius: 5px;
+    padding: 3px 8px;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: background 140ms;
+}
+
+.embedConfirmNo:hover {
+    background: var(--bg-100);
 }
 
 /* ── Expand Button ── */
@@ -508,30 +533,9 @@
     font-size: 14px;
 }
 
-.addIconBtn {
-    background: none;
-    border: none;
-    padding: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    transition: opacity 140ms, transform 140ms;
-    flex-shrink: 0;
-}
-
-.addIconBtn:hover {
-    opacity: 0.75;
-    transform: scale(1.08);
-}
-
-.addIcon {
-    width: 36px;
-    height: 36px;
-    display: block;
-}
-
+/* ═══════════════════════════════════════════════════════════
+   MOBILE  ≤ 768px
+   ═══════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
     .main {
         padding: 16px 12px;
@@ -555,29 +559,23 @@
 
     .searchInput {
         font-size: 16px;
-        /* prevent iOS zoom */
     }
 
-    /* Hide less important columns on mobile */
+    /* Hide less critical columns */
     .table th:nth-child(3),
-    /* Company */
     .table td:nth-child(3),
     .table th:nth-child(4),
-    /* Location */
     .table td:nth-child(4),
     .table th:nth-child(6),
-    /* AI Summary */
     .table td:nth-child(6) {
         display: none;
     }
 
-    /* Tighten cell padding */
     .table th,
     .table td {
         padding: 10px 10px;
     }
 
-    /* Actions — stack vertically, hide Delete on mobile */
     .actions {
         flex-direction: column;
         gap: 4px;
@@ -585,5 +583,15 @@
 
     .deleteBtn {
         display: none;
+    }
+
+    /* Embed confirm — stack vertically on very narrow screens */
+    .embedConfirm {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .embedConfirmText {
+        width: 100%;
     }
 }

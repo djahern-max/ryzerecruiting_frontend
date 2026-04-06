@@ -9,7 +9,6 @@ import indexedIcon from '../assets/icons/indexed.svg';
 import notIndexedIcon from '../assets/icons/not_indexed.svg';
 import addCandidateIcon from '../assets/icons/add-candidate.svg';
 
-
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 export default function CandidatesPage() {
@@ -24,6 +23,12 @@ export default function CandidatesPage() {
     const [expandedId, setExpandedId] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [editingCandidate, setEditingCandidate] = useState(null);
+
+    // Embedding state
+    const [embeddingIds, setEmbeddingIds] = useState(new Set());   // currently running
+    const [confirmEmbedId, setConfirmEmbedId] = useState(null);    // showing "Index now?" prompt
+    const [embedAllLoading, setEmbedAllLoading] = useState(false);
+    const [embedAllMsg, setEmbedAllMsg] = useState(null);
 
     const fetchCandidates = useCallback(async () => {
         try {
@@ -42,9 +47,53 @@ export default function CandidatesPage() {
         }
     }, [token, search]);
 
-    useEffect(() => {
-        fetchCandidates();
-    }, [fetchCandidates]);
+    useEffect(() => { fetchCandidates(); }, [fetchCandidates]);
+
+    // ── Single candidate embed ─────────────────────────────────────────────
+    async function handleEmbedSingle(id) {
+        setConfirmEmbedId(null);
+        setEmbeddingIds(prev => new Set([...prev, id]));
+        try {
+            const res = await fetch(`${API_BASE}/api/candidates/${id}/embed`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (!res.ok) {
+                const d = await res.json().catch(() => ({}));
+                throw new Error(d.detail || "Embedding failed");
+            }
+            const data = await res.json();
+            // Optimistically update this candidate in state
+            setCandidates(prev =>
+                prev.map(c => c.id === id ? { ...c, embedded_at: data.embedded_at } : c)
+            );
+        } catch (e) {
+            alert(`Indexing failed: ${e.message}`);
+        } finally {
+            setEmbeddingIds(prev => { const n = new Set(prev); n.delete(id); return n; });
+        }
+    }
+
+    // ── Embed all unindexed ────────────────────────────────────────────────
+    async function handleEmbedAll() {
+        setEmbedAllLoading(true);
+        setEmbedAllMsg(null);
+        try {
+            const res = await fetch(`${API_BASE}/api/candidates/embed-all`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (!res.ok) throw new Error("Failed to queue embeddings");
+            const data = await res.json();
+            setEmbedAllMsg(`${data.queued} candidate(s) queued — refresh in a moment.`);
+            // Refresh after a short delay to pick up completed embeddings
+            setTimeout(() => { fetchCandidates(); setEmbedAllMsg(null); }, 4000);
+        } catch (e) {
+            setEmbedAllMsg(`Error: ${e.message}`);
+        } finally {
+            setEmbedAllLoading(false);
+        }
+    }
 
     async function handleDelete(id) {
         if (!window.confirm("Delete this candidate?")) return;
@@ -55,20 +104,9 @@ export default function CandidatesPage() {
         fetchCandidates();
     }
 
-    function openAdd() {
-        setEditingCandidate(null);
-        setModalOpen(true);
-    }
-
-    function openEdit(candidate) {
-        setEditingCandidate(candidate);
-        setModalOpen(true);
-    }
-
-    function handleSaved() {
-        setModalOpen(false);
-        fetchCandidates();
-    }
+    function openAdd() { setEditingCandidate(null); setModalOpen(true); }
+    function openEdit(candidate) { setEditingCandidate(candidate); setModalOpen(true); }
+    function handleSaved() { setModalOpen(false); fetchCandidates(); }
 
     const filtered = candidates.filter((c) => {
         if (!search) return true;
@@ -83,11 +121,11 @@ export default function CandidatesPage() {
     });
 
     const indexedCount = candidates.filter((c) => c.embedded_at).length;
+    const unindexedCount = candidates.length - indexedCount;
     const fromCallCount = candidates.filter((c) => c.source === "booking").length;
 
     return (
         <div className={styles.page}>
-            {/* ── Header ── */}
             <AdminHeader active="candidates" />
 
             <main className={styles.main}>
@@ -99,16 +137,30 @@ export default function CandidatesPage() {
                             {candidates.length} candidate{candidates.length !== 1 ? "s" : ""} in your database
                             {candidates.length > 0 && (
                                 <>
-
+                                    <span className={styles.indexedStat}>
+                                        <span className={styles.indexedDot} />
+                                        {indexedCount} of {candidates.length} AI indexed
+                                    </span>
                                     {fromCallCount > 0 && (
-                                        <span style={{
-                                            marginLeft: '12px',
-                                            fontSize: '12px',
-                                            color: '#7c3aed',
-                                            fontWeight: 500,
-                                        }}>
+                                        <span className={styles.fromCallStat}>
                                             · {fromCallCount} from calls
                                         </span>
+                                    )}
+                                    {/* Index All button — only shown when there are unindexed candidates */}
+                                    {unindexedCount > 0 && (
+                                        <button
+                                            className={styles.indexAllBtn}
+                                            onClick={handleEmbedAll}
+                                            disabled={embedAllLoading}
+                                            title={`Index all ${unindexedCount} unindexed candidate(s)`}
+                                        >
+                                            {embedAllLoading
+                                                ? "Queuing…"
+                                                : `⚡ Index All (${unindexedCount})`}
+                                        </button>
+                                    )}
+                                    {embedAllMsg && (
+                                        <span className={styles.embedAllMsg}>{embedAllMsg}</span>
                                     )}
                                 </>
                             )}
@@ -167,6 +219,10 @@ export default function CandidatesPage() {
                                         handleDelete={handleDelete}
                                         navigate={navigate}
                                         styles={styles}
+                                        isEmbedding={embeddingIds.has(c.id)}
+                                        confirmEmbedId={confirmEmbedId}
+                                        setConfirmEmbedId={setConfirmEmbedId}
+                                        onEmbedConfirm={handleEmbedSingle}
                                     />
                                 ))}
                             </tbody>
@@ -187,14 +243,19 @@ export default function CandidatesPage() {
     );
 }
 
-function FragmentRow({ candidate: c, expandedId, setExpandedId, openEdit, handleDelete, navigate, styles }) {
+function FragmentRow({
+    candidate: c,
+    expandedId, setExpandedId,
+    openEdit, handleDelete, navigate, styles,
+    isEmbedding, confirmEmbedId, setConfirmEmbedId, onEmbedConfirm,
+}) {
     const isFromCall = c.source === "booking";
+    const isConfirming = confirmEmbedId === c.id;
 
     return (
         <>
             <tr className={`${styles.row} ${expandedId === c.id ? styles.rowExpanded : ""}`}>
                 <td>
-                    {/* Name — clickable, navigates to full profile */}
                     <div
                         className={styles.candidateName}
                         onClick={() => navigate(`/admin/candidates/${c.id}`)}
@@ -203,28 +264,12 @@ function FragmentRow({ candidate: c, expandedId, setExpandedId, openEdit, handle
                     >
                         {c.name}
                     </div>
-
-                    {/* Source badge — shown when auto-created from a confirmed call */}
                     {isFromCall && (
-                        <span style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                            marginTop: '3px',
-                            fontSize: '11px',
-                            fontWeight: 600,
-                            color: '#7c3aed',
-                            background: '#f5f3ff',
-                            border: '1px solid #ddd6fe',
-                            borderRadius: '4px',
-                            padding: '1px 6px',
-                            letterSpacing: '0.01em',
-                        }}>
+                        <span className={styles.fromCallBadge}>
                             <i className="fi fi-rr-phone-call" style={{ fontSize: '10px' }} />
                             From Call
                         </span>
                     )}
-
                     {c.linkedin_url && (
                         <a href={c.linkedin_url} target="_blank" rel="noopener noreferrer" className={styles.linkedinLink}>
                             LinkedIn ↗
@@ -236,11 +281,47 @@ function FragmentRow({ candidate: c, expandedId, setExpandedId, openEdit, handle
                 <td>{c.current_company || <span className={styles.empty}>—</span>}</td>
                 <td>{c.location || <span className={styles.empty}>—</span>}</td>
 
-                <td>
+                {/* ── AI Search / Embed column ── */}
+                <td className={styles.embedCell}>
                     {c.embedded_at ? (
-                        <img src={indexedIcon} className={styles.statusIcon} title="AI indexed & searchable" />
+                        // Indexed — static icon, no interaction needed
+                        <img
+                            src={indexedIcon}
+                            className={styles.statusIcon}
+                            title="AI indexed & searchable"
+                        />
+                    ) : isEmbedding ? (
+                        // Currently embedding — spinning state
+                        <img
+                            src={notIndexedIcon}
+                            className={styles.statusIconSpinning}
+                            title="Indexing in progress…"
+                        />
+                    ) : isConfirming ? (
+                        // Confirmation prompt inline
+                        <div className={styles.embedConfirm}>
+                            <span className={styles.embedConfirmText}>Index now?</span>
+                            <button
+                                className={styles.embedConfirmYes}
+                                onClick={() => onEmbedConfirm(c.id)}
+                            >
+                                Yes
+                            </button>
+                            <button
+                                className={styles.embedConfirmNo}
+                                onClick={() => setConfirmEmbedId(null)}
+                            >
+                                Cancel
+                            </button>
+                        </div>
                     ) : (
-                        <img src={notIndexedIcon} className={styles.statusIconPending} title="Indexing..." />
+                        // Not indexed — clickable icon
+                        <img
+                            src={notIndexedIcon}
+                            className={styles.statusIconClickable}
+                            title="Not indexed — click to index"
+                            onClick={() => setConfirmEmbedId(c.id)}
+                        />
                     )}
                 </td>
 
@@ -259,13 +340,7 @@ function FragmentRow({ candidate: c, expandedId, setExpandedId, openEdit, handle
 
                 <td>
                     <div className={styles.actions}>
-                        <button
-                            className={styles.editBtn}
-                            onClick={() => navigate(`/admin/candidates/${c.id}`)}
-                            title="View full profile"
-                        >
-                            Profile
-                        </button>
+                        <button className={styles.editBtn} onClick={() => navigate(`/admin/candidates/${c.id}`)}>Profile</button>
                         <button className={styles.editBtn} onClick={() => openEdit(c)}>Edit</button>
                         <button className={styles.deleteBtn} onClick={() => handleDelete(c.id)}>Delete</button>
                     </div>
