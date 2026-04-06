@@ -232,6 +232,9 @@ export default function DBExplorer() {
     const [dateTo, setDateTo] = useState("");
     const [exportLoading, setExportLoading] = useState(false);
 
+    // Mobile sidebar state
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
     const fetchCounts = useCallback(async () => {
         try {
             const token = localStorage.getItem("token");
@@ -261,9 +264,16 @@ export default function DBExplorer() {
 
     useEffect(() => { fetchData(); }, [fetchData]);
 
+    // Lock body scroll when sidebar drawer is open
+    useEffect(() => {
+        document.body.style.overflow = sidebarOpen ? "hidden" : "";
+        return () => { document.body.style.overflow = ""; };
+    }, [sidebarOpen]);
+
     function switchTable(t) {
         setActiveTable(t); setOffset(0); setSearch(""); setSearchInput(""); setExpandedId(null);
         setSortCol(null); setSortDir("desc"); setDateFrom(""); setDateTo(""); setShowFilter(false);
+        setSidebarOpen(false); // auto-close on mobile after selection
     }
 
     function handleFkClick(targetTable, id) {
@@ -314,10 +324,24 @@ export default function DBExplorer() {
         <div className={styles.page}>
             <AdminHeader active="db" />
             <div className={styles.layout}>
-                <aside className={styles.sidebar}>
+
+                {/* ── Backdrop overlay (mobile) ── */}
+                {sidebarOpen && <div className={styles.sidebarOverlay} onClick={() => setSidebarOpen(false)} />}
+
+                {/* ── Sidebar ── */}
+                <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : ""}`}>
+                    {/* Mobile header inside sidebar */}
+                    <div className={styles.sidebarMobileHeader}>
+                        <span className={styles.sidebarMobileTitle}>Tables</span>
+                        <button className={styles.sidebarCloseBtn} onClick={() => setSidebarOpen(false)} aria-label="Close">✕</button>
+                    </div>
                     <p className={styles.sidebarLabel}>Tables</p>
                     {TABLES.map((t) => (
-                        <button key={t} className={`${styles.tableBtn} ${t === activeTable ? styles.tableBtnActive : ""}`} onClick={() => switchTable(t)}>
+                        <button
+                            key={t}
+                            className={`${styles.tableBtn} ${t === activeTable ? styles.tableBtnActive : ""}`}
+                            onClick={() => switchTable(t)}
+                        >
                             <span className={styles.tableName}>{t}</span>
                             {counts[t] > 0 && (
                                 <span className={`${styles.tableCount} ${t === activeTable ? styles.tableCountActive : ""}`}>
@@ -328,7 +352,23 @@ export default function DBExplorer() {
                     ))}
                 </aside>
 
+                {/* ── Main ── */}
                 <main className={styles.main}>
+
+                    {/* Mobile top bar with hamburger */}
+                    <div className={styles.mobileTopBar}>
+                        <button
+                            className={styles.hamburgerBtn}
+                            onClick={() => setSidebarOpen(true)}
+                            aria-label="Open table selector"
+                        >
+                            ☰
+                        </button>
+                        <span className={styles.mobileActiveTable}>{activeTable}</span>
+                        <span className={styles.countLabel}>{loading ? "…" : `${total.toLocaleString()} rows`}</span>
+                        <button className={styles.refreshBtn} onClick={fetchData} title="Refresh">↻</button>
+                    </div>
+
                     <div className={styles.toolbar}>
                         <span className={styles.activeTable}>{activeTable}</span>
                         <form onSubmit={submitSearch} className={styles.searchForm}>
@@ -336,11 +376,17 @@ export default function DBExplorer() {
                             <button type="submit" className={styles.searchBtn}>Go</button>
                             {search && <button type="button" className={styles.clearBtn} onClick={clearSearch}>✕</button>}
                         </form>
-                        <button className={`${styles.filterToggleBtn} ${(showFilter || hasFilters) ? styles.filterToggleBtnActive : ""}`} onClick={() => setShowFilter(p => !p)} title="Date range filter">
+                        <button
+                            className={`${styles.filterToggleBtn} ${(showFilter || hasFilters) ? styles.filterToggleBtnActive : ""}`}
+                            onClick={() => setShowFilter(p => !p)}
+                            title="Date range filter"
+                        >
                             ⚌{hasFilters ? " •" : ""}
                         </button>
                         <span className={styles.countLabel}>{loading ? "…" : `${total.toLocaleString()} rows`}</span>
-                        <button className={styles.exportBtn} onClick={handleExport} disabled={exportLoading} title="Export CSV">{exportLoading ? "…" : "↓ CSV"}</button>
+                        <button className={styles.exportBtn} onClick={handleExport} disabled={exportLoading} title="Export CSV">
+                            {exportLoading ? "…" : "↓ CSV"}
+                        </button>
                         <button className={styles.refreshBtn} onClick={fetchData} title="Refresh">↻</button>
                     </div>
 
@@ -382,7 +428,16 @@ export default function DBExplorer() {
                                                     </div>
                                                 ))}
                                             </div>
-                                            {isExpanded && <DetailPanel row={row} columns={columns} table={activeTable} onFkClick={handleFkClick} onSaved={handleSaved} onDeleted={handleDeleted} />}
+                                            {isExpanded && (
+                                                <DetailPanel
+                                                    row={row}
+                                                    columns={columns}
+                                                    table={activeTable}
+                                                    onFkClick={handleFkClick}
+                                                    onSaved={handleSaved}
+                                                    onDeleted={handleDeleted}
+                                                />
+                                            )}
                                         </div>
                                     );
                                 })}

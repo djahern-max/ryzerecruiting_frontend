@@ -14,12 +14,14 @@
     overflow: hidden;
 }
 
-/* ── Sidebar */
+/* ── Sidebar ── */
 .sidebar {
     border-right: 1px solid #dce8f4;
     padding: 18px 0;
     background: #ffffff;
     overflow-y: auto;
+    transition: transform 240ms ease;
+    z-index: 200;
 }
 
 .sidebarLabel {
@@ -30,6 +32,38 @@
     color: #7a98b5;
     padding: 0 16px 10px;
     margin: 0;
+}
+
+/* Mobile sidebar header — hidden on desktop */
+.sidebarMobileHeader {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px 10px;
+    border-bottom: 1px solid #dce8f4;
+    margin-bottom: 4px;
+}
+
+.sidebarMobileTitle {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a2e44;
+}
+
+.sidebarCloseBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: #7a98b5;
+    padding: 4px 6px;
+    border-radius: 6px;
+    line-height: 1;
+}
+
+.sidebarCloseBtn:hover {
+    background: #f0f5fb;
+    color: #1a2e44;
 }
 
 .tableBtn {
@@ -80,14 +114,75 @@
     color: #0a66c2;
 }
 
-/* ── Main */
+/* ── Overlay backdrop (mobile only) ── */
+.sidebarOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 199;
+    animation: fadeIn 200ms ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ── Main ── */
 .main {
     display: flex;
     flex-direction: column;
     overflow: hidden;
     background: #f6f9fc;
+    min-width: 0;
 }
 
+/* ── Mobile top bar — hidden on desktop ── */
+.mobileTopBar {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #ffffff;
+    border-bottom: 1px solid #dce8f4;
+    flex-shrink: 0;
+}
+
+.hamburgerBtn {
+    background: none;
+    border: 1px solid #dce8f4;
+    border-radius: 7px;
+    cursor: pointer;
+    padding: 5px 8px;
+    color: #5a7a95;
+    font-size: 1rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.hamburgerBtn:hover {
+    background: #f0f5fb;
+    color: #1a2e44;
+}
+
+.mobileActiveTable {
+    font-family: "DM Mono", monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a2e44;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Toolbar ── */
 .toolbar {
     display: flex;
     align-items: center;
@@ -96,6 +191,7 @@
     border-bottom: 1px solid #dce8f4;
     background: #ffffff;
     flex-shrink: 0;
+    flex-wrap: wrap;
 }
 
 .activeTable {
@@ -125,6 +221,7 @@
     font-family: "DM Sans", sans-serif;
     outline: none;
     transition: border-color 0.15s, box-shadow 0.15s;
+    min-width: 0;
 }
 
 .searchInput:focus {
@@ -148,6 +245,7 @@
     cursor: pointer;
     font-family: "DM Sans", sans-serif;
     transition: background 0.12s;
+    flex-shrink: 0;
 }
 
 .searchBtn:hover {
@@ -165,6 +263,7 @@
     cursor: pointer;
     font-family: "DM Sans", sans-serif;
     transition: background 0.12s, color 0.12s;
+    flex-shrink: 0;
 }
 
 .clearBtn:hover {
@@ -246,7 +345,7 @@
     background: #f0f5fb;
 }
 
-/* ── Filter bar */
+/* ── Filter bar ── */
 .filterBar {
     display: flex;
     align-items: center;
@@ -255,6 +354,7 @@
     background: #f0f5fb;
     border-bottom: 1px solid #dce8f4;
     flex-shrink: 0;
+    flex-wrap: wrap;
 }
 
 .filterLabel {
@@ -285,10 +385,11 @@
     color: #a0b4c8;
 }
 
-/* ── Scroll + table */
+/* ── Scroll + table ── */
 .tableScroll {
     flex: 1;
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .tableInner {
@@ -335,7 +436,7 @@
     font-weight: 700;
 }
 
-/* ── Rows */
+/* ── Rows ── */
 .records {
     width: 100%;
 }
@@ -372,7 +473,7 @@
     white-space: nowrap;
 }
 
-/* ── Detail panel */
+/* ── Detail panel ── */
 .detailPanel {
     border-top: 1px solid #dce8f4;
     padding: 4px 0 16px;
@@ -538,7 +639,7 @@
     word-break: break-word;
 }
 
-/* ── Edit inputs */
+/* ── Edit inputs ── */
 .editInput {
     width: 100%;
     padding: 5px 9px;
@@ -579,7 +680,7 @@
     box-shadow: 0 0 0 2px rgba(10, 102, 194, 0.1);
 }
 
-/* ── Long text / expand */
+/* ── Long text / expand ── */
 .expandBtn {
     font-size: 11px;
     color: #0a66c2;
@@ -613,7 +714,7 @@
     line-height: 1.5;
 }
 
-/* ── FK link */
+/* ── FK link ── */
 .fkLink {
     background: none;
     border: none;
@@ -633,7 +734,7 @@
     opacity: 1;
 }
 
-/* ── Footer */
+/* ── Footer ── */
 .footer {
     display: flex;
     align-items: center;
@@ -674,7 +775,7 @@
     font-weight: 500;
 }
 
-/* ── Field helpers */
+/* ── Field helpers ── */
 .nullVal {
     font-size: 12px;
     color: #c8d8e8;
@@ -690,7 +791,7 @@
     color: #5a7a95;
 }
 
-/* ── Badges */
+/* ── Badges ── */
 .badge {
     display: inline-block;
     font-size: 11px;
@@ -729,7 +830,7 @@
     color: #64748b;
 }
 
-/* ── State messages */
+/* ── State messages ── */
 .stateMsg {
     padding: 48px 20px;
     text-align: center;
@@ -743,4 +844,100 @@
     color: #dc2626;
     background: rgba(220, 38, 38, 0.05);
     border-bottom: 1px solid rgba(220, 38, 38, 0.12);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE  ≤ 768px
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+    /* Collapse the grid — main takes full width */
+    .layout {
+        grid-template-columns: 1fr;
+        height: calc(100vh - 56px);
+    }
+
+    /* Sidebar becomes a fixed off-canvas drawer */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 260px;
+        transform: translateX(-100%);
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+        z-index: 200;
+        padding-top: 0;
+    }
+
+    .sidebarOpen {
+        transform: translateX(0);
+    }
+
+    /* Show the mobile header inside the sidebar */
+    .sidebarMobileHeader {
+        display: flex;
+    }
+
+    /* Show the backdrop */
+    .sidebarOverlay {
+        display: block;
+    }
+
+    /* Show the mobile top bar */
+    .mobileTopBar {
+        display: flex;
+    }
+
+    /* Hide the desktop "activeTable" label in the toolbar (shown in mobileTopBar instead) */
+    .activeTable {
+        display: none;
+    }
+
+    /* Tighten toolbar */
+    .toolbar {
+        padding: 8px 12px;
+        gap: 6px;
+    }
+
+    .searchForm {
+        max-width: none;
+        flex: 1;
+    }
+
+    .searchInput {
+        font-size: 16px;
+        /* prevent iOS zoom */
+    }
+
+    /* Hide export on mobile — not useful on phone */
+    .exportBtn {
+        display: none;
+    }
+
+    /* Row padding tighter */
+    .row {
+        padding: 0 12px;
+    }
+
+    /* Detail panel key column narrows */
+    .detailRow {
+        grid-template-columns: 120px 1fr;
+    }
+
+    /* Footer tighter */
+    .footer {
+        padding: 10px 12px;
+    }
+
+    /* Filter bar wraps nicely */
+    .filterBar {
+        padding: 8px 12px;
+    }
+
+    .filterInput {
+        font-size: 16px;
+        /* prevent iOS zoom */
+        width: 130px;
+    }
 }
