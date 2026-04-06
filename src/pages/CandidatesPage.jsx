@@ -97,10 +97,7 @@ export default function CandidatesPage() {
                             {candidates.length} candidate{candidates.length !== 1 ? "s" : ""} in your database
                             {candidates.length > 0 && (
                                 <>
-                                    <span className={styles.indexedStat}>
-                                        <span className={styles.indexedDot} />
-                                        {indexedCount} of {candidates.length} AI indexed and searchable
-                                    </span>
+
                                     {fromCallCount > 0 && (
                                         <span style={{
                                             marginLeft: '12px',
