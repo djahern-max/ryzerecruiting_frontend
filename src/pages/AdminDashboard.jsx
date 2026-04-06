@@ -374,7 +374,9 @@ function AdminDashboard() {
   const candidateBookings = bookings.filter(
     b => b.booking_type === 'outbound_candidate' || b.booking_type === 'inbound_candidate'
   );
-  const employerBookings = bookings.filter(b => b.booking_type === 'outbound_employer');
+  const employerBookings = bookings.filter(
+    b => b.booking_type === 'outbound_employer' || b.booking_type === 'inbound'
+  );
 
   const firstName = user?.full_name?.split(' ')[0] || 'there';
 
