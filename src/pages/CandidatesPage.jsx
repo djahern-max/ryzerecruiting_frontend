@@ -5,6 +5,8 @@ import { useAuth } from "../contexts/AuthContext";
 import CandidateModal from "../components/CandidateModal";
 import styles from "./CandidatesPage.module.css";
 import AdminHeader from '../components/AdminHeader';
+import indexedIcon from '../assets/icons/indexed.svg';
+import notIndexedIcon from '../assets/icons/not_indexed.svg';
 import addCandidateIcon from '../assets/icons/add-candidate.svg';
 
 
@@ -236,15 +238,9 @@ function FragmentRow({ candidate: c, expandedId, setExpandedId, openEdit, handle
 
                 <td>
                     {c.embedded_at ? (
-                        <span className={styles.badgeIndexed}>
-                            <span className={styles.badgeDot} />
-                            Indexed
-                        </span>
+                        <img src={indexedIcon} className={styles.statusIcon} title="AI indexed & searchable" />
                     ) : (
-                        <span className={styles.badgePending}>
-                            <span className={styles.badgeSpinner} />
-                            Indexing...
-                        </span>
+                        <img src={notIndexedIcon} className={styles.statusIconPending} title="Indexing..." />
                     )}
                 </td>
 
