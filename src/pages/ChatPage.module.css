@@ -9,116 +9,220 @@
     overflow: hidden;
 }
 
-/* ── Header altered for Commit  ── */
-.header {
-    background: white;
-    border-bottom: 1px solid var(--border-200);
-    flex-shrink: 0;
-    z-index: 100;
+/* ── Layout (sidebar + chat) ── */
+.body {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    position: relative;
 }
 
-.headerContent {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 24px;
-    height: 56px;
+/* ── Sidebar ── */
+.sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: #f8fafc;
+    border-right: 1px solid var(--border-200);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 240ms ease;
+    z-index: 200;
+}
+
+.sidebarHeader {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-200);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.newChatBtn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    border: 1px solid var(--border-300, #cbd5e1);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--brand-800);
+    cursor: pointer;
+    transition: background 140ms;
+    font-family: var(--font-sans);
+}
+
+.newChatBtn:hover {
+    background: var(--bg-100);
+}
+
+/* Close button inside sidebar header — mobile only, hidden on desktop */
+.sidebarCloseBtn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--text-400);
+    padding: 4px 6px;
+    border-radius: 6px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.sidebarCloseBtn:hover {
+    background: var(--bg-100);
+    color: var(--text-700);
+}
+
+.sessionList {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 0;
+}
+
+.sessionGroup {
+    margin-bottom: 4px;
+}
+
+.sessionGroupLabel {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-400, #94a3b8);
+    padding: 8px 12px 4px;
+}
+
+.sessionItem {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    padding: 7px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    margin: 0 6px;
+    transition: background 120ms;
+    gap: 6px;
 }
 
-.headerLeft {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
+.sessionItem:hover {
+    background: var(--bg-100);
 }
 
-.logo {
-    font-size: 1.1rem;
-    font-weight: 800;
+.sessionItemActive {
+    background: var(--brand-50, #eff6ff);
     color: var(--brand-800);
-    letter-spacing: -0.3px;
 }
 
-.adminBadge {
-    font-size: 0.7rem;
-    font-weight: 700;
-    background: var(--brand-100, #dbeafe);
+.sessionTitle {
+    font-size: 0.82rem;
+    color: var(--text-700);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+}
+
+.sessionItemActive .sessionTitle {
     color: var(--brand-800);
-    border: 1px solid var(--brand-200, #bfdbfe);
-    padding: 2px 8px;
-    border-radius: 20px;
-    letter-spacing: 0.3px;
+    font-weight: 600;
 }
 
-.nav {
-    display: flex;
-    gap: 4px;
-}
-
-.navBtn {
+.deleteBtn {
     background: none;
     border: none;
-    color: var(--text-500);
-    font-size: 0.875rem;
-    font-weight: 600;
-    font-family: var(--font-sans);
-    padding: 6px 12px;
-    border-radius: 8px;
     cursor: pointer;
-    transition: background 140ms, color 140ms;
-}
-
-.navBtn:hover {
-    background: var(--bg-100);
-    color: var(--text-900);
-}
-
-.navBtnActive {
-    background: var(--bg-100);
-    color: var(--brand-800);
-}
-
-.headerRight {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    font-size: 0.8rem;
+    padding: 2px 4px;
+    border-radius: 4px;
+    opacity: 0.6;
     flex-shrink: 0;
+    transition: opacity 140ms;
 }
 
-.userName {
-    font-size: 0.875rem;
-    color: var(--text-600);
+.deleteBtn:hover {
+    opacity: 1;
 }
 
-.logoutButton {
-    background: none;
-    border: 1px solid var(--border-300, #cbd5e1);
-    color: var(--text-600);
-    border-radius: 8px;
-    padding: 5px 10px;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: background 140ms;
-    display: flex;
-    align-items: center;
+.noSessions {
+    font-size: 0.8rem;
+    color: var(--text-400);
+    text-align: center;
+    padding: 24px 12px;
 }
 
-.logoutButton:hover {
-    background: var(--bg-100);
+/* ── Backdrop overlay (mobile only) ── */
+.sidebarOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 199;
+    animation: fadeIn 200ms ease;
 }
 
-/* ── Layout ── */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ── Chat layout ── */
 .chatLayout {
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    min-width: 0;
 }
 
-/* ── Chat main ── */
+/* ── Mobile top bar (hamburger row) — hidden on desktop ── */
+.mobileChatBar {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-200);
+    background: white;
+    flex-shrink: 0;
+}
+
+.hamburgerBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 6px;
+    color: var(--text-600);
+    font-size: 1.1rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.hamburgerBtn:hover {
+    background: var(--bg-100);
+}
+
+.mobileChatTitle {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text-700);
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Chat main scroll area ── */
 .chatMain {
     flex: 1;
     overflow-y: auto;
@@ -127,15 +231,9 @@
     flex-direction: column;
 }
 
-/* ── Content width constraint inside chat area ── */
+/* ── Content width constraint ── */
 .thread,
-.inputBar {
-    max-width: 780px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 16px;
-}
-
+.inputBar,
 .emptyState {
     max-width: 780px;
     width: 100%;
@@ -183,10 +281,6 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    max-width: 780px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 16px;
 }
 
 /* ── Message rows ── */
@@ -203,20 +297,6 @@
 .messageRowAI {
     flex-direction: row;
 }
-
-/* ── AI avatar (static) ── */
-.aiAvatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #0a66c2, #004182);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-/* Thinking avatar animation handled via inline styles + global keyframes in ChatPage.jsx */
 
 /* ── Bubbles ── */
 .bubble {
@@ -252,7 +332,6 @@
     margin-top: 6px;
 }
 
-/* Markdown rendered after streaming completes */
 .bubbleText ul,
 .bubbleText ol {
     margin: 6px 0;
@@ -335,6 +414,13 @@
     gap: 6px;
 }
 
+.cardTop {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+}
+
 .cardHeader {
     display: flex;
     align-items: center;
@@ -346,6 +432,16 @@
     font-weight: 700;
     color: var(--text-900);
     font-size: 0.9rem;
+}
+
+.scoreChip {
+    font-size: 0.72rem;
+    font-weight: 700;
+    border: 1.5px solid;
+    border-radius: 20px;
+    padding: 2px 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .cardScore {
@@ -383,6 +479,7 @@
     gap: 5px;
 }
 
+.tag,
 .tagLevel,
 .tagCert,
 .tagYears {
@@ -390,6 +487,12 @@
     font-weight: 600;
     border-radius: 20px;
     padding: 2px 8px;
+}
+
+.tag {
+    background: #f0f4f8;
+    color: var(--text-700);
+    border: 1px solid var(--border-200);
 }
 
 .tagLevel {
@@ -445,9 +548,10 @@
     border-radius: 10px;
     padding: 12px 14px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 12px;
+    flex-wrap: wrap;
 }
 
 .meetingCardLeft {
@@ -455,6 +559,7 @@
     flex-direction: column;
     gap: 3px;
     flex: 1;
+    min-width: 0;
 }
 
 .meetingCardRight {
@@ -492,9 +597,6 @@
 .inputBar {
     padding: 12px 16px 20px;
     flex-shrink: 0;
-    max-width: 780px;
-    width: 100%;
-    margin: 0 auto;
 }
 
 .errorBanner {
@@ -535,7 +637,7 @@
     line-height: 1.5;
     max-height: 160px;
     overflow-y: hidden;
-    /* ← was: auto */
+    min-width: 0;
 }
 
 .input::placeholder {
@@ -591,168 +693,25 @@
     animation: spin 0.7s linear infinite;
 }
 
-.thinkingLabel {
-    font-size: 0.78rem;
-    color: var(--text-400);
-    margin: 0 0 8px;
-    font-style: italic;
-}
-
-.typingBubbleInner {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
 @keyframes spin {
     to {
         transform: rotate(360deg);
     }
 }
 
-/* ── Stream cursor blink ── */
-.streamCursor {
-    display: inline-block;
-    animation: cursorBlink 0.7s steps(1) infinite;
-    color: var(--brand-700, #004182);
-    font-size: 0.85rem;
-    line-height: 1;
-    margin-left: 1px;
-    vertical-align: middle;
-}
-
-@keyframes cursorBlink {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0;
-    }
-}
-
-/* ── Body layout (sidebar + chat) ── */
-.body {
-    flex: 1;
-    display: flex;
-    overflow: hidden;
-}
-
-/* ── Sidebar ── */
-.sidebar {
-    width: 260px;
-    flex-shrink: 0;
-    background: #f8fafc;
-    border-right: 1px solid var(--border-200);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.sidebarHeader {
-    padding: 12px;
-    border-bottom: 1px solid var(--border-200);
-    flex-shrink: 0;
-}
-
-.newChatBtn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: white;
-    border: 1px solid var(--border-300, #cbd5e1);
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--brand-800);
-    cursor: pointer;
-    transition: background 140ms;
-    font-family: var(--font-sans);
-}
-
-.newChatBtn:hover {
-    background: var(--bg-100);
-}
-
-.sessionList {
-    flex: 1;
-    overflow-y: auto;
-    padding: 8px 0;
-}
-
-.sessionGroup {
-    margin-bottom: 4px;
-}
-
-.sessionGroupLabel {
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: var(--text-400, #94a3b8);
-    padding: 8px 12px 4px;
-}
-
-.sessionItem {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 7px 12px;
-    cursor: pointer;
-    border-radius: 6px;
-    margin: 0 6px;
-    transition: background 120ms;
-    gap: 6px;
-}
-
-.sessionItem:hover {
-    background: var(--bg-100);
-}
-
-.sessionItemActive {
-    background: var(--brand-50, #eff6ff);
-    color: var(--brand-800);
-}
-
-.sessionTitle {
-    font-size: 0.82rem;
-    color: var(--text-700);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex: 1;
-}
-
-.sessionItemActive .sessionTitle {
-    color: var(--brand-800);
-    font-weight: 600;
-}
-
-.deleteBtn {
+.expandBtn {
     background: none;
     border: none;
+    padding: 4px 0 0 0;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #0a66c2;
     cursor: pointer;
-    font-size: 0.8rem;
-    padding: 2px 4px;
-    border-radius: 4px;
-    opacity: 0.6;
-    flex-shrink: 0;
-    transition: opacity 140ms;
+    font-family: inherit;
 }
 
-.deleteBtn:hover {
-    opacity: 1;
-}
-
-.noSessions {
-    font-size: 0.8rem;
-    color: var(--text-400);
-    text-align: center;
-    padding: 24px 12px;
+.expandBtn:hover {
+    text-decoration: underline;
 }
 
 @keyframes logoPulse {
@@ -777,17 +736,102 @@
     margin-top: 2px;
 }
 
-.expandBtn {
-    background: none;
-    border: none;
-    padding: 4px 0 0 0;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: #0a66c2;
-    cursor: pointer;
-    font-family: inherit;
-}
+/* ═══════════════════════════════════════════════════════════
+   MOBILE  ≤ 768px
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
 
-.expandBtn:hover {
-    text-decoration: underline;
+    /* Sidebar becomes a fixed off-canvas drawer */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 280px;
+        transform: translateX(-100%);
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+        z-index: 200;
+    }
+
+    /* When open, slide in */
+    .sidebarOpen {
+        transform: translateX(0);
+    }
+
+    /* Show the close button inside the sidebar header */
+    .sidebarCloseBtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Show the backdrop overlay */
+    .sidebarOverlay {
+        display: block;
+    }
+
+    /* Show the mobile top bar with hamburger */
+    .mobileChatBar {
+        display: flex;
+    }
+
+    /* Chat fills full width */
+    .chatLayout {
+        width: 100%;
+    }
+
+    /* Tighten the empty state on small screens */
+    .emptyState {
+        padding: 32px 20px;
+        gap: 12px;
+    }
+
+    .emptyTitle {
+        font-size: 1.2rem;
+    }
+
+    .emptySub {
+        font-size: 0.85rem;
+    }
+
+    /* Bubbles use more width on narrow screens */
+    .bubble {
+        max-width: 88%;
+    }
+
+    /* Reduce avatar size slightly */
+    .messageRow svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    /* Input bar — tighter padding, no hint text */
+    .inputBar {
+        padding: 8px 12px 12px;
+    }
+
+    .inputHint {
+        display: none;
+    }
+
+    .inputWrapper {
+        border-radius: 12px;
+        padding: 8px 8px 8px 14px;
+    }
+
+    .input {
+        font-size: 16px;
+        /* prevents iOS zoom on focus */
+    }
+
+    /* Thread breathing room */
+    .thread,
+    .inputBar,
+    .emptyState {
+        padding: 0 12px;
+    }
+
+    .chatMain {
+        padding-top: 16px;
+    }
 }

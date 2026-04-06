@@ -1,8 +1,7 @@
 /* src/pages/ChatPage.jsx */
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { useEffect, useState, useRef, useCallback } from "react";
-import ReactMarkdown from "react-markdown";
+import { useEffect, useState, useRef } from "react";
 import styles from "./ChatPage.module.css";
 import AdminHeader from '../components/AdminHeader';
 import IntelligenceMessage from "../components/IntelligenceMessage";
@@ -43,41 +42,50 @@ function groupSessionsByDate(sessions) {
 // Sidebar
 // ---------------------------------------------------------------------------
 
-function ChatSidebar({ sessions, activeSessionId, onNewChat, onSelectSession, onDeleteSession }) {
+function ChatSidebar({ sessions, activeSessionId, onNewChat, onSelectSession, onDeleteSession, isOpen, onClose }) {
     const groups = groupSessionsByDate(sessions);
     const groupOrder = ["Today", "Yesterday", "This Week", "Older"];
 
     return (
-        <aside className={styles.sidebar}>
-            <div className={styles.sidebarHeader}>
-                <button className={styles.newChatBtn} onClick={onNewChat}>
-                    <span>+</span> New Chat
-                </button>
-            </div>
-            <div className={styles.sessionList}>
-                {groupOrder.map((group) => {
-                    const items = groups[group];
-                    if (!items.length) return null;
-                    return (
-                        <div key={group} className={styles.sessionGroup}>
-                            <div className={styles.sessionGroupLabel}>{group}</div>
-                            {items.map((s) => (
-                                <SessionItem
-                                    key={s.id}
-                                    session={s}
-                                    isActive={s.id === activeSessionId}
-                                    onSelect={() => onSelectSession(s.id)}
-                                    onDelete={() => onDeleteSession(s.id)}
-                                />
-                            ))}
-                        </div>
-                    );
-                })}
-                {sessions.length === 0 && (
-                    <div className={styles.noSessions}>No conversations yet</div>
-                )}
-            </div>
-        </aside>
+        <>
+            {/* Backdrop — tap to close on mobile */}
+            {isOpen && <div className={styles.sidebarOverlay} onClick={onClose} />}
+
+            <aside className={`${styles.sidebar} ${isOpen ? styles.sidebarOpen : ""}`}>
+                <div className={styles.sidebarHeader}>
+                    <button className={styles.newChatBtn} onClick={() => { onNewChat(); onClose(); }}>
+                        <span>+</span> New Chat
+                    </button>
+                    {/* Close button — only visible on mobile via CSS */}
+                    <button className={styles.sidebarCloseBtn} onClick={onClose} aria-label="Close menu">
+                        ✕
+                    </button>
+                </div>
+                <div className={styles.sessionList}>
+                    {groupOrder.map((group) => {
+                        const items = groups[group];
+                        if (!items.length) return null;
+                        return (
+                            <div key={group} className={styles.sessionGroup}>
+                                <div className={styles.sessionGroupLabel}>{group}</div>
+                                {items.map((s) => (
+                                    <SessionItem
+                                        key={s.id}
+                                        session={s}
+                                        isActive={s.id === activeSessionId}
+                                        onSelect={() => { onSelectSession(s.id); onClose(); }}
+                                        onDelete={() => onDeleteSession(s.id)}
+                                    />
+                                ))}
+                            </div>
+                        );
+                    })}
+                    {sessions.length === 0 && (
+                        <div className={styles.noSessions}>No conversations yet</div>
+                    )}
+                </div>
+            </aside>
+        </>
     );
 }
 
@@ -133,15 +141,9 @@ function CandidateCard({ candidate }) {
                 )}
             </div>
             <div className={styles.cardTags}>
-                {candidate.ai_career_level && (
-                    <span className={styles.tag}>{candidate.ai_career_level}</span>
-                )}
-                {candidate.ai_certifications && (
-                    <span className={styles.tag}>{candidate.ai_certifications}</span>
-                )}
-                {candidate.ai_years_experience && (
-                    <span className={styles.tag}>{candidate.ai_years_experience} yrs</span>
-                )}
+                {candidate.ai_career_level && <span className={styles.tag}>{candidate.ai_career_level}</span>}
+                {candidate.ai_certifications && <span className={styles.tag}>{candidate.ai_certifications}</span>}
+                {candidate.ai_years_experience && <span className={styles.tag}>{candidate.ai_years_experience} yrs</span>}
             </div>
             {candidate.ai_summary && (
                 <p className={styles.cardSummary}>{candidate.ai_summary}</p>
@@ -149,11 +151,10 @@ function CandidateCard({ candidate }) {
         </div>
     );
 }
+
 function MeetingCard({ meeting }) {
     const [expanded, setExpanded] = useState(false);
 
-    // If a summary exists the meeting already happened — show Completed
-    // regardless of what the booking status field says
     const statusColors = {
         confirmed: { bg: "#dcfce7", color: "#15803d", label: "Confirmed" },
         pending: { bg: "#fef3c7", color: "#92400e", label: "Pending" },
@@ -167,28 +168,19 @@ function MeetingCard({ meeting }) {
     const PREVIEW_LENGTH = 180;
     const summary = meeting.meeting_summary || "";
     const isLong = summary.length > PREVIEW_LENGTH;
-    const displayText = expanded || !isLong
-        ? summary
-        : summary.slice(0, PREVIEW_LENGTH) + "…";
+    const displayText = expanded || !isLong ? summary : summary.slice(0, PREVIEW_LENGTH) + "…";
 
     return (
         <div className={styles.meetingCard}>
             <div className={styles.meetingCardLeft}>
                 <div className={styles.cardName}>{meeting.employer_name || "Unknown"}</div>
-                {meeting.company_name && (
-                    <div className={styles.cardMeta}>{meeting.company_name}</div>
-                )}
-                <div className={styles.meetingTime}>
-                    📅 {meeting.date} at {meeting.time_slot} EST
-                </div>
+                {meeting.company_name && <div className={styles.cardMeta}>{meeting.company_name}</div>}
+                <div className={styles.meetingTime}>📅 {meeting.date} at {meeting.time_slot} EST</div>
                 {summary && (
                     <>
                         <p className={styles.cardSummary}>{displayText}</p>
                         {isLong && (
-                            <button
-                                className={styles.expandBtn}
-                                onClick={() => setExpanded(prev => !prev)}
-                            >
+                            <button className={styles.expandBtn} onClick={() => setExpanded(prev => !prev)}>
                                 {expanded ? "Show less ↑" : "Show more ↓"}
                             </button>
                         )}
@@ -196,19 +188,11 @@ function MeetingCard({ meeting }) {
                 )}
             </div>
             <div className={styles.meetingCardRight}>
-                <span
-                    className={styles.meetingStatus}
-                    style={{ background: s.bg, color: s.color }}
-                >
+                <span className={styles.meetingStatus} style={{ background: s.bg, color: s.color }}>
                     {s.label}
                 </span>
                 {meeting.meeting_url && meeting.status === "confirmed" && (
-                    <a
-                        href={meeting.meeting_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.zoomLink}
-                    >
+                    <a href={meeting.meeting_url} target="_blank" rel="noopener noreferrer" className={styles.zoomLink}>
                         Join Zoom →
                     </a>
                 )}
@@ -249,7 +233,6 @@ function TypingIndicator({ statusMsg }) {
     );
 }
 
-
 // ---------------------------------------------------------------------------
 // Message bubble
 // ---------------------------------------------------------------------------
@@ -267,7 +250,6 @@ function MessageBubble({ message }) {
                 {isUser ? (
                     <p className={styles.bubbleText}>{message.content}</p>
                 ) : (
-
                     <IntelligenceMessage message={message} />
                 )}
             </div>
@@ -296,8 +278,15 @@ export default function ChatPage() {
     const [sessions, setSessions] = useState([]);
     const [activeSessionId, setActiveSessionId] = useState(null);
 
+    // Mobile sidebar state
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
     const bottomRef = useRef(null);
     const inputRef = useRef(null);
+
+    // Active session title for mobile header
+    const activeSession = sessions.find(s => s.id === activeSessionId);
+    const mobileChatTitle = activeSession?.title || "RYZE Intelligence";
 
     // ── Auto-scroll ────────────────────────────────────────────────────────
     useEffect(() => {
@@ -312,26 +301,24 @@ export default function ChatPage() {
         }
     }, [input]);
 
-    // ── Load sessions on mount ─────────────────────────────────────────────
+    // Lock body scroll when sidebar is open on mobile
     useEffect(() => {
-        loadSessions();
-    }, []);
+        document.body.style.overflow = sidebarOpen ? "hidden" : "";
+        return () => { document.body.style.overflow = ""; };
+    }, [sidebarOpen]);
+
+    // ── Load sessions on mount ─────────────────────────────────────────────
+    useEffect(() => { loadSessions(); }, []);
 
     async function loadSessions() {
         try {
             const res = await fetch(`${API_BASE}/api/chat/sessions`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            if (res.ok) {
-                const data = await res.json();
-                setSessions(data);
-            }
-        } catch (e) {
-            console.error("Failed to load sessions", e);
-        }
+            if (res.ok) setSessions(await res.json());
+        } catch (e) { console.error("Failed to load sessions", e); }
     }
 
-    // ── Load a session's messages ──────────────────────────────────────────
     async function loadSession(sessionId) {
         try {
             const res = await fetch(`${API_BASE}/api/chat/sessions/${sessionId}`, {
@@ -348,12 +335,9 @@ export default function ChatPage() {
             }));
             setMessages(restored);
             setError(null);
-        } catch (e) {
-            console.error("Failed to load session", e);
-        }
+        } catch (e) { console.error("Failed to load session", e); }
     }
 
-    // ── New chat ───────────────────────────────────────────────────────────
     function handleNewChat() {
         setActiveSessionId(null);
         setMessages([]);
@@ -361,7 +345,6 @@ export default function ChatPage() {
         inputRef.current?.focus();
     }
 
-    // ── Delete session ─────────────────────────────────────────────────────
     async function handleDeleteSession(sessionId) {
         try {
             await fetch(`${API_BASE}/api/chat/sessions/${sessionId}`, {
@@ -370,32 +353,23 @@ export default function ChatPage() {
             });
             setSessions((prev) => prev.filter((s) => s.id !== sessionId));
             if (activeSessionId === sessionId) handleNewChat();
-        } catch (e) {
-            console.error("Failed to delete session", e);
-        }
+        } catch (e) { console.error("Failed to delete session", e); }
     }
 
-    // ── Save a message to current session ─────────────────────────────────
     async function saveMessage(sessionId, role, content, structuredData) {
         try {
             await fetch(`${API_BASE}/api/chat/sessions/${sessionId}/messages`, {
                 method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
+                headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
                 body: JSON.stringify({
                     role,
                     content,
                     structured_data: structuredData ? JSON.stringify(structuredData) : null,
                 }),
             });
-        } catch (e) {
-            console.error("Failed to save message", e);
-        }
+        } catch (e) { console.error("Failed to save message", e); }
     }
 
-    // ── Generate title after first exchange ───────────────────────────────
     async function generateTitle(sessionId) {
         try {
             const res = await fetch(`${API_BASE}/api/chat/sessions/${sessionId}/generate-title`, {
@@ -404,16 +378,11 @@ export default function ChatPage() {
             });
             if (res.ok) {
                 const data = await res.json();
-                setSessions((prev) =>
-                    prev.map((s) => s.id === sessionId ? { ...s, title: data.title } : s)
-                );
+                setSessions((prev) => prev.map((s) => s.id === sessionId ? { ...s, title: data.title } : s));
             }
-        } catch (e) {
-            console.error("Failed to generate title", e);
-        }
+        } catch (e) { console.error("Failed to generate title", e); }
     }
 
-    // ── Send message ───────────────────────────────────────────────────────
     async function sendMessage(text) {
         const userMessage = text.trim();
         if (!userMessage || loading || streaming) return;
@@ -428,17 +397,13 @@ export default function ChatPage() {
         setMessages(newMessages);
         setLoading(true);
 
-        // Create session on first message
         let sessionId = activeSessionId;
         const isFirstMessage = messages.length === 0;
         if (!sessionId) {
             try {
                 const res = await fetch(`${API_BASE}/api/chat/sessions`, {
                     method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
+                    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
                     body: JSON.stringify({ title: null }),
                 });
                 if (res.ok) {
@@ -447,24 +412,16 @@ export default function ChatPage() {
                     setActiveSessionId(sessionId);
                     setSessions((prev) => [session, ...prev]);
                 }
-            } catch (e) {
-                console.error("Failed to create session", e);
-            }
+            } catch (e) { console.error("Failed to create session", e); }
         }
 
-        // Save user message
-        if (sessionId) {
-            await saveMessage(sessionId, "user", userMessage, null);
-        }
+        if (sessionId) await saveMessage(sessionId, "user", userMessage, null);
 
         try {
             const history = messages.map((m) => ({ role: m.role, content: m.content }));
             const res = await fetch(`${API_BASE}/api/chat`, {
                 method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
+                headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
                 body: JSON.stringify({ message: userMessage, history }),
             });
 
@@ -497,8 +454,7 @@ export default function ChatPage() {
                         if (buffer.startsWith(STATUS_PREFIX)) {
                             const newlineIdx = buffer.indexOf("\n");
                             if (newlineIdx !== -1) {
-                                const msg = buffer.slice(STATUS_PREFIX.length, newlineIdx);
-                                setStatusMsg(msg);
+                                setStatusMsg(buffer.slice(STATUS_PREFIX.length, newlineIdx));
                                 buffer = buffer.slice(newlineIdx + 1);
                                 consumed = true;
                             }
@@ -536,7 +492,6 @@ export default function ChatPage() {
                 }
             }
 
-            // Finalize
             if (aiMsgIndex !== null) {
                 setMessages((prev) => {
                     const updated = [...prev];
@@ -553,13 +508,9 @@ export default function ChatPage() {
                 });
             }
 
-            // Save assistant message and generate title
             if (sessionId) {
                 await saveMessage(sessionId, "assistant", fullText, structuredData);
-                if (isFirstMessage) {
-                    generateTitle(sessionId);
-                }
-                // Refresh session list to update updated_at ordering
+                if (isFirstMessage) generateTitle(sessionId);
                 loadSessions();
             }
 
@@ -584,10 +535,8 @@ export default function ChatPage() {
 
     return (
         <div className={styles.page}>
-            {/* ── Header ── */}
-
             <AdminHeader active="intelligence" />
-            {/* ── Body: sidebar + chat ── */}
+
             <div className={styles.body}>
                 <ChatSidebar
                     sessions={sessions}
@@ -595,14 +544,28 @@ export default function ChatPage() {
                     onNewChat={handleNewChat}
                     onSelectSession={loadSession}
                     onDeleteSession={handleDeleteSession}
+                    isOpen={sidebarOpen}
+                    onClose={() => setSidebarOpen(false)}
                 />
 
                 <div className={styles.chatLayout}>
+                    {/* Mobile-only top bar with hamburger */}
+                    <div className={styles.mobileChatBar}>
+                        <button
+                            className={styles.hamburgerBtn}
+                            onClick={() => setSidebarOpen(true)}
+                            aria-label="Open chat history"
+                        >
+                            ☰
+                        </button>
+                        <span className={styles.mobileChatTitle}>{mobileChatTitle}</span>
+                    </div>
+
                     <main className={styles.chatMain}>
                         {messages.length === 0 && (
                             <div className={styles.emptyState}>
                                 <div className={styles.emptyIcon}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 375" width="80" height="80">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 375" width="64" height="64">
                                         <path fill="#004aad" d="M 186.078125 19.484375 L 0.367188 341.148438 L 180.234375 341.148438 L 229.054688 256.585938 L 201.605469 215.015625 L 190.46875 234.308594 L 154.511719 296.59375 L 77.539062 296.59375 L 186.394531 108.039062 L 296.730469 295.972656 L 243.730469 295.972656 L 221.453125 340.527344 L 374.554688 340.527344 Z" />
                                     </svg>
                                 </div>
