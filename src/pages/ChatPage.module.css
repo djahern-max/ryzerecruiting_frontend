@@ -263,7 +263,7 @@
 .emptyTitle {
     font-size: 1.5rem;
     font-weight: 800;
-    color: var(--text-900);
+    color: #64748b;
     margin: 0;
     letter-spacing: -0.4px;
 }
