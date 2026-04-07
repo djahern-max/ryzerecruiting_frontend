@@ -92,10 +92,20 @@ function SendInviteModal({ onClose, onSuccess }) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
+  function formatPhone(value) {
+    const digits = value.replace(/\D/g, "").slice(0, 10);
+    if (digits.length < 4) return digits;
+    if (digits.length < 7) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  }
+
   function handleChange(e) {
     const { name, value } = e.target;
     setForm(prev => {
-      const updated = { ...prev, [name]: value };
+      const updated = {
+        ...prev,
+        [name]: name === "contact_phone" ? formatPhone(value) : value
+      };
       if (name === 'date') {
         const available = getAvailableSlots(value);
         if (prev.time_slot && !available.includes(prev.time_slot)) {
