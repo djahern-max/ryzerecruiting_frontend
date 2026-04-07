@@ -352,12 +352,12 @@
 .statNumber {
   font-size: 1.6rem;
   font-weight: 800;
-  color: #0a66c2;
+  color: var(--text-900);
   line-height: 1;
 }
 
 .statPending {
-  color: #7c3aed;
+  color: #d97706;
 }
 
 .statConfirmed {
