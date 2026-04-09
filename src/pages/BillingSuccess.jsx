@@ -2,19 +2,28 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import confetti from 'canvas-confetti';
 import styles from './UpgradePage.module.css';
+import happyFace from '../assets/icons/happy_face.svg';
 
 export default function BillingSuccess() {
     const navigate = useNavigate();
     const { user } = useAuth();
 
-    // Redirect to the right dashboard after 4 seconds
     useEffect(() => {
+        confetti({
+            particleCount: 150,
+            spread: 80,
+            origin: { y: 0.6 },
+            colors: ['#0a66c2', '#16a34a', '#f59e0b', '#ec4899'],
+        });
+
         const timer = setTimeout(() => {
             if (user?.user_type === 'ADMIN') navigate('/admin');
             else if (user?.user_type === 'EMPLOYER') navigate('/employer/dashboard');
             else navigate('/candidate/dashboard');
         }, 4000);
+
         return () => clearTimeout(timer);
     }, [user, navigate]);
 
@@ -23,8 +32,8 @@ export default function BillingSuccess() {
             <div className={styles.card}>
                 <div className={styles.logo}>RYZE.ai</div>
 
-                <div className={styles.iconWrap} style={{ background: '#dcfce7', color: '#16a34a' }}>
-                    <i className="fi fi-rr-check-circle"></i>
+                <div className={styles.iconWrap}>
+                    <img src={happyFace} alt="" style={{ width: '64px', height: '64px' }} />
                 </div>
 
                 <h1 className={styles.title}>You're all set!</h1>
