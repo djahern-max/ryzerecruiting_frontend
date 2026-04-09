@@ -22,7 +22,7 @@ import EP15 from "../assets/landing_page_thumbnails/EP15.png";
 import EP16 from "../assets/landing_page_thumbnails/EP16.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
-const CURRENT_VERSION = 16;
+const CURRENT_VERSION = 17;
 
 const EPISODES = [
   {
@@ -296,7 +296,25 @@ const PHASES = [
       "Foundation confirmed solid before the invite system opens the doors",
     ],
   },
-
+  {
+    id: "12",
+    title: "Invite System, Free Trial & Stripe Billing",
+    status: "complete",
+    summary: "EP17 opens the doors. A single admin action onboards any recruiting firm — creates their tenant, starts a 30-day free trial, and fires a branded welcome email with login credentials. Stripe converts trial users to paying subscribers. A full billing lifecycle is in place: trial badge in the header, 402 enforcement on every data endpoint, upgrade wall, Stripe Checkout, and a webhook-driven activation flow. A firm goes from zero to paying customer in under 5 minutes.",
+    bullets: [
+      "Admin invite endpoint — creates tenant, generates slug, sets 30-day trial in one action",
+      "Branded welcome email — fires via Resend with temp password and login link",
+      "Tenant model — status field: trial | active | expired | cancelled",
+      "Trial badge in AdminHeader — shows days remaining, turns urgent red at 7 days",
+      "402 enforcement — every data endpoint checks trial/billing state via deps.py",
+      "Global 402 interceptor in AuthContext — auto-redirects to /upgrade on expiry",
+      "UpgradePage — trial expired wall with Stripe Checkout redirect",
+      "Stripe Checkout session endpoint — creates hosted payment page per tenant",
+      "Stripe webhook handler — activates tenant on checkout.session.completed",
+      "BillingSuccess page — confetti confirmation, auto-redirects to dashboard",
+      "InviteForm.jsx — admin UI for onboarding new firms with success state",
+    ],
+  },
 ];
 
 const DEMO_QUERIES = [
@@ -652,24 +670,34 @@ export default function Landing() {
               <div className={styles.nextNum}>EP 17</div>
               <div className={styles.nextTitle}>Invite System, Free Trial &amp; Stripe Billing</div>
               <p className={styles.nextDesc}>
-                EP16 proved the walls hold. EP17 opens the doors. A new admin
-                invite flow onboards any recruiting firm in one action — creates
-                their tenant, starts a 30-day free trial, and fires a branded
-                welcome email. Stripe converts trial users to $99/month
-                subscribers. A complete firm goes from zero to paying customer
-                in under 5 minutes.
+                EP16 proved the walls hold. EP17 opened the doors. Admin invite
+                flow onboards any recruiting firm in one action — tenant created,
+                30-day trial started, branded welcome email fired. Stripe handles
+                the full billing lifecycle from trial to paying subscriber.
+              </p>
+              <span className={styles.nextBadgePosted}>✓ Complete</span>
+            </div>
+
+            <div className={styles.nextCard}>
+              <div className={styles.nextNum}>EP 18</div>
+              <div className={styles.nextTitle}>Profile &amp; Document Engine</div>
+              <p className={styles.nextDesc}>
+                Every candidate, employer, and job order gets a document you'd
+                send to a client. Branded PDF exports, one-click email delivery,
+                and profile views rebuilt for presentation — not just data entry.
+                The platform starts producing recruiter-grade deliverables.
               </p>
               <span className={styles.nextBadge}>Up next</span>
             </div>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 18</div>
+              <div className={styles.nextNum}>EP 19</div>
               <div className={styles.nextTitle}>First External Recruiters</div>
               <p className={styles.nextDesc}>
-                The invite system ships and the first real recruiting firms get
-                access. Onboarding feedback shapes the next round of polish —
-                what breaks, what's missing, what gets in the way. The platform
-                stops being a proof of concept and starts being a product.
+                The invite system is live and the platform is polished enough to
+                hand to real users. The first recruiting firms get access.
+                Onboarding feedback shapes the next round of improvements — what
+                breaks, what's missing, what gets in the way.
               </p>
               <span className={styles.nextBadge}>Coming soon</span>
             </div>
