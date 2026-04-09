@@ -1,5 +1,5 @@
 /* src/pages/CandidateProfile.jsx */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import AdminHeader from "../components/AdminHeader";
 import CandidateModal from "../components/CandidateModal";
@@ -59,17 +59,17 @@ export default function CandidateProfile() {
     const { id } = useParams();
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
+    const photoInputRef = useRef(null);
 
     const [candidate, setCandidate] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    // Two separate modal modes — never open both at once
     const [editOpen, setEditOpen] = useState(false);
     const [enrichOpen, setEnrichOpen] = useState(false);
-
     const [outreachExpanded, setOutreachExpanded] = useState(false);
     const [transcriptExpanded, setTranscriptExpanded] = useState(false);
+    const [photoUploading, setPhotoUploading] = useState(false);
+    const [pdfLoading, setPdfLoading] = useState(false);
 
     useEffect(() => {
         async function fetchCandidate() {
@@ -92,6 +92,49 @@ export default function CandidateProfile() {
         setCandidate(updated);
         setEditOpen(false);
         setEnrichOpen(false);
+    }
+
+    async function handlePhotoChange(e) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setPhotoUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
+            const res = await fetch(`${API_BASE}/api/candidates/${id}/photo`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData,
+            });
+            if (!res.ok) throw new Error("Upload failed");
+            const data = await res.json();
+            setCandidate(prev => ({ ...prev, photo_url: data.photo_url }));
+        } catch (err) {
+            alert("Photo upload failed: " + err.message);
+        } finally {
+            setPhotoUploading(false);
+        }
+    }
+
+    async function handleDownloadPdf() {
+        setPdfLoading(true);
+        try {
+            const res = await fetch(`${API_BASE}/api/candidates/${id}/pdf`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (!res.ok) throw new Error("PDF generation failed");
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${candidate.name.replace(/\s+/g, "_")}_profile.pdf`;
+            a.click();
+            URL.revokeObjectURL(url);
+        } catch (err) {
+            alert("PDF download failed: " + err.message);
+        } finally {
+            setPdfLoading(false);
+        }
     }
 
     if (loading) {
@@ -125,10 +168,6 @@ export default function CandidateProfile() {
     const hasCFA = candidate.ai_certifications?.toUpperCase().includes("CFA");
     const hasCMA = candidate.ai_certifications?.toUpperCase().includes("CMA");
     const isFromCall = candidate.source === "booking";
-
-    // A stub is a call-sourced candidate that hasn't been enriched yet —
-    // no AI summary and no current title means the only data we have is
-    // what was on the booking (name, email, phone).
     const isStub = isFromCall && !candidate.ai_summary && !candidate.current_title;
 
     return (
@@ -143,25 +182,28 @@ export default function CandidateProfile() {
                         <button className={styles.backLink} onClick={() => navigate(-1)}>
                             ← Back
                         </button>
-
-                        {/* Header actions — Enrich shown only for call-sourced, Edit always shown */}
-                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        <div className={styles.headerActions}>
+                            <button
+                                className={styles.pdfBtn}
+                                onClick={handleDownloadPdf}
+                                disabled={pdfLoading}
+                            >
+                                {pdfLoading
+                                    ? <><span className={styles.spinnerWhite} /> Generating…</>
+                                    : <><i className="fi fi-rr-file-pdf" style={{ marginRight: '6px', fontSize: '13px' }} />Download PDF</>
+                                }
+                            </button>
                             {isFromCall && (
                                 <button
-                                    className={styles.editBtn}
+                                    className={`${styles.headerBtn} ${styles.enrichBtn}`}
                                     onClick={() => setEnrichOpen(true)}
-                                    style={{
-                                        background: '#f5f3ff',
-                                        color: '#7c3aed',
-                                        border: '1px solid #ddd6fe',
-                                    }}
                                 >
                                     <i className="fi fi-rr-add" style={{ marginRight: '6px', fontSize: '13px' }} />
                                     Enrich Profile
                                 </button>
                             )}
                             <button
-                                className={styles.editBtn}
+                                className={styles.headerBtn}
                                 onClick={() => setEditOpen(true)}
                             >
                                 ✏ Edit Profile
@@ -170,9 +212,38 @@ export default function CandidateProfile() {
                     </div>
 
                     <div className={styles.headerMain}>
-                        <div className={styles.avatar}>
-                            {candidate.name?.charAt(0).toUpperCase()}
+                        {/* ── Photo / Avatar ── */}
+                        <div
+                            className={styles.avatarWrap}
+                            onClick={() => !photoUploading && photoInputRef.current?.click()}
+                            title="Click to upload photo"
+                        >
+                            {candidate.photo_url ? (
+                                <img
+                                    src={candidate.photo_url}
+                                    alt={candidate.name}
+                                    className={styles.avatarImg}
+                                />
+                            ) : (
+                                <div className={styles.avatarInitial}>
+                                    {candidate.name?.charAt(0).toUpperCase()}
+                                </div>
+                            )}
+                            <div className={styles.avatarOverlay}>
+                                {photoUploading
+                                    ? <span className={styles.spinnerWhite} />
+                                    : <i className="fi fi-rr-camera" />
+                                }
+                            </div>
                         </div>
+                        <input
+                            ref={photoInputRef}
+                            type="file"
+                            accept="image/*"
+                            style={{ display: "none" }}
+                            onChange={handlePhotoChange}
+                        />
+
                         <div className={styles.headerInfo}>
                             <h1 className={styles.candidateName}>{candidate.name}</h1>
                             <div className={styles.candidateMeta}>
@@ -190,18 +261,7 @@ export default function CandidateProfile() {
                             )}
                             <div className={styles.headerBadges}>
                                 {isFromCall && (
-                                    <span style={{
-                                        display: 'inline-flex',
-                                        alignItems: 'center',
-                                        gap: '5px',
-                                        fontSize: '12px',
-                                        fontWeight: 600,
-                                        color: '#7c3aed',
-                                        background: '#f5f3ff',
-                                        border: '1px solid #ddd6fe',
-                                        borderRadius: '6px',
-                                        padding: '3px 8px',
-                                    }}>
+                                    <span className={styles.callBadge}>
                                         <i className="fi fi-rr-phone-call" style={{ fontSize: '11px' }} />
                                         Created from Call
                                     </span>
@@ -240,42 +300,16 @@ export default function CandidateProfile() {
                     {/* ── Main Column ── */}
                     <div className={styles.mainCol}>
 
-                        {/* Stub notice — shown when call-sourced and not yet enriched */}
                         {isStub && (
-                            <div style={{
-                                background: '#faf5ff',
-                                border: '1px solid #e9d5ff',
-                                borderRadius: '10px',
-                                padding: '16px 20px',
-                                marginBottom: '16px',
-                                display: 'flex',
-                                alignItems: 'flex-start',
-                                gap: '12px',
-                            }}>
+                            <div className={styles.stubNotice}>
                                 <i className="fi fi-rr-info" style={{ color: '#7c3aed', marginTop: '2px', flexShrink: 0 }} />
                                 <div>
-                                    <div style={{ fontWeight: 600, color: '#6d28d9', fontSize: '14px', marginBottom: '4px' }}>
-                                        Profile created from a scheduled call
-                                    </div>
-                                    <div style={{ color: '#7c3aed', fontSize: '13px', lineHeight: 1.5 }}>
+                                    <div className={styles.stubTitle}>Profile created from a scheduled call</div>
+                                    <div className={styles.stubBody}>
                                         This candidate was automatically added when the call was confirmed.
                                         Upload a resume or paste their LinkedIn profile to enrich the record with full details.
                                     </div>
-                                    <button
-                                        onClick={() => setEnrichOpen(true)}
-                                        style={{
-                                            marginTop: '10px',
-                                            background: '#7c3aed',
-                                            color: '#fff',
-                                            border: 'none',
-                                            borderRadius: '6px',
-                                            padding: '7px 14px',
-                                            fontSize: '13px',
-                                            fontWeight: 600,
-                                            cursor: 'pointer',
-                                            fontFamily: 'inherit',
-                                        }}
-                                    >
+                                    <button className={styles.stubBtn} onClick={() => setEnrichOpen(true)}>
                                         Enrich Profile →
                                     </button>
                                 </div>
@@ -316,79 +350,26 @@ export default function CandidateProfile() {
                             </Section>
                         )}
 
-                        {/* ── Call Transcript ── */}
                         {candidate.meeting_transcript && (
                             <Section title="Call Transcript">
-                                <div style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                    marginBottom: '10px',
-                                }}>
-                                    <span style={{
-                                        display: 'inline-flex',
-                                        alignItems: 'center',
-                                        gap: '4px',
-                                        fontSize: '11px',
-                                        fontWeight: 600,
-                                        color: '#0369a1',
-                                        background: '#e0f2fe',
-                                        border: '1px solid #bae6fd',
-                                        borderRadius: '4px',
-                                        padding: '2px 7px',
-                                    }}>
+                                <div className={styles.transcriptMeta}>
+                                    <span className={styles.transcriptBadge}>
                                         <i className="fi fi-rr-rec" style={{ fontSize: '10px' }} />
                                         Zoom Recording
                                     </span>
-                                    <span style={{ fontSize: '12px', color: '#9ca3af' }}>
+                                    <span className={styles.transcriptLen}>
                                         {candidate.meeting_transcript.length.toLocaleString()} chars
                                     </span>
                                 </div>
-                                <div style={{
-                                    position: 'relative',
-                                    maxHeight: transcriptExpanded ? 'none' : '240px',
-                                    overflow: transcriptExpanded ? 'visible' : 'hidden',
-                                }}>
-                                    <pre style={{
-                                        fontFamily: 'inherit',
-                                        fontSize: '13px',
-                                        lineHeight: 1.65,
-                                        color: '#374151',
-                                        whiteSpace: 'pre-wrap',
-                                        wordBreak: 'break-word',
-                                        margin: 0,
-                                        background: '#f8fafc',
-                                        border: '1px solid #e2e8f0',
-                                        borderRadius: '8px',
-                                        padding: '14px 16px',
-                                    }}>
+                                <div className={styles.transcriptWrap} style={{ maxHeight: transcriptExpanded ? 'none' : '240px' }}>
+                                    <pre className={styles.transcriptPre}>
                                         {candidate.meeting_transcript}
                                     </pre>
-                                    {!transcriptExpanded && (
-                                        <div style={{
-                                            position: 'absolute',
-                                            bottom: 0,
-                                            left: 0,
-                                            right: 0,
-                                            height: '60px',
-                                            background: 'linear-gradient(to bottom, transparent, #fff)',
-                                            pointerEvents: 'none',
-                                        }} />
-                                    )}
+                                    {!transcriptExpanded && <div className={styles.transcriptFade} />}
                                 </div>
                                 <button
+                                    className={styles.outreachToggle}
                                     onClick={() => setTranscriptExpanded(p => !p)}
-                                    style={{
-                                        marginTop: '8px',
-                                        background: 'none',
-                                        border: 'none',
-                                        color: '#2563eb',
-                                        fontSize: '13px',
-                                        fontWeight: 600,
-                                        cursor: 'pointer',
-                                        padding: '0',
-                                        fontFamily: 'inherit',
-                                    }}
                                 >
                                     {transcriptExpanded ? "Show less ↑" : "Show full transcript ↓"}
                                 </button>
@@ -401,7 +382,6 @@ export default function CandidateProfile() {
                                 <p className={styles.bodyText}>{candidate.notes}</p>
                             </Section>
                         )}
-
                     </div>
 
                     {/* ── Sidebar ── */}
@@ -439,10 +419,7 @@ export default function CandidateProfile() {
 
                         <Section title="Profile Details">
                             <div className={styles.infoList}>
-                                <InfoRow
-                                    label="Source"
-                                    value={isFromCall ? "From Call" : "Manual Entry"}
-                                />
+                                <InfoRow label="Source" value={isFromCall ? "From Call" : "Manual Entry"} />
                                 {candidate.ai_parsed_at && (
                                     <InfoRow
                                         label="Parsed"
@@ -453,9 +430,9 @@ export default function CandidateProfile() {
                                 )}
                                 <InfoRow
                                     label="Added"
-                                    value={new Date(candidate.created_at).toLocaleDateString("en-US", {
+                                    value={candidate.created_at ? new Date(candidate.created_at).toLocaleDateString("en-US", {
                                         month: "short", day: "numeric", year: "numeric"
-                                    })}
+                                    }) : "—"}
                                 />
                                 <InfoRow
                                     label="AI Search"
@@ -467,11 +444,28 @@ export default function CandidateProfile() {
                             </div>
                         </Section>
 
+                        {/* ── PDF Export Card ── */}
+                        <div className={styles.pdfCard}>
+                            <div className={styles.pdfCardTitle}>Export Profile</div>
+                            <p className={styles.pdfCardDesc}>
+                                Download a clean one-page PDF to share with potential employers.
+                            </p>
+                            <button
+                                className={styles.pdfCardBtn}
+                                onClick={handleDownloadPdf}
+                                disabled={pdfLoading}
+                            >
+                                {pdfLoading
+                                    ? "Generating…"
+                                    : <><i className="fi fi-rr-file-pdf" style={{ marginRight: '6px' }} />Download PDF</>
+                                }
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             </div>
 
-            {/* ── Enrich Modal — parse tab, merges into existing record ── */}
             {enrichOpen && (
                 <CandidateModal
                     candidate={candidate}
@@ -482,7 +476,6 @@ export default function CandidateProfile() {
                 />
             )}
 
-            {/* ── Edit Modal — manual form only ── */}
             {editOpen && (
                 <CandidateModal
                     candidate={candidate}
