@@ -48,7 +48,7 @@ export default function UpgradePage() {
 
                 {/* Icon */}
                 <div className={styles.iconWrap}>
-                    <img src={sadFace} alt="" style={{ width: '32px', height: '32px' }} />
+                    <img src={sadFace} alt="" style={{ width: '64px', height: '64px' }} />
                 </div>
 
 
