@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import styles from './UpgradePage.module.css';
+import sadFace from '../assets/icons/sad_face.svg';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -47,8 +48,9 @@ export default function UpgradePage() {
 
                 {/* Icon */}
                 <div className={styles.iconWrap}>
-                    <i className="fi fi-rr-lock"></i>
+                    <img src={sadFace} alt="" style={{ width: '32px', height: '32px' }} />
                 </div>
+
 
                 <h1 className={styles.title}>Your trial has ended</h1>
                 <p className={styles.sub}>
