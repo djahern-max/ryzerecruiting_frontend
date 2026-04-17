@@ -20,6 +20,7 @@ import EP13 from "../assets/landing_page_thumbnails/EP13.png";
 import EP14 from "../assets/landing_page_thumbnails/EP14.png";
 import EP15 from "../assets/landing_page_thumbnails/EP15.png";
 import EP16 from "../assets/landing_page_thumbnails/EP16.png";
+import EP17 from "../assets/landing_page_thumbnails/EP17.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 const CURRENT_VERSION = 17;
@@ -29,7 +30,7 @@ const EPISODES = [
     num: 16,
     title: "Multi-Tenant Architecture Testing",
     thumb: EP16,
-    url: "https://www.linkedin.com/in/daneahern/",
+    url: "https://www.linkedin.com/posts/daneahern_building-ryzeai-in-public-ep16-before-ugcPost-7445042623633018880-dQcM?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
     desc: "Before opening RYZE to real recruiters, the multi-tenant isolation layer gets a full stress test. Every table carries a tenant_id column. Every query filters by the authenticated user's tenant. Cross-tenant data access blocked and verified end-to-end. The walls hold.",
   },
   {
