@@ -27,6 +27,13 @@ const CURRENT_VERSION = 17;
 
 const EPISODES = [
   {
+    num: 17,
+    title: "Invite System, Free Trial & Stripe Billing",
+    thumb: EP17,
+    url: "https://www.linkedin.com/posts/daneahern_building-ryzeai-in-public-ep17-invitation-ugcPost-7448296134080348160-e8rh?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo", // ← swap in post URL when published
+    desc: "EP16 proved the walls hold. EP17 opened the doors. Admin invite flow onboards any recruiting firm in one action — tenant created, 30-day trial started, branded welcome email fired. Stripe handles the full billing lifecycle from trial to paying subscriber. A firm goes from zero to paying customer in under 5 minutes.",
+  },
+  {
     num: 16,
     title: "Multi-Tenant Architecture Testing",
     thumb: EP16,
