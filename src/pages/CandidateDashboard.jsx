@@ -6,8 +6,11 @@ import BookingModal from '../components/BookingModal';
 import zoomIcon from '../assets/icons/zoom.svg';
 import styles from './CandidateDashboard.module.css';
 import { apiFetch } from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -140,6 +143,7 @@ function JobMatchCard({ job, rank }) {
 
 export default function CandidateDashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const firstName = user?.full_name?.split(' ')[0] || 'there';
 
@@ -218,6 +222,9 @@ export default function CandidateDashboard() {
             </p>
           </div>
           <div className={styles.bannerRight}>
+            <button className={styles.profileBtn} onClick={() => navigate('/candidate/profile')}>
+              <i className="fi fi-rr-user" /> My Profile
+            </button>
             <button className={styles.scheduleBtn} onClick={() => setBookingOpen(true)}>
               <i className="fi fi-rr-calendar" />
               Schedule a Call

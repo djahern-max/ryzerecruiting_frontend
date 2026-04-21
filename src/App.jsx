@@ -22,6 +22,7 @@ import UpgradePage from './pages/UpgradePage';
 import BillingSuccess from './pages/BillingSuccess';
 import InviteForm from './pages/admin/InviteForm';
 import ChangePassword from './pages/ChangePassword';
+import CandidateSelfProfile from './pages/CandidateSelfProfile';
 
 const loadingScreen = (
   <div style={{
@@ -112,6 +113,15 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['CANDIDATE']}>
                 <CandidateDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/candidate/profile"
+            element={
+              <ProtectedRoute allowedRoles={['CANDIDATE']}>
+                <CandidateSelfProfile />
               </ProtectedRoute>
             }
           />

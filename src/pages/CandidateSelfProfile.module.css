@@ -1,0 +1,549 @@
+/* src/pages/CandidateProfile.module.css */
+
+.page {
+    min-height: 100vh;
+    background: #f1f5f9;
+    font-family: 'DM Sans', sans-serif;
+    color: #0f172a;
+}
+
+.main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ── Loading / empty ─────────────────────────────────────────────────────── */
+
+.loadingState,
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    min-height: 60vh;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.loadingDots {
+    display: flex;
+    gap: 8px;
+}
+
+.loadingDots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #2563eb;
+    animation: dotPulse 1.4s ease-in-out infinite both;
+}
+
+.loadingDots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.loadingDots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes dotPulse {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0.6);
+        opacity: 0.4;
+    }
+
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ── Back button ─────────────────────────────────────────────────────────── */
+
+.backBtn {
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.15s;
+    width: fit-content;
+}
+
+.backBtn:hover {
+    color: #2563eb;
+}
+
+.backLink {
+    background: none;
+    border: none;
+    color: #2563eb;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: underline;
+    padding: 0;
+}
+
+/* ── Profile card ────────────────────────────────────────────────────────── */
+
+.profileCard {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* Banner */
+.banner {
+    height: 140px;
+    position: relative;
+}
+
+.bannerPlaceholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #57a0d3 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 12px 16px;
+}
+
+.bannerComingSoon {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* Avatar */
+.identityRow {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 28px 0 24px;
+    margin-top: -44px;
+    margin-bottom: 4px;
+}
+
+.avatarWrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: #1e3a5f;
+    color: #fff;
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    user-select: none;
+}
+
+.avatarUploadBtn {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    border: 2px solid #fff;
+    color: #94a3b8;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: not-allowed;
+    transition: background 0.15s;
+}
+
+.identityActions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    padding-bottom: 8px;
+}
+
+.editBtn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1.5px solid #2563eb;
+    color: #2563eb;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.editBtn:hover {
+    background: #2563eb;
+    color: #fff;
+}
+
+.editActions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.cancelBtn {
+    padding: 8px 14px;
+    background: transparent;
+    border: 1.5px solid #e2e8f0;
+    color: #64748b;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: border-color 0.15s;
+}
+
+.cancelBtn:hover {
+    border-color: #94a3b8;
+}
+
+.saveBtn {
+    padding: 8px 18px;
+    background: #2563eb;
+    border: none;
+    color: #fff;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
+}
+
+.saveBtn:hover:not(:disabled) {
+    background: #1d4ed8;
+}
+
+.saveBtn:disabled,
+.cancelBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.saveMsg {
+    font-size: 12px;
+    color: #16a34a;
+    font-weight: 600;
+}
+
+.saveMsgErr {
+    color: #dc2626;
+}
+
+/* Name block */
+.nameBlock {
+    padding: 12px 28px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: #0f172a;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.headline {
+    font-size: 15px;
+    color: #334155;
+    margin: 0;
+    font-weight: 500;
+}
+
+.locationLine {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    color: #64748b;
+    margin: 2px 0 0;
+}
+
+/* Badges */
+.badgeRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 28px 24px;
+}
+
+.levelBadge {
+    padding: 4px 12px;
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.expBadge {
+    padding: 4px 12px;
+    background: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.certBadge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    background: #fefce8;
+    color: #a16207;
+    border: 1px solid #fde68a;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ── Sections ────────────────────────────────────────────────────────────── */
+
+.section {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.sectionHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sectionTitle {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+}
+
+.sectionSub {
+    font-size: 13px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* ── Edit form ───────────────────────────────────────────────────────────── */
+
+.editForm {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.fieldRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.fieldLabel {
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.fieldInput {
+    padding: 10px 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 9px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    color: #0f172a;
+    background: #f8fafc;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.fieldInput:focus {
+    border-color: #2563eb;
+    background: #fff;
+}
+
+.fieldInput::placeholder {
+    color: #94a3b8;
+}
+
+/* ── Read-only display ───────────────────────────────────────────────────── */
+
+.roGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.roField {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.roLabel {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.roValue {
+    font-size: 14px;
+    color: #1e293b;
+    font-weight: 500;
+}
+
+.roLink {
+    font-size: 14px;
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+    word-break: break-all;
+}
+
+.roLink:hover {
+    text-decoration: underline;
+}
+
+/* ── AI profile sections ─────────────────────────────────────────────────── */
+
+.summaryBlock {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 18px 20px;
+}
+
+.summaryText {
+    font-size: 14px;
+    color: #334155;
+    line-height: 1.75;
+    margin: 0;
+}
+
+.subsection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.subsectionTitle {
+    font-size: 13px;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0;
+}
+
+.subsectionText {
+    font-size: 14px;
+    color: #334155;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.skillsWrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.skillTag {
+    padding: 5px 12px;
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+    .fieldRow {
+        grid-template-columns: 1fr;
+    }
+
+    .roGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .identityRow {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: -44px;
+        gap: 16px;
+        padding-bottom: 0;
+    }
+
+    .identityActions {
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .nameBlock {
+        padding: 12px 20px 20px;
+    }
+
+    .badgeRow {
+        padding: 0 20px 20px;
+    }
+}
