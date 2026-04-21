@@ -29,12 +29,15 @@ function formatDate(dateStr) {
 
 function formatTime(timeStr) {
   if (!timeStr) return '';
-  const [h, m] = timeStr.split(':').map(Number);
+  const parts = timeStr.split(':');
+  if (parts.length < 2) return timeStr;
+  const h = parseInt(parts[0], 10);
+  const m = parseInt(parts[1], 10);
+  if (isNaN(h) || isNaN(m)) return timeStr;
   const period = h >= 12 ? 'PM' : 'AM';
   const hour = h % 12 || 12;
   return `${hour}:${m.toString().padStart(2, '0')} ${period}`;
 }
-
 // ---------------------------------------------------------------------------
 // Match score utilities
 // ---------------------------------------------------------------------------
@@ -207,7 +210,6 @@ export default function CandidateDashboard() {
         {/* ── Welcome Banner ── */}
         <div className={styles.banner}>
           <div className={styles.bannerLeft}>
-            <span className={styles.bannerBadge}>Candidate</span>
             <h1 className={styles.bannerTitle}>Welcome back, {firstName}.</h1>
             <p className={styles.bannerSub}>
               {isRanked
@@ -300,12 +302,6 @@ export default function CandidateDashboard() {
                       : 'Your profile is being set up — check back soon'}
                 </p>
               </div>
-              {isRanked && (
-                <span className={styles.aiRankedBadge}>
-                  <i className="fi fi-rr-magic-wand" />
-                  AI Ranked
-                </span>
-              )}
             </div>
           </div>
 
