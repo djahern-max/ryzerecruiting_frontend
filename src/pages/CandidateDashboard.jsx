@@ -56,7 +56,7 @@ function getScoreTier(score) {
 
 const TRUNCATE = 220;
 
-function JobMatchCard({ job, onSchedule, rank }) {
+function JobMatchCard({ job, rank }) {
   const [expanded, setExpanded] = useState(false);
   const isLong = job.requirements && job.requirements.length > TRUNCATE;
   const hasScore = job.match_score != null;
@@ -107,7 +107,7 @@ function JobMatchCard({ job, onSchedule, rank }) {
               )}
             </div>
           </div>
-          <span className={styles.openBadge}>Open</span>
+
         </div>
 
         {job.requirements && (
@@ -125,11 +125,7 @@ function JobMatchCard({ job, onSchedule, rank }) {
           </div>
         )}
 
-        <div className={styles.matchCardFooter}>
-          <button className={styles.applyBtn} onClick={onSchedule}>
-            Schedule an Intro Call →
-          </button>
-        </div>
+
       </div>
     </div>
   );
@@ -343,7 +339,7 @@ export default function CandidateDashboard() {
                   key={job.id}
                   job={job}
                   rank={idx + 1}
-                  onSchedule={() => setBookingOpen(true)}
+
                 />
               ))}
             </div>
