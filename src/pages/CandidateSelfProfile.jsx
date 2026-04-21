@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import { apiFetch } from '../services/api';
-import styles from './CandidateProfile.module.css';
+import styles from './CandidateSelfProfile.module.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
