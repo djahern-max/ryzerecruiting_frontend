@@ -235,7 +235,7 @@ export default function CandidateDashboard() {
         {/* ── My Scheduled Calls ── */}
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
-            <h3 className={styles.sectionTitle}>My Scheduled Calls</h3>
+            <h3 className={styles.sectionTitle}>My Scheduled TEST Calls</h3>
             <p className={styles.sectionSub}>Your intro calls with RYZE.ai</p>
           </div>
 
