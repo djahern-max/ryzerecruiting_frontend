@@ -25,9 +25,9 @@
    PROFILE HEADER
    ══════════════════════════════════════════════════════ */
 .profileHeader {
-    background: #1a3a6b;
+    background: transparent;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .profileHeader::after {
@@ -70,6 +70,7 @@
     padding: 0 32px 32px;
     position: relative;
     z-index: 1;
+    background: linear-gradient(135deg, #0f2444 0%, #1a3a6b 60%, #1e4a8a 100%);
 }
 
 /* ── Top Bar ── */
@@ -79,6 +80,8 @@
     justify-content: space-between;
     padding-top: 16px;
     margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
 }
 
 .headerActions {
@@ -187,7 +190,8 @@
     border-radius: 50%;
     flex-shrink: 0;
     cursor: pointer;
-    margin-top: -44px;
+    margin-top: -54px;
+    z-index: 2;
 }
 
 .avatarImg {
