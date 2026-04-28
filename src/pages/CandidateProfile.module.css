@@ -22,197 +22,102 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   PROFILE HEADER
+   BANNER
+   Full-width image area. Back button + actions float
+   on top. Upload hint appears only on hover.
    ══════════════════════════════════════════════════════ */
-.profileHeader {
-    background: #1a3a6b;
-    position: relative;
-    overflow: hidden;
-}
-
-.profileHeader::after {
-    display: none;
-}
-
-/* ── Banner ── */
 .bannerWrap {
     width: 100%;
-    height: 160px;
+    height: 180px;
     background: linear-gradient(135deg, #0f2444 0%, #1a3a6b 60%, #1e4a8a 100%);
     position: relative;
-    cursor: pointer;
     overflow: hidden;
-    flex-shrink: 0;
 }
 
-.bannerOverlay {
+/* Back button + actions — always visible, pinned to top of banner */
+.bannerControls {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    right: 0;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+}
+
+/* Upload hint — invisible by default, appears on hover */
+.bannerUploadHint {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.35);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    color: rgba(255, 255, 255, 0.0);
+    color: transparent;
     font-size: 0.85rem;
     font-weight: 600;
+    cursor: pointer;
     transition: color 200ms, background 200ms;
+    z-index: 5;
 }
 
-.bannerWrap:hover .bannerOverlay {
-    background: rgba(0, 0, 0, 0.45);
+.bannerWrap:hover .bannerUploadHint {
     color: rgba(255, 255, 255, 0.9);
+    background: rgba(0, 0, 0, 0.25);
 }
 
-.profileHeaderInner {
+/* ══════════════════════════════════════════════════════
+   IDENTITY BAR
+   Dark band directly below banner. Avatar pulls up
+   with negative margin to straddle the boundary.
+   ══════════════════════════════════════════════════════ */
+.identityBar {
+    background: linear-gradient(135deg, #0f2444 0%, #1a3a6b 60%, #1e4a8a 100%);
+    padding-bottom: 28px;
+}
+
+.identityBarInner {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 0 32px 32px;
-    position: relative;
-    z-index: 1;
-    background: transparent;
-}
-
-/* ── Top Bar ── */
-.headerTop {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 16px;
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 2;
-}
-
-.headerActions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.backLink {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 0.85);
-    font-size: 0.82rem;
-    font-weight: 600;
-    font-family: var(--font-sans);
-    padding: 6px 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 150ms;
-}
-
-.backLink:hover {
-    background: rgba(255, 255, 255, 0.18);
-    color: #fff;
-}
-
-.backBtn {
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
-    color: #1d4ed8;
-    font-size: 0.85rem;
-    font-weight: 600;
-    font-family: var(--font-sans);
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.headerBtn {
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    color: #fff;
-    font-size: 0.82rem;
-    font-weight: 600;
-    font-family: var(--font-sans);
-    padding: 7px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 150ms;
-    display: inline-flex;
-    align-items: center;
-}
-
-.headerBtn:hover {
-    background: rgba(255, 255, 255, 0.22);
-}
-
-.enrichBtn {
-    background: rgba(124, 58, 237, 0.25);
-    border-color: rgba(167, 139, 250, 0.4);
-    color: #ddd6fe;
-}
-
-.enrichBtn:hover {
-    background: rgba(124, 58, 237, 0.38);
-}
-
-/* ── PDF button in header ── */
-.pdfBtn {
-    background: rgba(22, 163, 74, 0.2);
-    border: 1px solid rgba(74, 222, 128, 0.35);
-    color: #bbf7d0;
-    font-size: 0.82rem;
-    font-weight: 600;
-    font-family: var(--font-sans);
-    padding: 7px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 150ms;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.pdfBtn:hover:not(:disabled) {
-    background: rgba(22, 163, 74, 0.32);
-}
-
-.pdfBtn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-/* ── Header Main ── */
-.headerMain {
+    padding: 0 32px;
     display: flex;
     align-items: flex-start;
     gap: 20px;
 }
 
-/* ── Avatar with photo upload ── */
+/* ── Avatar ── */
 .avatarWrap {
     position: relative;
-    width: 88px;
-    height: 88px;
+    width: 96px;
+    height: 96px;
     border-radius: 50%;
     flex-shrink: 0;
     cursor: pointer;
-    margin-top: -54px;
+    margin-top: -48px;
     z-index: 2;
 }
 
 .avatarImg {
-    width: 88px;
-    height: 88px;
+    width: 96px;
+    height: 96px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid rgba(255, 255, 255, 0.4);
+    border: 4px solid #1a3a6b;
     display: block;
 }
 
 .avatarInitial {
-    width: 88px;
-    height: 88px;
+    width: 96px;
+    height: 96px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.15);
-    border: 3px solid rgba(255, 255, 255, 0.4);
+    border: 4px solid #1a3a6b;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.2rem;
+    font-size: 2.4rem;
     font-weight: 800;
     color: #fff;
     letter-spacing: -1px;
@@ -236,36 +141,18 @@
     opacity: 1;
 }
 
-/* ── Spinner ── */
-.spinnerWhite {
-    display: inline-block;
-    width: 13px;
-    height: 13px;
-    border: 2px solid rgba(255, 255, 255, 0.35);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite;
-    margin-right: 6px;
-    vertical-align: middle;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
+/* ── Name / meta ── */
 .headerInfo {
     flex: 1;
     min-width: 0;
-    padding-top: 4px;
+    padding-top: 12px;
 }
 
 .candidateName {
     font-size: 1.9rem;
     font-weight: 800;
     color: #fff;
-    margin: 0 0 6px;
+    margin: 0 0 4px;
     letter-spacing: -0.5px;
     line-height: 1.15;
 }
@@ -290,7 +177,7 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .locationIcon {
@@ -304,6 +191,122 @@
     flex-wrap: wrap;
 }
 
+/* ══════════════════════════════════════════════════════
+   BUTTONS (in banner controls)
+   ══════════════════════════════════════════════════════ */
+.backLink {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 150ms;
+    z-index: 10;
+}
+
+.backLink:hover {
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.backBtn {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.headerActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 10;
+}
+
+.headerBtn {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    padding: 7px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 150ms;
+    display: inline-flex;
+    align-items: center;
+}
+
+.headerBtn:hover {
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.enrichBtn {
+    background: rgba(124, 58, 237, 0.4);
+    border-color: rgba(167, 139, 250, 0.5);
+    color: #ddd6fe;
+}
+
+.enrichBtn:hover {
+    background: rgba(124, 58, 237, 0.6);
+}
+
+.pdfBtn {
+    background: rgba(22, 163, 74, 0.35);
+    border: 1px solid rgba(74, 222, 128, 0.4);
+    color: #bbf7d0;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    padding: 7px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 150ms;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.pdfBtn:hover:not(:disabled) {
+    background: rgba(22, 163, 74, 0.5);
+}
+
+.pdfBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ── Spinner ── */
+.spinnerWhite {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ══════════════════════════════════════════════════════
+   BADGES
+   ══════════════════════════════════════════════════════ */
 .callBadge {
     display: inline-flex;
     align-items: center;
@@ -707,32 +710,36 @@
         position: static;
     }
 
-    .profileHeaderInner {
-        padding: 0 20px 24px;
+    .bannerWrap {
+        height: 120px;
     }
 
-    .candidateName {
-        font-size: 1.4rem;
+    .bannerControls {
+        padding: 0 20px;
+    }
+
+    .identityBarInner {
+        padding: 0 20px;
     }
 
     .avatarWrap {
-        width: 64px;
-        height: 64px;
-        margin-top: -32px;
+        width: 72px;
+        height: 72px;
+        margin-top: -36px;
     }
 
     .avatarImg,
     .avatarInitial {
-        width: 64px;
-        height: 64px;
+        width: 72px;
+        height: 72px;
     }
 
     .avatarInitial {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
     }
 
-    .bannerWrap {
-        height: 110px;
+    .candidateName {
+        font-size: 1.4rem;
     }
 
     .headerActions {
@@ -741,7 +748,7 @@
 
     .pdfBtn,
     .headerBtn {
-        font-size: 0.78rem;
-        padding: 6px 10px;
+        font-size: 0.75rem;
+        padding: 5px 9px;
     }
 }
