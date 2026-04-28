@@ -26,7 +26,6 @@
    ══════════════════════════════════════════════════════ */
 .profileHeader {
     background: linear-gradient(135deg, #0f2444 0%, #1a3a6b 60%, #1e4a8a 100%);
-    padding: 28px 0 36px;
     position: relative;
     overflow: hidden;
 }
@@ -39,10 +38,39 @@
     pointer-events: none;
 }
 
+/* ── Banner ── */
+.bannerWrap {
+    width: 100%;
+    height: 160px;
+    background: linear-gradient(135deg, #0f2444 0%, #1a3a6b 60%, #1e4a8a 100%);
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.bannerOverlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.0);
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: color 200ms, background 200ms;
+}
+
+.bannerWrap:hover .bannerOverlay {
+    background: rgba(0, 0, 0, 0.45);
+    color: rgba(255, 255, 255, 0.9);
+}
+
 .profileHeaderInner {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 0 32px;
+    padding: 0 32px 32px;
     position: relative;
     z-index: 1;
 }
@@ -52,7 +80,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 24px;
+    padding-top: 16px;
+    margin-bottom: 20px;
 }
 
 .headerActions {
@@ -156,32 +185,33 @@
 /* ── Avatar with photo upload ── */
 .avatarWrap {
     position: relative;
-    width: 72px;
-    height: 72px;
+    width: 88px;
+    height: 88px;
     border-radius: 50%;
     flex-shrink: 0;
     cursor: pointer;
+    margin-top: -44px;
 }
 
 .avatarImg {
-    width: 72px;
-    height: 72px;
+    width: 88px;
+    height: 88px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 3px solid rgba(255, 255, 255, 0.4);
     display: block;
 }
 
 .avatarInitial {
-    width: 72px;
-    height: 72px;
+    width: 88px;
+    height: 88px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.15);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 3px solid rgba(255, 255, 255, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.9rem;
+    font-size: 2.2rem;
     font-weight: 800;
     color: #fff;
     letter-spacing: -1px;
@@ -227,6 +257,7 @@
 .headerInfo {
     flex: 1;
     min-width: 0;
+    padding-top: 4px;
 }
 
 .candidateName {
@@ -676,22 +707,31 @@
     }
 
     .profileHeaderInner {
-        padding: 0 20px;
+        padding: 0 20px 24px;
     }
 
     .candidateName {
         font-size: 1.4rem;
     }
 
-    .avatarWrap,
+    .avatarWrap {
+        width: 64px;
+        height: 64px;
+        margin-top: -32px;
+    }
+
     .avatarImg,
     .avatarInitial {
-        width: 52px;
-        height: 52px;
+        width: 64px;
+        height: 64px;
     }
 
     .avatarInitial {
-        font-size: 1.3rem;
+        font-size: 1.5rem;
+    }
+
+    .bannerWrap {
+        height: 110px;
     }
 
     .headerActions {

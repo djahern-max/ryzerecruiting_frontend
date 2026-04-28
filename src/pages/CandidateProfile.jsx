@@ -60,6 +60,7 @@ export default function CandidateProfile() {
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
     const photoInputRef = useRef(null);
+    const bannerInputRef = useRef(null);
 
     const [candidate, setCandidate] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -69,6 +70,7 @@ export default function CandidateProfile() {
     const [outreachExpanded, setOutreachExpanded] = useState(false);
     const [transcriptExpanded, setTranscriptExpanded] = useState(false);
     const [photoUploading, setPhotoUploading] = useState(false);
+    const [bannerUploading, setBannerUploading] = useState(false);
     const [pdfLoading, setPdfLoading] = useState(false);
 
     useEffect(() => {
@@ -113,6 +115,28 @@ export default function CandidateProfile() {
             alert("Photo upload failed: " + err.message);
         } finally {
             setPhotoUploading(false);
+        }
+    }
+
+    async function handleBannerChange(e) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setBannerUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
+            const res = await fetch(`${API_BASE}/api/candidates/${id}/banner`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData,
+            });
+            if (!res.ok) throw new Error("Upload failed");
+            const data = await res.json();
+            setCandidate(prev => ({ ...prev, banner_url: data.banner_url }));
+        } catch (err) {
+            alert("Banner upload failed: " + err.message);
+        } finally {
+            setBannerUploading(false);
         }
     }
 
@@ -176,8 +200,36 @@ export default function CandidateProfile() {
 
             {/* ── Profile Header ── */}
             <div className={styles.profileHeader}>
+
+                {/* ── Banner ── */}
+                <div
+                    className={styles.bannerWrap}
+                    onClick={() => !bannerUploading && bannerInputRef.current?.click()}
+                    title="Click to upload banner image"
+                    style={candidate.banner_url ? {
+                        backgroundImage: `url(${candidate.banner_url})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                    } : {}}
+                >
+                    <div className={styles.bannerOverlay}>
+                        {bannerUploading
+                            ? <span className={styles.spinnerWhite} />
+                            : <><i className="fi fi-rr-picture" /> <span>Upload banner</span></>
+                        }
+                    </div>
+                </div>
+                <input
+                    ref={bannerInputRef}
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={handleBannerChange}
+                />
+
                 <div className={styles.profileHeaderInner}>
 
+                    {/* ── Top Bar ── */}
                     <div className={styles.headerTop}>
                         <button className={styles.backLink} onClick={() => navigate(-1)}>
                             ← Back
@@ -211,8 +263,8 @@ export default function CandidateProfile() {
                         </div>
                     </div>
 
+                    {/* ── Avatar + Info ── */}
                     <div className={styles.headerMain}>
-                        {/* ── Photo / Avatar ── */}
                         <div
                             className={styles.avatarWrap}
                             onClick={() => !photoUploading && photoInputRef.current?.click()}
