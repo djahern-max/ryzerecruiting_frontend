@@ -34,34 +34,39 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   HEADER ZONE
-   A single dark container that holds both the banner
-   and the identity bar. This ensures the dark
-   background is continuous — no light bleed.
+   HERO BANNER
+   Single full-width block — banner image + identity
+   info all live here. A gradient scrim at the bottom
+   ensures text stays readable over any image.
    ══════════════════════════════════════════════════════ */
-.headerZone {
-    background: #0f2444;
-}
-
-/* ══════════════════════════════════════════════════════
-   BANNER
-   Sits inside headerZone. position:relative so that
-   the back button and action buttons can be absolutely
-   positioned within it.
-   ══════════════════════════════════════════════════════ */
-.bannerWrap {
+.heroBanner {
     position: relative;
     width: 100%;
-    height: 180px;
+    height: 280px;
     background: linear-gradient(135deg, #0f2444 0%, #1a3a6b 60%, #1e4a8a 100%);
+    background-size: cover;
+    background-position: center;
     overflow: hidden;
 }
 
-/* Hover-only upload hint — fullscreen over banner */
+/* Gradient scrim — transparent at top, dark at bottom */
+.heroScrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom,
+            transparent 0%,
+            transparent 20%,
+            rgba(8, 18, 38, 0.5) 55%,
+            rgba(8, 18, 38, 0.92) 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Hover upload hint */
 .bannerUploadHint {
     position: absolute;
     inset: 0;
-    z-index: 10;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -73,19 +78,19 @@
     transition: color 200ms, background 200ms;
 }
 
-.bannerWrap:hover .bannerUploadHint {
-    color: rgba(255, 255, 255, 0.9);
-    background: rgba(0, 0, 0, 0.3);
+.heroBanner:hover .bannerUploadHint {
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(0, 0, 0, 0.18);
 }
 
-/* Back button — absolute top-left of banner */
+/* ── Back button — top left ── */
 .backLink {
     position: absolute;
     top: 16px;
     left: 32px;
-    z-index: 20;
+    z-index: 10;
     background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.28);
     color: #fff;
     font-size: 0.82rem;
     font-weight: 600;
@@ -94,75 +99,67 @@
     border-radius: 8px;
     cursor: pointer;
     transition: background 150ms;
+    backdrop-filter: blur(4px);
 }
 
 .backLink:hover {
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.65);
 }
 
-/* Actions — absolute top-right of banner */
+/* ── Action buttons — top right ── */
 .headerActions {
     position: absolute;
     top: 16px;
     right: 32px;
-    z-index: 20;
+    z-index: 10;
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-/* ══════════════════════════════════════════════════════
-   IDENTITY BAR
-   Dark background (part of headerZone), avatar overlaps
-   upward into the banner via negative margin-top.
-   All text here is white.
-   ══════════════════════════════════════════════════════ */
-.identityBar {
-    padding-bottom: 20px;
-}
-
-.identityBarInner {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 32px;
+/* ── Identity overlay — pinned to the bottom of heroBanner ── */
+.identityOverlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    padding: 0 32px 20px;
     display: flex;
-    align-items: flex-start;
-    gap: 20px;
+    align-items: flex-end;
+    gap: 18px;
+    box-sizing: border-box;
 }
 
 /* ── Avatar ── */
 .avatarWrap {
     position: relative;
-    width: 96px;
-    height: 96px;
+    width: 88px;
+    height: 88px;
     border-radius: 50%;
     flex-shrink: 0;
     cursor: pointer;
-    /* Pull up so the top half sits inside the banner */
-    margin-top: -48px;
-    z-index: 5;
 }
 
 .avatarImg {
-    width: 96px;
-    height: 96px;
+    width: 88px;
+    height: 88px;
     border-radius: 50%;
     object-fit: cover;
-    /* Border colour matches the dark identity bar bg */
-    border: 4px solid #0f2444;
+    border: 3px solid rgba(255, 255, 255, 0.35);
     display: block;
 }
 
 .avatarInitial {
-    width: 96px;
-    height: 96px;
+    width: 88px;
+    height: 88px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.15);
-    border: 4px solid #0f2444;
+    border: 3px solid rgba(255, 255, 255, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.4rem;
+    font-size: 2.2rem;
     font-weight: 800;
     color: #fff;
     letter-spacing: -1px;
@@ -186,31 +183,30 @@
     opacity: 1;
 }
 
-/* ── Name / meta block — sits next to avatar, padded down from top ── */
+/* ── Name / meta ── */
 .headerInfo {
     flex: 1;
     min-width: 0;
-    /* Align text to the bottom of where the avatar sits */
-    padding-top: 14px;
 }
 
 .candidateName {
-    font-size: 1.9rem;
+    font-size: 1.85rem;
     font-weight: 800;
     color: #fff;
-    margin: 0 0 4px;
+    margin: 0 0 3px;
     letter-spacing: -0.5px;
     line-height: 1.15;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
 }
 
 .candidateMeta {
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.97rem;
+    color: rgba(255, 255, 255, 0.88);
     display: flex;
     align-items: center;
     gap: 6px;
     flex-wrap: wrap;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
 }
 
 .metaDot {
@@ -218,12 +214,12 @@
 }
 
 .candidateLocation {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.83rem;
+    color: rgba(255, 255, 255, 0.65);
     display: flex;
     align-items: center;
     gap: 4px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .locationIcon {
@@ -241,8 +237,8 @@
    BUTTONS
    ══════════════════════════════════════════════════════ */
 .headerBtn {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.28);
     color: #fff;
     font-size: 0.82rem;
     font-weight: 600;
@@ -254,24 +250,25 @@
     display: inline-flex;
     align-items: center;
     white-space: nowrap;
+    backdrop-filter: blur(6px);
 }
 
 .headerBtn:hover {
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.65);
 }
 
 .enrichBtn {
-    background: rgba(124, 58, 237, 0.5);
+    background: rgba(124, 58, 237, 0.55);
     border-color: rgba(167, 139, 250, 0.5);
     color: #ddd6fe;
 }
 
 .enrichBtn:hover {
-    background: rgba(124, 58, 237, 0.7);
+    background: rgba(124, 58, 237, 0.75);
 }
 
 .pdfBtn {
-    background: rgba(22, 163, 74, 0.45);
+    background: rgba(22, 163, 74, 0.5);
     border: 1px solid rgba(74, 222, 128, 0.45);
     color: #bbf7d0;
     font-size: 0.82rem;
@@ -285,10 +282,11 @@
     align-items: center;
     gap: 4px;
     white-space: nowrap;
+    backdrop-filter: blur(6px);
 }
 
 .pdfBtn:hover:not(:disabled) {
-    background: rgba(22, 163, 74, 0.65);
+    background: rgba(22, 163, 74, 0.7);
 }
 
 .pdfBtn:disabled {
@@ -326,13 +324,12 @@
     font-size: 12px;
     font-weight: 600;
     color: #ddd6fe;
-    background: rgba(124, 58, 237, 0.25);
-    border: 1px solid rgba(167, 139, 250, 0.35);
+    background: rgba(124, 58, 237, 0.3);
+    border: 1px solid rgba(167, 139, 250, 0.4);
     border-radius: 6px;
     padding: 3px 8px;
 }
 
-/* levelBadge uses inline styles from CAREER_LEVEL_COLORS */
 .levelBadge {
     font-size: 0.72rem;
     font-weight: 700;
@@ -346,9 +343,9 @@
     font-size: 0.72rem;
     font-weight: 600;
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.9);
     padding: 3px 10px;
 }
 
@@ -363,10 +360,10 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   PROFILE BODY  (light grey, two-column grid)
+   PROFILE BODY
    ══════════════════════════════════════════════════════ */
 .profileBody {
-    padding: 32px 0 64px;
+    padding: 28px 0 64px;
 }
 
 .profileBodyInner {
@@ -394,7 +391,7 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   CONTENT SECTIONS
+   SECTIONS
    ══════════════════════════════════════════════════════ */
 .section {
     background: #fff;
@@ -433,7 +430,6 @@
     white-space: pre-wrap;
 }
 
-/* ── Stub notice ── */
 .stubNotice {
     background: #faf5ff;
     border: 1px solid #e9d5ff;
@@ -470,7 +466,6 @@
     font-family: inherit;
 }
 
-/* ── Outreach / transcript ── */
 .outreachWrap {
     display: flex;
     flex-direction: column;
@@ -559,7 +554,6 @@
     pointer-events: none;
 }
 
-/* ── Notes ── */
 .notesSection {
     border-color: #fef3c7;
 }
@@ -660,7 +654,6 @@
     padding: 3px 9px;
 }
 
-/* ── PDF export card ── */
 .pdfCard {
     background: #fff;
     border: 1px solid #e2e8f0;
@@ -714,17 +707,8 @@
    RESPONSIVE
    ══════════════════════════════════════════════════════ */
 @media (max-width: 840px) {
-    .profileBodyInner {
-        grid-template-columns: 1fr;
-        padding: 0 16px;
-    }
-
-    .sideCol {
-        position: static;
-    }
-
-    .bannerWrap {
-        height: 120px;
+    .heroBanner {
+        height: 240px;
     }
 
     .backLink {
@@ -737,33 +721,37 @@
         top: 12px;
     }
 
-    .identityBarInner {
-        padding: 0 16px;
+    .identityOverlay {
+        padding: 0 16px 16px;
     }
 
-    .avatarWrap {
-        width: 72px;
-        height: 72px;
-        margin-top: -36px;
-    }
-
+    .avatarWrap,
     .avatarImg,
     .avatarInitial {
-        width: 72px;
-        height: 72px;
+        width: 68px;
+        height: 68px;
     }
 
     .avatarInitial {
-        font-size: 1.8rem;
+        font-size: 1.7rem;
     }
 
     .candidateName {
-        font-size: 1.4rem;
+        font-size: 1.35rem;
+    }
+
+    .profileBodyInner {
+        grid-template-columns: 1fr;
+        padding: 0 16px;
+    }
+
+    .sideCol {
+        position: static;
     }
 
     .pdfBtn,
     .headerBtn {
         font-size: 0.75rem;
-        padding: 5px 9px;
+        padding: 5px 10px;
     }
 }
