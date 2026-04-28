@@ -106,8 +106,8 @@
    margin-top so it straddles the boundary.
    ══════════════════════════════════════════════════════ */
 .identityBar {
-    background: linear-gradient(180deg, #1a3a6b 0%, #0f2444 100%);
-    padding-bottom: 28px;
+    background: #f1f5f9;
+    padding-bottom: 16px;
 }
 
 .identityBarInner {
