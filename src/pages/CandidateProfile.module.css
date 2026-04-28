@@ -34,9 +34,20 @@
 }
 
 /* ══════════════════════════════════════════════════════
+   HEADER ZONE
+   A single dark container that holds both the banner
+   and the identity bar. This ensures the dark
+   background is continuous — no light bleed.
+   ══════════════════════════════════════════════════════ */
+.headerZone {
+    background: #0f2444;
+}
+
+/* ══════════════════════════════════════════════════════
    BANNER
-   Full-width, 180px tall. Everything inside is
-   absolutely positioned so nothing pushes height.
+   Sits inside headerZone. position:relative so that
+   the back button and action buttons can be absolutely
+   positioned within it.
    ══════════════════════════════════════════════════════ */
 .bannerWrap {
     position: relative;
@@ -46,7 +57,28 @@
     overflow: hidden;
 }
 
-/* Back button — absolute top-left */
+/* Hover-only upload hint — fullscreen over banner */
+.bannerUploadHint {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: transparent;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 200ms, background 200ms;
+}
+
+.bannerWrap:hover .bannerUploadHint {
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Back button — absolute top-left of banner */
 .backLink {
     position: absolute;
     top: 16px;
@@ -68,7 +100,7 @@
     background: rgba(0, 0, 0, 0.6);
 }
 
-/* Actions — absolute top-right */
+/* Actions — absolute top-right of banner */
 .headerActions {
     position: absolute;
     top: 16px;
@@ -79,35 +111,14 @@
     gap: 8px;
 }
 
-/* Upload hint — centered, invisible until hover */
-.bannerUploadHint {
-    position: absolute;
-    inset: 0;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    color: transparent;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: color 200ms, background 200ms;
-}
-
-.bannerWrap:hover .bannerUploadHint {
-    color: rgba(255, 255, 255, 0.9);
-    background: rgba(0, 0, 0, 0.3);
-}
-
 /* ══════════════════════════════════════════════════════
    IDENTITY BAR
-   Sits directly below banner. Avatar has negative
-   margin-top so it straddles the boundary.
+   Dark background (part of headerZone), avatar overlaps
+   upward into the banner via negative margin-top.
+   All text here is white.
    ══════════════════════════════════════════════════════ */
 .identityBar {
-    background: #f1f5f9;
-    padding-bottom: 16px;
+    padding-bottom: 20px;
 }
 
 .identityBarInner {
@@ -127,6 +138,7 @@
     border-radius: 50%;
     flex-shrink: 0;
     cursor: pointer;
+    /* Pull up so the top half sits inside the banner */
     margin-top: -48px;
     z-index: 5;
 }
@@ -136,6 +148,7 @@
     height: 96px;
     border-radius: 50%;
     object-fit: cover;
+    /* Border colour matches the dark identity bar bg */
     border: 4px solid #0f2444;
     display: block;
 }
@@ -173,11 +186,12 @@
     opacity: 1;
 }
 
-/* ── Name / meta ── */
+/* ── Name / meta block — sits next to avatar, padded down from top ── */
 .headerInfo {
     flex: 1;
     min-width: 0;
-    padding-top: 12px;
+    /* Align text to the bottom of where the avatar sits */
+    padding-top: 14px;
 }
 
 .candidateName {
@@ -205,7 +219,7 @@
 
 .candidateLocation {
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.65);
+    color: rgba(255, 255, 255, 0.6);
     display: flex;
     align-items: center;
     gap: 4px;
@@ -239,6 +253,7 @@
     transition: background 150ms;
     display: inline-flex;
     align-items: center;
+    white-space: nowrap;
 }
 
 .headerBtn:hover {
@@ -269,6 +284,7 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    white-space: nowrap;
 }
 
 .pdfBtn:hover:not(:disabled) {
@@ -291,6 +307,7 @@
     animation: spin 0.6s linear infinite;
     margin-right: 6px;
     vertical-align: middle;
+    flex-shrink: 0;
 }
 
 @keyframes spin {
@@ -315,6 +332,7 @@
     padding: 3px 8px;
 }
 
+/* levelBadge uses inline styles from CAREER_LEVEL_COLORS */
 .levelBadge {
     font-size: 0.72rem;
     font-weight: 700;
@@ -345,7 +363,7 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   PROFILE BODY
+   PROFILE BODY  (light grey, two-column grid)
    ══════════════════════════════════════════════════════ */
 .profileBody {
     padding: 32px 0 64px;
@@ -376,7 +394,7 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   SECTIONS
+   CONTENT SECTIONS
    ══════════════════════════════════════════════════════ */
 .section {
     background: #fff;
@@ -415,6 +433,7 @@
     white-space: pre-wrap;
 }
 
+/* ── Stub notice ── */
 .stubNotice {
     background: #faf5ff;
     border: 1px solid #e9d5ff;
@@ -451,6 +470,7 @@
     font-family: inherit;
 }
 
+/* ── Outreach / transcript ── */
 .outreachWrap {
     display: flex;
     flex-direction: column;
@@ -539,6 +559,7 @@
     pointer-events: none;
 }
 
+/* ── Notes ── */
 .notesSection {
     border-color: #fef3c7;
 }
@@ -561,6 +582,9 @@
     margin-bottom: 10px;
 }
 
+/* ══════════════════════════════════════════════════════
+   SIDEBAR
+   ══════════════════════════════════════════════════════ */
 .infoList {
     display: flex;
     flex-direction: column;
@@ -636,6 +660,7 @@
     padding: 3px 9px;
 }
 
+/* ── PDF export card ── */
 .pdfCard {
     background: #fff;
     border: 1px solid #e2e8f0;
@@ -691,7 +716,7 @@
 @media (max-width: 840px) {
     .profileBodyInner {
         grid-template-columns: 1fr;
-        padding: 0 20px;
+        padding: 0 16px;
     }
 
     .sideCol {
@@ -703,17 +728,17 @@
     }
 
     .backLink {
-        left: 20px;
+        left: 16px;
         top: 12px;
     }
 
     .headerActions {
-        right: 20px;
+        right: 16px;
         top: 12px;
     }
 
     .identityBarInner {
-        padding: 0 20px;
+        padding: 0 16px;
     }
 
     .avatarWrap {
