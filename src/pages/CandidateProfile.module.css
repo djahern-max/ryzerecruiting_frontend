@@ -44,17 +44,20 @@
     background-size: cover;
     background-position: center;
     overflow: hidden;
+    /* Center the identity overlay vertically */
+    display: flex;
+    align-items: center;
 }
 
-/* Gradient scrim — tighter fade, only darkens the lower third */
+/* Gradient scrim — darkens center-bottom where identity text lives */
 .heroScrim {
     position: absolute;
     inset: 0;
     background: linear-gradient(to bottom,
             transparent 0%,
-            transparent 35%,
-            rgba(8, 18, 38, 0.45) 65%,
-            rgba(8, 18, 38, 0.88) 100%);
+            rgba(8, 18, 38, 0.25) 40%,
+            rgba(8, 18, 38, 0.65) 70%,
+            rgba(8, 18, 38, 0.75) 100%);
     z-index: 1;
     pointer-events: none;
 }
@@ -114,16 +117,14 @@
     gap: 8px;
 }
 
-/* ── Identity overlay — bottom of heroBanner ── */
+/* ── Identity overlay — centered by the banner's flexbox ── */
 .identityOverlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    position: relative;
     z-index: 5;
-    padding: 0 40px 28px;
+    width: 100%;
+    padding: 0 40px;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     gap: 22px;
     box-sizing: border-box;
 }
@@ -136,8 +137,6 @@
     border-radius: 50%;
     flex-shrink: 0;
     cursor: pointer;
-    /* Lift the avatar slightly above the baseline */
-    margin-bottom: -4px;
 }
 
 .avatarImg {
@@ -718,7 +717,7 @@
     }
 
     .identityOverlay {
-        padding: 0 20px 20px;
+        padding: 0 20px;
         gap: 16px;
     }
 
