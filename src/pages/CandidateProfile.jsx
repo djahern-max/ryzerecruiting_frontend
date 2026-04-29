@@ -247,7 +247,10 @@ export default function CandidateProfile() {
                     {/* Avatar */}
                     <div
                         className={styles.avatarWrap}
-                        onClick={() => !photoUploading && photoInputRef.current?.click()}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            !photoUploading && photoInputRef.current?.click();
+                        }}
                         title="Click to upload photo"
                     >
                         {candidate.photo_url ? (

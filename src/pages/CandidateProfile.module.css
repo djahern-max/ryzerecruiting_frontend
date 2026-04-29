@@ -42,7 +42,8 @@
     height: 300px;
     background: linear-gradient(135deg, #0f2444 0%, #1a3a6b 60%, #1e4a8a 100%);
     background-size: cover;
-    background-position: center;
+    background-position: center top;
+    image-rendering: -webkit-optimize-contrast;
     overflow: hidden;
     /* Center the identity overlay vertically */
     display: flex;
