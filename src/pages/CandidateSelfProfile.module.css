@@ -44,6 +44,9 @@
     background-size: cover;
     background-position: center;
     overflow: hidden;
+    /* Center the identity overlay vertically */
+    display: flex;
+    align-items: center;
 }
 
 /* Gradient scrim — darkens center-bottom where identity text lives */
@@ -114,19 +117,18 @@
     gap: 8px;
 }
 
-/* ── Identity overlay — vertically centered in the banner ── */
+/* ── Identity overlay — centered by the banner's flexbox ── */
 .identityOverlay {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 0;
-    right: 0;
+    position: relative;
     z-index: 5;
+    width: 100%;
     padding: 0 40px;
     display: flex;
     align-items: center;
     gap: 22px;
     box-sizing: border-box;
+    /* Push down slightly to account for the top action bar visually */
+    margin-top: 40px;
 }
 
 /* ── Avatar ── */
