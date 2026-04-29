@@ -184,9 +184,6 @@ export default function CandidateProfile() {
         );
     }
 
-    const level = candidate.ai_career_level?.toLowerCase();
-    const levelStyle = CAREER_LEVEL_COLORS[level] || null;
-    const levelLabel = level ? level.charAt(0).toUpperCase() + level.slice(1) : null;
     const skills = parseJsonField(candidate.ai_skills);
     const hasCPA = candidate.ai_certifications?.toUpperCase().includes("CPA");
     const hasCFA = candidate.ai_certifications?.toUpperCase().includes("CFA");
@@ -200,9 +197,6 @@ export default function CandidateProfile() {
 
             {/* ══════════════════════════════════════════
                 HERO BANNER
-                One single block. Banner image fills it.
-                Gradient scrim darkens the bottom half.
-                Avatar + name overlay sit at the bottom.
             ══════════════════════════════════════════ */}
             <div
                 className={styles.heroBanner}
@@ -210,7 +204,7 @@ export default function CandidateProfile() {
                     backgroundImage: `url(${candidate.banner_url})`,
                 } : {}}
             >
-                {/* Gradient scrim — always present */}
+                {/* Gradient scrim */}
                 <div className={styles.heroScrim} />
 
                 {/* Hover upload hint */}
@@ -220,7 +214,7 @@ export default function CandidateProfile() {
                 >
                     {bannerUploading
                         ? <span className={styles.spinnerWhite} />
-                        : <><i className="fi fi-rr-picture" /><span>Upload banner image</span></>
+                        : <><i className="fi fi-rr-picture" /><span>Change banner image</span></>
                     }
                 </div>
 
@@ -250,6 +244,7 @@ export default function CandidateProfile() {
 
                 {/* Identity overlay — bottom of hero */}
                 <div className={styles.identityOverlay}>
+                    {/* Avatar */}
                     <div
                         className={styles.avatarWrap}
                         onClick={() => !photoUploading && photoInputRef.current?.click()}
@@ -267,47 +262,35 @@ export default function CandidateProfile() {
                         </div>
                     </div>
 
+                    {/* Name + meta */}
                     <div className={styles.headerInfo}>
-                        <h1 className={styles.candidateName}>{candidate.name}</h1>
-                        <div className={styles.candidateMeta}>
-                            {candidate.current_title && <span>{candidate.current_title}</span>}
-                            {candidate.current_title && candidate.current_company && (
-                                <span className={styles.metaDot}>·</span>
+                        <div className={styles.nameRow}>
+                            <h1 className={styles.candidateName}>{candidate.name}</h1>
+                            {isFromCall && (
+                                <span className={styles.callBadge}>
+                                    <i className="fi fi-rr-phone-call" style={{ fontSize: "10px" }} />
+                                    From Call
+                                </span>
                             )}
-                            {candidate.current_company && <span>{candidate.current_company}</span>}
                         </div>
+
+                        {(candidate.current_title || candidate.current_company) && (
+                            <div className={styles.candidateMeta}>
+                                {candidate.current_title && <span>{candidate.current_title}</span>}
+                                {candidate.current_title && candidate.current_company && (
+                                    <span className={styles.metaDivider}>at</span>
+                                )}
+                                {candidate.current_company && (
+                                    <span className={styles.metaCompany}>{candidate.current_company}</span>
+                                )}
+                            </div>
+                        )}
+
                         {candidate.location && (
                             <div className={styles.candidateLocation}>
-                                <span className={styles.locationIcon}>📍</span>
                                 {candidate.location}
                             </div>
                         )}
-                        <div className={styles.headerBadges}>
-                            {isFromCall && (
-                                <span className={styles.callBadge}>
-                                    <i className="fi fi-rr-phone-call" style={{ fontSize: "11px" }} />
-                                    Created from Call
-                                </span>
-                            )}
-                            {levelLabel && levelStyle && (
-                                <span
-                                    className={styles.levelBadge}
-                                    style={{
-                                        background: levelStyle.bg,
-                                        color: levelStyle.color,
-                                        borderColor: levelStyle.border,
-                                    }}
-                                >
-                                    {levelLabel}
-                                </span>
-                            )}
-                            {candidate.ai_years_experience && (
-                                <span className={styles.statBadge}>{candidate.ai_years_experience} yrs exp</span>
-                            )}
-                            {hasCPA && <span className={styles.certBadge}>CPA</span>}
-                            {hasCFA && <span className={styles.certBadge}>CFA</span>}
-                            {hasCMA && <span className={styles.certBadge}>CMA</span>}
-                        </div>
                     </div>
                 </div>
             </div>
@@ -402,7 +385,14 @@ export default function CandidateProfile() {
                                 {candidate.ai_certifications && (
                                     <div className={styles.certRow}>
                                         <span className={styles.sideLabel}>Certifications</span>
-                                        <p className={styles.certText}>{candidate.ai_certifications}</p>
+                                        <div className={styles.certBadgeRow}>
+                                            {hasCPA && <span className={styles.certBadge}>CPA</span>}
+                                            {hasCFA && <span className={styles.certBadge}>CFA</span>}
+                                            {hasCMA && <span className={styles.certBadge}>CMA</span>}
+                                            {!hasCPA && !hasCFA && !hasCMA && (
+                                                <p className={styles.certText}>{candidate.ai_certifications}</p>
+                                            )}
+                                        </div>
                                     </div>
                                 )}
                                 {skills.length > 0 && (
@@ -416,6 +406,8 @@ export default function CandidateProfile() {
                         )}
                         <Section title="Profile Details">
                             <div className={styles.infoList}>
+                                <InfoRow label="Level" value={candidate.ai_career_level ? candidate.ai_career_level.charAt(0).toUpperCase() + candidate.ai_career_level.slice(1) : null} />
+                                <InfoRow label="Experience" value={candidate.ai_years_experience ? `${candidate.ai_years_experience} years` : null} />
                                 <InfoRow label="Source" value={isFromCall ? "From Call" : "Manual Entry"} />
                                 {candidate.ai_parsed_at && (
                                     <InfoRow label="Parsed" value={new Date(candidate.ai_parsed_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })} />
