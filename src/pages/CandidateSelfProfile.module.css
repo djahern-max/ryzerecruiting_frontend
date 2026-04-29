@@ -114,10 +114,11 @@
     gap: 8px;
 }
 
-/* ── Identity overlay — vertically centered in the lower half ── */
+/* ── Identity overlay — vertically centered in the banner ── */
 .identityOverlay {
     position: absolute;
     top: 50%;
+    transform: translateY(-50%);
     left: 0;
     right: 0;
     z-index: 5;
