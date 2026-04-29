@@ -65,6 +65,7 @@
 
 /* Hover upload hint — subtle, only reveals on hover */
 .bannerUploadHint {
+    pointer-events: none;
     position: absolute;
     inset: 0;
     z-index: 6;

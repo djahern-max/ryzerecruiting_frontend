@@ -221,25 +221,25 @@ export default function CandidateProfile() {
                 </div>
 
                 {/* Back — top left */}
-                <button className={styles.backLink} onClick={() => navigate(-1)}>
+                <button className={styles.backLink} onClick={(e) => { e.stopPropagation(); navigate(-1); }}>
                     ← Back
                 </button>
 
                 {/* Actions — top right */}
                 <div className={styles.headerActions}>
-                    <button className={styles.pdfBtn} onClick={handleDownloadPdf} disabled={pdfLoading}>
+                    <button className={styles.pdfBtn} onClick={(e) => { e.stopPropagation(); handleDownloadPdf(); }} disabled={pdfLoading}>
                         {pdfLoading
                             ? <><span className={styles.spinnerWhite} />Generating…</>
                             : <><i className="fi fi-rr-file-pdf" style={{ marginRight: "6px", fontSize: "13px" }} />Download PDF</>
                         }
                     </button>
                     {isFromCall && (
-                        <button className={`${styles.headerBtn} ${styles.enrichBtn}`} onClick={() => setEnrichOpen(true)}>
+                        <button className={`${styles.headerBtn} ${styles.enrichBtn}`} onClick={(e) => { e.stopPropagation(); setEnrichOpen(true); }}>
                             <i className="fi fi-rr-add" style={{ marginRight: "6px", fontSize: "13px" }} />
                             Enrich Profile
                         </button>
                     )}
-                    <button className={styles.headerBtn} onClick={() => setEditOpen(true)}>
+                    <button className={styles.headerBtn} onClick={(e) => { e.stopPropagation(); setEditOpen(true); }}>
                         ✏ Edit Profile
                     </button>
                 </div>
