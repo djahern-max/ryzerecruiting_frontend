@@ -72,6 +72,7 @@ export default function CandidateProfile() {
     const [photoUploading, setPhotoUploading] = useState(false);
     const [bannerUploading, setBannerUploading] = useState(false);
     const [pdfLoading, setPdfLoading] = useState(false);
+    const identityRef = useRef(null);
 
     useEffect(() => {
         async function fetchCandidate() {
@@ -203,15 +204,16 @@ export default function CandidateProfile() {
                 style={candidate.banner_url ? {
                     backgroundImage: `url(${candidate.banner_url})`,
                 } : {}}
+                onClick={(e) => {
+                    if (identityRef.current?.contains(e.target)) return;
+                    !bannerUploading && bannerInputRef.current?.click();
+                }}
             >
                 {/* Gradient scrim */}
                 <div className={styles.heroScrim} />
 
                 {/* Hover upload hint */}
-                <div
-                    className={styles.bannerUploadHint}
-                    onClick={() => !bannerUploading && bannerInputRef.current?.click()}
-                >
+                <div className={styles.bannerUploadHint}>
                     {bannerUploading
                         ? <span className={styles.spinnerWhite} />
                         : <><i className="fi fi-rr-picture" /><span>Change banner image</span></>
@@ -243,14 +245,11 @@ export default function CandidateProfile() {
                 </div>
 
                 {/* Identity overlay — bottom of hero */}
-                <div className={styles.identityOverlay}>
+                <div ref={identityRef} className={styles.identityOverlay}>
                     {/* Avatar */}
                     <div
                         className={styles.avatarWrap}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            !photoUploading && photoInputRef.current?.click();
-                        }}
+                        onClick={() => !photoUploading && photoInputRef.current?.click()}
                         title="Click to upload photo"
                     >
                         {candidate.photo_url ? (
