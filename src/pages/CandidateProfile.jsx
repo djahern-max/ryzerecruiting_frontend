@@ -72,7 +72,7 @@ export default function CandidateProfile() {
     const [photoUploading, setPhotoUploading] = useState(false);
     const [bannerUploading, setBannerUploading] = useState(false);
     const [pdfLoading, setPdfLoading] = useState(false);
-    const identityRef = useRef(null);
+
 
     useEffect(() => {
         async function fetchCandidate() {
@@ -204,21 +204,9 @@ export default function CandidateProfile() {
                 style={candidate.banner_url ? {
                     backgroundImage: `url(${candidate.banner_url})`,
                 } : {}}
-                onClick={(e) => {
-                    if (identityRef.current?.contains(e.target)) return;
-                    !bannerUploading && bannerInputRef.current?.click();
-                }}
             >
                 {/* Gradient scrim */}
                 <div className={styles.heroScrim} />
-
-                {/* Hover upload hint */}
-                <div className={styles.bannerUploadHint}>
-                    {bannerUploading
-                        ? <span className={styles.spinnerWhite} />
-                        : <><i className="fi fi-rr-picture" /><span>Change banner image</span></>
-                    }
-                </div>
 
                 {/* Back — top left */}
                 <button className={styles.backLink} onClick={(e) => { e.stopPropagation(); navigate(-1); }}>
@@ -227,6 +215,16 @@ export default function CandidateProfile() {
 
                 {/* Actions — top right */}
                 <div className={styles.headerActions}>
+                    <button
+                        className={styles.headerBtn}
+                        onClick={() => bannerInputRef.current?.click()}
+                        disabled={bannerUploading}
+                    >
+                        {bannerUploading
+                            ? <><span className={styles.spinnerWhite} />Uploading…</>
+                            : <><i className="fi fi-rr-picture" style={{ marginRight: "6px", fontSize: "13px" }} />Change Banner</>
+                        }
+                    </button>
                     <button className={styles.pdfBtn} onClick={(e) => { e.stopPropagation(); handleDownloadPdf(); }} disabled={pdfLoading}>
                         {pdfLoading
                             ? <><span className={styles.spinnerWhite} />Generating…</>
@@ -245,7 +243,7 @@ export default function CandidateProfile() {
                 </div>
 
                 {/* Identity overlay — bottom of hero */}
-                <div ref={identityRef} className={styles.identityOverlay}>
+                <div className={styles.identityOverlay}>
                     {/* Avatar */}
                     <div
                         className={styles.avatarWrap}
