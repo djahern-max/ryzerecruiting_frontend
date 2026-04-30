@@ -21,11 +21,19 @@ import EP14 from "../assets/landing_page_thumbnails/EP14.png";
 import EP15 from "../assets/landing_page_thumbnails/EP15.png";
 import EP16 from "../assets/landing_page_thumbnails/EP16.png";
 import EP17 from "../assets/landing_page_thumbnails/EP17.png";
+import EP18 from "../assets/landing_page_thumbnails/EP18.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 const CURRENT_VERSION = 17;
 
 const EPISODES = [
+  {
+    num: 18,
+    title: "Candidate Profile",
+    thumb: EP18,
+    url: "https://www.linkedin.com/posts/daneahern_building-ryzeai-in-public-ep18-candidate-ugcPost-7455551630424567808-tATF?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "EP17 built the billing layer. EP18 makes the platform look like something worth paying for. Candidate profiles rebuilt with a branded banner, headshot upload stored in DigitalOcean Spaces, and a hero layout with name and title overlaid directly on the banner. Experience and education restructured from AI-generated paragraphs into scannable bullet points. One-click PDF export — Playwright renders a fully branded recruiter-grade profile ready to send to a hiring manager.",
+  },
   {
     num: 17,
     title: "Invite System, Free Trial & Stripe Billing",
@@ -323,6 +331,23 @@ const PHASES = [
       "InviteForm.jsx — admin UI for onboarding new firms with success state",
     ],
   },
+  {
+    id: "13",
+    title: "Candidate Profile & PDF Export",
+    status: "complete",
+    summary: "Rebuilt the candidate profile from a data-entry view into a recruiter-grade presentation layer. Every profile now has a branded banner, headshot upload via DigitalOcean Spaces, and a hero layout with name, title, and location overlaid directly on the banner. AI-generated content restructured from paragraphs into scannable bullets. One-click PDF export renders a fully branded profile via Playwright — ready to send to a hiring manager.",
+    bullets: [
+      "Banner image upload — stored in DigitalOcean Spaces, rendered as hero background",
+      "Headshot upload — circular avatar with camera overlay, object-fit crop",
+      "Hero layout — name, title, company, location, and badge row overlaid on banner",
+      "Experience restructured — AI prose split into scannable bullet points",
+      "Education restructured — degrees and certifications as individual bullets",
+      "PDF export via Playwright — branded HTML template rendered by headless Chromium",
+      "PDF mirrors the UI — same banner, headshot, skills, certs, and layout",
+      "Streaming PDF response — downloads directly from the browser in one click",
+    ],
+  },
+
 ];
 
 const DEMO_QUERIES = [
@@ -675,37 +700,37 @@ export default function Landing() {
           <div className={styles.nextGrid}>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 17</div>
-              <div className={styles.nextTitle}>Invite System, Free Trial &amp; Stripe Billing</div>
+              <div className={styles.nextNum}>EP 18</div>
+              <div className={styles.nextTitle}>Candidate Profile &amp; PDF Export</div>
               <p className={styles.nextDesc}>
-                EP16 proved the walls hold. EP17 opened the doors. Admin invite
-                flow onboards any recruiting firm in one action — tenant created,
-                30-day trial started, branded welcome email fired. Stripe handles
-                the full billing lifecycle from trial to paying subscriber.
+                Candidate profiles rebuilt for presentation — branded banner, headshot upload,
+                and a hero layout with identity overlaid directly on the image. AI content
+                restructured into scannable bullets. One-click PDF export produces a
+                recruiter-grade deliverable ready to send to a hiring manager.
               </p>
               <span className={styles.nextBadgePosted}>✓ Complete</span>
             </div>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 18</div>
-              <div className={styles.nextTitle}>Profile &amp; Document Engine</div>
+              <div className={styles.nextNum}>EP 19</div>
+              <div className={styles.nextTitle}>AI Headline Generator</div>
               <p className={styles.nextDesc}>
-                Every candidate, employer, and job order gets a document you'd
-                send to a client. Branded PDF exports, one-click email delivery,
-                and profile views rebuilt for presentation — not just data entry.
-                The platform starts producing recruiter-grade deliverables.
+                Instead of "Controller at Rye Beach Landscaping," Claude reads the candidate's
+                full profile and suggests 3–5 punchy, skills-first headlines. One click to
+                generate. One click to save. The profile starts selling the candidate, not
+                just describing them.
               </p>
               <span className={styles.nextBadge}>Up next</span>
             </div>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 19</div>
+              <div className={styles.nextNum}>EP 20</div>
               <div className={styles.nextTitle}>First External Recruiters</div>
               <p className={styles.nextDesc}>
-                The invite system is live and the platform is polished enough to
-                hand to real users. The first recruiting firms get access.
-                Onboarding feedback shapes the next round of improvements — what
-                breaks, what's missing, what gets in the way.
+                The invite system is live and the platform is polished enough to hand to
+                real users. The first recruiting firms get access. Onboarding feedback
+                shapes the next round of improvements — what breaks, what's missing,
+                what gets in the way.
               </p>
               <span className={styles.nextBadge}>Coming soon</span>
             </div>
