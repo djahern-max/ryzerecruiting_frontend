@@ -702,6 +702,22 @@
     cursor: not-allowed;
 }
 
+.bulletList {
+    margin: 0;
+    padding: 0 0 0 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    list-style: disc;
+}
+
+.bulletItem {
+    font-size: 0.875rem;
+    color: #334155;
+    line-height: 1.65;
+    padding-left: 4px;
+}
+
 /* ══════════════════════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════════════════════ */

@@ -30,6 +30,33 @@ function parseJsonField(value) {
     }
 }
 
+function parseToDisplayBullets(text, maxItems = 6) {
+    if (!text) return [];
+    const sentences = text.split(/(?<=\.)\s+(?=[A-Z])/);
+    const STRIP_PREFIXES = [
+        "He then ", "He also ", "He currently ", "He is currently ",
+        "She then ", "She also ", "She currently ", "She is currently ",
+        "They then ", "They also ", "They currently ",
+        "Concurrently, he ", "Concurrently, she ", "Concurrently, they ",
+        "He ", "She ", "They ",
+    ];
+    const bullets = [];
+    for (let s of sentences) {
+        s = s.trim();
+        if (s.length < 20) continue;
+        if (/^[A-Z][a-z]+ [A-Z][a-z]+ has (an|a) /.test(s)) continue;
+        for (const prefix of STRIP_PREFIXES) {
+            if (s.startsWith(prefix)) {
+                s = s.slice(prefix.length);
+                s = s.charAt(0).toUpperCase() + s.slice(1);
+                break;
+            }
+        }
+        bullets.push(s);
+    }
+    return bullets.slice(0, maxItems);
+}
+
 function InfoRow({ label, value, href }) {
     if (!value) return null;
     return (
@@ -324,12 +351,20 @@ export default function CandidateProfile() {
                         )}
                         {candidate.ai_experience && (
                             <Section title="Experience">
-                                <p className={styles.bodyText}>{candidate.ai_experience}</p>
+                                <ul className={styles.bulletList}>
+                                    {parseToDisplayBullets(candidate.ai_experience, 6).map((bullet, i) => (
+                                        <li key={i} className={styles.bulletItem}>{bullet}</li>
+                                    ))}
+                                </ul>
                             </Section>
                         )}
                         {candidate.ai_education && (
                             <Section title="Education">
-                                <p className={styles.bodyText}>{candidate.ai_education}</p>
+                                <ul className={styles.bulletList}>
+                                    {parseToDisplayBullets(candidate.ai_education, 3).map((bullet, i) => (
+                                        <li key={i} className={styles.bulletItem}>{bullet}</li>
+                                    ))}
+                                </ul>
                             </Section>
                         )}
                         {candidate.ai_outreach_message && (
