@@ -7,18 +7,6 @@ import styles from "./CandidateProfile.module.css";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-const CAREER_LEVEL_COLORS = {
-    entry: { bg: "#f0fdf4", color: "#15803d", border: "#bbf7d0" },
-    junior: { bg: "#f0fdf4", color: "#15803d", border: "#bbf7d0" },
-    mid: { bg: "#eff6ff", color: "#1d4ed8", border: "#bfdbfe" },
-    senior: { bg: "#faf5ff", color: "#7c3aed", border: "#e9d5ff" },
-    manager: { bg: "#fff7ed", color: "#c2410c", border: "#fed7aa" },
-    director: { bg: "#fff7ed", color: "#c2410c", border: "#fed7aa" },
-    vp: { bg: "#fef2f2", color: "#b91c1c", border: "#fecaca" },
-    "c-suite": { bg: "#0f172a", color: "#f8fafc", border: "#1e293b" },
-    executive: { bg: "#0f172a", color: "#f8fafc", border: "#1e293b" },
-};
-
 function parseJsonField(value) {
     if (!value) return [];
     if (Array.isArray(value)) return value;
@@ -99,7 +87,6 @@ export default function CandidateProfile() {
     const [photoUploading, setPhotoUploading] = useState(false);
     const [bannerUploading, setBannerUploading] = useState(false);
     const [pdfLoading, setPdfLoading] = useState(false);
-
 
     useEffect(() => {
         async function fetchCandidate() {
@@ -223,20 +210,19 @@ export default function CandidateProfile() {
         <div className={styles.page}>
             <AdminHeader active="candidates" />
 
-            {/* ══════════════════════════════════════════
-                HERO BANNER
-            ══════════════════════════════════════════ */}
+            {/* ── Hero Banner ── */}
             <div
                 className={styles.heroBanner}
                 style={candidate.banner_url ? {
                     backgroundImage: `url(${candidate.banner_url})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
                 } : {}}
             >
-                {/* Gradient scrim */}
                 <div className={styles.heroScrim} />
 
                 {/* Back — top left */}
-                <button className={styles.backLink} onClick={(e) => { e.stopPropagation(); navigate(-1); }}>
+                <button className={styles.backLink} onClick={() => navigate(-1)}>
                     ← Back
                 </button>
 
@@ -249,43 +235,63 @@ export default function CandidateProfile() {
                     >
                         {bannerUploading
                             ? <><span className={styles.spinnerWhite} />Uploading…</>
-                            : <><i className="fi fi-rr-picture" style={{ marginRight: "6px", fontSize: "13px" }} />Change Banner</>
+                            : <><i className="fi fi-rr-picture" />Change Banner</>
                         }
                     </button>
-                    <button className={styles.pdfBtn} onClick={(e) => { e.stopPropagation(); handleDownloadPdf(); }} disabled={pdfLoading}>
+                    <button className={styles.pdfBtn} onClick={handleDownloadPdf} disabled={pdfLoading}>
                         {pdfLoading
                             ? <><span className={styles.spinnerWhite} />Generating…</>
-                            : <><i className="fi fi-rr-file-pdf" style={{ marginRight: "6px", fontSize: "13px" }} />Download PDF</>
+                            : <><i className="fi fi-rr-file-pdf" />Download PDF</>
                         }
                     </button>
                     {isFromCall && (
-                        <button className={`${styles.headerBtn} ${styles.enrichBtn}`} onClick={(e) => { e.stopPropagation(); setEnrichOpen(true); }}>
-                            <i className="fi fi-rr-add" style={{ marginRight: "6px", fontSize: "13px" }} />
-                            Enrich Profile
+                        <button className={`${styles.headerBtn} ${styles.enrichBtn}`} onClick={() => setEnrichOpen(true)}>
+                            <i className="fi fi-rr-add" />Enrich Profile
                         </button>
                     )}
-                    <button className={styles.headerBtn} onClick={(e) => { e.stopPropagation(); setEditOpen(true); }}>
+                    <button className={styles.headerBtn} onClick={() => setEditOpen(true)}>
                         ✏ Edit Profile
                     </button>
                 </div>
+            </div>
 
-                {/* Identity overlay — bottom of hero */}
-                <div className={styles.identityOverlay}>
-                    {/* Avatar */}
-                    <div
-                        className={styles.avatarWrap}
-                        onClick={() => !photoUploading && photoInputRef.current?.click()}
-                        title="Click to upload photo"
-                    >
-                        {candidate.photo_url ? (
-                            <img src={candidate.photo_url} alt={candidate.name} className={styles.avatarImg} />
-                        ) : (
-                            <div className={styles.avatarInitial}>
-                                {candidate.name?.charAt(0).toUpperCase()}
+            <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleBannerChange} />
+            <input ref={photoInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoChange} />
+
+            {/* ── Profile body ── */}
+            <div className={styles.profileBody}>
+
+                {/* Identity card — LinkedIn style: avatar overlaps banner */}
+                <div className={styles.identityCard}>
+                    <div className={styles.identityOverlay}>
+                        {/* Avatar */}
+                        <div
+                            className={styles.avatarWrap}
+                            onClick={() => !photoUploading && photoInputRef.current?.click()}
+                            title="Click to upload photo"
+                        >
+                            {candidate.photo_url ? (
+                                <img src={candidate.photo_url} alt={candidate.name} className={styles.avatarImg} />
+                            ) : (
+                                <div className={styles.avatarInitial}>
+                                    {candidate.name?.charAt(0).toUpperCase()}
+                                </div>
+                            )}
+                            <div className={styles.avatarOverlay}>
+                                {photoUploading ? <span className={styles.spinnerWhite} /> : <i className="fi fi-rr-camera" />}
                             </div>
-                        )}
-                        <div className={styles.avatarOverlay}>
-                            {photoUploading ? <span className={styles.spinnerWhite} /> : <i className="fi fi-rr-camera" />}
+                        </div>
+
+                        {/* Right-side action buttons */}
+                        <div className={styles.identityActions}>
+                            {isFromCall && (
+                                <button className={`${styles.identityEditBtn} ${styles.enrichBtn}`} onClick={() => setEnrichOpen(true)}>
+                                    Enrich Profile
+                                </button>
+                            )}
+                            <button className={styles.identityEditBtn} onClick={() => setEditOpen(true)}>
+                                ✏ Edit
+                            </button>
                         </div>
                     </div>
 
@@ -305,7 +311,7 @@ export default function CandidateProfile() {
                             <div className={styles.candidateMeta}>
                                 {candidate.current_title && <span>{candidate.current_title}</span>}
                                 {candidate.current_title && candidate.current_company && (
-                                    <span className={styles.metaDivider}>at</span>
+                                    <span className={styles.metaDivider}>·</span>
                                 )}
                                 {candidate.current_company && (
                                     <span className={styles.metaCompany}>{candidate.current_company}</span>
@@ -320,13 +326,8 @@ export default function CandidateProfile() {
                         )}
                     </div>
                 </div>
-            </div>
 
-            <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleBannerChange} />
-            <input ref={photoInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoChange} />
-
-            {/* ── Profile Body ── */}
-            <div className={styles.profileBody}>
+                {/* ── Main grid ── */}
                 <div className={styles.profileBodyInner}>
                     <div className={styles.mainCol}>
                         {isStub && (
@@ -336,7 +337,7 @@ export default function CandidateProfile() {
                                     <div className={styles.stubTitle}>Profile created from a scheduled call</div>
                                     <div className={styles.stubBody}>
                                         This candidate was automatically added when the call was confirmed.
-                                        Upload a resume or paste their LinkedIn profile to enrich the record with full details.
+                                        Upload a resume or paste their LinkedIn profile to enrich the record.
                                     </div>
                                     <button className={styles.stubBtn} onClick={() => setEnrichOpen(true)}>
                                         Enrich Profile →
@@ -344,11 +345,13 @@ export default function CandidateProfile() {
                                 </div>
                             </div>
                         )}
+
                         {candidate.ai_summary && (
-                            <Section title="AI Summary">
+                            <Section title="About">
                                 <p className={styles.summaryText}>{candidate.ai_summary}</p>
                             </Section>
                         )}
+
                         {candidate.ai_experience && (
                             <Section title="Experience">
                                 <ul className={styles.bulletList}>
@@ -358,6 +361,7 @@ export default function CandidateProfile() {
                                 </ul>
                             </Section>
                         )}
+
                         {candidate.ai_education && (
                             <Section title="Education">
                                 <ul className={styles.bulletList}>
@@ -367,6 +371,7 @@ export default function CandidateProfile() {
                                 </ul>
                             </Section>
                         )}
+
                         {candidate.ai_outreach_message && (
                             <Section title="Outreach Message">
                                 <div className={styles.outreachWrap}>
@@ -379,6 +384,7 @@ export default function CandidateProfile() {
                                 </div>
                             </Section>
                         )}
+
                         {candidate.meeting_transcript && (
                             <Section title="Call Transcript">
                                 <div className={styles.transcriptMeta}>
@@ -394,11 +400,12 @@ export default function CandidateProfile() {
                                     <pre className={styles.transcriptPre}>{candidate.meeting_transcript}</pre>
                                     {!transcriptExpanded && <div className={styles.transcriptFade} />}
                                 </div>
-                                <button className={styles.outreachToggle} onClick={() => setTranscriptExpanded(p => !p)}>
+                                <button className={styles.outreachToggle} onClick={() => setTranscriptExpanded(p => !p)} style={{ marginTop: "10px" }}>
                                     {transcriptExpanded ? "Show less ↑" : "Show full transcript ↓"}
                                 </button>
                             </Section>
                         )}
+
                         {candidate.notes && (
                             <Section title="Recruiter Notes" className={styles.notesSection}>
                                 <div className={styles.notesInternalBadge}>Internal — not visible to candidates</div>
@@ -407,6 +414,7 @@ export default function CandidateProfile() {
                         )}
                     </div>
 
+                    {/* ── Sidebar ── */}
                     <div className={styles.sideCol}>
                         <Section title="Contact">
                             <div className={styles.infoList}>
@@ -415,6 +423,7 @@ export default function CandidateProfile() {
                                 <InfoRow label="LinkedIn" value={candidate.linkedin_url ? "View Profile" : null} href={candidate.linkedin_url} />
                             </div>
                         </Section>
+
                         {(candidate.ai_certifications || skills.length > 0) && (
                             <Section title="Skills & Certifications">
                                 {candidate.ai_certifications && (
@@ -439,6 +448,7 @@ export default function CandidateProfile() {
                                 )}
                             </Section>
                         )}
+
                         <Section title="Profile Details">
                             <div className={styles.infoList}>
                                 <InfoRow label="Level" value={candidate.ai_career_level ? candidate.ai_career_level.charAt(0).toUpperCase() + candidate.ai_career_level.slice(1) : null} />
@@ -452,11 +462,12 @@ export default function CandidateProfile() {
                                 {candidate.meeting_transcript && <InfoRow label="Transcript" value="✓ Available" />}
                             </div>
                         </Section>
+
                         <div className={styles.pdfCard}>
                             <div className={styles.pdfCardTitle}>Export Profile</div>
-                            <p className={styles.pdfCardDesc}>Download a clean one-page PDF to share with potential employers.</p>
+                            <p className={styles.pdfCardDesc}>Download a clean PDF to share with potential employers.</p>
                             <button className={styles.pdfCardBtn} onClick={handleDownloadPdf} disabled={pdfLoading}>
-                                {pdfLoading ? "Generating…" : <><i className="fi fi-rr-file-pdf" style={{ marginRight: "6px" }} />Download PDF</>}
+                                {pdfLoading ? "Generating…" : <><i className="fi fi-rr-file-pdf" />Download PDF</>}
                             </button>
                         </div>
                     </div>

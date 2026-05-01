@@ -1,5 +1,5 @@
-// src/pages/CandidateProfile.jsx
-import { useState, useEffect } from 'react';
+// src/pages/CandidateSelfProfile.jsx
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
@@ -7,9 +7,6 @@ import { apiFetch } from '../services/api';
 import styles from './CandidateSelfProfile.module.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-
-// Fields the candidate can edit themselves
-const EDITABLE_FIELDS = ['current_title', 'current_company', 'location', 'phone', 'linkedin_url'];
 
 function getInitials(name) {
     if (!name) return '?';
@@ -30,10 +27,12 @@ function ReadOnlyField({ label, value }) {
     );
 }
 
-export default function CandidateProfile() {
+export default function CandidateSelfProfile() {
     const { user } = useAuth();
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
+    const photoInputRef = useRef(null);
+    const bannerInputRef = useRef(null);
 
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -41,6 +40,8 @@ export default function CandidateProfile() {
     const [saving, setSaving] = useState(false);
     const [saveMsg, setSaveMsg] = useState('');
     const [form, setForm] = useState({});
+    const [photoUploading, setPhotoUploading] = useState(false);
+    const [bannerUploading, setBannerUploading] = useState(false);
 
     useEffect(() => {
         const headers = { Authorization: `Bearer ${token}` };
@@ -83,7 +84,7 @@ export default function CandidateProfile() {
             const updated = await res.json();
             setProfile(updated);
             setEditing(false);
-            setSaveMsg('Saved!');
+            setSaveMsg('Changes saved!');
             setTimeout(() => setSaveMsg(''), 3000);
         } catch {
             setSaveMsg('Save failed — please try again.');
@@ -104,6 +105,53 @@ export default function CandidateProfile() {
         }
         setEditing(false);
         setSaveMsg('');
+    }
+
+    async function handlePhotoChange(e) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setPhotoUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            const res = await fetch(`${API_BASE}/api/candidates/me/photo`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData,
+            });
+            if (!res.ok) throw new Error('Upload failed');
+            const data = await res.json();
+            setProfile(prev => ({ ...prev, photo_url: data.photo_url }));
+        } catch (err) {
+            alert('Photo upload failed: ' + err.message);
+        } finally {
+            setPhotoUploading(false);
+            // reset so same file can be re-selected
+            if (photoInputRef.current) photoInputRef.current.value = '';
+        }
+    }
+
+    async function handleBannerChange(e) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setBannerUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            const res = await fetch(`${API_BASE}/api/candidates/me/banner`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData,
+            });
+            if (!res.ok) throw new Error('Upload failed');
+            const data = await res.json();
+            setProfile(prev => ({ ...prev, banner_url: data.banner_url }));
+        } catch (err) {
+            alert('Banner upload failed: ' + err.message);
+        } finally {
+            setBannerUploading(false);
+            if (bannerInputRef.current) bannerInputRef.current.value = '';
+        }
     }
 
     const skills = Array.isArray(profile?.ai_skills)
@@ -157,23 +205,51 @@ export default function CandidateProfile() {
                 <div className={styles.profileCard}>
 
                     {/* Banner */}
-                    <div className={styles.banner}>
-                        <div className={styles.bannerPlaceholder}>
-                            <span className={styles.bannerComingSoon}>
-                                Profile banner — coming soon
-                            </span>
-                        </div>
+                    <div
+                        className={styles.banner}
+                        style={profile.banner_url ? {
+                            backgroundImage: `url(${profile.banner_url})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                        } : {}}
+                    >
+                        <button
+                            className={styles.bannerEditBtn}
+                            onClick={() => bannerInputRef.current?.click()}
+                            disabled={bannerUploading}
+                            title="Change banner photo"
+                        >
+                            {bannerUploading
+                                ? <><span className={styles.spinner} />Uploading…</>
+                                : <><i className="fi fi-rr-picture" />Change Banner</>
+                            }
+                        </button>
                     </div>
 
-                    {/* Avatar + identity */}
+                    {/* Avatar + identity actions row */}
                     <div className={styles.identityRow}>
-                        <div className={styles.avatarWrap}>
-                            <div className={styles.avatar}>
-                                {getInitials(profile.name)}
+                        <div
+                            className={styles.avatarWrap}
+                            onClick={() => !photoUploading && photoInputRef.current?.click()}
+                            title="Click to update your photo"
+                        >
+                            {profile.photo_url ? (
+                                <img
+                                    src={profile.photo_url}
+                                    alt={profile.name}
+                                    className={styles.avatarImg}
+                                />
+                            ) : (
+                                <div className={styles.avatar}>
+                                    {getInitials(profile.name)}
+                                </div>
+                            )}
+                            <div className={styles.avatarOverlay}>
+                                {photoUploading
+                                    ? <span className={styles.spinnerDark} />
+                                    : <i className="fi fi-rr-camera" />
+                                }
                             </div>
-                            <button className={styles.avatarUploadBtn} title="Photo upload coming soon" disabled>
-                                <i className="fi fi-rr-camera" />
-                            </button>
                         </div>
 
                         <div className={styles.identityActions}>
@@ -222,7 +298,9 @@ export default function CandidateProfile() {
                                 <span className={styles.expBadge}>{profile.ai_years_experience} yrs experience</span>
                             )}
                             {profile.ai_certifications && (
-                                <span className={styles.certBadge}><i className="fi fi-rr-diploma" /> {profile.ai_certifications}</span>
+                                <span className={styles.certBadge}>
+                                    <i className="fi fi-rr-diploma" /> {profile.ai_certifications}
+                                </span>
                             )}
                         </div>
                     )}
@@ -352,6 +430,10 @@ export default function CandidateProfile() {
                 )}
 
             </main>
+
+            {/* Hidden file inputs */}
+            <input ref={photoInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handlePhotoChange} />
+            <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleBannerChange} />
         </div>
     );
 }
