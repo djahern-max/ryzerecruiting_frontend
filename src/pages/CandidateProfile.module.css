@@ -1,6 +1,7 @@
 /* ══════════════════════════════════════════════════════
-   RYZE.ai — Admin Candidate Profile  (LinkedIn-inspired)
-   Variables scoped to .page — avoids :root conflicts
+   RYZE.ai — Admin Candidate Profile
+   Banner-inside-card layout matching CandidateSelfProfile
+   Variables scoped to .page to avoid :root conflicts
    ══════════════════════════════════════════════════════ */
 
 .page {
@@ -12,7 +13,7 @@
     --text: rgba(0, 0, 0, 0.9);
     --sub: rgba(0, 0, 0, 0.6);
     --muted: rgba(0, 0, 0, 0.4);
-    --avatar: 152px;
+    --avatar: 120px;
     --radius: 8px;
     --font: 'DM Sans', system-ui, -apple-system, sans-serif;
 
@@ -35,7 +36,7 @@
     font-size: 0.95rem;
 }
 
-.backBtn {
+.errorBackBtn {
     background: transparent;
     border: 1.5px solid var(--blue);
     color: var(--blue);
@@ -48,137 +49,132 @@
     transition: background 140ms, color 140ms;
 }
 
-.backBtn:hover {
+.errorBackBtn:hover {
     background: var(--blue);
     color: #fff;
 }
 
 /* ══════════════════════════════════════════════════════
-   HERO BANNER
+   PROFILE BODY — centered, max-width container
    ══════════════════════════════════════════════════════ */
-.heroBanner {
+.profileBody {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 16px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* ── Back button above the card ── */
+.backBtn {
+    background: none;
+    border: none;
+    color: var(--sub);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.15s;
+    width: fit-content;
+    font-family: var(--font);
+}
+
+.backBtn:hover {
+    color: var(--blue);
+}
+
+/* ══════════════════════════════════════════════════════
+   IDENTITY CARD — contains banner + avatar + name
+   overflow: hidden clips the banner to rounded corners
+   ══════════════════════════════════════════════════════ */
+.identityCard {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Banner — inside the card, clipped by card's overflow:hidden ── */
+.banner {
+    height: 200px;
     position: relative;
-    width: 100%;
-    height: 216px;
     background: linear-gradient(120deg, #1c3f6e 0%, #0a66c2 60%, #378fe9 100%);
     background-size: cover;
     background-position: center;
-    overflow: hidden;
-    flex-shrink: 0;
-    display: block;
 }
 
-.heroScrim {
+/* Action buttons inside banner — bottom-right, matching candidate view */
+.bannerActions {
     position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.15) 100%);
-    z-index: 1;
-    pointer-events: none;
-}
-
-/* ── Back link — top left, absolutely inside banner ── */
-.backLink {
-    position: absolute;
-    top: 16px;
-    left: 24px;
-    z-index: 10;
-    background: rgba(0, 0, 0, 0.32);
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    color: #fff;
-    font-size: 0.8rem;
-    font-weight: 600;
-    font-family: var(--font);
-    padding: 6px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    backdrop-filter: blur(8px);
-    transition: background 150ms;
-    line-height: 1.4;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.backLink:hover {
-    background: rgba(0, 0, 0, 0.55);
-}
-
-/* ── Action buttons — top right, absolutely inside banner ── */
-.headerActions {
-    position: absolute;
-    top: 16px;
-    right: 24px;
-    z-index: 10;
+    bottom: 12px;
+    right: 16px;
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.headerBtn {
-    background: rgba(0, 0, 0, 0.36);
+/* Base banner button style */
+.bannerBtn {
+    background: rgba(0, 0, 0, 0.38);
     border: 1px solid rgba(255, 255, 255, 0.28);
     color: #fff;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: 600;
     font-family: var(--font);
-    padding: 7px 16px;
+    padding: 6px 14px;
     border-radius: 20px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    white-space: nowrap;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(6px);
     transition: background 150ms;
+    white-space: nowrap;
 }
 
-.headerBtn:hover:not(:disabled) {
+.bannerBtn:hover:not(:disabled) {
     background: rgba(0, 0, 0, 0.58);
 }
 
-.headerBtn:disabled {
+.bannerBtn:disabled {
     opacity: 0.55;
     cursor: not-allowed;
 }
 
-.enrichBtn {
-    background: rgba(124, 58, 237, 0.45) !important;
-    border-color: rgba(167, 139, 250, 0.45) !important;
-    color: #ede9fe !important;
-}
-
-.enrichBtn:hover:not(:disabled) {
-    background: rgba(124, 58, 237, 0.68) !important;
-}
-
-.pdfBtn {
-    background: rgba(22, 163, 74, 0.42);
-    border: 1px solid rgba(74, 222, 128, 0.4);
+.bannerBtnGreen {
+    composes: bannerBtn;
+    background: rgba(22, 163, 74, 0.45);
+    border-color: rgba(74, 222, 128, 0.4);
     color: #bbf7d0;
-    font-size: 0.8rem;
-    font-weight: 600;
-    font-family: var(--font);
-    padding: 7px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    white-space: nowrap;
-    backdrop-filter: blur(8px);
-    transition: background 150ms;
 }
 
-.pdfBtn:hover:not(:disabled) {
-    background: rgba(22, 163, 74, 0.65);
+.bannerBtnGreen:hover:not(:disabled) {
+    background: rgba(22, 163, 74, 0.68);
 }
 
-.pdfBtn:disabled {
+.bannerBtnGreen:disabled {
     opacity: 0.55;
     cursor: not-allowed;
+}
+
+.bannerBtnPurple {
+    composes: bannerBtn;
+    background: rgba(124, 58, 237, 0.45);
+    border-color: rgba(167, 139, 250, 0.45);
+    color: #ede9fe;
+}
+
+.bannerBtnPurple:hover:not(:disabled) {
+    background: rgba(124, 58, 237, 0.68);
 }
 
 /* ── Spinner ── */
-.spinnerWhite {
+.spinner {
     display: inline-block;
     width: 12px;
     height: 12px;
@@ -189,57 +185,42 @@
     flex-shrink: 0;
 }
 
+.spinnerDark {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
 @keyframes spin {
     to {
         transform: rotate(360deg);
     }
 }
 
-/* ══════════════════════════════════════════════════════
-   PROFILE BODY — container below the banner
-   ══════════════════════════════════════════════════════ */
-.profileBody {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 16px 64px;
-}
-
-/* ══════════════════════════════════════════════════════
-   IDENTITY CARD
-   Avatar overlaps the banner above using negative margin-top.
-   MUST have overflow: visible to allow avatar to peek up.
-   ══════════════════════════════════════════════════════ */
-.identityCard {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: visible;
-    /* critical — lets avatar overlap banner */
-    margin-bottom: 8px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-}
-
-/* Flex row: avatar (left) + edit buttons (right) */
-.identityOverlay {
+/* ── Identity row: avatar (left, overlaps banner) + edit button (right) ── */
+.identityRow {
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end;
     justify-content: space-between;
-    padding-right: 20px;
+    padding: 0 24px 0 20px;
+    /* Pull this row up so avatar overlaps the banner above it */
+    margin-top: calc(var(--avatar) * -0.46);
+    margin-bottom: 6px;
 }
 
-/* Avatar — negative margin-top pulls it up by exactly half its height,
-   so it sits centered on the banner/card boundary, just like LinkedIn */
+/* Avatar */
 .avatarWrap {
     position: relative;
     width: var(--avatar);
     height: var(--avatar);
     border-radius: 50%;
-    margin-top: calc(var(--avatar) * -0.5);
-    /* half height = 76px up */
-    margin-left: 24px;
     cursor: pointer;
     flex-shrink: 0;
-    z-index: 4;
+    z-index: 2;
 }
 
 .avatarImg {
@@ -249,7 +230,7 @@
     object-fit: cover;
     object-position: center top;
     border: 4px solid #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     display: block;
 }
 
@@ -258,32 +239,29 @@
     height: var(--avatar);
     border-radius: 50%;
     background: #1c3f6e;
-    border: 4px solid #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    color: #fff;
+    font-size: 2.4rem;
+    font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3.5rem;
-    font-weight: 800;
-    color: #fff;
-    letter-spacing: -1px;
+    border: 4px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     user-select: none;
+    letter-spacing: -1px;
 }
 
 /* Camera overlay on hover */
 .avatarOverlay {
     position: absolute;
-    top: 4px;
-    right: 4px;
-    bottom: 4px;
-    left: 4px;
+    inset: 4px;
     border-radius: 50%;
     background: rgba(0, 0, 0, 0.45);
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     opacity: 0;
     transition: opacity 150ms;
 }
@@ -292,36 +270,42 @@
     opacity: 1;
 }
 
-/* Edit/Enrich buttons — right side, aligned with top of card */
+/* Edit button — right side */
 .identityActions {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-end;
     gap: 8px;
-    padding-top: 16px;
+    padding-bottom: 10px;
 }
 
-.identityEditBtn {
-    padding: 7px 20px;
+.editBtn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 20px;
     background: transparent;
     border: 1.5px solid var(--blue);
     color: var(--blue);
     border-radius: 20px;
-    font-size: 0.85rem;
+    font-size: 13px;
     font-weight: 700;
-    font-family: var(--font);
     cursor: pointer;
-    transition: background 140ms, color 140ms;
-    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+    font-family: var(--font);
 }
 
-.identityEditBtn:hover {
+.editBtn:hover {
     background: var(--blue);
     color: #fff;
 }
 
-/* Name/title/location — inside identity card, below avatar row */
-.headerInfo {
-    padding: 10px 24px 22px;
+/* Name / headline / location */
+.nameBlock {
+    padding: 8px 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .nameRow {
@@ -329,11 +313,11 @@
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
-.candidateName {
-    font-size: 1.6rem;
+.name {
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--text);
     margin: 0;
@@ -341,31 +325,26 @@
     letter-spacing: -0.3px;
 }
 
-.candidateMeta {
-    font-size: 0.95rem;
+.headline {
+    font-size: 15px;
     color: var(--sub);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 4px;
-    line-height: 1.5;
+    margin: 0;
+    font-weight: 400;
+    line-height: 1.4;
 }
 
-.metaDivider {
+.headlineDot {
     color: var(--muted);
 }
 
-.metaCompany {
-    font-weight: 600;
-    color: var(--text);
-}
-
-.candidateLocation {
-    font-size: 0.82rem;
+.locationLine {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
     color: var(--blue);
+    margin: 2px 0 0;
     font-weight: 500;
-    margin-top: 2px;
 }
 
 .callBadge {
@@ -379,6 +358,45 @@
     border: 1px solid #c4b5fd;
     border-radius: 4px;
     padding: 2px 8px;
+}
+
+/* ══════════════════════════════════════════════════════
+   STUB NOTICE
+   ══════════════════════════════════════════════════════ */
+.stubNotice {
+    background: #faf5ff;
+    border: 1px solid #e9d5ff;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.stubTitle {
+    font-weight: 700;
+    color: #6d28d9;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.stubBody {
+    color: #7c3aed;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.stubBtn {
+    margin-top: 10px;
+    background: #7c3aed;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 7px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--font);
 }
 
 /* ══════════════════════════════════════════════════════
@@ -456,43 +474,6 @@
     color: var(--sub);
     line-height: 1.65;
     padding-left: 4px;
-}
-
-/* Stub notice */
-.stubNotice {
-    background: #faf5ff;
-    border: 1px solid #e9d5ff;
-    border-radius: var(--radius);
-    padding: 16px 20px;
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-}
-
-.stubTitle {
-    font-weight: 700;
-    color: #6d28d9;
-    font-size: 14px;
-    margin-bottom: 4px;
-}
-
-.stubBody {
-    color: #7c3aed;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.stubBtn {
-    margin-top: 10px;
-    background: #7c3aed;
-    color: #fff;
-    border: none;
-    border-radius: 20px;
-    padding: 7px 16px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    font-family: var(--font);
 }
 
 /* Outreach */
@@ -757,42 +738,25 @@
    RESPONSIVE
    ══════════════════════════════════════════════════════ */
 @media (max-width: 840px) {
-    .heroBanner {
-        height: 160px;
+    .page {
+        --avatar: 88px;
     }
 
-    /* Avatar shrinks, margin-top stays exactly -half */
-    .avatarWrap {
-        width: 104px;
-        height: 104px;
-        margin-top: -52px;
+    .banner {
+        height: 148px;
     }
 
-    .avatarImg {
-        width: 104px;
-        height: 104px;
+    .bannerActions {
+        bottom: 8px;
+        right: 10px;
+        gap: 6px;
     }
 
-    .avatarInitial {
-        width: 104px;
-        height: 104px;
-        font-size: 2.4rem;
-    }
-
-    .backLink {
-        left: 14px;
-        top: 12px;
-    }
-
-    .headerActions {
-        right: 14px;
-        top: 12px;
-    }
-
-    .headerBtn,
-    .pdfBtn {
-        font-size: 0.75rem;
-        padding: 5px 12px;
+    .bannerBtn,
+    .bannerBtnGreen,
+    .bannerBtnPurple {
+        font-size: 0.72rem;
+        padding: 5px 10px;
     }
 
     .profileBodyInner {
@@ -803,11 +767,15 @@
         position: static;
     }
 
-    .candidateName {
-        font-size: 1.35rem;
+    .nameBlock {
+        padding: 10px 20px 18px;
     }
 
-    .headerInfo {
-        padding: 8px 16px 18px;
+    .identityRow {
+        padding: 0 16px 0 16px;
+    }
+
+    .name {
+        font-size: 1.3rem;
     }
 }

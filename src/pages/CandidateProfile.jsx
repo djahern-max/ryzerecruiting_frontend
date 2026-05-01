@@ -130,6 +130,7 @@ export default function CandidateProfile() {
             alert("Photo upload failed: " + err.message);
         } finally {
             setPhotoUploading(false);
+            if (photoInputRef.current) photoInputRef.current.value = "";
         }
     }
 
@@ -152,6 +153,7 @@ export default function CandidateProfile() {
             alert("Banner upload failed: " + err.message);
         } finally {
             setBannerUploading(false);
+            if (bannerInputRef.current) bannerInputRef.current.value = "";
         }
     }
 
@@ -191,7 +193,7 @@ export default function CandidateProfile() {
                 <AdminHeader active="candidates" />
                 <div className={styles.errorState}>
                     <p>{error || "Candidate not found."}</p>
-                    <button onClick={() => navigate("/admin/candidates")} className={styles.backBtn}>
+                    <button onClick={() => navigate("/admin/candidates")} className={styles.errorBackBtn}>
                         ← Back to Candidates
                     </button>
                 </div>
@@ -210,61 +212,55 @@ export default function CandidateProfile() {
         <div className={styles.page}>
             <AdminHeader active="candidates" />
 
-            {/* ── Hero Banner ── */}
-            <div
-                className={styles.heroBanner}
-                style={candidate.banner_url ? {
-                    backgroundImage: `url(${candidate.banner_url})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                } : {}}
-            >
-                <div className={styles.heroScrim} />
-
-                {/* Back — top left */}
-                <button className={styles.backLink} onClick={() => navigate(-1)}>
-                    ← Back
-                </button>
-
-                {/* Actions — top right */}
-                <div className={styles.headerActions}>
-                    <button
-                        className={styles.headerBtn}
-                        onClick={() => bannerInputRef.current?.click()}
-                        disabled={bannerUploading}
-                    >
-                        {bannerUploading
-                            ? <><span className={styles.spinnerWhite} />Uploading…</>
-                            : <><i className="fi fi-rr-picture" />Change Banner</>
-                        }
-                    </button>
-                    <button className={styles.pdfBtn} onClick={handleDownloadPdf} disabled={pdfLoading}>
-                        {pdfLoading
-                            ? <><span className={styles.spinnerWhite} />Generating…</>
-                            : <><i className="fi fi-rr-file-pdf" />Download PDF</>
-                        }
-                    </button>
-                    {isFromCall && (
-                        <button className={`${styles.headerBtn} ${styles.enrichBtn}`} onClick={() => setEnrichOpen(true)}>
-                            <i className="fi fi-rr-add" />Enrich Profile
-                        </button>
-                    )}
-                    <button className={styles.headerBtn} onClick={() => setEditOpen(true)}>
-                        ✏ Edit Profile
-                    </button>
-                </div>
-            </div>
-
-            <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleBannerChange} />
-            <input ref={photoInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoChange} />
-
-            {/* ── Profile body ── */}
             <div className={styles.profileBody}>
 
-                {/* Identity card — LinkedIn style: avatar overlaps banner */}
+                {/* ── Back nav (above the card, like candidate view) ── */}
+                <button className={styles.backBtn} onClick={() => navigate(-1)}>
+                    ← Back to Candidates
+                </button>
+
+                {/* ══════════════════════════════════════════
+                    IDENTITY CARD — banner lives inside here
+                ══════════════════════════════════════════ */}
                 <div className={styles.identityCard}>
-                    <div className={styles.identityOverlay}>
-                        {/* Avatar */}
+
+                    {/* Banner — inside the card, clipped by card's border-radius */}
+                    <div
+                        className={styles.banner}
+                        style={candidate.banner_url ? {
+                            backgroundImage: `url(${candidate.banner_url})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                        } : {}}
+                    >
+                        {/* Action buttons — top-right inside banner */}
+                        <div className={styles.bannerActions}>
+                            <button
+                                className={styles.bannerBtn}
+                                onClick={() => bannerInputRef.current?.click()}
+                                disabled={bannerUploading}
+                            >
+                                {bannerUploading
+                                    ? <><span className={styles.spinner} />Uploading…</>
+                                    : <><i className="fi fi-rr-picture" />Change Banner</>
+                                }
+                            </button>
+                            <button className={styles.bannerBtnGreen} onClick={handleDownloadPdf} disabled={pdfLoading}>
+                                {pdfLoading
+                                    ? <><span className={styles.spinner} />Generating…</>
+                                    : <><i className="fi fi-rr-file-pdf" />Download PDF</>
+                                }
+                            </button>
+                            {isFromCall && (
+                                <button className={styles.bannerBtnPurple} onClick={() => setEnrichOpen(true)}>
+                                    <i className="fi fi-rr-add" />Enrich Profile
+                                </button>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Avatar + Edit button row — avatar overlaps banner via negative margin-top */}
+                    <div className={styles.identityRow}>
                         <div
                             className={styles.avatarWrap}
                             onClick={() => !photoUploading && photoInputRef.current?.click()}
@@ -278,27 +274,21 @@ export default function CandidateProfile() {
                                 </div>
                             )}
                             <div className={styles.avatarOverlay}>
-                                {photoUploading ? <span className={styles.spinnerWhite} /> : <i className="fi fi-rr-camera" />}
+                                {photoUploading ? <span className={styles.spinnerDark} /> : <i className="fi fi-rr-camera" />}
                             </div>
                         </div>
 
-                        {/* Right-side action buttons */}
                         <div className={styles.identityActions}>
-                            {isFromCall && (
-                                <button className={`${styles.identityEditBtn} ${styles.enrichBtn}`} onClick={() => setEnrichOpen(true)}>
-                                    Enrich Profile
-                                </button>
-                            )}
-                            <button className={styles.identityEditBtn} onClick={() => setEditOpen(true)}>
-                                ✏ Edit
+                            <button className={styles.editBtn} onClick={() => setEditOpen(true)}>
+                                <i className="fi fi-rr-edit" /> Edit Profile
                             </button>
                         </div>
                     </div>
 
-                    {/* Name + meta */}
-                    <div className={styles.headerInfo}>
+                    {/* Name + meta + location */}
+                    <div className={styles.nameBlock}>
                         <div className={styles.nameRow}>
-                            <h1 className={styles.candidateName}>{candidate.name}</h1>
+                            <h1 className={styles.name}>{candidate.name}</h1>
                             {isFromCall && (
                                 <span className={styles.callBadge}>
                                     <i className="fi fi-rr-phone-call" style={{ fontSize: "10px" }} />
@@ -306,52 +296,54 @@ export default function CandidateProfile() {
                                 </span>
                             )}
                         </div>
-
                         {(candidate.current_title || candidate.current_company) && (
-                            <div className={styles.candidateMeta}>
-                                {candidate.current_title && <span>{candidate.current_title}</span>}
+                            <p className={styles.headline}>
+                                {candidate.current_title}
                                 {candidate.current_title && candidate.current_company && (
-                                    <span className={styles.metaDivider}>·</span>
+                                    <span className={styles.headlineDot}> · </span>
                                 )}
                                 {candidate.current_company && (
-                                    <span className={styles.metaCompany}>{candidate.current_company}</span>
+                                    <strong>{candidate.current_company}</strong>
                                 )}
-                            </div>
+                            </p>
                         )}
-
                         {candidate.location && (
-                            <div className={styles.candidateLocation}>
-                                {candidate.location}
-                            </div>
+                            <p className={styles.locationLine}>
+                                <i className="fi fi-rr-marker" /> {candidate.location}
+                            </p>
                         )}
                     </div>
                 </div>
 
-                {/* ── Main grid ── */}
+                {/* Hidden file inputs */}
+                <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleBannerChange} />
+                <input ref={photoInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoChange} />
+
+                {/* ── Stub notice ── */}
+                {isStub && (
+                    <div className={styles.stubNotice}>
+                        <i className="fi fi-rr-info" style={{ color: "#7c3aed", marginTop: "2px", flexShrink: 0 }} />
+                        <div>
+                            <div className={styles.stubTitle}>Profile created from a scheduled call</div>
+                            <div className={styles.stubBody}>
+                                This candidate was automatically added when the call was confirmed.
+                                Upload a resume or paste their LinkedIn profile to enrich the record.
+                            </div>
+                            <button className={styles.stubBtn} onClick={() => setEnrichOpen(true)}>
+                                Enrich Profile →
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {/* ── Two-column grid ── */}
                 <div className={styles.profileBodyInner}>
                     <div className={styles.mainCol}>
-                        {isStub && (
-                            <div className={styles.stubNotice}>
-                                <i className="fi fi-rr-info" style={{ color: "#7c3aed", marginTop: "2px", flexShrink: 0 }} />
-                                <div>
-                                    <div className={styles.stubTitle}>Profile created from a scheduled call</div>
-                                    <div className={styles.stubBody}>
-                                        This candidate was automatically added when the call was confirmed.
-                                        Upload a resume or paste their LinkedIn profile to enrich the record.
-                                    </div>
-                                    <button className={styles.stubBtn} onClick={() => setEnrichOpen(true)}>
-                                        Enrich Profile →
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-
                         {candidate.ai_summary && (
                             <Section title="About">
                                 <p className={styles.summaryText}>{candidate.ai_summary}</p>
                             </Section>
                         )}
-
                         {candidate.ai_experience && (
                             <Section title="Experience">
                                 <ul className={styles.bulletList}>
@@ -361,7 +353,6 @@ export default function CandidateProfile() {
                                 </ul>
                             </Section>
                         )}
-
                         {candidate.ai_education && (
                             <Section title="Education">
                                 <ul className={styles.bulletList}>
@@ -371,7 +362,6 @@ export default function CandidateProfile() {
                                 </ul>
                             </Section>
                         )}
-
                         {candidate.ai_outreach_message && (
                             <Section title="Outreach Message">
                                 <div className={styles.outreachWrap}>
@@ -384,7 +374,6 @@ export default function CandidateProfile() {
                                 </div>
                             </Section>
                         )}
-
                         {candidate.meeting_transcript && (
                             <Section title="Call Transcript">
                                 <div className={styles.transcriptMeta}>
@@ -405,7 +394,6 @@ export default function CandidateProfile() {
                                 </button>
                             </Section>
                         )}
-
                         {candidate.notes && (
                             <Section title="Recruiter Notes" className={styles.notesSection}>
                                 <div className={styles.notesInternalBadge}>Internal — not visible to candidates</div>
@@ -414,7 +402,6 @@ export default function CandidateProfile() {
                         )}
                     </div>
 
-                    {/* ── Sidebar ── */}
                     <div className={styles.sideCol}>
                         <Section title="Contact">
                             <div className={styles.infoList}>
@@ -423,7 +410,6 @@ export default function CandidateProfile() {
                                 <InfoRow label="LinkedIn" value={candidate.linkedin_url ? "View Profile" : null} href={candidate.linkedin_url} />
                             </div>
                         </Section>
-
                         {(candidate.ai_certifications || skills.length > 0) && (
                             <Section title="Skills & Certifications">
                                 {candidate.ai_certifications && (
@@ -448,7 +434,6 @@ export default function CandidateProfile() {
                                 )}
                             </Section>
                         )}
-
                         <Section title="Profile Details">
                             <div className={styles.infoList}>
                                 <InfoRow label="Level" value={candidate.ai_career_level ? candidate.ai_career_level.charAt(0).toUpperCase() + candidate.ai_career_level.slice(1) : null} />
@@ -462,7 +447,6 @@ export default function CandidateProfile() {
                                 {candidate.meeting_transcript && <InfoRow label="Transcript" value="✓ Available" />}
                             </div>
                         </Section>
-
                         <div className={styles.pdfCard}>
                             <div className={styles.pdfCardTitle}>Export Profile</div>
                             <p className={styles.pdfCardDesc}>Download a clean PDF to share with potential employers.</p>
