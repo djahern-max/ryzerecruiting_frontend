@@ -93,6 +93,7 @@ export default function CandidateProfile() {
             try {
                 const res = await fetch(`${API_BASE}/api/candidates/${id}`, {
                     headers: { Authorization: `Bearer ${token}` },
+                    cache: "no-store",
                 });
                 if (!res.ok) throw new Error("Candidate not found");
                 setCandidate(await res.json());
@@ -214,17 +215,17 @@ export default function CandidateProfile() {
 
             <div className={styles.profileBody}>
 
-                {/* ── Back nav (above the card, like candidate view) ── */}
+                {/* ── Back nav ── */}
                 <button className={styles.backBtn} onClick={() => navigate(-1)}>
                     ← Back to Candidates
                 </button>
 
                 {/* ══════════════════════════════════════════
-                    IDENTITY CARD — banner lives inside here
+                    IDENTITY CARD
                 ══════════════════════════════════════════ */}
                 <div className={styles.identityCard}>
 
-                    {/* Banner — inside the card, clipped by card's border-radius */}
+                    {/* Banner — purely visual, no buttons on top */}
                     <div
                         className={styles.banner}
                         style={candidate.banner_url ? {
@@ -232,34 +233,13 @@ export default function CandidateProfile() {
                             backgroundSize: "cover",
                             backgroundPosition: "center",
                         } : {}}
-                    >
-                        {/* Action buttons — top-right inside banner */}
-                        <div className={styles.bannerActions}>
-                            <button
-                                className={styles.bannerBtn}
-                                onClick={() => bannerInputRef.current?.click()}
-                                disabled={bannerUploading}
-                            >
-                                {bannerUploading
-                                    ? <><span className={styles.spinner} />Uploading…</>
-                                    : <><i className="fi fi-rr-picture" />Change Banner</>
-                                }
-                            </button>
-                            <button className={styles.bannerBtnGreen} onClick={handleDownloadPdf} disabled={pdfLoading}>
-                                {pdfLoading
-                                    ? <><span className={styles.spinner} />Generating…</>
-                                    : <><i className="fi fi-rr-file-pdf" />Download PDF</>
-                                }
-                            </button>
-                            {isFromCall && (
-                                <button className={styles.bannerBtnPurple} onClick={() => setEnrichOpen(true)}>
-                                    <i className="fi fi-rr-add" />Enrich Profile
-                                </button>
-                            )}
-                        </div>
-                    </div>
+                    />
 
-                    {/* Avatar + Edit button row — avatar overlaps banner via negative margin-top */}
+                    {/* Hidden file inputs */}
+                    <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleBannerChange} />
+                    <input ref={photoInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoChange} />
+
+                    {/* Avatar (left, overlaps banner) + action buttons (right) */}
                     <div className={styles.identityRow}>
                         <div
                             className={styles.avatarWrap}
@@ -278,14 +258,40 @@ export default function CandidateProfile() {
                             </div>
                         </div>
 
+                        {/* Action buttons — now in the white zone below the banner */}
                         <div className={styles.identityActions}>
+                            <button
+                                className={styles.actionBtn}
+                                onClick={() => bannerInputRef.current?.click()}
+                                disabled={bannerUploading}
+                            >
+                                {bannerUploading
+                                    ? <><span className={styles.spinnerSmall} />Uploading…</>
+                                    : <><i className="fi fi-rr-picture" />Change Banner</>
+                                }
+                            </button>
+                            <button
+                                className={styles.actionBtnGreen}
+                                onClick={handleDownloadPdf}
+                                disabled={pdfLoading}
+                            >
+                                {pdfLoading
+                                    ? <><span className={styles.spinnerSmall} />Generating…</>
+                                    : <><i className="fi fi-rr-file-pdf" />Download PDF</>
+                                }
+                            </button>
+                            {isFromCall && (
+                                <button className={styles.actionBtnPurple} onClick={() => setEnrichOpen(true)}>
+                                    <i className="fi fi-rr-add" />Enrich Profile
+                                </button>
+                            )}
                             <button className={styles.editBtn} onClick={() => setEditOpen(true)}>
                                 <i className="fi fi-rr-edit" /> Edit Profile
                             </button>
                         </div>
                     </div>
 
-                    {/* Name + meta + location */}
+                    {/* Name + headline + location */}
                     <div className={styles.nameBlock}>
                         <div className={styles.nameRow}>
                             <h1 className={styles.name}>{candidate.name}</h1>
@@ -315,10 +321,6 @@ export default function CandidateProfile() {
                     </div>
                 </div>
 
-                {/* Hidden file inputs */}
-                <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleBannerChange} />
-                <input ref={photoInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoChange} />
-
                 {/* ── Stub notice ── */}
                 {isStub && (
                     <div className={styles.stubNotice}>
@@ -336,7 +338,7 @@ export default function CandidateProfile() {
                     </div>
                 )}
 
-                {/* ── Two-column grid ── */}
+                {/* ── Two-column grid (mirrors PDF layout) ── */}
                 <div className={styles.profileBodyInner}>
                     <div className={styles.mainCol}>
                         {candidate.ai_summary && (
@@ -369,35 +371,47 @@ export default function CandidateProfile() {
                                         {candidate.ai_outreach_message}
                                     </p>
                                     <button className={styles.outreachToggle} onClick={() => setOutreachExpanded(p => !p)}>
-                                        {outreachExpanded ? "Show less ↑" : "Show full message ↓"}
+                                        {outreachExpanded ? "Show less ↑" : "Read more ↓"}
                                     </button>
                                 </div>
                             </Section>
                         )}
                         {candidate.meeting_transcript && (
-                            <Section title="Call Transcript">
+                            <Section title="Meeting Transcript">
                                 <div className={styles.transcriptMeta}>
                                     <span className={styles.transcriptBadge}>
-                                        <i className="fi fi-rr-rec" style={{ fontSize: "10px" }} />
-                                        Zoom Recording
+                                        <i className="fi fi-rr-microphone" style={{ fontSize: "9px" }} />
+                                        Zoom AI
                                     </span>
                                     <span className={styles.transcriptLen}>
                                         {candidate.meeting_transcript.length.toLocaleString()} chars
                                     </span>
                                 </div>
-                                <div className={styles.transcriptWrap} style={{ maxHeight: transcriptExpanded ? "none" : "240px" }}>
-                                    <pre className={styles.transcriptPre}>{candidate.meeting_transcript}</pre>
-                                    {!transcriptExpanded && <div className={styles.transcriptFade} />}
+                                <div className={styles.transcriptWrap}>
+                                    <pre className={styles.transcriptPre}>
+                                        {transcriptExpanded
+                                            ? candidate.meeting_transcript
+                                            : candidate.meeting_transcript.slice(0, 800) + (candidate.meeting_transcript.length > 800 ? "…" : "")}
+                                    </pre>
+                                    {!transcriptExpanded && candidate.meeting_transcript.length > 800 && (
+                                        <div className={styles.transcriptFade} />
+                                    )}
                                 </div>
-                                <button className={styles.outreachToggle} onClick={() => setTranscriptExpanded(p => !p)} style={{ marginTop: "10px" }}>
-                                    {transcriptExpanded ? "Show less ↑" : "Show full transcript ↓"}
-                                </button>
+                                {candidate.meeting_transcript.length > 800 && (
+                                    <button
+                                        className={styles.outreachToggle}
+                                        onClick={() => setTranscriptExpanded(p => !p)}
+                                        style={{ marginTop: "8px" }}
+                                    >
+                                        {transcriptExpanded ? "Show less ↑" : "Show full transcript ↓"}
+                                    </button>
+                                )}
                             </Section>
                         )}
-                        {candidate.notes && (
+                        {candidate.recruiter_notes && (
                             <Section title="Recruiter Notes" className={styles.notesSection}>
-                                <div className={styles.notesInternalBadge}>Internal — not visible to candidates</div>
-                                <p className={styles.bodyText}>{candidate.notes}</p>
+                                <span className={styles.notesInternalBadge}>Internal Only</span>
+                                <p className={styles.bodyText}>{candidate.recruiter_notes}</p>
                             </Section>
                         )}
                     </div>
@@ -405,9 +419,21 @@ export default function CandidateProfile() {
                     <div className={styles.sideCol}>
                         <Section title="Contact">
                             <div className={styles.infoList}>
-                                <InfoRow label="Email" value={candidate.email} href={`mailto:${candidate.email}`} />
-                                <InfoRow label="Phone" value={candidate.phone} />
-                                <InfoRow label="LinkedIn" value={candidate.linkedin_url ? "View Profile" : null} href={candidate.linkedin_url} />
+                                <InfoRow
+                                    label="Email"
+                                    value={candidate.email}
+                                    href={candidate.email ? `mailto:${candidate.email}` : null}
+                                />
+                                <InfoRow
+                                    label="Phone"
+                                    value={candidate.phone}
+                                    href={candidate.phone ? `tel:${candidate.phone}` : null}
+                                />
+                                <InfoRow
+                                    label="LinkedIn"
+                                    value={candidate.linkedin_url ? "View Profile" : null}
+                                    href={candidate.linkedin_url}
+                                />
                             </div>
                         </Section>
                         {(candidate.ai_certifications || skills.length > 0) && (
@@ -436,13 +462,33 @@ export default function CandidateProfile() {
                         )}
                         <Section title="Profile Details">
                             <div className={styles.infoList}>
-                                <InfoRow label="Level" value={candidate.ai_career_level ? candidate.ai_career_level.charAt(0).toUpperCase() + candidate.ai_career_level.slice(1) : null} />
-                                <InfoRow label="Experience" value={candidate.ai_years_experience ? `${candidate.ai_years_experience} years` : null} />
+                                <InfoRow
+                                    label="Level"
+                                    value={candidate.ai_career_level
+                                        ? candidate.ai_career_level.charAt(0).toUpperCase() + candidate.ai_career_level.slice(1)
+                                        : null}
+                                />
+                                <InfoRow
+                                    label="Experience"
+                                    value={candidate.ai_years_experience ? `${candidate.ai_years_experience} years` : null}
+                                />
                                 <InfoRow label="Source" value={isFromCall ? "From Call" : "Manual Entry"} />
                                 {candidate.ai_parsed_at && (
-                                    <InfoRow label="Parsed" value={new Date(candidate.ai_parsed_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })} />
+                                    <InfoRow
+                                        label="Parsed"
+                                        value={new Date(candidate.ai_parsed_at).toLocaleDateString("en-US", {
+                                            month: "short", day: "numeric", year: "numeric",
+                                        })}
+                                    />
                                 )}
-                                <InfoRow label="Added" value={candidate.created_at ? new Date(candidate.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—"} />
+                                <InfoRow
+                                    label="Added"
+                                    value={candidate.created_at
+                                        ? new Date(candidate.created_at).toLocaleDateString("en-US", {
+                                            month: "short", day: "numeric", year: "numeric",
+                                        })
+                                        : "—"}
+                                />
                                 <InfoRow label="AI Search" value={candidate.embedded_at ? "✓ Indexed" : "Not indexed"} />
                                 {candidate.meeting_transcript && <InfoRow label="Transcript" value="✓ Available" />}
                             </div>
@@ -456,10 +502,26 @@ export default function CandidateProfile() {
                         </div>
                     </div>
                 </div>
+
             </div>
 
-            {enrichOpen && <CandidateModal candidate={candidate} token={token} enrichMode={true} onSaved={handleSaved} onClose={() => setEnrichOpen(false)} />}
-            {editOpen && <CandidateModal candidate={candidate} token={token} onSaved={handleSaved} onClose={() => setEditOpen(false)} />}
+            {enrichOpen && (
+                <CandidateModal
+                    candidate={candidate}
+                    token={token}
+                    enrichMode={true}
+                    onSaved={handleSaved}
+                    onClose={() => setEnrichOpen(false)}
+                />
+            )}
+            {editOpen && (
+                <CandidateModal
+                    candidate={candidate}
+                    token={token}
+                    onSaved={handleSaved}
+                    onClose={() => setEditOpen(false)}
+                />
+            )}
         </div>
     );
 }

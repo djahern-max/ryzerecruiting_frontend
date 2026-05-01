@@ -88,7 +88,7 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   IDENTITY CARD — contains banner + avatar + name
+   IDENTITY CARD — contains banner + avatar + name block
    overflow: hidden clips the banner to rounded corners
    ══════════════════════════════════════════════════════ */
 .identityCard {
@@ -99,87 +99,23 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
-/* ── Banner — inside the card, clipped by card's overflow:hidden ── */
+/* ── Banner — purely visual, no buttons on top ── */
 .banner {
     height: 200px;
-    position: relative;
     background: linear-gradient(120deg, #1c3f6e 0%, #0a66c2 60%, #378fe9 100%);
     background-size: cover;
     background-position: center;
+    display: block;
 }
 
-/* Action buttons inside banner — bottom-right, matching candidate view */
-.bannerActions {
-    position: absolute;
-    bottom: 12px;
-    right: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* Base banner button style */
-.bannerBtn {
-    background: rgba(0, 0, 0, 0.38);
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    color: #fff;
-    font-size: 0.78rem;
-    font-weight: 600;
-    font-family: var(--font);
-    padding: 6px 14px;
-    border-radius: 20px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    backdrop-filter: blur(6px);
-    transition: background 150ms;
-    white-space: nowrap;
-}
-
-.bannerBtn:hover:not(:disabled) {
-    background: rgba(0, 0, 0, 0.58);
-}
-
-.bannerBtn:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-}
-
-.bannerBtnGreen {
-    composes: bannerBtn;
-    background: rgba(22, 163, 74, 0.45);
-    border-color: rgba(74, 222, 128, 0.4);
-    color: #bbf7d0;
-}
-
-.bannerBtnGreen:hover:not(:disabled) {
-    background: rgba(22, 163, 74, 0.68);
-}
-
-.bannerBtnGreen:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-}
-
-.bannerBtnPurple {
-    composes: bannerBtn;
-    background: rgba(124, 58, 237, 0.45);
-    border-color: rgba(167, 139, 250, 0.45);
-    color: #ede9fe;
-}
-
-.bannerBtnPurple:hover:not(:disabled) {
-    background: rgba(124, 58, 237, 0.68);
-}
-
-/* ── Spinner ── */
-.spinner {
+/* ── Spinners ── */
+.spinner,
+.spinnerSmall {
     display: inline-block;
     width: 12px;
     height: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top-color: #fff;
+    border: 2px solid rgba(0, 0, 0, 0.15);
+    border-top-color: currentColor;
     border-radius: 50%;
     animation: spin 0.6s linear infinite;
     flex-shrink: 0;
@@ -201,13 +137,12 @@
     }
 }
 
-/* ── Identity row: avatar (left, overlaps banner) + edit button (right) ── */
+/* ── Identity row: avatar (left, overlaps banner) + action buttons (right) ── */
 .identityRow {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     padding: 0 24px 0 20px;
-    /* Pull this row up so avatar overlaps the banner above it */
     margin-top: calc(var(--avatar) * -0.46);
     margin-bottom: 6px;
 }
@@ -270,15 +205,94 @@
     opacity: 1;
 }
 
-/* Edit button — right side */
+/* ── Action buttons — right side, below banner in white space ── */
 .identityActions {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
     gap: 8px;
     padding-bottom: 10px;
 }
 
+/* Base action button */
+.actionBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--sub);
+    font-size: 0.78rem;
+    font-weight: 600;
+    font-family: var(--font);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: border-color 150ms, color 150ms;
+    white-space: nowrap;
+}
+
+.actionBtn:hover:not(:disabled) {
+    border-color: var(--blue);
+    color: var(--blue);
+}
+
+.actionBtn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+/* Green variant — PDF download */
+.actionBtnGreen {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    background: transparent;
+    border: 1.5px solid #16a34a;
+    color: #16a34a;
+    font-size: 0.78rem;
+    font-weight: 600;
+    font-family: var(--font);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 150ms;
+    white-space: nowrap;
+}
+
+.actionBtnGreen:hover:not(:disabled) {
+    background: #f0fdf4;
+}
+
+.actionBtnGreen:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+/* Purple variant — Enrich */
+.actionBtnPurple {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    background: transparent;
+    border: 1.5px solid #7c3aed;
+    color: #7c3aed;
+    font-size: 0.78rem;
+    font-weight: 600;
+    font-family: var(--font);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 150ms;
+    white-space: nowrap;
+}
+
+.actionBtnPurple:hover:not(:disabled) {
+    background: #f5f3ff;
+}
+
+/* Edit Profile button */
 .editBtn {
     display: flex;
     align-items: center;
@@ -400,7 +414,7 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   TWO-COLUMN GRID
+   TWO-COLUMN GRID (mirrors PDF layout)
    ══════════════════════════════════════════════════════ */
 .profileBodyInner {
     display: grid;
@@ -746,15 +760,13 @@
         height: 148px;
     }
 
-    .bannerActions {
-        bottom: 8px;
-        right: 10px;
+    .identityActions {
         gap: 6px;
     }
 
-    .bannerBtn,
-    .bannerBtnGreen,
-    .bannerBtnPurple {
+    .actionBtn,
+    .actionBtnGreen,
+    .actionBtnPurple {
         font-size: 0.72rem;
         padding: 5px 10px;
     }
@@ -773,6 +785,12 @@
 
     .identityRow {
         padding: 0 16px 0 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .identityActions {
+        justify-content: flex-start;
     }
 
     .name {
