@@ -37,6 +37,7 @@ export default function CandidatesPage() {
             const params = search ? `?search=${encodeURIComponent(search)}` : "";
             const res = await fetch(`${API_BASE}/api/candidates${params}`, {
                 headers: { Authorization: `Bearer ${token}` },
+                cache: 'no-store',
             });
             if (!res.ok) throw new Error("Failed to fetch candidates");
             setCandidates(await res.json());
