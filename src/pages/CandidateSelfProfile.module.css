@@ -3,7 +3,7 @@
    Matches admin CandidateProfile visual language exactly
    ══════════════════════════════════════════════════════ */
 
-:root {
+.page {
     --li-bg: #f3f2ef;
     --li-card: #ffffff;
     --li-blue: #0a66c2;

@@ -1,238 +1,184 @@
 /* ══════════════════════════════════════════════════════
-   RYZE.ai — Candidate Self Profile  (LinkedIn-inspired)
-   Matches admin CandidateProfile visual language exactly
+   RYZE.ai — Admin Candidate Profile  (LinkedIn-inspired)
+   Variables scoped to .page — avoids :root conflicts
    ══════════════════════════════════════════════════════ */
 
-:root {
-    --li-bg: #f3f2ef;
-    --li-card: #ffffff;
-    --li-blue: #0a66c2;
-    --li-blue-hover: #004182;
-    --li-border: rgba(0, 0, 0, 0.12);
-    --li-text: rgba(0, 0, 0, 0.9);
-    --li-sub: rgba(0, 0, 0, 0.6);
-    --li-muted: rgba(0, 0, 0, 0.4);
-    --li-avatar-size: 120px;
-    --li-banner-h: 200px;
-    --li-radius: 8px;
-    --font: 'DM Sans', system-ui, -apple-system, sans-serif;
-}
-
-/* ── Page ────────────────────────────────────────────── */
 .page {
+    --bg: #f3f2ef;
+    --card: #ffffff;
+    --blue: #0a66c2;
+    --blue-hover: #004182;
+    --border: rgba(0, 0, 0, 0.12);
+    --text: rgba(0, 0, 0, 0.9);
+    --sub: rgba(0, 0, 0, 0.6);
+    --muted: rgba(0, 0, 0, 0.4);
+    --avatar: 152px;
+    --radius: 8px;
+    --font: 'DM Sans', system-ui, -apple-system, sans-serif;
+
     min-height: 100vh;
-    background: var(--li-bg);
+    background: var(--bg);
     font-family: var(--font);
-    color: var(--li-text);
+    color: var(--text);
 }
 
-.main {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 24px 16px 80px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-/* ── Loading / empty ─────────────────────────────────── */
+/* ── Loading / Error ─────────────────────────────────── */
 .loadingState,
-.emptyState {
+.errorState {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 16px;
     min-height: 60vh;
-    color: var(--li-sub);
-    font-size: 14px;
+    color: var(--sub);
+    font-size: 0.95rem;
 }
 
-.loadingDots {
-    display: flex;
-    gap: 8px;
-}
-
-.loadingDots span {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--li-blue);
-    animation: dotPulse 1.4s ease-in-out infinite both;
-}
-
-.loadingDots span:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.loadingDots span:nth-child(3) {
-    animation-delay: 0.4s;
-}
-
-@keyframes dotPulse {
-
-    0%,
-    80%,
-    100% {
-        transform: scale(0.6);
-        opacity: 0.4;
-    }
-
-    40% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-/* ── Back button ─────────────────────────────────────── */
 .backBtn {
-    background: none;
-    border: none;
-    color: var(--li-sub);
-    font-size: 13px;
+    background: transparent;
+    border: 1.5px solid var(--blue);
+    color: var(--blue);
+    font-size: 0.85rem;
     font-weight: 600;
-    cursor: pointer;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: color 0.15s;
-    width: fit-content;
     font-family: var(--font);
+    padding: 8px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 140ms, color 140ms;
 }
 
 .backBtn:hover {
-    color: var(--li-blue);
-}
-
-.backLink {
-    background: none;
-    border: none;
-    color: var(--li-blue);
-    cursor: pointer;
-    font-size: 14px;
-    text-decoration: underline;
-    padding: 0;
+    background: var(--blue);
+    color: #fff;
 }
 
 /* ══════════════════════════════════════════════════════
-   PROFILE CARD
+   HERO BANNER
    ══════════════════════════════════════════════════════ */
-.profileCard {
-    background: var(--li-card);
-    border: 1px solid var(--li-border);
-    border-radius: var(--li-radius);
-    overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-}
-
-/* ── Banner ── */
-.banner {
-    height: var(--li-banner-h);
+.heroBanner {
     position: relative;
+    width: 100%;
+    height: 216px;
     background: linear-gradient(120deg, #1c3f6e 0%, #0a66c2 60%, #378fe9 100%);
     background-size: cover;
     background-position: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: block;
 }
 
-.bannerEditBtn {
+.heroScrim {
     position: absolute;
-    bottom: 12px;
-    right: 16px;
-    background: rgba(0, 0, 0, 0.38);
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.15) 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* ── Back link — top left, absolutely inside banner ── */
+.backLink {
+    position: absolute;
+    top: 16px;
+    left: 24px;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.32);
     border: 1px solid rgba(255, 255, 255, 0.28);
     color: #fff;
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     font-weight: 600;
     font-family: var(--font);
-    padding: 6px 14px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: background 150ms;
+    line-height: 1.4;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.backLink:hover {
+    background: rgba(0, 0, 0, 0.55);
+}
+
+/* ── Action buttons — top right, absolutely inside banner ── */
+.headerActions {
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.headerBtn {
+    background: rgba(0, 0, 0, 0.36);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: var(--font);
+    padding: 7px 16px;
     border-radius: 20px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    backdrop-filter: blur(6px);
-    transition: background 150ms;
     white-space: nowrap;
+    backdrop-filter: blur(8px);
+    transition: background 150ms;
 }
 
-.bannerEditBtn:hover:not(:disabled) {
-    background: rgba(0, 0, 0, 0.6);
+.headerBtn:hover:not(:disabled) {
+    background: rgba(0, 0, 0, 0.58);
 }
 
-.bannerEditBtn:disabled {
-    opacity: 0.6;
+.headerBtn:disabled {
+    opacity: 0.55;
     cursor: not-allowed;
 }
 
-/* ── Avatar — overlaps banner ── */
-.identityRow {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    padding: 0 24px 0 20px;
-    margin-top: calc(var(--li-avatar-size) * -0.46);
-    margin-bottom: 6px;
+.enrichBtn {
+    background: rgba(124, 58, 237, 0.45) !important;
+    border-color: rgba(167, 139, 250, 0.45) !important;
+    color: #ede9fe !important;
 }
 
-.avatarWrap {
-    position: relative;
-    width: var(--li-avatar-size);
-    height: var(--li-avatar-size);
-    border-radius: 50%;
+.enrichBtn:hover:not(:disabled) {
+    background: rgba(124, 58, 237, 0.68) !important;
+}
+
+.pdfBtn {
+    background: rgba(22, 163, 74, 0.42);
+    border: 1px solid rgba(74, 222, 128, 0.4);
+    color: #bbf7d0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: var(--font);
+    padding: 7px 16px;
+    border-radius: 20px;
     cursor: pointer;
-    flex-shrink: 0;
-    z-index: 2;
-}
-
-.avatarImg {
-    width: var(--li-avatar-size);
-    height: var(--li-avatar-size);
-    border-radius: 50%;
-    object-fit: cover;
-    object-position: center top;
-    border: 4px solid #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    display: block;
-}
-
-.avatar {
-    width: var(--li-avatar-size);
-    height: var(--li-avatar-size);
-    border-radius: 50%;
-    background: #1c3f6e;
-    color: #fff;
-    font-size: 2.4rem;
-    font-weight: 800;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    border: 4px solid #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    user-select: none;
-    letter-spacing: -1px;
+    gap: 6px;
+    white-space: nowrap;
+    backdrop-filter: blur(8px);
+    transition: background 150ms;
 }
 
-.avatarOverlay {
-    position: absolute;
-    inset: 4px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.45);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 1.2rem;
-    opacity: 0;
-    transition: opacity 150ms;
+.pdfBtn:hover:not(:disabled) {
+    background: rgba(22, 163, 74, 0.65);
 }
 
-.avatarWrap:hover .avatarOverlay {
-    opacity: 1;
+.pdfBtn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
 }
 
-/* Spinner variants */
-.spinner {
+/* ── Spinner ── */
+.spinnerWhite {
     display: inline-block;
     width: 12px;
     height: 12px;
@@ -243,355 +189,514 @@
     flex-shrink: 0;
 }
 
-.spinnerDark {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    border: 2px solid rgba(255, 255, 255, 0.35);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite;
-}
-
 @keyframes spin {
     to {
         transform: rotate(360deg);
     }
 }
 
-/* ── Identity actions (edit button area) ── */
+/* ══════════════════════════════════════════════════════
+   PROFILE BODY — container below the banner
+   ══════════════════════════════════════════════════════ */
+.profileBody {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 16px 64px;
+}
+
+/* ══════════════════════════════════════════════════════
+   IDENTITY CARD
+   Avatar overlaps the banner above using negative margin-top.
+   MUST have overflow: visible to allow avatar to peek up.
+   ══════════════════════════════════════════════════════ */
+.identityCard {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: visible;
+    /* critical — lets avatar overlap banner */
+    margin-bottom: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* Flex row: avatar (left) + edit buttons (right) */
+.identityOverlay {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-right: 20px;
+}
+
+/* Avatar — negative margin-top pulls it up by exactly half its height,
+   so it sits centered on the banner/card boundary, just like LinkedIn */
+.avatarWrap {
+    position: relative;
+    width: var(--avatar);
+    height: var(--avatar);
+    border-radius: 50%;
+    margin-top: calc(var(--avatar) * -0.5);
+    /* half height = 76px up */
+    margin-left: 24px;
+    cursor: pointer;
+    flex-shrink: 0;
+    z-index: 4;
+}
+
+.avatarImg {
+    width: var(--avatar);
+    height: var(--avatar);
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    border: 4px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    display: block;
+}
+
+.avatarInitial {
+    width: var(--avatar);
+    height: var(--avatar);
+    border-radius: 50%;
+    background: #1c3f6e;
+    border: 4px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -1px;
+    user-select: none;
+}
+
+/* Camera overlay on hover */
+.avatarOverlay {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    bottom: 4px;
+    left: 4px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.4rem;
+    opacity: 0;
+    transition: opacity 150ms;
+}
+
+.avatarWrap:hover .avatarOverlay {
+    opacity: 1;
+}
+
+/* Edit/Enrich buttons — right side, aligned with top of card */
 .identityActions {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 8px;
-    padding-bottom: 10px;
-}
-
-.editBtn {
-    display: flex;
     align-items: center;
-    gap: 7px;
-    padding: 8px 20px;
-    background: transparent;
-    border: 1.5px solid var(--li-blue);
-    color: var(--li-blue);
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-    font-family: var(--font);
+    gap: 8px;
+    padding-top: 16px;
 }
 
-.editBtn:hover {
-    background: var(--li-blue);
+.identityEditBtn {
+    padding: 7px 20px;
+    background: transparent;
+    border: 1.5px solid var(--blue);
+    color: var(--blue);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    font-family: var(--font);
+    cursor: pointer;
+    transition: background 140ms, color 140ms;
+    white-space: nowrap;
+}
+
+.identityEditBtn:hover {
+    background: var(--blue);
     color: #fff;
 }
 
-.editActions {
+/* Name/title/location — inside identity card, below avatar row */
+.headerInfo {
+    padding: 10px 24px 22px;
+}
+
+.nameRow {
     display: flex;
-    gap: 8px;
     align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
 }
 
-.cancelBtn {
-    padding: 8px 16px;
-    background: transparent;
-    border: 1.5px solid var(--li-border);
-    color: var(--li-sub);
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: var(--font);
-    transition: border-color 0.15s;
-}
-
-.cancelBtn:hover {
-    border-color: var(--li-muted);
-}
-
-.saveBtn {
-    padding: 8px 20px;
-    background: var(--li-blue);
-    border: none;
-    color: #fff;
-    border-radius: 20px;
-    font-size: 13px;
+.candidateName {
+    font-size: 1.6rem;
     font-weight: 700;
-    cursor: pointer;
-    font-family: var(--font);
-    transition: background 0.15s;
-}
-
-.saveBtn:hover:not(:disabled) {
-    background: var(--li-blue-hover);
-}
-
-.saveBtn:disabled,
-.cancelBtn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.saveMsg {
-    font-size: 12px;
-    color: #16a34a;
-    font-weight: 600;
-}
-
-.saveMsgErr {
-    color: #dc2626;
-}
-
-/* ── Name block ── */
-.nameBlock {
-    padding: 8px 24px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.name {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--li-text);
+    color: var(--text);
     margin: 0;
     line-height: 1.2;
     letter-spacing: -0.3px;
 }
 
-.headline {
-    font-size: 15px;
-    color: var(--li-sub);
-    margin: 0;
-    font-weight: 500;
-    line-height: 1.4;
-}
-
-.locationLine {
+.candidateMeta {
+    font-size: 0.95rem;
+    color: var(--sub);
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-size: 13px;
-    color: var(--li-blue);
-    margin: 2px 0 0;
-    font-weight: 500;
-}
-
-/* ── Badges ── */
-.badgeRow {
-    display: flex;
+    gap: 6px;
     flex-wrap: wrap;
-    gap: 8px;
-    padding: 0 24px 22px;
+    margin-bottom: 4px;
+    line-height: 1.5;
 }
 
-.levelBadge {
-    padding: 4px 14px;
-    background: #edf3fb;
-    color: var(--li-blue);
-    border: 1px solid #c0d9f0;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 700;
+.metaDivider {
+    color: var(--muted);
 }
 
-.expBadge {
-    padding: 4px 14px;
-    background: #f0fdf4;
-    color: #15803d;
-    border: 1px solid #bbf7d0;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 700;
+.metaCompany {
+    font-weight: 600;
+    color: var(--text);
 }
 
-.certBadge {
-    display: flex;
+.candidateLocation {
+    font-size: 0.82rem;
+    color: var(--blue);
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+.callBadge {
+    display: inline-flex;
     align-items: center;
     gap: 5px;
-    padding: 4px 14px;
-    background: #fefce8;
-    color: #a16207;
-    border: 1px solid #fde68a;
-    border-radius: 999px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
+    color: #6d28d9;
+    background: #ede9fe;
+    border: 1px solid #c4b5fd;
+    border-radius: 4px;
+    padding: 2px 8px;
 }
 
 /* ══════════════════════════════════════════════════════
-   SECTIONS
+   TWO-COLUMN GRID
    ══════════════════════════════════════════════════════ */
-.section {
-    background: var(--li-card);
-    border: 1px solid var(--li-border);
-    border-radius: var(--li-radius);
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+.profileBodyInner {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 8px;
+    align-items: start;
 }
 
-.sectionHeader {
+.mainCol {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
+}
+
+.sideCol {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: sticky;
+    top: 80px;
+}
+
+/* ══════════════════════════════════════════════════════
+   SECTION CARDS
+   ══════════════════════════════════════════════════════ */
+.section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 .sectionTitle {
     font-size: 1.05rem;
     font-weight: 700;
-    color: var(--li-text);
-    margin: 0;
+    color: var(--text);
+    padding: 16px 20px 0;
 }
 
-.sectionSub {
-    font-size: 13px;
-    color: var(--li-sub);
-    margin: 0;
-}
-
-/* ── Edit form ── */
-.editForm {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.fieldRow {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-.field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.fieldLabel {
-    font-size: 11px;
-    font-weight: 700;
-    color: #475569;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-}
-
-.fieldInput {
-    padding: 10px 14px;
-    border: 1.5px solid var(--li-border);
-    border-radius: 6px;
-    font-size: 14px;
-    font-family: var(--font);
-    color: var(--li-text);
-    background: #f8fafc;
-    outline: none;
-    transition: border-color 0.15s, background 0.15s;
-}
-
-.fieldInput:focus {
-    border-color: var(--li-blue);
-    background: #fff;
-}
-
-.fieldInput::placeholder {
-    color: var(--li-muted);
-}
-
-/* ── Read-only display ── */
-.roGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-.roField {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.roLabel {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--li-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-}
-
-.roValue {
-    font-size: 14px;
-    color: var(--li-text);
-    font-weight: 500;
-}
-
-.roLink {
-    font-size: 14px;
-    color: var(--li-blue);
-    text-decoration: none;
-    font-weight: 500;
-    word-break: break-all;
-}
-
-.roLink:hover {
-    text-decoration: underline;
-}
-
-/* ── AI profile sections ── */
-.summaryBlock {
-    background: #f8fafc;
-    border: 1px solid var(--li-border);
-    border-radius: 6px;
-    padding: 16px 18px;
+.sectionBody {
+    padding: 12px 20px 20px;
 }
 
 .summaryText {
-    font-size: 14px;
-    color: var(--li-sub);
+    font-size: 0.9rem;
+    color: var(--sub);
     line-height: 1.75;
     margin: 0;
 }
 
-.subsection {
+.bodyText {
+    font-size: 0.875rem;
+    color: var(--sub);
+    line-height: 1.75;
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.bulletList {
+    margin: 0;
+    padding: 0 0 0 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    list-style: disc;
+}
+
+.bulletItem {
+    font-size: 0.875rem;
+    color: var(--sub);
+    line-height: 1.65;
+    padding-left: 4px;
+}
+
+/* Stub notice */
+.stubNotice {
+    background: #faf5ff;
+    border: 1px solid #e9d5ff;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.stubTitle {
+    font-weight: 700;
+    color: #6d28d9;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.stubBody {
+    color: #7c3aed;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.stubBtn {
+    margin-top: 10px;
+    background: #7c3aed;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 7px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--font);
+}
+
+/* Outreach */
+.outreachWrap {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.subsectionTitle {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--li-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin: 0;
+.outreachText {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
-.subsectionText {
-    font-size: 14px;
-    color: var(--li-sub);
-    line-height: 1.7;
+.outreachExpanded {
+    display: block;
+    -webkit-line-clamp: unset;
+}
+
+.outreachToggle {
+    align-self: flex-start;
+    background: none;
+    border: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: var(--font);
+    color: var(--blue);
+    cursor: pointer;
+    padding: 0;
+}
+
+.outreachToggle:hover {
+    color: var(--blue-hover);
+    text-decoration: underline;
+}
+
+/* Transcript */
+.transcriptMeta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.transcriptBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #0369a1;
+    background: #e0f2fe;
+    border: 1px solid #bae6fd;
+    border-radius: 4px;
+    padding: 2px 7px;
+}
+
+.transcriptLen {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.transcriptWrap {
+    position: relative;
+    overflow: hidden;
+}
+
+.transcriptPre {
+    font-family: var(--font);
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--sub);
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+}
+
+.transcriptFade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, #fff);
+    pointer-events: none;
+}
+
+/* Notes */
+.notesSection {
+    border-left: 3px solid #f59e0b;
+}
+
+.notesInternalBadge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+    border-radius: 20px;
+    padding: 2px 8px;
+    margin-bottom: 10px;
+}
+
+/* ══════════════════════════════════════════════════════
+   SIDEBAR
+   ══════════════════════════════════════════════════════ */
+.infoList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.infoRow {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.infoLabel {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    flex-shrink: 0;
+    width: 76px;
+    padding-top: 1px;
+}
+
+.infoValue {
+    font-size: 0.875rem;
+    color: var(--text);
+    word-break: break-word;
+    font-weight: 500;
+}
+
+.infoLink {
+    font-size: 0.875rem;
+    color: var(--blue);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.infoLink:hover {
+    text-decoration: underline;
+}
+
+.certRow {
+    margin-bottom: 14px;
+}
+
+.sideLabel {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 6px;
+}
+
+.certBadge {
+    font-size: 0.72rem;
+    font-weight: 800;
+    border-radius: 20px;
+    background: var(--blue);
+    color: #fff;
+    padding: 3px 11px;
+}
+
+.certBadgeRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 2px;
+}
+
+.certText {
+    font-size: 0.875rem;
+    color: var(--text);
     margin: 0;
 }
 
 .skillsWrap {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
 }
 
 .skillTag {
-    padding: 5px 14px;
-    background: #edf3fb;
-    color: var(--li-blue);
-    border: 1px solid #c0d9f0;
-    border-radius: 999px;
-    font-size: 12px;
+    font-size: 0.78rem;
     font-weight: 600;
+    background: #edf3fb;
+    border: 1px solid #c0d9f0;
+    color: var(--blue);
+    border-radius: 20px;
+    padding: 3px 12px;
     transition: background 140ms;
 }
 
@@ -599,46 +704,110 @@
     background: #d0e5f7;
 }
 
+.pdfCard {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.pdfCardTitle {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+}
+
+.pdfCardDesc {
+    font-size: 0.82rem;
+    color: var(--sub);
+    line-height: 1.5;
+    margin: 0 0 14px;
+}
+
+.pdfCardBtn {
+    width: 100%;
+    padding: 10px 16px;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    font-family: var(--font);
+    cursor: pointer;
+    transition: background 150ms;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.pdfCardBtn:hover:not(:disabled) {
+    background: var(--blue-hover);
+}
+
+.pdfCardBtn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
 /* ══════════════════════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════════════════════ */
-@media (max-width: 600px) {
-    :root {
-        --li-avatar-size: 88px;
-        --li-banner-h: 148px;
+@media (max-width: 840px) {
+    .heroBanner {
+        height: 160px;
     }
 
-    .fieldRow {
+    /* Avatar shrinks, margin-top stays exactly -half */
+    .avatarWrap {
+        width: 104px;
+        height: 104px;
+        margin-top: -52px;
+    }
+
+    .avatarImg {
+        width: 104px;
+        height: 104px;
+    }
+
+    .avatarInitial {
+        width: 104px;
+        height: 104px;
+        font-size: 2.4rem;
+    }
+
+    .backLink {
+        left: 14px;
+        top: 12px;
+    }
+
+    .headerActions {
+        right: 14px;
+        top: 12px;
+    }
+
+    .headerBtn,
+    .pdfBtn {
+        font-size: 0.75rem;
+        padding: 5px 12px;
+    }
+
+    .profileBodyInner {
         grid-template-columns: 1fr;
     }
 
-    .roGrid {
-        grid-template-columns: 1fr;
+    .sideCol {
+        position: static;
     }
 
-    .identityRow {
-        flex-direction: column;
-        align-items: flex-start;
-        margin-top: calc(var(--li-avatar-size) * -0.46);
-        gap: 12px;
-        padding-bottom: 0;
+    .candidateName {
+        font-size: 1.35rem;
     }
 
-    .identityActions {
-        align-items: flex-start;
-        width: 100%;
-    }
-
-    .nameBlock {
-        padding: 10px 20px 18px;
-    }
-
-    .badgeRow {
-        padding: 0 20px 18px;
-    }
-
-    .bannerEditBtn {
-        font-size: 0.72rem;
-        padding: 5px 10px;
+    .headerInfo {
+        padding: 8px 16px 18px;
     }
 }
