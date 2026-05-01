@@ -239,7 +239,7 @@ export default function CandidateProfile() {
                     <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleBannerChange} />
                     <input ref={photoInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoChange} />
 
-                    {/* Avatar (left, overlaps banner) + action buttons (right) */}
+                    {/* Avatar only — overlaps banner via negative margin */}
                     <div className={styles.identityRow}>
                         <div
                             className={styles.avatarWrap}
@@ -257,42 +257,38 @@ export default function CandidateProfile() {
                                 {photoUploading ? <span className={styles.spinnerDark} /> : <i className="fi fi-rr-camera" />}
                             </div>
                         </div>
+                    </div>
 
-                        {/* Action buttons — now in the white zone below the banner */}
-                        <div className={styles.identityActions}>
-                            <button
-                                className={styles.actionBtn}
-                                onClick={() => bannerInputRef.current?.click()}
-                                disabled={bannerUploading}
-                            >
-                                {bannerUploading
-                                    ? <><span className={styles.spinnerSmall} />Uploading…</>
-                                    : <><i className="fi fi-rr-picture" />Change Banner</>
-                                }
+                    {/* Action buttons — separate div, structurally below the banner, cannot overlap */}
+                    <div className={styles.profileActions}>
+                        <button
+                            className={styles.actionBtn}
+                            onClick={() => bannerInputRef.current?.click()}
+                            disabled={bannerUploading}
+                        >
+                            {bannerUploading
+                                ? <><span className={styles.spinnerSmall} />Uploading…</>
+                                : <><i className="fi fi-rr-picture" />Change Banner</>
+                            }
+                        </button>
+                        <button className={styles.actionBtnGreen} onClick={handleDownloadPdf} disabled={pdfLoading}>
+                            {pdfLoading
+                                ? <><span className={styles.spinnerSmall} />Generating…</>
+                                : <><i className="fi fi-rr-file-pdf" />Download PDF</>
+                            }
+                        </button>
+                        {isFromCall && (
+                            <button className={styles.actionBtnPurple} onClick={() => setEnrichOpen(true)}>
+                                <i className="fi fi-rr-add" />Enrich Profile
                             </button>
-                            <button
-                                className={styles.actionBtnGreen}
-                                onClick={handleDownloadPdf}
-                                disabled={pdfLoading}
-                            >
-                                {pdfLoading
-                                    ? <><span className={styles.spinnerSmall} />Generating…</>
-                                    : <><i className="fi fi-rr-file-pdf" />Download PDF</>
-                                }
-                            </button>
-                            {isFromCall && (
-                                <button className={styles.actionBtnPurple} onClick={() => setEnrichOpen(true)}>
-                                    <i className="fi fi-rr-add" />Enrich Profile
-                                </button>
-                            )}
-                            <button className={styles.editBtn} onClick={() => setEditOpen(true)}>
-                                <i className="fi fi-rr-edit" /> Edit Profile
-                            </button>
-                        </div>
+                        )}
+                        <button className={styles.editBtn} onClick={() => setEditOpen(true)}>
+                            <i className="fi fi-rr-edit" /> Edit Profile
+                        </button>
                     </div>
 
                     {/* Name + headline + location */}
-                    <div className={styles.nameBlock}>
+                    {/* <div className={styles.nameBlock}>
                         <div className={styles.nameRow}>
                             <h1 className={styles.name}>{candidate.name}</h1>
                             {isFromCall && (
@@ -318,7 +314,7 @@ export default function CandidateProfile() {
                                 <i className="fi fi-rr-marker" /> {candidate.location}
                             </p>
                         )}
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* ── Stub notice ── */}

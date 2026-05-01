@@ -315,7 +315,7 @@ export default function CandidateSelfProfile() {
                     </div>
 
                     {/* Name + headline + location */}
-                    <div className={styles.nameBlock}>
+                    {/* <div className={styles.nameBlock}>
                         <h1 className={styles.name}>{profile.name}</h1>
                         {(profile.current_title || profile.current_company) && (
                             <p className={styles.headline}>
@@ -327,7 +327,7 @@ export default function CandidateSelfProfile() {
                                 <i className="fi fi-rr-marker" /> {profile.location}
                             </p>
                         )}
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* ══════════════════════════════════════════

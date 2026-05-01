@@ -141,10 +141,18 @@
 .identityRow {
     display: flex;
     align-items: flex-end;
-    justify-content: space-between;
-    padding: 0 24px 0 20px;
+    padding: 0 0 0 20px;
     margin-top: calc(var(--avatar) * -0.46);
-    margin-bottom: 6px;
+    margin-bottom: 0;
+}
+
+.profileActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 6px 24px 10px;
 }
 
 /* Avatar */
@@ -795,5 +803,18 @@
 
     .name {
         font-size: 1.3rem;
+    }
+
+    .profileActions {
+        justify-content: flex-start;
+        padding: 6px 16px 10px;
+        gap: 6px;
+    }
+
+    .actionBtn,
+    .actionBtnGreen,
+    .actionBtnPurple {
+        font-size: 0.72rem;
+        padding: 5px 10px;
     }
 }
