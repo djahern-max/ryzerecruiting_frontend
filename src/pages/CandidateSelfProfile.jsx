@@ -175,27 +175,24 @@ export default function CandidateSelfProfile() {
                     </div>
 
                     {/* Name / title / location — vertical stack */}
-
-
-                    <div className={styles.identityActions}>
-                        {!editing && (
-                            <button className={styles.changeBannerBtn} onClick={() => bannerInputRef.current?.click()} disabled={bannerUploading}>
-                                {bannerUploading ? <><span className={styles.spinner} /> Uploading…</> : <><i className="fi fi-rr-picture" /> Change Banner</>}
-                            </button>
-                        )}
-                        {editing ? (
-                            <div className={styles.editActions}>
-                                <button className={styles.cancelBtn} onClick={handleCancel} disabled={saving}>Cancel</button>
-                                <button className={styles.saveBtn} onClick={handleSave} disabled={saving}>
-                                    {saving ? <><span className={styles.spinner} /> Saving…</> : 'Save Changes'}
-                                </button>
+                    <div className={styles.nameStack}>
+                        <div className={styles.candidateName}>{profile.name}</div>
+                        {(profile.current_title || profile.current_company) && (
+                            <div className={styles.candidateMeta}>
+                                {profile.current_title}
+                                {profile.current_title && profile.current_company && (
+                                    <span className={styles.metaDivider}>·</span>
+                                )}
+                                {profile.current_company}
                             </div>
-                        ) : (
-                            <button className={styles.editBtn} onClick={() => setEditing(true)}>
-                                <i className="fi fi-rr-edit" /> Edit Profile
-                            </button>
+                        )}
+                        {profile.location && (
+                            <div className={styles.candidateLocation}>
+                                <i className="fi fi-rr-marker" /> {profile.location}
+                            </div>
                         )}
                     </div>
+
                 </div>
 
                 {/* NAME BLOCK — now just the gradient border divider + saveMsg */}
