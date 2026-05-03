@@ -437,7 +437,7 @@ export default function CandidateProfile() {
                                         )}
                                         {candidate.ai_certifications && (
                                             <div className={styles.roField}>
-                                                <span className={styles.roLabel}>Certification</span>
+                                                <span className={styles.roLabelWide}>Certification</span>
                                                 <span className={styles.roValue}>{candidate.ai_certifications}</span>
                                             </div>
                                         )}
