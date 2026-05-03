@@ -197,26 +197,9 @@ export default function CandidateSelfProfile() {
                 </div>
 
                 {/* NAME BLOCK — always visible, white bg, gradient border */}
-                {/* <div className={styles.nameBlock}>
-                    <div className={styles.candidateName}>{profile.name}</div>
-                    {(profile.current_title || profile.current_company) && (
-                        <div className={styles.candidateMeta}>
-                            {profile.current_title}
-                            {profile.current_title && profile.current_company && (
-                                <span className={styles.metaDivider}>·</span>
-                            )}
-                            {profile.current_company}
-                        </div>
-                    )}
-                    {profile.location && (
-                        <div className={styles.candidateLocation}>
-                            <i className="fi fi-rr-marker" /> {profile.location}
-                        </div>
-                    )}
-                    {saveMsg && (
-                        <div className={`${styles.saveMsg} ${saveMsg.includes('failed') ? styles.saveMsgErr : ''}`}>{saveMsg}</div>
-                    )}
-                </div> */}
+                <div className={styles.nameBlock}>
+
+                </div>
                 {/* TWO-COLUMN BODY */}
                 <div className={styles.profileBodyGrid}>
 
