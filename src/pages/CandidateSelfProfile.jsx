@@ -6,7 +6,7 @@ import Header from '../components/Header';
 import { apiFetch } from '../services/api';
 import styles from './CandidateSelfProfile.module.css';
 // import editIcon from '../assets/icons/edit.svg';
-import changeIcon from '../assets/icons/change.svg';
+import changeIcon from '../assets/icons/banner_image.svg';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
