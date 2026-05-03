@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import { apiFetch } from '../services/api';
 import styles from './CandidateSelfProfile.module.css';
-import editIcon from '../assets/icons/edit.svg';
+// import editIcon from '../assets/icons/edit.svg';
 import changeIcon from '../assets/icons/change.svg';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -225,7 +225,7 @@ export default function CandidateSelfProfile() {
                     <div className={styles.identityActions}>
 
                         {/* CHANGE BANNER */}
-                        {/* {!editing && (
+                        {!editing && (
                             <button
                                 type="button"
                                 className={styles.rawIconButton}
@@ -245,7 +245,7 @@ export default function CandidateSelfProfile() {
                                     />
                                 )}
                             </button>
-                        )} */}
+                        )}
 
                         {/* EDIT / SAVE MODE */}
                         {editing ? (
@@ -289,13 +289,13 @@ export default function CandidateSelfProfile() {
                                 onClick={() => setEditing(true)}
                                 title="Edit Profile"
                                 aria-label="Edit Profile"
-                            >
-                                <img
+                            >                                {/* <img
                                     src={editIcon}
                                     alt=""
                                     aria-hidden="true"
                                     className={styles.actionSvg}
                                 />
+ */}
                             </button>
 
                         )}
