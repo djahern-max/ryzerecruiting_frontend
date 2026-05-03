@@ -128,6 +128,9 @@ export default function CandidateSelfProfile() {
     const experienceBullets = parseToDisplayBullets(profile?.ai_experience);
     const educationBullets = parseToDisplayBullets(profile?.ai_education, 4);
     const careerLevelLabel = { entry: 'Entry Level', mid: 'Mid Level', senior: 'Senior', executive: 'Executive' }[profile?.ai_career_level] || profile?.ai_career_level || null;
+    const totalMainBullets = experienceBullets.length + educationBullets.length;
+    const skillsCap = totalMainBullets <= 4 ? 6 : totalMainBullets <= 7 ? 8 : 10;
+
 
     if (loading) return (
         <div className={styles.page}><Header />
@@ -401,13 +404,12 @@ export default function CandidateSelfProfile() {
                                 </div>
                             </div>
                         )}
-
                         {skills.length > 0 && (
                             <div className={`${styles.bodyCard} ${styles.skillsCard}`}>
                                 <div className={styles.bodyCardTitle}>Skills</div>
                                 <div className={`${styles.bodyCardBody} ${styles.skillsScrollBody}`}>
                                     <div className={styles.skillsWrap}>
-                                        {skills.map((skill, i) => (
+                                        {skills.slice(0, skillsCap).map((skill, i) => (
                                             <span key={i} className={styles.skillTag}>
                                                 {skill}
                                             </span>
@@ -427,11 +429,6 @@ export default function CandidateSelfProfile() {
                         <span className={styles.footerTagline}>Your Candidate Profile</span>
                     </div>
                 </div>
-
-
-
-
-
 
             </main>
         </div>
