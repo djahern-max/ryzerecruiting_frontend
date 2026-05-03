@@ -480,9 +480,9 @@
 .roField {
     display: flex;
     flex-direction: row;
-    /* was: column — now label + value on same line */
     align-items: baseline;
-    gap: 8px;
+    gap: 16px;
+    /* was: 8px */
 }
 
 .roLabel {
