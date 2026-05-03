@@ -614,6 +614,21 @@
     flex-direction: column;
 }
 
+.identityName {
+    flex: 1;
+    padding: 0 14px 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: -0.2px;
+    align-self: flex-end;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
 
 @media (max-width: 680px) {
     .banner {
