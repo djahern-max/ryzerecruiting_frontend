@@ -266,7 +266,7 @@ export default function CandidateSelfProfile() {
                                     )}
                                 </button>
 
-                                <button
+                                {/* <button
                                     type="button"
                                     className={styles.rawIconButton}
                                     onClick={() => setEditing(true)}
@@ -274,7 +274,7 @@ export default function CandidateSelfProfile() {
                                     aria-label="Edit Profile"
                                 >
                                     <span className={styles.actionGlyph}>✎</span>
-                                </button>
+                                </button> */}
                             </>
                         )}
                     </div>
