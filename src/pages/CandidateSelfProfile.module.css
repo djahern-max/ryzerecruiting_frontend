@@ -221,7 +221,8 @@
    NAME BLOCK — white bg, gradient border-bottom
    ══════════════════════════════════════════════════════ */
 .nameBlock {
-
+    background: var(--card);
+    padding: 0 4px 0;
     border-bottom: 3px solid transparent;
     border-image: linear-gradient(to right, #1e3a5f, #2563eb, #1e3a5f) 1;
 }
