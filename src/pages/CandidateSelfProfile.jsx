@@ -96,6 +96,21 @@ export default function CandidateSelfProfile() {
         setEditing(false); setSaveMsg('');
     }
 
+    function formatPhone(phone) {
+        if (!phone) return null;
+        const digits = phone.replace(/\D/g, '');
+        if (digits.length === 10) return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+        if (digits.length === 11 && digits[0] === '1') return `+1 (${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7)}`;
+        return phone;
+    }
+
+    const SOURCE_LABELS = {
+        booking: 'From Call',
+        resume: 'Resume Upload',
+        linkedin: 'LinkedIn',
+        manual: 'Manual Entry',
+    };
+
     async function handlePhotoChange(e) {
         const file = e.target.files?.[0]; if (!file) return;
         setPhotoUploading(true);
@@ -363,7 +378,7 @@ export default function CandidateSelfProfile() {
                                             ['Title', profile.current_title],
                                             ['Company', profile.current_company],
                                             ['Location', profile.location],
-                                            ['Phone', profile.phone]
+                                            ['Phone', formatPhone(profile.phone)]
                                         ].map(([label, val]) => val ? (
                                             <div key={label} className={styles.roField}>
                                                 <span className={styles.roLabel}>{label}</span>

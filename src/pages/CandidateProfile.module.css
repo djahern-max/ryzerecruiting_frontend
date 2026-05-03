@@ -521,8 +521,13 @@
     color: var(--blue);
     text-decoration: none;
     font-weight: 500;
-    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
+    display: block;
 }
+
 
 .roLink:hover {
     text-decoration: underline;
@@ -613,11 +618,12 @@
 }
 
 .actionIcon {
-    width: 22px;
-    height: 22px;
+    width: 26px;
+    height: 26px;
     display: block;
     transition: opacity 0.15s, transform 0.15s;
 }
+
 
 .actionBtn:hover:not(:disabled) .actionIcon {
     opacity: 0.6;

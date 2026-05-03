@@ -52,6 +52,21 @@ function parseToDisplayBullets(text, maxItems = 6) {
     return bullets.slice(0, maxItems);
 }
 
+function formatPhone(phone) {
+    if (!phone) return null;
+    const digits = phone.replace(/\D/g, '');
+    if (digits.length === 10) return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+    if (digits.length === 11 && digits[0] === '1') return `+1 (${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7)}`;
+    return phone;
+}
+
+const SOURCE_LABELS = {
+    booking: 'From Call',
+    resume: 'Resume Upload',
+    linkedin: 'LinkedIn',
+    manual: 'Manual Entry',
+};
+
 export default function CandidateProfile() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -389,7 +404,7 @@ export default function CandidateProfile() {
                                     {candidate.phone && (
                                         <div className={styles.roField}>
                                             <span className={styles.roLabel}>Phone</span>
-                                            <a href={`tel:${candidate.phone}`} className={styles.roLink}>{candidate.phone}</a>
+                                            <a href={`tel:${candidate.phone}`} className={styles.roLink}>{formatPhone(candidate.phone)}</a>
                                         </div>
                                     )}
                                     {candidate.linkedin_url && (
@@ -423,14 +438,7 @@ export default function CandidateProfile() {
                                         {candidate.ai_certifications && (
                                             <div className={styles.roField}>
                                                 <span className={styles.roLabel}>Certification</span>
-                                                <div className={styles.certBadgeRow}>
-                                                    {hasCPA && <span className={styles.certBadge}>CPA</span>}
-                                                    {hasCFA && <span className={styles.certBadge}>CFA</span>}
-                                                    {hasCMA && <span className={styles.certBadge}>CMA</span>}
-                                                    {!hasCPA && !hasCFA && !hasCMA && (
-                                                        <span className={styles.roValue}>{candidate.ai_certifications}</span>
-                                                    )}
-                                                </div>
+                                                <span className={styles.roValue}>{candidate.ai_certifications}</span>
                                             </div>
                                         )}
                                     </div>
