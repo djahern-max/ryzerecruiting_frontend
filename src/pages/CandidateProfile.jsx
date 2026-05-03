@@ -241,8 +241,8 @@ export default function CandidateProfile() {
                     <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleBannerChange} />
                     <input ref={photoInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoChange} />
 
-                    {/* ── Identity row: avatar ONLY — overlaps banner seam ── */}
-                    <div className={styles.identityRow}>
+                    {/* Replace identityRow + nameStrip + profileActions with this */}
+                    <div className={styles.profileHeaderContent}>
                         <div
                             className={styles.avatarWrap}
                             onClick={() => !photoUploading && photoInputRef.current?.click()}
@@ -255,21 +255,16 @@ export default function CandidateProfile() {
                                     {candidate.name?.charAt(0).toUpperCase()}
                                 </div>
                             )}
+
                             <div className={styles.avatarOverlay}>
-                                {photoUploading
-                                    ? <span className={styles.spinnerDark} />
-                                    : <i className="fi fi-rr-camera" />}
+                                {photoUploading ? <span className={styles.spinnerDark} /> : <i className="fi fi-rr-camera" />}
                             </div>
                         </div>
-                    </div>
 
-                    {/* ── Name strip: name | title · company | location ── */}
-                    <div className={styles.nameStrip}>
-                        <div className={styles.nameStripCol}>
+                        <div className={styles.profileIntro}>
                             <div className={styles.identityName}>{candidate.name}</div>
-                        </div>
-                        {(candidate.current_title || candidate.current_company) && (
-                            <div className={styles.nameStripCol}>
+
+                            {(candidate.current_title || candidate.current_company) && (
                                 <div className={styles.identityHeadline}>
                                     {candidate.current_title}
                                     {candidate.current_title && candidate.current_company && (
@@ -277,15 +272,18 @@ export default function CandidateProfile() {
                                     )}
                                     {candidate.current_company}
                                 </div>
-                            </div>
-                        )}
-                        {candidate.location && (
-                            <div className={styles.nameStripCol}>
+                            )}
+
+                            {candidate.location && (
                                 <div className={styles.identityLocation}>
                                     <i className="fi fi-rr-marker" /> {candidate.location}
                                 </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
+
+                        <div className={styles.profileActions}>
+                            {/* keep your existing buttons here */}
+                        </div>
                     </div>
 
                     {/* ── Action buttons row ── */}
