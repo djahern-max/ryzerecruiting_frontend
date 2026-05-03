@@ -227,23 +227,25 @@ export default function CandidateSelfProfile() {
                         )}
 
                         {/* EDIT / SAVE MODE */}
-                        {/* EDIT / SAVE MODE */}
                         {editing ? (
                             <div className={styles.editActions}>
+
+                                {/* CANCEL */}
                                 <button
                                     type="button"
-                                    className={styles.iconButton}
+                                    className={styles.rawIconButton}
                                     onClick={handleCancel}
                                     disabled={saving}
                                     title="Cancel"
                                     aria-label="Cancel"
                                 >
-                                    ✕
+                                    <span className={styles.actionGlyph}>✕</span>
                                 </button>
 
+                                {/* SAVE */}
                                 <button
                                     type="button"
-                                    className={styles.iconButtonPrimary}
+                                    className={styles.rawIconButton}
                                     onClick={handleSave}
                                     disabled={saving}
                                     title="Save Changes"
@@ -252,14 +254,17 @@ export default function CandidateSelfProfile() {
                                     {saving ? (
                                         <span className={styles.spinner} />
                                     ) : (
-                                        '✓'
+                                        <span className={styles.actionGlyph}>✓</span>
                                     )}
                                 </button>
+
                             </div>
                         ) : (
+
+                            /* EDIT ICON ONLY */
                             <button
                                 type="button"
-                                className={styles.iconButtonPrimary}
+                                className={styles.rawIconButton}
                                 onClick={() => setEditing(true)}
                                 title="Edit Profile"
                                 aria-label="Edit Profile"
@@ -268,12 +273,14 @@ export default function CandidateSelfProfile() {
                                     src={editIcon}
                                     alt=""
                                     aria-hidden="true"
-                                    className={styles.btnIcon}
+                                    className={styles.actionSvg}
                                 />
                             </button>
+
                         )}
                     </div>
                 </div>
+
 
                 {/* NAME BLOCK — always visible, white bg, gradient border */}
                 <div className={styles.nameBlock}>

@@ -283,49 +283,6 @@
     color: #dc2626;
 }
 
-/* Buttons */
-.changeBannerBtn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 16px;
-    background: transparent;
-    border: 1.5px solid var(--border);
-    color: var(--sub);
-    font-size: 0.78rem;
-    font-weight: 600;
-    font-family: var(--font);
-    border-radius: 20px;
-    cursor: pointer;
-    transition: border-color 150ms, color 150ms;
-    white-space: nowrap;
-}
-
-.changeBannerBtn:hover:not(:disabled) {
-    border-color: var(--blue);
-    color: var(--blue);
-}
-
-.changeBannerBtn:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-}
-
-/* Edit Profile icon = blue */
-.editBtn .btnIcon {
-    filter: brightness(0) saturate(100%) invert(33%) sepia(94%) saturate(1519%) hue-rotate(187deg) brightness(88%) contrast(93%);
-}
-
-/* Edit hover icon = white */
-.editBtn:hover .btnIcon {
-    filter: brightness(0) invert(1);
-}
-
-.editActions {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
 
 .cancelBtn {
     padding: 8px 16px;
@@ -616,70 +573,30 @@
     flex-shrink: 0;
 }
 
-/* Change Banner icon = muted gray */
-.changeBannerBtn .btnIcon {
-    filter: brightness(0) saturate(100%) invert(49%) sepia(13%) saturate(817%) hue-rotate(176deg) brightness(91%) contrast(88%);
-}
 
-.editBtn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 8px 18px;
+.rawIconButton {
+    border: none;
     background: transparent;
-    border: 1.5px solid var(--blue);
-    color: var(--blue);
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    font-family: var(--font);
-    transition: background 0.15s, color 0.15s;
-    white-space: nowrap;
-}
-
-.editBtn:hover {
-    background: var(--blue);
-    color: #fff;
-}
-
-.iconButton,
-.iconButtonPrimary {
-    width: 34px;
-    height: 34px;
-    border-radius: 999px;
+    padding: 0;
+    width: 26px;
+    height: 26px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: 700;
 }
 
-.iconButton {
-    background: #fff;
-    border: 1.5px solid var(--border);
-    color: var(--sub);
-}
-
-.iconButtonPrimary {
-    background: #fff;
-    border: 1.5px solid var(--blue);
-    color: var(--blue);
-}
-
-.iconButtonPrimary:hover {
-    background: var(--blue);
-    color: #fff;
-}
-
-.btnIcon {
-    width: 16px;
-    height: 16px;
+.actionSvg {
+    width: 22px;
+    height: 22px;
     display: block;
 }
+
+.actionGlyph {
+    font-size: 18px;
+    line-height: 1;
+}
+
 
 @media (max-width: 680px) {
     .banner {
