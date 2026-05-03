@@ -225,19 +225,23 @@
     opacity: 1;
 }
 
-/* ── Inline identity meta: name / title / location ── */
-.identityMeta {
-    flex: 1;
-    min-width: 0;
-    padding: 0 14px 10px;
+/* ── Name strip: horizontal 3-col bar below avatar row ── */
+.nameStrip {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    padding: 6px 24px 14px;
+    gap: 8px;
+}
+
+.nameStripCol {
     display: flex;
-    flex-direction: column;
-    gap: 3px;
-    align-self: flex-end;
+    align-items: center;
+    min-width: 0;
 }
 
 .identityName {
-    font-size: 1.45rem;
+    font-size: 1.35rem;
     font-weight: 800;
     color: var(--li-text);
     line-height: 1.2;

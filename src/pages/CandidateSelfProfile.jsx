@@ -251,10 +251,8 @@ export default function CandidateSelfProfile() {
                     <input ref={photoInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handlePhotoChange} />
                     <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleBannerChange} />
 
-                    {/* ── Identity row: avatar + name/title/location + actions ── */}
+                    {/* ── Identity row: avatar ONLY — overlaps banner seam ── */}
                     <div className={styles.identityRow}>
-
-                        {/* Avatar — click to change photo */}
                         <div
                             className={styles.avatarWrap}
                             onClick={() => !photoUploading && photoInputRef.current?.click()}
@@ -273,25 +271,6 @@ export default function CandidateSelfProfile() {
                                     : <i className="fi fi-rr-camera" />
                                 }
                             </div>
-                        </div>
-
-                        {/* Inline name / title / location */}
-                        <div className={styles.identityMeta}>
-                            <div className={styles.identityName}>{profile.name}</div>
-                            {(profile.current_title || profile.current_company) && (
-                                <div className={styles.identityHeadline}>
-                                    {profile.current_title}
-                                    {profile.current_title && profile.current_company && (
-                                        <span className={styles.headlineDot}> · </span>
-                                    )}
-                                    {profile.current_company}
-                                </div>
-                            )}
-                            {profile.location && (
-                                <div className={styles.identityLocation}>
-                                    <i className="fi fi-rr-marker" /> {profile.location}
-                                </div>
-                            )}
                         </div>
 
                         {/* Actions: Change Banner + Edit/Save/Cancel */}
@@ -324,6 +303,31 @@ export default function CandidateSelfProfile() {
                                 </button>
                             )}
                         </div>
+                    </div>
+
+                    {/* ── Name strip: name | title · company | location ── */}
+                    <div className={styles.nameStrip}>
+                        <div className={styles.nameStripCol}>
+                            <div className={styles.identityName}>{profile.name}</div>
+                        </div>
+                        {(profile.current_title || profile.current_company) && (
+                            <div className={styles.nameStripCol}>
+                                <div className={styles.identityHeadline}>
+                                    {profile.current_title}
+                                    {profile.current_title && profile.current_company && (
+                                        <span className={styles.headlineDot}> · </span>
+                                    )}
+                                    {profile.current_company}
+                                </div>
+                            </div>
+                        )}
+                        {profile.location && (
+                            <div className={styles.nameStripCol}>
+                                <div className={styles.identityLocation}>
+                                    <i className="fi fi-rr-marker" /> {profile.location}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Save message */}

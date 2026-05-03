@@ -242,10 +242,8 @@ export default function CandidateProfile() {
                     <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleBannerChange} />
                     <input ref={photoInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoChange} />
 
-                    {/* ── Identity row: avatar + name / title / location ── */}
+                    {/* ── Identity row: avatar ONLY — overlaps banner seam ── */}
                     <div className={styles.identityRow}>
-
-                        {/* Avatar — click to upload */}
                         <div
                             className={styles.avatarWrap}
                             onClick={() => !photoUploading && photoInputRef.current?.click()}
@@ -264,11 +262,15 @@ export default function CandidateProfile() {
                                     : <i className="fi fi-rr-camera" />}
                             </div>
                         </div>
+                    </div>
 
-                        {/* Inline name / title / location */}
-                        <div className={styles.identityMeta}>
+                    {/* ── Name strip: name | title · company | location ── */}
+                    <div className={styles.nameStrip}>
+                        <div className={styles.nameStripCol}>
                             <div className={styles.identityName}>{candidate.name}</div>
-                            {(candidate.current_title || candidate.current_company) && (
+                        </div>
+                        {(candidate.current_title || candidate.current_company) && (
+                            <div className={styles.nameStripCol}>
                                 <div className={styles.identityHeadline}>
                                     {candidate.current_title}
                                     {candidate.current_title && candidate.current_company && (
@@ -276,13 +278,15 @@ export default function CandidateProfile() {
                                     )}
                                     {candidate.current_company}
                                 </div>
-                            )}
-                            {candidate.location && (
+                            </div>
+                        )}
+                        {candidate.location && (
+                            <div className={styles.nameStripCol}>
                                 <div className={styles.identityLocation}>
                                     <i className="fi fi-rr-marker" /> {candidate.location}
                                 </div>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* ── Action buttons row ── */}
