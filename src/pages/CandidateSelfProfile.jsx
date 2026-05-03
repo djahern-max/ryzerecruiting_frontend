@@ -196,11 +196,11 @@ export default function CandidateSelfProfile() {
                 </div>
 
                 {/* NAME BLOCK — now just the gradient border divider + saveMsg */}
-                <div className={styles.nameBlock}>
-                    {saveMsg && (
+                {saveMsg && (
+                    <div className={styles.nameBlock}>
                         <div className={`${styles.saveMsg} ${saveMsg.includes('failed') ? styles.saveMsgErr : ''}`}>{saveMsg}</div>
-                    )}
-                </div>
+                    </div>
+                )}
 
                 {/* TWO-COLUMN BODY */}
                 <div className={styles.profileBodyGrid}>
