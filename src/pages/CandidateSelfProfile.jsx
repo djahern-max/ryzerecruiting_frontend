@@ -396,11 +396,11 @@ export default function CandidateSelfProfile() {
                         )}
 
                         {skills.length > 0 && (
-                            <div className={styles.bodyCard}>
+                            <div className={`${styles.bodyCard} ${styles.skillsCard}`}>
                                 <div className={styles.bodyCardTitle}>Skills</div>
-                                <div className={styles.bodyCardBody}>
+                                <div className={`${styles.bodyCardBody} ${styles.skillsScrollBody}`}>
                                     <div className={styles.skillsWrap}>
-                                        {skills.slice(0, 10).map((skill, i) => (
+                                        {skills.map((skill, i) => (
                                             <span key={i} className={styles.skillTag}>{skill}</span>
                                         ))}
                                     </div>

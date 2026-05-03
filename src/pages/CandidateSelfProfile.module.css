@@ -597,6 +597,20 @@
     line-height: 1;
 }
 
+.skillsCard {
+    max-height: 246px;
+}
+
+.skillsScrollBody {
+    max-height: 198px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.skillsCard {
+    max-height: 246px;
+}
+
 
 @media (max-width: 680px) {
     .banner {
