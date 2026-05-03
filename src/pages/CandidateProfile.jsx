@@ -6,7 +6,7 @@ import CandidateModal from "../components/CandidateModal";
 import styles from "./CandidateProfile.module.css";
 import bannerImageIcon from "../assets/icons/banner_image.svg";
 import enhanceProfileIconV2 from "../assets/icons/enhance_profileV2.svg";
-import downloadV2 from "../assets/icons/download.svg";
+import downloadV2 from "../assets/icons/downloadV2.svg";
 import editIcon from "../assets/icons/edit.svg";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
