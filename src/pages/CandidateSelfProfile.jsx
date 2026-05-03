@@ -341,43 +341,72 @@ export default function CandidateSelfProfile() {
                             </div>
                         </div>
 
-                        {(careerLevelLabel || profile.ai_years_experience || profile.ai_certifications) && (
+                        <div className={styles.sideCol}>
                             <div className={styles.bodyCard}>
-                                <div className={styles.bodyCardTitle}>Career Details</div>
+                                <div className={styles.bodyCardTitle}>Basic Information</div>
                                 <div className={styles.bodyCardBody}>
-                                    <div className={styles.roGrid}>
-                                        {careerLevelLabel && <div className={styles.roField}><span className={styles.roLabel}>Level</span><span className={styles.roValue}>{careerLevelLabel}</span></div>}
-                                        {profile.ai_years_experience && <div className={styles.roField}><span className={styles.roLabel}>Experience</span><span className={styles.roValue}>{profile.ai_years_experience} years</span></div>}
-                                        {profile.ai_certifications && <div className={styles.roField} style={{ gridColumn: '1/-1' }}><span className={styles.roLabel}>Certifications</span><span className={styles.roValue}>{profile.ai_certifications}</span></div>}
+                                    {/* existing Basic Information content */}
+                                </div>
+                            </div>
+
+                            {(careerLevelLabel || profile.ai_years_experience || profile.ai_certifications) && (
+                                <div className={styles.bodyCard}>
+                                    <div className={styles.bodyCardTitle}>Career Details</div>
+                                    <div className={styles.bodyCardBody}>
+                                        <div className={styles.roGrid}>
+                                            {careerLevelLabel && (
+                                                <div className={styles.roField}>
+                                                    <span className={styles.roLabel}>Level</span>
+                                                    <span className={styles.roValue}>{careerLevelLabel}</span>
+                                                </div>
+                                            )}
+
+                                            {profile.ai_years_experience && (
+                                                <div className={styles.roField}>
+                                                    <span className={styles.roLabel}>Experience</span>
+                                                    <span className={styles.roValue}>{profile.ai_years_experience} years</span>
+                                                </div>
+                                            )}
+
+                                            {profile.ai_certifications && (
+                                                <div className={styles.roField}>
+                                                    <span className={styles.roLabel}>Certification</span>
+                                                    <span className={styles.roValue}>{profile.ai_certifications}</span>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
 
-                    </div>
-                    {/* Skills AFTER Education */}
-                    {skills.length > 0 && (
-                        <div className={styles.bodyCard}>
-                            <div className={styles.bodyCardTitle}>Skills</div>
-                            <div className={styles.bodyCardBody}>
-                                <div className={styles.skillsWrap}>
-                                    {skills.map((skill, i) => <span key={i} className={styles.skillTag}>{skill}</span>)}
+                            {skills.length > 0 && (
+                                <div className={styles.bodyCard}>
+                                    <div className={styles.bodyCardTitle}>Skills</div>
+                                    <div className={styles.bodyCardBody}>
+                                        <div className={styles.skillsWrap}>
+                                            {skills.map((skill, i) => (
+                                                <span key={i} className={styles.skillTag}>
+                                                    {skill}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
-                    )}
-                </div>
 
-                {/* RYZE footer */}
-                <div className={styles.profileFooter}>
-                    <div className={styles.footerLeft}>
-                        <span className={styles.footerBrand}>RYZE.ai</span>
-                        <span className={styles.footerSep} />
-                        <span className={styles.footerTagline}>Your Candidate Profile</span>
+                        {/* RYZE footer */}
+                        <div className={styles.profileFooter}>
+                            <div className={styles.footerLeft}>
+                                <span className={styles.footerBrand}>RYZE.ai</span>
+                                <span className={styles.footerSep} />
+                                <span className={styles.footerTagline}>Your Candidate Profile</span>
+                            </div>
+
+                        </div>
                     </div>
 
                 </div>
-
             </main>
         </div>
     );
