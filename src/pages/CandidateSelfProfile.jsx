@@ -145,6 +145,7 @@ export default function CandidateSelfProfile() {
     );
 
     return (
+
         <div className={styles.page}>
             <Header />
             <main className={styles.main}>
@@ -163,7 +164,7 @@ export default function CandidateSelfProfile() {
                     style={profile.banner_url ? { backgroundImage: `url(${profile.banner_url})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}
                 />
 
-                {/* IDENTITY ZONE — avatar (left) + name stack (center) + actions (right) */}
+                {/* IDENTITY ZONE — avatar (left) + actions (right) */}
                 <div className={styles.identityZone}>
                     <div className={styles.avatarWrap} onClick={() => !photoUploading && photoInputRef.current?.click()} title="Click to update your photo">
                         {profile.photo_url
@@ -174,34 +175,48 @@ export default function CandidateSelfProfile() {
                         </div>
                     </div>
 
-                    {/* Name / title / location — vertical stack */}
-                    <div className={styles.nameStack}>
-                        <div className={styles.candidateName}>{profile.name}</div>
-                        {(profile.current_title || profile.current_company) && (
-                            <div className={styles.candidateMeta}>
-                                {profile.current_title}
-                                {profile.current_title && profile.current_company && (
-                                    <span className={styles.metaDivider}>·</span>
-                                )}
-                                {profile.current_company}
-                            </div>
+                    <div className={styles.identityActions}>
+                        {!editing && (
+                            <button className={styles.changeBannerBtn} onClick={() => bannerInputRef.current?.click()} disabled={bannerUploading}>
+                                {bannerUploading ? <><span className={styles.spinner} /> Uploading…</> : <><i className="fi fi-rr-picture" /> Change Banner</>}
+                            </button>
                         )}
-                        {profile.location && (
-                            <div className={styles.candidateLocation}>
-                                <i className="fi fi-rr-marker" /> {profile.location}
+                        {editing ? (
+                            <div className={styles.editActions}>
+                                <button className={styles.cancelBtn} onClick={handleCancel} disabled={saving}>Cancel</button>
+                                <button className={styles.saveBtn} onClick={handleSave} disabled={saving}>
+                                    {saving ? <><span className={styles.spinner} /> Saving…</> : 'Save Changes'}
+                                </button>
                             </div>
+                        ) : (
+                            <button className={styles.editBtn} onClick={() => setEditing(true)}>
+                                <i className="fi fi-rr-edit" /> Edit Profile
+                            </button>
                         )}
                     </div>
-
                 </div>
 
-                {/* NAME BLOCK — now just the gradient border divider + saveMsg */}
-                {saveMsg && (
-                    <div className={styles.nameBlock}>
+                {/* NAME BLOCK — always visible, white bg, gradient border */}
+                <div className={styles.nameBlock}>
+                    <div className={styles.candidateName}>{profile.name}</div>
+                    {(profile.current_title || profile.current_company) && (
+                        <div className={styles.candidateMeta}>
+                            {profile.current_title}
+                            {profile.current_title && profile.current_company && (
+                                <span className={styles.metaDivider}>·</span>
+                            )}
+                            {profile.current_company}
+                        </div>
+                    )}
+                    {profile.location && (
+                        <div className={styles.candidateLocation}>
+                            <i className="fi fi-rr-marker" /> {profile.location}
+                        </div>
+                    )}
+                    {saveMsg && (
                         <div className={`${styles.saveMsg} ${saveMsg.includes('failed') ? styles.saveMsgErr : ''}`}>{saveMsg}</div>
-                    </div>
-                )}
-
+                    )}
+                </div>
                 {/* TWO-COLUMN BODY */}
                 <div className={styles.profileBodyGrid}>
 

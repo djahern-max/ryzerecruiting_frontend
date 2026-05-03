@@ -222,7 +222,7 @@
    ══════════════════════════════════════════════════════ */
 .nameBlock {
     background: var(--card);
-    padding: 12px 4px 16px;
+    padding: 12px 4px 14px;
     border-bottom: 3px solid transparent;
     border-image: linear-gradient(to right, #1e3a5f, #2563eb, #1e3a5f) 1;
 }
@@ -256,7 +256,6 @@
     color: var(--blue);
     font-weight: 600;
     margin-bottom: 0;
-    /* was 14px — not needed in identityZone */
     display: flex;
     align-items: center;
     gap: 4px;
