@@ -241,7 +241,7 @@ export default function CandidateProfile() {
                     <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleBannerChange} />
                     <input ref={photoInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoChange} />
 
-                    {/* Replace identityRow + nameStrip + profileActions with this */}
+
                     <div className={styles.profileHeaderContent}>
                         <div
                             className={styles.avatarWrap}
@@ -279,10 +279,26 @@ export default function CandidateProfile() {
                                     <i className="fi fi-rr-marker" /> {candidate.location}
                                 </div>
                             )}
-                        </div>
 
-                        <div className={styles.profileActions}>
-                            {/* keep your existing buttons here */}
+                            <div className={styles.profileActions}>
+                                <button className={styles.actionBtn} onClick={() => bannerInputRef.current?.click()} disabled={bannerUploading}>
+                                    {bannerUploading ? <span className={styles.spinner} /> : <i className="fi fi-rr-picture" />}
+                                    {bannerUploading ? "Uploading…" : "Change Banner"}
+                                </button>
+
+                                <button className={styles.actionBtnGreen} onClick={() => setEnrichOpen(true)}>
+                                    <i className="fi fi-rr-magic-wand" /> Enrich Profile
+                                </button>
+
+                                <button className={styles.actionBtnPurple} onClick={handleDownloadPdf} disabled={pdfLoading}>
+                                    {pdfLoading ? <span className={styles.spinner} /> : <i className="fi fi-rr-file-pdf" />}
+                                    {pdfLoading ? "Generating…" : "Download PDF"}
+                                </button>
+
+                                <button className={styles.actionBtn} onClick={() => setEditOpen(true)}>
+                                    <i className="fi fi-rr-edit" /> Edit Profile
+                                </button>
+                            </div>
                         </div>
                     </div>
 

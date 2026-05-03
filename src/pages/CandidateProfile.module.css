@@ -16,6 +16,7 @@
     --avatar: 120px;
     --radius: 8px;
     --font: 'DM Sans', system-ui, -apple-system, sans-serif;
+    --avatar: 96px;
 
     min-height: 100vh;
     background: var(--bg);
@@ -110,12 +111,13 @@
 
 .profileHeaderContent {
     display: grid;
-    grid-template-columns: 120px 1fr auto;
-    align-items: end;
+    grid-template-columns: 96px 1fr;
+    align-items: start;
     gap: 16px;
-    padding: 0 24px 16px;
-    margin-top: -54px;
+    padding: 0 24px 18px;
+    margin-top: -42px;
 }
+
 
 /* ── Spinners ── */
 .spinner,
@@ -211,8 +213,9 @@
 
 .profileIntro {
     min-width: 0;
-    padding-bottom: 4px;
+    padding-top: 42px;
 }
+
 
 
 /* ── Name strip: horizontal 3-col bar below avatar row ── */
@@ -261,10 +264,10 @@
 .profileActions {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: flex-start;
     gap: 8px;
-    padding: 0;
-    max-width: 360px;
+    padding: 14px 0 0;
+    max-width: none;
 }
 
 .actionBtn {
@@ -716,7 +719,7 @@
    ══════════════════════════════════════════════════════ */
 @media (max-width: 840px) {
     .page {
-        --avatar: 88px;
+        --avatar: 96px;
     }
 
     .banner {
