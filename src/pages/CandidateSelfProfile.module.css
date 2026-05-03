@@ -457,8 +457,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
-    max-height: 180px;
-    overflow-y: auto;
 }
 
 .skillTag {

@@ -230,6 +230,17 @@ export default function CandidateSelfProfile() {
                                 </div>
                             </div>
                         )}
+                        {/* Skills AFTER Education */}
+                        {skills.length > 0 && (
+                            <div className={styles.bodyCard}>
+                                <div className={styles.bodyCardTitle}>Skills</div>
+                                <div className={styles.bodyCardBody}>
+                                    <div className={styles.skillsWrap}>
+                                        {skills.map((skill, i) => <span key={i} className={styles.skillTag}>{skill}</span>)}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     <div className={styles.sideCol}>
