@@ -621,6 +621,29 @@
     filter: brightness(0) saturate(100%) invert(49%) sepia(13%) saturate(817%) hue-rotate(176deg) brightness(91%) contrast(88%);
 }
 
+.editBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 18px;
+    background: transparent;
+    border: 1.5px solid var(--blue);
+    color: var(--blue);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+.editBtn:hover {
+    background: var(--blue);
+    color: #fff;
+}
+
 @media (max-width: 680px) {
     .banner {
         height: 130px;
