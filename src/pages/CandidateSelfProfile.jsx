@@ -203,25 +203,21 @@ export default function CandidateSelfProfile() {
                         {!editing && (
                             <button
                                 type="button"
-                                className={styles.changeBannerBtn}
+                                className={styles.rawIconButton}
                                 onClick={() => bannerInputRef.current?.click()}
                                 disabled={bannerUploading}
+                                title="Change Banner"
+                                aria-label="Change Banner"
                             >
                                 {bannerUploading ? (
-                                    <>
-                                        <span className={styles.spinner} />
-                                        Uploading…
-                                    </>
+                                    <span className={styles.spinner} />
                                 ) : (
-                                    <>
-                                        <img
-                                            src={changeIcon}
-                                            alt=""
-                                            aria-hidden="true"
-                                            className={styles.btnIcon}
-                                        />
-                                        Change Banner
-                                    </>
+                                    <img
+                                        src={changeIcon}
+                                        alt=""
+                                        aria-hidden="true"
+                                        className={styles.actionSvg}
+                                    />
                                 )}
                             </button>
                         )}
