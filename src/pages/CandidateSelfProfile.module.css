@@ -8,7 +8,7 @@
     --card: #ffffff;
     --bannerCard: #f6f8ff;
     --border: #e2e8f0;
-    e --blue: #0a66c2;
+    --blue: #0a66c2;
     --blue-h: #004182;
     --navy: #0f2444;
     --navy2: #1e3a5f;
@@ -23,6 +23,7 @@
     font-family: var(--font);
     color: var(--text);
 }
+
 
 .main {
     max-width: 900px;
