@@ -270,7 +270,6 @@ export default function CandidateSelfProfile() {
                                 </div>
                             </div>
                         )}
-
                         {skills.length > 0 && (
                             <div className={styles.bodyCard}>
                                 <div className={styles.bodyCardTitle}>Skills</div>
@@ -281,8 +280,6 @@ export default function CandidateSelfProfile() {
                                 </div>
                             </div>
                         )}
-
-
                     </div>
                 </div>
 
@@ -293,9 +290,7 @@ export default function CandidateSelfProfile() {
                         <span className={styles.footerSep} />
                         <span className={styles.footerTagline}>Your Candidate Profile</span>
                     </div>
-                    <div className={styles.footerRight}>
-                        {profile.ai_parsed_at ? `Enriched ${new Date(profile.ai_parsed_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}` : 'Not yet enriched'}
-                    </div>
+
                 </div>
 
             </main>
