@@ -210,7 +210,6 @@ export default function CandidateProfile() {
     const isStub = isFromCall && !candidate.ai_summary && !candidate.current_title;
     const experienceBullets = parseToDisplayBullets(candidate.ai_experience);
     const educationBullets = parseToDisplayBullets(candidate.ai_education, 4);
-    const hasBadges = isFromCall || hasCPA || hasCFA || hasCMA || candidate.ai_career_level;
 
     return (
         <div className={styles.page}>
@@ -325,26 +324,7 @@ export default function CandidateProfile() {
                         </button>
                     </div>
 
-                    {/* ── Badges row (name/title/location moved up to identityRow) ── */}
-                    {hasBadges && (
-                        <div className={styles.nameBlock}>
-                            <div className={styles.nameRow}>
-                                {isFromCall && (
-                                    <span className={styles.callBadge}>
-                                        <i className="fi fi-rr-phone-call" /> From Call
-                                    </span>
-                                )}
-                                {hasCPA && <span className={styles.certBadge}>CPA</span>}
-                                {hasCFA && <span className={styles.certBadge}>CFA</span>}
-                                {hasCMA && <span className={styles.certBadge}>CMA</span>}
-                                {candidate.ai_career_level && (
-                                    <span className={styles.levelBadge}>
-                                        {candidate.ai_career_level.charAt(0).toUpperCase() + candidate.ai_career_level.slice(1)}
-                                    </span>
-                                )}
-                            </div>
-                        </div>
-                    )}
+
                 </div>
 
                 {/* ── Stub notice ── */}
