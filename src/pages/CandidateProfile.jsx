@@ -302,41 +302,7 @@ export default function CandidateProfile() {
                         </div>
                     </div>
 
-                    {/* ── Action buttons row ── */}
-                    <div className={styles.profileActions}>
-                        <button
-                            className={styles.actionBtn}
-                            onClick={() => bannerInputRef.current?.click()}
-                            disabled={bannerUploading}
-                        >
-                            {bannerUploading
-                                ? <span className={styles.spinner} />
-                                : <i className="fi fi-rr-picture" />}
-                            {bannerUploading ? "Uploading…" : "Change Banner"}
-                        </button>
-                        <button
-                            className={styles.actionBtnGreen}
-                            onClick={() => setEnrichOpen(true)}
-                        >
-                            <i className="fi fi-rr-magic-wand" /> Enrich Profile
-                        </button>
-                        <button
-                            className={styles.actionBtnPurple}
-                            onClick={handleDownloadPdf}
-                            disabled={pdfLoading}
-                        >
-                            {pdfLoading
-                                ? <span className={styles.spinner} />
-                                : <i className="fi fi-rr-file-pdf" />}
-                            {pdfLoading ? "Generating…" : "Download PDF"}
-                        </button>
-                        <button
-                            className={styles.actionBtn}
-                            onClick={() => setEditOpen(true)}
-                        >
-                            <i className="fi fi-rr-edit" /> Edit Profile
-                        </button>
-                    </div>
+
 
 
                 </div>
