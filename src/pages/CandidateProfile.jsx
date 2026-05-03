@@ -5,7 +5,7 @@ import AdminHeader from "../components/AdminHeader";
 import CandidateModal from "../components/CandidateModal";
 import styles from "./CandidateProfile.module.css";
 import bannerImageIcon from "../assets/icons/banner_image.svg";
-import enhanceProfileIcon from "../assets/icons/enhance_profile.svg";
+import enhanceProfileIconV2 from "../assets/icons/enhance_profileV2.svg";
 import download from "../assets/icons/download.svg";
 import editIcon from "../assets/icons/edit.svg";
 
@@ -267,7 +267,7 @@ export default function CandidateProfile() {
                             {bannerUploading ? <span className={styles.spinner} /> : <img src={bannerImageIcon} alt="" className={styles.actionIcon} />}
                         </button>
                         <button className={styles.actionBtn} onClick={() => setEnrichOpen(true)} title="Enrich Profile">
-                            <img src={enhanceProfileIcon} alt="" className={styles.actionIcon} />
+                            <img src={enhanceProfileIconV2} alt="" className={styles.actionIcon} />
                         </button>
                         <button className={styles.actionBtn} onClick={handleDownloadPdf} disabled={pdfLoading} title="Download PDF">
                             {pdfLoading ? <span className={styles.spinner} /> : <img src={download} alt="" className={styles.actionIcon} />}
