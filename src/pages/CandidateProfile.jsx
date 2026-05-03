@@ -279,20 +279,7 @@ export default function CandidateProfile() {
 
                 {/* NAME BLOCK — title, company, location */}
                 <div className={styles.nameBlock}>
-                    {(candidate.current_title || candidate.current_company) && (
-                        <div className={styles.candidateMeta}>
-                            {candidate.current_title}
-                            {candidate.current_title && candidate.current_company && (
-                                <span className={styles.metaDivider}>·</span>
-                            )}
-                            {candidate.current_company}
-                        </div>
-                    )}
-                    {candidate.location && (
-                        <div className={styles.candidateLocation}>
-                            <i className="fi fi-rr-marker" /> {candidate.location}
-                        </div>
-                    )}
+
                 </div>
 
                 {/* Stub notice */}
