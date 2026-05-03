@@ -224,7 +224,8 @@
    ══════════════════════════════════════════════════════ */
 .nameBlock {
     background: var(--bannerCard);
-    padding: 0 4px 0;
+    padding: 12px 4px 16px;
+    /* was: 0 4px 0 */
     border-bottom: 3px solid transparent;
     border-image: linear-gradient(to right, #1e3a5f, #2563eb, #1e3a5f) 1;
 }
