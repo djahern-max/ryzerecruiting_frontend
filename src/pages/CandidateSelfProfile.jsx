@@ -163,7 +163,7 @@ export default function CandidateSelfProfile() {
                     style={profile.banner_url ? { backgroundImage: `url(${profile.banner_url})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}
                 />
 
-                {/* IDENTITY ZONE — avatar (left) + actions (right), overlaps banner */}
+                {/* IDENTITY ZONE — avatar (left) + name stack (center) + actions (right) */}
                 <div className={styles.identityZone}>
                     <div className={styles.avatarWrap} onClick={() => !photoUploading && photoInputRef.current?.click()} title="Click to update your photo">
                         {profile.photo_url
@@ -172,6 +172,21 @@ export default function CandidateSelfProfile() {
                         <div className={styles.avatarOverlay}>
                             {photoUploading ? <span className={styles.spinner} /> : <i className="fi fi-rr-camera" />}
                         </div>
+                    </div>
+
+                    {/* Name / title / location — vertical stack */}
+                    <div className={styles.identityInfo}>
+                        <div className={styles.candidateName}>{profile.name}</div>
+                        {(profile.current_title || profile.current_company) && (
+                            <div className={styles.candidateMeta}>
+                                {profile.current_title}
+                                {profile.current_title && profile.current_company && <span className={styles.metaDivider}>·</span>}
+                                {profile.current_company}
+                            </div>
+                        )}
+                        {profile.location && (
+                            <div className={styles.candidateLocation}><i className="fi fi-rr-marker" /> {profile.location}</div>
+                        )}
                     </div>
 
                     <div className={styles.identityActions}>
@@ -195,19 +210,8 @@ export default function CandidateSelfProfile() {
                     </div>
                 </div>
 
-                {/* NAME BLOCK — white bg, gradient border-bottom */}
+                {/* NAME BLOCK — now just the gradient border divider + saveMsg */}
                 <div className={styles.nameBlock}>
-                    <div className={styles.candidateName}>{profile.name}</div>
-                    {(profile.current_title || profile.current_company) && (
-                        <div className={styles.candidateMeta}>
-                            {profile.current_title}
-                            {profile.current_title && profile.current_company && <span className={styles.metaDivider}>·</span>}
-                            {profile.current_company}
-                        </div>
-                    )}
-                    {profile.location && (
-                        <div className={styles.candidateLocation}><i className="fi fi-rr-marker" /> {profile.location}</div>
-                    )}
                     {saveMsg && (
                         <div className={`${styles.saveMsg} ${saveMsg.includes('failed') ? styles.saveMsgErr : ''}`}>{saveMsg}</div>
                     )}
@@ -295,16 +299,7 @@ export default function CandidateSelfProfile() {
                             </div>
                         )}
 
-                        <div className={styles.bodyCard}>
-                            <div className={styles.bodyCardTitle}>Contact</div>
-                            <div className={styles.bodyCardBody}>
-                                <div className={styles.detailList}>
-                                    {profile.email && <div className={styles.detailRow}><span className={styles.detailLabel}>Email</span><a href={`mailto:${profile.email}`} className={styles.detailLink}>{profile.email}</a></div>}
-                                    {profile.phone && <div className={styles.detailRow}><span className={styles.detailLabel}>Phone</span><a href={`tel:${profile.phone}`} className={styles.detailLink}>{profile.phone}</a></div>}
-                                    {profile.linkedin_url && <div className={styles.detailRow}><span className={styles.detailLabel}>LinkedIn</span><a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className={styles.detailLink}>View Profile</a></div>}
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
 
