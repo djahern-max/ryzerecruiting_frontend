@@ -335,7 +335,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) 245px;
     gap: 18px;
-    align-items: stretch;
+    align-items: start;
 }
 
 .mainCol {
@@ -597,14 +597,12 @@
 }
 
 .skillsCard {
-    flex: 1;
     min-height: 0;
     display: flex;
     flex-direction: column;
 }
 
 .skillsScrollBody {
-    flex: 1;
     min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;

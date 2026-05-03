@@ -194,7 +194,14 @@ export default function CandidateSelfProfile() {
                                 <span className={styles.cameraIcon}>📷</span>
                             )}
                         </div>
+
                     </div>
+
+                    <div
+                        className={styles.avatarWrap}
+                        onClick={() => !photoUploading && photoInputRef.current?.click()}
+                        title="Click to update your photo"
+                    ></div>
 
                     {/* ACTION BUTTONS */}
                     <div className={styles.identityActions}>
