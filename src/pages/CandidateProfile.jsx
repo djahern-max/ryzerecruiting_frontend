@@ -235,33 +235,34 @@ export default function CandidateProfile() {
                     } : {}}
                 />
 
-                {/* IDENTITY ZONE — avatar (left) + name (middle) + actions (right) */}
+                {/* IDENTITY ZONE */}
                 <div className={styles.identityZone}>
 
-                    {/* AVATAR */}
-                    <div
-                        className={styles.avatarWrap}
-                        onClick={() => !photoUploading && photoInputRef.current?.click()}
-                        title="Click to upload photo"
-                    >
-                        {candidate.photo_url
-                            ? <img src={candidate.photo_url} alt={candidate.name} className={styles.avatarImg} />
-                            : <div className={styles.avatarInitial}>{getInitials(candidate.name)}</div>
-                        }
-                        <div className={styles.avatarOverlay}>
-                            {photoUploading
-                                ? <span className={styles.spinner} />
-                                : <span className={styles.cameraIcon}>📷</span>
+                    {/* LEFT: avatar + name grouped together */}
+                    <div className={styles.identityLeft}>
+                        <div
+                            className={styles.avatarWrap}
+                            onClick={() => !photoUploading && photoInputRef.current?.click()}
+                            title="Click to update photo"
+                        >
+                            {candidate.photo_url
+                                ? <img src={candidate.photo_url} alt={candidate.name} className={styles.avatarImg} />
+                                : <div className={styles.avatarInitial}>{getInitials(candidate.name)}</div>
                             }
+                            <div className={styles.avatarOverlay}>
+                                {photoUploading
+                                    ? <span className={styles.spinner} />
+                                    : <span className={styles.cameraIcon}>📷</span>
+                                }
+                            </div>
+                        </div>
+
+                        <div className={styles.identityName}>
+                            {candidate.name}
                         </div>
                     </div>
 
-                    {/* NAME */}
-                    <div className={styles.identityName}>
-                        {candidate.name}
-                    </div>
-
-                    {/* ACTION BUTTONS */}
+                    {/* RIGHT: action buttons */}
                     <div className={styles.identityActions}>
                         <button className={styles.actionBtn} onClick={() => bannerInputRef.current?.click()} disabled={bannerUploading} title="Change Banner">
                             {bannerUploading ? <span className={styles.spinner} /> : <img src={bannerImageIcon} alt="" className={styles.actionIcon} />}
