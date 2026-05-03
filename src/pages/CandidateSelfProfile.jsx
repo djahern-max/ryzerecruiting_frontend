@@ -184,46 +184,43 @@ export default function CandidateSelfProfile() {
                     style={profile.banner_url ? { backgroundImage: `url(${profile.banner_url})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}
                 />
 
-                {/* IDENTITY ZONE — avatar (left) + actions (right) */}
+                {/* IDENTITY ZONE — avatar + name (left) + actions (right) */}
                 <div className={styles.identityZone}>
 
-                    {/* AVATAR */}
-                    <div
-                        className={styles.avatarWrap}
-                        onClick={() => !photoUploading && photoInputRef.current?.click()}
-                        title="Click to update your photo"
-                    >
-                        {profile.photo_url ? (
-                            <img
-                                src={profile.photo_url}
-                                alt={profile.name}
-                                className={styles.avatarImg}
-                            />
-                        ) : (
-                            <div className={styles.avatarInitial}>
-                                {getInitials(profile.name)}
-                            </div>
-                        )}
-
-                        <div className={styles.avatarOverlay}>
-                            {photoUploading ? (
-                                <span className={styles.spinner} />
+                    {/* LEFT: avatar + name grouped */}
+                    <div className={styles.identityLeft}>
+                        <div
+                            className={styles.avatarWrap}
+                            onClick={() => !photoUploading && photoInputRef.current?.click()}
+                            title="Click to update your photo"
+                        >
+                            {profile.photo_url ? (
+                                <img
+                                    src={profile.photo_url}
+                                    alt={profile.name}
+                                    className={styles.avatarImg}
+                                />
                             ) : (
-                                <span className={styles.cameraIcon}>📷</span>
+                                <div className={styles.avatarInitial}>
+                                    {getInitials(profile.name)}
+                                </div>
                             )}
+                            <div className={styles.avatarOverlay}>
+                                {photoUploading ? (
+                                    <span className={styles.spinner} />
+                                ) : (
+                                    <span className={styles.cameraIcon}>📷</span>
+                                )}
+                            </div>
                         </div>
 
+                        <div className={styles.identityName}>
+                            {profile.name}
+                        </div>
                     </div>
 
-                    <div className={styles.identityName}>
-                        {profile.name}
-                    </div>
-
-
-
-                    {/* ACTION BUTTONS */}
+                    {/* RIGHT: action buttons */}
                     <div className={styles.identityActions}>
-
                         {/* CHANGE BANNER */}
                         {!editing && (
                             <button

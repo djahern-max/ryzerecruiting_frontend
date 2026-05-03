@@ -198,8 +198,9 @@
     flex-wrap: wrap;
     align-items: flex-end;
     justify-content: flex-end;
-    gap: 8px;
+    gap: 12px;
     padding-bottom: 6px;
+    padding-right: 10px;
     flex-shrink: 0;
 }
 
@@ -622,8 +623,7 @@
 }
 
 .identityName {
-    flex: 1;
-    padding: 0 14px 8px;
+    padding: 0 0 8px;
     font-size: 1.1rem;
     font-weight: 700;
     color: var(--muted);
@@ -634,7 +634,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
 
 
 @media (max-width: 680px) {
