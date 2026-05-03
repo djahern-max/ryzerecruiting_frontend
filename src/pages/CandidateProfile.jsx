@@ -4,6 +4,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import AdminHeader from "../components/AdminHeader";
 import CandidateModal from "../components/CandidateModal";
 import styles from "./CandidateProfile.module.css";
+import bannerImageIcon from "../assets/icons/banner_image.svg";
+import enhanceProfileIcon from "../assets/icons/enhance_profile.svg";
+import changeIcon from "../assets/icons/change.svg";
+import editIcon from "../assets/icons/edit.svg";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
@@ -250,14 +254,17 @@ export default function CandidateProfile() {
                             disabled={bannerUploading}
                             title="Change Banner"
                         >
-                            {bannerUploading ? <span className={styles.spinner} /> : <i className="fi fi-rr-picture" />}
+                            {bannerUploading
+                                ? <span className={styles.spinner} />
+                                : <img src={bannerImageIcon} alt="Change Banner" className={styles.actionIcon} />
+                            }
                         </button>
                         <button
                             className={styles.actionBtn}
                             onClick={() => setEnrichOpen(true)}
                             title="Enrich Profile"
                         >
-                            <i className="fi fi-rr-magic-wand" />
+                            <img src={enhanceProfileIcon} alt="Enrich Profile" className={styles.actionIcon} />
                         </button>
                         <button
                             className={styles.actionBtn}
@@ -265,14 +272,17 @@ export default function CandidateProfile() {
                             disabled={pdfLoading}
                             title="Download PDF"
                         >
-                            {pdfLoading ? <span className={styles.spinner} /> : <i className="fi fi-rr-file-pdf" />}
+                            {pdfLoading
+                                ? <span className={styles.spinner} />
+                                : <img src={changeIcon} alt="Download PDF" className={styles.actionIcon} />
+                            }
                         </button>
                         <button
                             className={styles.actionBtn}
                             onClick={() => setEditOpen(true)}
                             title="Edit Profile"
                         >
-                            <i className="fi fi-rr-edit" />
+                            <img src={editIcon} alt="Edit Profile" className={styles.actionIcon} />
                         </button>
                     </div>
                 </div>

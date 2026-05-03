@@ -616,6 +616,18 @@
     color: rgba(255, 255, 255, 0.55);
 }
 
+.actionIcon {
+    width: 18px;
+    height: 18px;
+    display: block;
+    opacity: 0.6;
+    transition: opacity 0.15s;
+}
+
+.actionBtn:hover:not(:disabled) .actionIcon {
+    opacity: 1;
+}
+
 /* ══════════════════════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════════════════════ */
