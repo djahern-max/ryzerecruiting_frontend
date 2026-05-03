@@ -282,6 +282,7 @@ export default function CandidateSelfProfile() {
                 <div className={styles.nameBlock}>
 
                 </div>
+
                 {/* TWO-COLUMN BODY */}
                 <div className={styles.profileBodyGrid}>
 
@@ -289,30 +290,37 @@ export default function CandidateSelfProfile() {
                         {profile.ai_summary && (
                             <div className={styles.bodyCard}>
                                 <div className={styles.bodyCardTitle}>About</div>
-                                <div className={styles.bodyCardBody}><p className={styles.summaryText}>{profile.ai_summary}</p></div>
+                                <div className={styles.bodyCardBody}>
+                                    <p className={styles.summaryText}>{profile.ai_summary}</p>
+                                </div>
                             </div>
                         )}
+
                         {experienceBullets.length > 0 && (
                             <div className={styles.bodyCard}>
                                 <div className={styles.bodyCardTitle}>Experience</div>
                                 <div className={styles.bodyCardBody}>
                                     <ul className={styles.bulletList}>
-                                        {experienceBullets.map((b, i) => <li key={i} className={styles.bulletItem}>{b}</li>)}
-                                    </ul>
-                                </div>
-                            </div>
-                        )}
-                        {educationBullets.length > 0 && (
-                            <div className={styles.bodyCard}>
-                                <div className={styles.bodyCardTitle}>Education</div>
-                                <div className={styles.bodyCardBody}>
-                                    <ul className={styles.bulletList}>
-                                        {educationBullets.map((b, i) => <li key={i} className={styles.bulletItem}>{b}</li>)}
+                                        {experienceBullets.map((b, i) => (
+                                            <li key={i} className={styles.bulletItem}>{b}</li>
+                                        ))}
                                     </ul>
                                 </div>
                             </div>
                         )}
 
+                        {educationBullets.length > 0 && (
+                            <div className={styles.bodyCard}>
+                                <div className={styles.bodyCardTitle}>Education</div>
+                                <div className={styles.bodyCardBody}>
+                                    <ul className={styles.bulletList}>
+                                        {educationBullets.map((b, i) => (
+                                            <li key={i} className={styles.bulletItem}>{b}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     <div className={styles.sideCol}>
@@ -321,16 +329,32 @@ export default function CandidateSelfProfile() {
                             <div className={styles.bodyCardBody}>
                                 {editing ? (
                                     <div className={styles.fieldRow}>
-                                        {[['current_title', 'Current Title', 'e.g. Senior Accountant'], ['current_company', 'Current Company', 'e.g. Acme Corp'], ['location', 'Location', 'e.g. Manchester, NH'], ['phone', 'Phone', 'e.g. 603-555-0100'], ['linkedin_url', 'LinkedIn URL', 'https://linkedin.com/in/…']].map(([key, label, ph]) => (
+                                        {[
+                                            ['current_title', 'Current Title', 'e.g. Senior Accountant'],
+                                            ['current_company', 'Current Company', 'e.g. Acme Corp'],
+                                            ['location', 'Location', 'e.g. Manchester, NH'],
+                                            ['phone', 'Phone', 'e.g. 603-555-0100'],
+                                            ['linkedin_url', 'LinkedIn URL', 'https://linkedin.com/in/…']
+                                        ].map(([key, label, ph]) => (
                                             <div key={key} className={styles.fieldGroup}>
                                                 <label className={styles.fieldLabel}>{label}</label>
-                                                <input className={styles.fieldInput} value={form[key]} onChange={e => setForm(p => ({ ...p, [key]: e.target.value }))} placeholder={ph} />
+                                                <input
+                                                    className={styles.fieldInput}
+                                                    value={form[key]}
+                                                    onChange={e => setForm(p => ({ ...p, [key]: e.target.value }))}
+                                                    placeholder={ph}
+                                                />
                                             </div>
                                         ))}
                                     </div>
                                 ) : (
                                     <div className={styles.roGrid}>
-                                        {[['Title', profile.current_title], ['Company', profile.current_company], ['Location', profile.location], ['Phone', profile.phone]].map(([label, val]) => val ? (
+                                        {[
+                                            ['Title', profile.current_title],
+                                            ['Company', profile.current_company],
+                                            ['Location', profile.location],
+                                            ['Phone', profile.phone]
+                                        ].map(([label, val]) => val ? (
                                             <div key={label} className={styles.roField}>
                                                 <span className={styles.roLabel}>{label}</span>
                                                 <span className={styles.roValue}>{val}</span>
@@ -341,72 +365,65 @@ export default function CandidateSelfProfile() {
                             </div>
                         </div>
 
-                        <div className={styles.sideCol}>
+                        {(careerLevelLabel || profile.ai_years_experience || profile.ai_certifications) && (
                             <div className={styles.bodyCard}>
-                                <div className={styles.bodyCardTitle}>Basic Information</div>
+                                <div className={styles.bodyCardTitle}>Career Details</div>
                                 <div className={styles.bodyCardBody}>
-                                    {/* existing Basic Information content */}
-                                </div>
-                            </div>
+                                    <div className={styles.roGrid}>
+                                        {careerLevelLabel && (
+                                            <div className={styles.roField}>
+                                                <span className={styles.roLabel}>Level</span>
+                                                <span className={styles.roValue}>{careerLevelLabel}</span>
+                                            </div>
+                                        )}
 
-                            {(careerLevelLabel || profile.ai_years_experience || profile.ai_certifications) && (
-                                <div className={styles.bodyCard}>
-                                    <div className={styles.bodyCardTitle}>Career Details</div>
-                                    <div className={styles.bodyCardBody}>
-                                        <div className={styles.roGrid}>
-                                            {careerLevelLabel && (
-                                                <div className={styles.roField}>
-                                                    <span className={styles.roLabel}>Level</span>
-                                                    <span className={styles.roValue}>{careerLevelLabel}</span>
-                                                </div>
-                                            )}
+                                        {profile.ai_years_experience && (
+                                            <div className={styles.roField}>
+                                                <span className={styles.roLabel}>Experience</span>
+                                                <span className={styles.roValue}>{profile.ai_years_experience} years</span>
+                                            </div>
+                                        )}
 
-                                            {profile.ai_years_experience && (
-                                                <div className={styles.roField}>
-                                                    <span className={styles.roLabel}>Experience</span>
-                                                    <span className={styles.roValue}>{profile.ai_years_experience} years</span>
-                                                </div>
-                                            )}
-
-                                            {profile.ai_certifications && (
-                                                <div className={styles.roField}>
-                                                    <span className={styles.roLabel}>Certification</span>
-                                                    <span className={styles.roValue}>{profile.ai_certifications}</span>
-                                                </div>
-                                            )}
-                                        </div>
+                                        {profile.ai_certifications && (
+                                            <div className={styles.roField}>
+                                                <span className={styles.roLabel}>Certification</span>
+                                                <span className={styles.roValue}>{profile.ai_certifications}</span>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
-                            )}
+                            </div>
+                        )}
 
-                            {skills.length > 0 && (
-                                <div className={styles.bodyCard}>
-                                    <div className={styles.bodyCardTitle}>Skills</div>
-                                    <div className={styles.bodyCardBody}>
-                                        <div className={styles.skillsWrap}>
-                                            {skills.map((skill, i) => (
-                                                <span key={i} className={styles.skillTag}>
-                                                    {skill}
-                                                </span>
-                                            ))}
-                                        </div>
+                        {skills.length > 0 && (
+                            <div className={styles.bodyCard}>
+                                <div className={styles.bodyCardTitle}>Skills</div>
+                                <div className={styles.bodyCardBody}>
+                                    <div className={styles.skillsWrap}>
+                                        {skills.slice(0, 10).map((skill, i) => (
+                                            <span key={i} className={styles.skillTag}>{skill}</span>
+                                        ))}
                                     </div>
                                 </div>
-                            )}
-                        </div>
-
-                        {/* RYZE footer */}
-                        <div className={styles.profileFooter}>
-                            <div className={styles.footerLeft}>
-                                <span className={styles.footerBrand}>RYZE.ai</span>
-                                <span className={styles.footerSep} />
-                                <span className={styles.footerTagline}>Your Candidate Profile</span>
                             </div>
-
-                        </div>
+                        )}
                     </div>
-
                 </div>
+
+                {/* RYZE footer */}
+                <div className={styles.profileFooter}>
+                    <div className={styles.footerLeft}>
+                        <span className={styles.footerBrand}>RYZE.ai</span>
+                        <span className={styles.footerSep} />
+                        <span className={styles.footerTagline}>Your Candidate Profile</span>
+                    </div>
+                </div>
+
+
+
+
+
+
             </main>
         </div>
     );
