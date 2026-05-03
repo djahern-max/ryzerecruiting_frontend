@@ -311,26 +311,14 @@
     cursor: not-allowed;
 }
 
-.editBtn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 18px;
-    background: transparent;
-    border: 1.5px solid var(--blue);
-    color: var(--blue);
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    font-family: var(--font);
-    transition: background 0.15s, color 0.15s;
-    white-space: nowrap;
+/* Edit Profile icon = blue */
+.editBtn .btnIcon {
+    filter: brightness(0) saturate(100%) invert(33%) sepia(94%) saturate(1519%) hue-rotate(187deg) brightness(88%) contrast(93%);
 }
 
-.editBtn:hover {
-    background: var(--blue);
-    color: #fff;
+/* Edit hover icon = white */
+.editBtn:hover .btnIcon {
+    filter: brightness(0) invert(1);
 }
 
 .editActions {
@@ -621,20 +609,16 @@
     color: rgba(255, 255, 255, 0.55);
 }
 
-/* 1. Add this new rule for SVG button icons */
 .btnIcon {
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
     display: inline-block;
-    vertical-align: middle;
-    margin-right: 4px;
-    /* Make icon match button text color */
-    filter: brightness(0) saturate(100%) invert(22%) sepia(70%) saturate(600%) hue-rotate(190deg) brightness(90%);
+    flex-shrink: 0;
 }
 
-/* For white-text buttons (changeBannerBtn), override to white */
+/* Change Banner icon = muted gray */
 .changeBannerBtn .btnIcon {
-    filter: brightness(0) invert(1);
+    filter: brightness(0) saturate(100%) invert(49%) sepia(13%) saturate(817%) hue-rotate(176deg) brightness(91%) contrast(88%);
 }
 
 @media (max-width: 680px) {

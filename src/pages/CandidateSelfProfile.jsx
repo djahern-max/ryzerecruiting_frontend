@@ -179,11 +179,22 @@ export default function CandidateSelfProfile() {
 
                     <div className={styles.identityActions}>
                         {!editing && (
-                            <button className={styles.changeBannerBtn} onClick={() => bannerInputRef.current?.click()} disabled={bannerUploading}>
-                                {bannerUploading
-                                    ? <><span className={styles.spinner} /> Uploading…</>
-                                    : <><img src={changeIcon} alt="" className={styles.btnIcon} /> Change Banner</>
-                                }
+                            <button
+                                className={styles.changeBannerBtn}
+                                onClick={() => bannerInputRef.current?.click()}
+                                disabled={bannerUploading}
+                            >
+                                {bannerUploading ? (
+                                    <>
+                                        <span className={styles.spinner} />
+                                        Uploading…
+                                    </>
+                                ) : (
+                                    <>
+                                        <img src={changeIcon} alt="" aria-hidden="true" className={styles.btnIcon} />
+                                        Change Banner
+                                    </>
+                                )}
                             </button>
                         )}
                         {editing ? (
@@ -195,7 +206,8 @@ export default function CandidateSelfProfile() {
                             </div>
                         ) : (
                             <button className={styles.editBtn} onClick={() => setEditing(true)}>
-                                <img src={editIcon} alt="" className={styles.btnIcon} /> Edit Profile
+                                <img src={editIcon} alt="" aria-hidden="true" className={styles.btnIcon} />
+                                Edit Profile
                             </button>
                         )}
                     </div>
