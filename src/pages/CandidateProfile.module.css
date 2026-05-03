@@ -210,10 +210,12 @@
     padding: 0 14px 8px;
     font-size: 1.1rem;
     font-weight: 700;
-    color: #374151;
-    /* was: var(--muted) */
+    color: #4b5563;
+    /* slightly lighter dark grey */
     letter-spacing: -0.2px;
     align-self: flex-end;
+    text-align: left;
+    /* add this */
     min-width: 0;
     white-space: nowrap;
     overflow: hidden;
