@@ -178,16 +178,18 @@ export default function CandidateSelfProfile() {
                 <input ref={photoInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handlePhotoChange} />
                 <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleBannerChange} />
 
-                {/* BANNER — flat, no card */}
+                {/* BANNER */}
                 <div
                     className={styles.banner}
-                    style={profile.banner_url ? { backgroundImage: `url(${profile.banner_url})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}
+                    style={profile.banner_url
+                        ? { backgroundImage: `url(${profile.banner_url})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                        : {}}
                 />
 
-                {/* IDENTITY ZONE — avatar + name (left) + actions (right) */}
+                {/* IDENTITY ZONE */}
                 <div className={styles.identityZone}>
 
-                    {/* LEFT: avatar + name grouped */}
+                    {/* LEFT GROUP — avatar + name */}
                     <div className={styles.identityLeft}>
                         <div
                             className={styles.avatarWrap}
@@ -195,16 +197,11 @@ export default function CandidateSelfProfile() {
                             title="Click to update your photo"
                         >
                             {profile.photo_url ? (
-                                <img
-                                    src={profile.photo_url}
-                                    alt={profile.name}
-                                    className={styles.avatarImg}
-                                />
+                                <img src={profile.photo_url} alt={profile.name} className={styles.avatarImg} />
                             ) : (
-                                <div className={styles.avatarInitial}>
-                                    {getInitials(profile.name)}
-                                </div>
+                                <div className={styles.avatarInitial}>{getInitials(profile.name)}</div>
                             )}
+
                             <div className={styles.avatarOverlay}>
                                 {photoUploading ? (
                                     <span className={styles.spinner} />
@@ -214,41 +211,13 @@ export default function CandidateSelfProfile() {
                             </div>
                         </div>
 
-                        <div className={styles.identityName}>
-                            {profile.name}
-                        </div>
+                        <span className={styles.identityName}>{profile.name}</span>
                     </div>
 
-                    {/* RIGHT: action buttons */}
+                    {/* RIGHT GROUP — action buttons */}
                     <div className={styles.identityActions}>
-                        {/* CHANGE BANNER */}
-                        {!editing && (
-                            <button
-                                type="button"
-                                className={styles.rawIconButton}
-                                onClick={() => bannerInputRef.current?.click()}
-                                disabled={bannerUploading}
-                                title="Change Banner"
-                                aria-label="Change Banner"
-                            >
-                                {bannerUploading ? (
-                                    <span className={styles.spinner} />
-                                ) : (
-                                    <img
-                                        src={changeIcon}
-                                        alt=""
-                                        aria-hidden="true"
-                                        className={styles.actionSvg}
-                                    />
-                                )}
-                            </button>
-                        )}
-
-                        {/* EDIT / SAVE MODE */}
                         {editing ? (
                             <div className={styles.editActions}>
-
-                                {/* CANCEL */}
                                 <button
                                     type="button"
                                     className={styles.rawIconButton}
@@ -260,7 +229,6 @@ export default function CandidateSelfProfile() {
                                     <span className={styles.actionGlyph}>✕</span>
                                 </button>
 
-                                {/* SAVE */}
                                 <button
                                     type="button"
                                     className={styles.rawIconButton}
@@ -275,26 +243,39 @@ export default function CandidateSelfProfile() {
                                         <span className={styles.actionGlyph}>✓</span>
                                     )}
                                 </button>
-
                             </div>
                         ) : (
+                            <>
+                                <button
+                                    type="button"
+                                    className={styles.rawIconButton}
+                                    onClick={() => bannerInputRef.current?.click()}
+                                    disabled={bannerUploading}
+                                    title="Change Banner"
+                                    aria-label="Change Banner"
+                                >
+                                    {bannerUploading ? (
+                                        <span className={styles.spinner} />
+                                    ) : (
+                                        <img
+                                            src={changeIcon}
+                                            alt=""
+                                            aria-hidden="true"
+                                            className={styles.actionSvg}
+                                        />
+                                    )}
+                                </button>
 
-                            /* EDIT ICON ONLY */
-                            <button
-                                type="button"
-                                className={styles.rawIconButton}
-                                onClick={() => setEditing(true)}
-                                title="Edit Profile"
-                                aria-label="Edit Profile"
-                            >                                {/* <img
-                                    src={editIcon}
-                                    alt=""
-                                    aria-hidden="true"
-                                    className={styles.actionSvg}
-                                />
- */}
-                            </button>
-
+                                <button
+                                    type="button"
+                                    className={styles.rawIconButton}
+                                    onClick={() => setEditing(true)}
+                                    title="Edit Profile"
+                                    aria-label="Edit Profile"
+                                >
+                                    <span className={styles.actionGlyph}>✎</span>
+                                </button>
+                            </>
                         )}
                     </div>
                 </div>
