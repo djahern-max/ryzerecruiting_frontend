@@ -589,6 +589,12 @@
     width: 22px;
     height: 22px;
     display: block;
+    transition: opacity 0.15s, transform 0.15s;
+}
+
+.rawIconButton:hover:not(:disabled) .actionSvg {
+    opacity: 0.6;
+    transform: scale(1.15);
 }
 
 .actionGlyph {
