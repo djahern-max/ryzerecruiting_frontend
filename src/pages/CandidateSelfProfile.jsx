@@ -168,18 +168,41 @@ export default function CandidateSelfProfile() {
 
                 {/* IDENTITY ZONE — avatar (left) + actions (right) */}
                 <div className={styles.identityZone}>
-                    <div className={styles.avatarWrap} onClick={() => !photoUploading && photoInputRef.current?.click()} title="Click to update your photo">
-                        {profile.photo_url
-                            ? <img src={profile.photo_url} alt={profile.name} className={styles.avatarImg} />
-                            : <div className={styles.avatarInitial}>{getInitials(profile.name)}</div>}
+
+                    {/* AVATAR */}
+                    <div
+                        className={styles.avatarWrap}
+                        onClick={() => !photoUploading && photoInputRef.current?.click()}
+                        title="Click to update your photo"
+                    >
+                        {profile.photo_url ? (
+                            <img
+                                src={profile.photo_url}
+                                alt={profile.name}
+                                className={styles.avatarImg}
+                            />
+                        ) : (
+                            <div className={styles.avatarInitial}>
+                                {getInitials(profile.name)}
+                            </div>
+                        )}
+
                         <div className={styles.avatarOverlay}>
-                            {photoUploading ? <span className={styles.spinner} /> : <i className="fi fi-rr-camera" />}
+                            {photoUploading ? (
+                                <span className={styles.spinner} />
+                            ) : (
+                                <span className={styles.cameraIcon}>📷</span>
+                            )}
                         </div>
                     </div>
 
+                    {/* ACTION BUTTONS */}
                     <div className={styles.identityActions}>
+
+                        {/* CHANGE BANNER */}
                         {!editing && (
                             <button
+                                type="button"
                                 className={styles.changeBannerBtn}
                                 onClick={() => bannerInputRef.current?.click()}
                                 disabled={bannerUploading}
@@ -191,22 +214,58 @@ export default function CandidateSelfProfile() {
                                     </>
                                 ) : (
                                     <>
-                                        <img src={changeIcon} alt="" aria-hidden="true" className={styles.btnIcon} />
+                                        <img
+                                            src={changeIcon}
+                                            alt=""
+                                            aria-hidden="true"
+                                            className={styles.btnIcon}
+                                        />
                                         Change Banner
                                     </>
                                 )}
                             </button>
                         )}
+
+                        {/* EDIT / SAVE MODE */}
                         {editing ? (
                             <div className={styles.editActions}>
-                                <button className={styles.cancelBtn} onClick={handleCancel} disabled={saving}>Cancel</button>
-                                <button className={styles.saveBtn} onClick={handleSave} disabled={saving}>
-                                    {saving ? <><span className={styles.spinner} /> Saving…</> : 'Save Changes'}
+                                <button
+                                    type="button"
+                                    className={styles.cancelBtn}
+                                    onClick={handleCancel}
+                                    disabled={saving}
+                                >
+                                    Cancel
+                                </button>
+
+                                <button
+                                    type="button"
+                                    className={styles.saveBtn}
+                                    onClick={handleSave}
+                                    disabled={saving}
+                                >
+                                    {saving ? (
+                                        <>
+                                            <span className={styles.spinner} />
+                                            Saving…
+                                        </>
+                                    ) : (
+                                        'Save Changes'
+                                    )}
                                 </button>
                             </div>
                         ) : (
-                            <button className={styles.editBtn} onClick={() => setEditing(true)}>
-                                <img src={editIcon} alt="" aria-hidden="true" className={styles.btnIcon} />
+                            <button
+                                type="button"
+                                className={styles.editBtn}
+                                onClick={() => setEditing(true)}
+                            >
+                                <img
+                                    src={editIcon}
+                                    alt=""
+                                    aria-hidden="true"
+                                    className={styles.btnIcon}
+                                />
                                 Edit Profile
                             </button>
                         )}
