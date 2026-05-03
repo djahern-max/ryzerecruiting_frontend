@@ -175,19 +175,7 @@ export default function CandidateSelfProfile() {
                     </div>
 
                     {/* Name / title / location — vertical stack */}
-                    <div className={styles.identityInfo}>
-                        <div className={styles.candidateName}>{profile.name}</div>
-                        {(profile.current_title || profile.current_company) && (
-                            <div className={styles.candidateMeta}>
-                                {profile.current_title}
-                                {profile.current_title && profile.current_company && <span className={styles.metaDivider}>·</span>}
-                                {profile.current_company}
-                            </div>
-                        )}
-                        {profile.location && (
-                            <div className={styles.candidateLocation}><i className="fi fi-rr-marker" /> {profile.location}</div>
-                        )}
-                    </div>
+
 
                     <div className={styles.identityActions}>
                         {!editing && (
