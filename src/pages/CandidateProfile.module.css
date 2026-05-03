@@ -1,14 +1,14 @@
 /* ══════════════════════════════════════════════════════
    RYZE.ai — Admin Candidate Profile
-   THE FIX: No white card wrapper around banner.
-   Structure: flat banner → transparent identity zone →
-   white nameBlock (gradient border) → grey body columns.
-   Skills: grey #f1f5f9 chips, NOT blue pills.
+   Redesigned to match CandidateSelfProfile layout:
+   flat banner → identity zone (avatar + name + actions)
+   → nameBlock (subtitle/location) → two-column body
    ══════════════════════════════════════════════════════ */
 
 .page {
     --bg: #f1f5f9;
     --card: #ffffff;
+    --bannerCard: #f8fafc;
     --border: #e2e8f0;
     --blue: #0a66c2;
     --blue-h: #004182;
@@ -27,6 +27,14 @@
     color: var(--text);
 }
 
+.main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 16px 64px;
+    display: flex;
+    flex-direction: column;
+}
+
 .loadingState,
 .errorState {
     display: flex;
@@ -37,6 +45,42 @@
     min-height: 60vh;
     color: var(--sub);
     font-size: 0.95rem;
+}
+
+.loadingDots {
+    display: flex;
+    gap: 6px;
+}
+
+.loadingDots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--blue);
+    animation: dotPulse 1.2s ease-in-out infinite;
+}
+
+.loadingDots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.loadingDots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes dotPulse {
+
+    0%,
+    80%,
+    100% {
+        opacity: 0.25;
+        transform: scale(0.8);
+    }
+
+    40% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .errorBackBtn {
@@ -54,17 +98,6 @@
 .errorBackBtn:hover {
     background: var(--blue);
     color: #fff;
-}
-
-/* ══════════════════════════════════════════════════════
-   OUTER CONTAINER — grey bg, flat, no shadow
-   ══════════════════════════════════════════════════════ */
-.profileBody {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 24px 16px 64px;
-    display: flex;
-    flex-direction: column;
 }
 
 .backBtn {
@@ -89,47 +122,43 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   BANNER — flat element, no card, no borders, no shadow.
-   This is the root cause of the mismatch — the old code
-   put this inside identityCard which added white bg +
-   border + rounded clipping. Now it's a standalone div.
+   BANNER — flat, no card wrapper
    ══════════════════════════════════════════════════════ */
 .banner {
-    height: 140px;
+    height: 160px;
     background: linear-gradient(120deg, #1c3f6e 0%, #0a66c2 60%, #378fe9 100%);
     background-size: cover;
     background-position: center;
     display: block;
     width: 100%;
-    flex-shrink: 0;
 }
 
 /* ══════════════════════════════════════════════════════
-   IDENTITY ZONE — sits directly on grey page background.
-   Avatar overlaps banner with negative margin-top.
-   No background color — grey shows through.
+   IDENTITY ZONE — avatar + name + actions, overlaps banner
    ══════════════════════════════════════════════════════ */
 .identityZone {
     display: flex;
     align-items: flex-end;
+    justify-content: space-between;
     padding: 0 2px;
-    margin-top: -44px;
+    margin-top: -52px;
     position: relative;
     z-index: 2;
+    background: linear-gradient(to bottom, transparent 52px, var(--bannerCard) 52px);
 }
 
 .avatarWrap {
     position: relative;
-    width: 88px;
-    height: 88px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     cursor: pointer;
     flex-shrink: 0;
 }
 
 .avatarImg {
-    width: 88px;
-    height: 88px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     object-fit: cover;
     object-position: center top;
@@ -139,12 +168,12 @@
 }
 
 .avatarInitial {
-    width: 88px;
-    height: 88px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     background: #1c3f6e;
     color: #fff;
-    font-size: 2rem;
+    font-size: 2.4rem;
     font-weight: 800;
     display: flex;
     align-items: center;
@@ -164,7 +193,7 @@
     align-items: center;
     justify-content: center;
     color: #fff;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     opacity: 0;
     transition: opacity 160ms;
 }
@@ -173,24 +202,87 @@
     opacity: 1;
 }
 
-/* ══════════════════════════════════════════════════════
-   NAME BLOCK — white bg, gradient border-bottom only.
-   NO left, right, or top borders. No box-shadow.
-   ══════════════════════════════════════════════════════ */
-.nameBlock {
-    background: var(--card);
-    padding: 12px 4px 16px;
-    border-bottom: 3px solid transparent;
-    border-image: linear-gradient(to right, #1e3a5f, #2563eb, #1e3a5f) 1;
+.cameraIcon {
+    font-size: 1.15rem;
 }
 
-.candidateName {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--navy);
-    letter-spacing: -0.4px;
-    line-height: 1.15;
-    margin-bottom: 4px;
+.identityName {
+    flex: 1;
+    padding: 0 14px 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: -0.2px;
+    align-self: flex-end;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.identityActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-bottom: 6px;
+    flex-shrink: 0;
+}
+
+/* Icon-only action buttons */
+.actionBtn {
+    border: none;
+    background: transparent;
+    padding: 0;
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--sub);
+    font-size: 1rem;
+    border-radius: 6px;
+    transition: color 0.15s, background 0.15s;
+}
+
+.actionBtn:hover:not(:disabled) {
+    color: var(--blue);
+    background: rgba(10, 102, 194, 0.08);
+}
+
+.actionBtn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.spinner {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(0, 0, 0, 0.15);
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ══════════════════════════════════════════════════════
+   NAME BLOCK — subtitle row, gradient border-bottom
+   ══════════════════════════════════════════════════════ */
+.nameBlock {
+    background: var(--bannerCard);
+    padding: 6px 4px 10px;
+    border-bottom: 3px solid transparent;
+    border-image: linear-gradient(to right, #1e3a5f, #2563eb, #1e3a5f) 1;
+    min-height: 16px;
 }
 
 .candidateMeta {
@@ -212,119 +304,9 @@
     font-size: 12px;
     color: var(--blue);
     font-weight: 600;
-    margin-bottom: 14px;
     display: flex;
     align-items: center;
     gap: 4px;
-}
-
-.profileActions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.actionBtn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 16px;
-    background: transparent;
-    border: 1.5px solid var(--border);
-    color: var(--sub);
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: border-color 0.15s, color 0.15s;
-    font-family: var(--font);
-    white-space: nowrap;
-}
-
-.actionBtn:hover:not(:disabled) {
-    border-color: var(--blue);
-    color: var(--blue);
-}
-
-.actionBtn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.actionBtnGreen {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 16px;
-    background: transparent;
-    border: 1.5px solid var(--green);
-    color: var(--green);
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-    font-family: var(--font);
-    white-space: nowrap;
-}
-
-.actionBtnGreen:hover {
-    background: var(--green);
-    color: #fff;
-}
-
-.actionBtnBlue {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 16px;
-    background: var(--blue);
-    border: 1.5px solid var(--blue);
-    color: #fff;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s;
-    font-family: var(--font);
-    white-space: nowrap;
-}
-
-.actionBtnBlue:hover:not(:disabled) {
-    background: var(--blue-h);
-    border-color: var(--blue-h);
-}
-
-.actionBtnBlue:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-}
-
-.spinner {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-top-color: currentColor;
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite;
-    flex-shrink: 0;
-}
-
-.spinnerDark {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    border: 2px solid rgba(255, 255, 255, 0.35);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
 }
 
 /* ══════════════════════════════════════════════════════
@@ -365,10 +347,9 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   TWO-COLUMN BODY — mirrors PDF .body
-   No top border/line — gradient on nameBlock IS the divider
+   TWO-COLUMN BODY
    ══════════════════════════════════════════════════════ */
-.profileBodyInner {
+.profileBodyGrid {
     padding-top: 18px;
     display: grid;
     grid-template-columns: minmax(0, 1fr) 245px;
@@ -391,16 +372,20 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   SECTION CARDS
+   BODY CARDS
    ══════════════════════════════════════════════════════ */
-.section {
+.bodyCard {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     overflow: hidden;
 }
 
-.sectionTitle {
+.notesCard {
+    border-left: 3px solid #f59e0b;
+}
+
+.bodyCardTitle {
     font-size: 0.7rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -411,8 +396,8 @@
     background: #f8fafc;
 }
 
-.sectionBody {
-    padding: 14px 16px;
+.bodyCardBody {
+    padding: 12px 14px;
 }
 
 .summaryText {
@@ -491,10 +476,6 @@
     pointer-events: none;
 }
 
-.notesSection {
-    border-left: 3px solid #f59e0b;
-}
-
 .notesInternalBadge {
     display: inline-block;
     font-size: 0.68rem;
@@ -508,51 +489,67 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   SIDEBAR
+   SIDEBAR — read-only rows
    ══════════════════════════════════════════════════════ */
-.infoList {
-    display: flex;
-    flex-direction: column;
+.roGrid {
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 10px;
 }
 
-.infoRow {
+.roField {
     display: flex;
-    align-items: flex-start;
-    gap: 10px;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
 }
 
-.infoLabel {
+.roLabel {
     font-size: 0.68rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
     color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
     flex-shrink: 0;
-    width: 72px;
-    padding-top: 1px;
+    width: 80px;
 }
 
-.infoValue {
+.roValue {
     font-size: 13px;
     color: var(--text);
-    word-break: break-word;
     font-weight: 500;
-    line-height: 1.35;
 }
 
-.infoLink {
+.roLink {
     font-size: 13px;
     color: var(--blue);
     text-decoration: none;
     font-weight: 500;
+    word-break: break-all;
 }
 
-.infoLink:hover {
+.roLink:hover {
     text-decoration: underline;
 }
 
-/* SKILLS — grey chips matching PDF .skill-tag exactly */
+/* Cert badges */
+.certBadgeRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.certBadge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    border-radius: 20px;
+    background: #1d4ed8;
+    border: 1px solid #3b82f6;
+    color: #fff;
+    padding: 3px 11px;
+}
+
+/* Skills */
 .skillsWrap {
     display: flex;
     flex-wrap: wrap;
@@ -574,102 +571,8 @@
     background: #e2e8f0;
 }
 
-/* Cert badges */
-.certRow {
-    margin-bottom: 12px;
-}
-
-.sideLabel {
-    font-size: 0.68rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--muted);
-    display: block;
-    margin-bottom: 6px;
-}
-
-.certBadgeRow {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-
-.certBadge {
-    font-size: 0.72rem;
-    font-weight: 700;
-    border-radius: 20px;
-    background: #1d4ed8;
-    border: 1px solid #3b82f6;
-    color: #fff;
-    padding: 3px 11px;
-}
-
-.certText {
-    font-size: 13px;
-    color: var(--text);
-    margin: 0;
-}
-
-/* PDF export card */
-.pdfCard {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-}
-
-.pdfCardHeader {
-    font-size: 0.7rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
-    color: var(--muted);
-    padding: 10px 16px 9px;
-    border-bottom: 1px solid #f1f5f9;
-    background: #f8fafc;
-}
-
-.pdfCardBody {
-    padding: 14px 16px;
-}
-
-.pdfCardDesc {
-    font-size: 0.82rem;
-    color: var(--sub);
-    line-height: 1.5;
-    margin: 0 0 12px;
-}
-
-.pdfCardBtn {
-    width: 100%;
-    padding: 10px 16px;
-    background: var(--blue);
-    color: #fff;
-    border: none;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    font-weight: 700;
-    font-family: var(--font);
-    cursor: pointer;
-    transition: background 150ms;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-}
-
-.pdfCardBtn:hover:not(:disabled) {
-    background: var(--blue-h);
-}
-
-.pdfCardBtn:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-}
-
 /* ══════════════════════════════════════════════════════
-   FOOTER — mirrors PDF footer
+   FOOTER
    ══════════════════════════════════════════════════════ */
 .profileFooter {
     display: flex;
@@ -716,8 +619,12 @@
 /* ══════════════════════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════════════════════ */
-@media (max-width: 840px) {
-    .profileBodyInner {
+@media (max-width: 680px) {
+    .banner {
+        height: 130px;
+    }
+
+    .profileBodyGrid {
         grid-template-columns: 1fr;
         gap: 10px;
     }
@@ -726,22 +633,26 @@
         position: static;
     }
 
-    .profileActions {
-        gap: 6px;
+    .identityZone {
+        flex-wrap: wrap;
+        gap: 8px;
     }
 
-    .actionBtn,
-    .actionBtnGreen,
-    .actionBtnBlue {
-        font-size: 0.72rem;
-        padding: 5px 12px;
+    .identityName {
+        font-size: 0.95rem;
     }
 
-    .candidateName {
-        font-size: 1.2rem;
+    .identityActions {
+        justify-content: flex-start;
+        width: 100%;
     }
 
-    .banner {
-        height: 120px;
+    .roField {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .roLabel {
+        width: auto;
     }
 }
