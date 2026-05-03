@@ -6,7 +6,7 @@ import CandidateModal from "../components/CandidateModal";
 import styles from "./CandidateProfile.module.css";
 import bannerImageIcon from "../assets/icons/banner_image.svg";
 import enhanceProfileIcon from "../assets/icons/enhance_profile.svg";
-import changeIcon from "../assets/icons/change.svg";
+import downloadpdf from "../assets/icons/download-pdf.svg";
 import editIcon from "../assets/icons/edit.svg";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
@@ -270,7 +270,7 @@ export default function CandidateProfile() {
                             <img src={enhanceProfileIcon} alt="" className={styles.actionIcon} />
                         </button>
                         <button className={styles.actionBtn} onClick={handleDownloadPdf} disabled={pdfLoading} title="Download PDF">
-                            {pdfLoading ? <span className={styles.spinner} /> : <img src={changeIcon} alt="" className={styles.actionIcon} />}
+                            {pdfLoading ? <span className={styles.spinner} /> : <img src={downloadpdf} alt="" className={styles.actionIcon} />}
                         </button>
                         <button className={styles.actionBtn} onClick={() => setEditOpen(true)} title="Edit Profile">
                             <img src={editIcon} alt="" className={styles.actionIcon} />

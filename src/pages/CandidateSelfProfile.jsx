@@ -225,7 +225,7 @@ export default function CandidateSelfProfile() {
                     <div className={styles.identityActions}>
 
                         {/* CHANGE BANNER */}
-                        {!editing && (
+                        {/* {!editing && (
                             <button
                                 type="button"
                                 className={styles.rawIconButton}
@@ -245,7 +245,7 @@ export default function CandidateSelfProfile() {
                                     />
                                 )}
                             </button>
-                        )}
+                        )} */}
 
                         {/* EDIT / SAVE MODE */}
                         {editing ? (
