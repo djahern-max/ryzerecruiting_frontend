@@ -217,17 +217,17 @@ export default function CandidateProfile() {
 
             <div className={styles.profileBody}>
 
-                {/* ── Back nav ── */}
                 <button className={styles.backBtn} onClick={() => navigate(-1)}>
                     ← Back to Candidates
                 </button>
 
                 {/* ══════════════════════════════════════════
-                    IDENTITY CARD
+                    IDENTITY CARD — mirrors PDF structure exactly:
+                    banner → identityZone (avatar) → nameBlock (gradient border)
                 ══════════════════════════════════════════ */}
                 <div className={styles.identityCard}>
 
-                    {/* Banner — purely visual, no buttons on top */}
+                    {/* Banner — purely visual */}
                     <div
                         className={styles.banner}
                         style={candidate.banner_url ? {
@@ -241,8 +241,8 @@ export default function CandidateProfile() {
                     <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleBannerChange} />
                     <input ref={photoInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoChange} />
 
-
-                    <div className={styles.profileHeaderContent}>
+                    {/* Identity zone: avatar overlaps banner seam (mirrors .identity-zone) */}
+                    <div className={styles.identityZone}>
                         <div
                             className={styles.avatarWrap}
                             onClick={() => !photoUploading && photoInputRef.current?.click()}
@@ -255,76 +255,83 @@ export default function CandidateProfile() {
                                     {candidate.name?.charAt(0).toUpperCase()}
                                 </div>
                             )}
-
                             <div className={styles.avatarOverlay}>
-                                {photoUploading ? <span className={styles.spinnerDark} /> : <i className="fi fi-rr-camera" />}
-                            </div>
-                        </div>
-
-                        <div className={styles.profileIntro}>
-                            <div className={styles.identityName}>{candidate.name}</div>
-
-                            {(candidate.current_title || candidate.current_company) && (
-                                <div className={styles.identityHeadline}>
-                                    {candidate.current_title}
-                                    {candidate.current_title && candidate.current_company && (
-                                        <span className={styles.headlineDot}> · </span>
-                                    )}
-                                    {candidate.current_company}
-                                </div>
-                            )}
-
-                            {candidate.location && (
-                                <div className={styles.identityLocation}>
-                                    <i className="fi fi-rr-marker" /> {candidate.location}
-                                </div>
-                            )}
-
-                            <div className={styles.profileActions}>
-                                <button className={styles.actionBtn} onClick={() => bannerInputRef.current?.click()} disabled={bannerUploading}>
-                                    {bannerUploading ? <span className={styles.spinner} /> : <i className="fi fi-rr-picture" />}
-                                    {bannerUploading ? "Uploading…" : "Change Banner"}
-                                </button>
-
-                                <button className={styles.actionBtnGreen} onClick={() => setEnrichOpen(true)}>
-                                    <i className="fi fi-rr-magic-wand" /> Enrich Profile
-                                </button>
-
-                                <button className={styles.actionBtnPurple} onClick={handleDownloadPdf} disabled={pdfLoading}>
-                                    {pdfLoading ? <span className={styles.spinner} /> : <i className="fi fi-rr-file-pdf" />}
-                                    {pdfLoading ? "Generating…" : "Download PDF"}
-                                </button>
-
-                                <button className={styles.actionBtn} onClick={() => setEditOpen(true)}>
-                                    <i className="fi fi-rr-edit" /> Edit Profile
-                                </button>
+                                {photoUploading
+                                    ? <span className={styles.spinnerDark} />
+                                    : <i className="fi fi-rr-camera" />}
                             </div>
                         </div>
                     </div>
 
+                    {/* Name block — white bg, gradient border-bottom (mirrors .name-block) */}
+                    <div className={styles.nameBlock}>
+                        <div className={styles.candidateName}>{candidate.name}</div>
 
-
-
-                </div>
-
-                {/* ── Stub notice ── */}
-                {isStub && (
-                    <div className={styles.stubNotice}>
-                        <div>
-                            <div className={styles.stubTitle}>Profile stub — resume not yet parsed</div>
-                            <div className={styles.stubBody}>
-                                This candidate was added from a call booking. Upload their resume or paste
-                                their LinkedIn to enrich the profile with AI-generated details.
+                        {(candidate.current_title || candidate.current_company) && (
+                            <div className={styles.candidateMeta}>
+                                {candidate.current_title}
+                                {candidate.current_title && candidate.current_company && (
+                                    <span className={styles.metaDivider}>·</span>
+                                )}
+                                {candidate.current_company}
                             </div>
-                            <button className={styles.stubBtn} onClick={() => setEnrichOpen(true)}>
-                                Enrich with Resume / LinkedIn
+                        )}
+
+                        {candidate.location && (
+                            <div className={styles.candidateLocation}>
+                                <i className="fi fi-rr-marker" /> {candidate.location}
+                            </div>
+                        )}
+
+                        {/* Action buttons */}
+                        <div className={styles.profileActions}>
+                            <button
+                                className={styles.actionBtn}
+                                onClick={() => bannerInputRef.current?.click()}
+                                disabled={bannerUploading}
+                            >
+                                {bannerUploading
+                                    ? <><span className={styles.spinner} /> Uploading…</>
+                                    : <><i className="fi fi-rr-picture" /> Change Banner</>}
+                            </button>
+
+                            <button className={styles.actionBtnGreen} onClick={() => setEnrichOpen(true)}>
+                                <i className="fi fi-rr-magic-wand" /> Enrich Profile
+                            </button>
+
+                            <button
+                                className={styles.actionBtnBlue}
+                                onClick={handleDownloadPdf}
+                                disabled={pdfLoading}
+                            >
+                                {pdfLoading
+                                    ? <><span className={styles.spinner} /> Generating…</>
+                                    : <><i className="fi fi-rr-file-pdf" /> Download PDF</>}
+                            </button>
+
+                            <button className={styles.actionBtn} onClick={() => setEditOpen(true)}>
+                                <i className="fi fi-rr-edit" /> Edit Profile
                             </button>
                         </div>
+                    </div>
+                </div>
+
+                {/* Stub notice */}
+                {isStub && (
+                    <div className={styles.stubNotice}>
+                        <div className={styles.stubTitle}>Profile stub — resume not yet parsed</div>
+                        <div className={styles.stubBody}>
+                            This candidate was added from a call booking. Upload their resume or paste
+                            their LinkedIn to enrich the profile with AI-generated details.
+                        </div>
+                        <button className={styles.stubBtn} onClick={() => setEnrichOpen(true)}>
+                            Enrich with Resume / LinkedIn
+                        </button>
                     </div>
                 )}
 
                 {/* ══════════════════════════════════════════
-                    TWO-COLUMN PROFILE BODY
+                    TWO-COLUMN BODY — mirrors PDF .body layout
                 ══════════════════════════════════════════ */}
                 <div className={styles.profileBodyInner}>
 
@@ -366,10 +373,7 @@ export default function CandidateProfile() {
                                         (candidate.ai_outreach_message.length > 300 ? "…" : "")}
                                 </p>
                                 {candidate.ai_outreach_message.length > 300 && (
-                                    <button
-                                        className={styles.expandBtn}
-                                        onClick={() => setOutreachExpanded(p => !p)}
-                                    >
+                                    <button className={styles.expandBtn} onClick={() => setOutreachExpanded(p => !p)}>
                                         {outreachExpanded ? "Show less ↑" : "Show full message ↓"}
                                     </button>
                                 )}
@@ -390,10 +394,7 @@ export default function CandidateProfile() {
                                     )}
                                 </div>
                                 {candidate.meeting_transcript.length > 600 && (
-                                    <button
-                                        className={styles.expandBtn}
-                                        onClick={() => setTranscriptExpanded(p => !p)}
-                                    >
+                                    <button className={styles.expandBtn} onClick={() => setTranscriptExpanded(p => !p)}>
                                         {transcriptExpanded ? "Show less ↑" : "Show full transcript ↓"}
                                     </button>
                                 )}
@@ -413,21 +414,9 @@ export default function CandidateProfile() {
 
                         <Section title="Contact">
                             <div className={styles.infoList}>
-                                <InfoRow
-                                    label="Email"
-                                    value={candidate.email}
-                                    href={candidate.email ? `mailto:${candidate.email}` : null}
-                                />
-                                <InfoRow
-                                    label="Phone"
-                                    value={candidate.phone}
-                                    href={candidate.phone ? `tel:${candidate.phone}` : null}
-                                />
-                                <InfoRow
-                                    label="LinkedIn"
-                                    value={candidate.linkedin_url ? "View Profile" : null}
-                                    href={candidate.linkedin_url}
-                                />
+                                <InfoRow label="Email" value={candidate.email} href={candidate.email ? `mailto:${candidate.email}` : null} />
+                                <InfoRow label="Phone" value={candidate.phone} href={candidate.phone ? `tel:${candidate.phone}` : null} />
+                                <InfoRow label="LinkedIn" value={candidate.linkedin_url ? "View Profile" : null} href={candidate.linkedin_url} />
                             </div>
                         </Section>
 
@@ -464,10 +453,7 @@ export default function CandidateProfile() {
                                         ? candidate.ai_career_level.charAt(0).toUpperCase() + candidate.ai_career_level.slice(1)
                                         : null}
                                 />
-                                <InfoRow
-                                    label="Experience"
-                                    value={candidate.ai_years_experience ? `${candidate.ai_years_experience} years` : null}
-                                />
+                                <InfoRow label="Experience" value={candidate.ai_years_experience ? `${candidate.ai_years_experience} years` : null} />
                                 <InfoRow label="Source" value={isFromCall ? "From Call" : "Manual Entry"} />
                                 {candidate.ai_parsed_at && (
                                     <InfoRow
@@ -490,17 +476,35 @@ export default function CandidateProfile() {
                             </div>
                         </Section>
 
+                        {/* PDF export card — mirrors PDF card style */}
                         <div className={styles.pdfCard}>
-                            <div className={styles.pdfCardTitle}>Export Profile</div>
-                            <p className={styles.pdfCardDesc}>Download a clean PDF to share with potential employers.</p>
-                            <button className={styles.pdfCardBtn} onClick={handleDownloadPdf} disabled={pdfLoading}>
-                                {pdfLoading
-                                    ? <span className={styles.spinner} />
-                                    : <i className="fi fi-rr-file-pdf" />}
-                                {pdfLoading ? "Generating…" : "Download PDF"}
-                            </button>
+                            <div className={styles.pdfCardHeader}>Export Profile</div>
+                            <div className={styles.pdfCardBody}>
+                                <p className={styles.pdfCardDesc}>
+                                    Download a clean PDF to share with potential employers.
+                                </p>
+                                <button className={styles.pdfCardBtn} onClick={handleDownloadPdf} disabled={pdfLoading}>
+                                    {pdfLoading
+                                        ? <><span className={styles.spinner} /> Generating…</>
+                                        : <><i className="fi fi-rr-file-pdf" /> Download PDF</>}
+                                </button>
+                            </div>
                         </div>
 
+                    </div>
+                </div>
+
+                {/* ── RYZE footer — mirrors PDF footer ── */}
+                <div className={styles.profileFooter}>
+                    <div className={styles.footerLeft}>
+                        <span className={styles.footerBrand}>RYZE.ai</span>
+                        <span className={styles.footerSep} />
+                        <span className={styles.footerTagline}>Candidate Profile</span>
+                    </div>
+                    <div className={styles.footerRight}>
+                        {candidate.ai_parsed_at
+                            ? `Parsed ${new Date(candidate.ai_parsed_at).toLocaleDateString("en-US", { month: "short", year: "numeric" })}`
+                            : "Not yet enriched"}
                     </div>
                 </div>
 

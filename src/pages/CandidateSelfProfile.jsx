@@ -14,8 +14,8 @@ function getInitials(name) {
 }
 
 /**
- * Splits AI prose text into individual bullet sentences, strips subject pronouns,
- * and returns an array of cleaned strings (mirrors the backend _parse_to_bullets logic).
+ * Splits AI prose into bullet sentences, strips subject pronouns.
+ * Mirrors backend _parse_to_bullets logic and PDF pdf_parse_to_bullets.
  */
 function parseToDisplayBullets(text, maxItems = 6) {
     if (!text) return [];
@@ -42,16 +42,6 @@ function parseToDisplayBullets(text, maxItems = 6) {
         bullets.push(s);
     }
     return bullets.slice(0, maxItems);
-}
-
-function ReadOnlyField({ label, value }) {
-    if (!value) return null;
-    return (
-        <div className={styles.roField}>
-            <span className={styles.roLabel}>{label}</span>
-            <span className={styles.roValue}>{value}</span>
-        </div>
-    );
 }
 
 export default function CandidateSelfProfile() {
@@ -180,7 +170,7 @@ export default function CandidateSelfProfile() {
         }
     }
 
-    // ── Derived display values ──────────────────────────────────────────
+    // ── Derived display values ──────────────────────────────────────────────
     const skills = Array.isArray(profile?.ai_skills)
         ? profile.ai_skills
         : typeof profile?.ai_skills === 'string'
@@ -197,7 +187,7 @@ export default function CandidateSelfProfile() {
         executive: 'Executive',
     }[profile?.ai_career_level] || profile?.ai_career_level || null;
 
-    // ── Loading / empty states ──────────────────────────────────────────
+    // ── Loading / empty ─────────────────────────────────────────────────────
     if (loading) {
         return (
             <div className={styles.page}>
@@ -227,13 +217,13 @@ export default function CandidateSelfProfile() {
 
             <main className={styles.main}>
 
-                {/* ── Back nav ── */}
                 <button className={styles.backBtn} onClick={() => navigate('/candidate/dashboard')}>
                     ← Back to Dashboard
                 </button>
 
                 {/* ══════════════════════════════════════════
-                    PROFILE CARD (identity section)
+                    IDENTITY CARD — mirrors PDF structure exactly:
+                    banner → identityZone (avatar + actions) → nameBlock
                 ══════════════════════════════════════════ */}
                 <div className={styles.profileCard}>
 
@@ -251,8 +241,8 @@ export default function CandidateSelfProfile() {
                     <input ref={photoInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handlePhotoChange} />
                     <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleBannerChange} />
 
-                    {/* ── Identity row: avatar ONLY — overlaps banner seam ── */}
-                    <div className={styles.identityRow}>
+                    {/* Identity zone: avatar (left) + action buttons (right) */}
+                    <div className={styles.identityZone}>
                         <div
                             className={styles.avatarWrap}
                             onClick={() => !photoUploading && photoInputRef.current?.click()}
@@ -268,12 +258,11 @@ export default function CandidateSelfProfile() {
                             <div className={styles.avatarOverlay}>
                                 {photoUploading
                                     ? <span className={styles.spinner} />
-                                    : <i className="fi fi-rr-camera" />
-                                }
+                                    : <i className="fi fi-rr-camera" />}
                             </div>
                         </div>
 
-                        {/* Actions: Change Banner + Edit/Save/Cancel */}
+                        {/* Action buttons float to the right, aligned to bottom of identity zone */}
                         <div className={styles.identityActions}>
                             {!editing && (
                                 <button
@@ -283,8 +272,7 @@ export default function CandidateSelfProfile() {
                                 >
                                     {bannerUploading
                                         ? <><span className={styles.spinner} /> Uploading…</>
-                                        : <><i className="fi fi-rr-picture" /> Change Banner</>
-                                    }
+                                        : <><i className="fi fi-rr-picture" /> Change Banner</>}
                                 </button>
                             )}
 
@@ -305,41 +293,36 @@ export default function CandidateSelfProfile() {
                         </div>
                     </div>
 
-                    {/* ── Name strip: name | title · company | location ── */}
-                    <div className={styles.nameStrip}>
-                        <div className={styles.nameStripCol}>
-                            <div className={styles.identityName}>{profile.name}</div>
-                        </div>
+                    {/* Name block — gradient border-bottom (mirrors .name-block) */}
+                    <div className={styles.nameBlock}>
+                        <div className={styles.candidateName}>{profile.name}</div>
+
                         {(profile.current_title || profile.current_company) && (
-                            <div className={styles.nameStripCol}>
-                                <div className={styles.identityHeadline}>
-                                    {profile.current_title}
-                                    {profile.current_title && profile.current_company && (
-                                        <span className={styles.headlineDot}> · </span>
-                                    )}
-                                    {profile.current_company}
-                                </div>
+                            <div className={styles.candidateMeta}>
+                                {profile.current_title}
+                                {profile.current_title && profile.current_company && (
+                                    <span className={styles.metaDivider}>·</span>
+                                )}
+                                {profile.current_company}
                             </div>
                         )}
+
                         {profile.location && (
-                            <div className={styles.nameStripCol}>
-                                <div className={styles.identityLocation}>
-                                    <i className="fi fi-rr-marker" /> {profile.location}
-                                </div>
+                            <div className={styles.candidateLocation}>
+                                <i className="fi fi-rr-marker" /> {profile.location}
+                            </div>
+                        )}
+
+                        {saveMsg && (
+                            <div className={`${styles.saveMsg} ${saveMsg.includes('failed') ? styles.saveMsgErr : ''}`}>
+                                {saveMsg}
                             </div>
                         )}
                     </div>
-
-                    {/* Save message */}
-                    {saveMsg && (
-                        <div className={`${styles.saveMsg} ${saveMsg.includes('failed') ? styles.saveMsgErr : ''}`}>
-                            {saveMsg}
-                        </div>
-                    )}
                 </div>
 
                 {/* ══════════════════════════════════════════
-                    TWO-COLUMN PROFILE BODY
+                    TWO-COLUMN BODY — mirrors PDF .body layout
                 ══════════════════════════════════════════ */}
                 <div className={styles.profileBodyGrid}>
 
@@ -349,7 +332,7 @@ export default function CandidateSelfProfile() {
                         {profile.ai_summary && (
                             <div className={styles.bodyCard}>
                                 <div className={styles.bodyCardTitle}>About</div>
-                                <div style={{ padding: '16px 18px' }}>
+                                <div style={{ padding: '14px 18px' }}>
                                     <p className={styles.summaryText}>{profile.ai_summary}</p>
                                 </div>
                             </div>
@@ -358,7 +341,7 @@ export default function CandidateSelfProfile() {
                         {experienceBullets.length > 0 && (
                             <div className={styles.bodyCard}>
                                 <div className={styles.bodyCardTitle}>Experience</div>
-                                <div style={{ padding: '16px 18px' }}>
+                                <div style={{ padding: '14px 18px' }}>
                                     <ul className={styles.bulletList}>
                                         {experienceBullets.map((b, i) => (
                                             <li key={i} className={styles.bulletItem}>{b}</li>
@@ -371,7 +354,7 @@ export default function CandidateSelfProfile() {
                         {educationBullets.length > 0 && (
                             <div className={styles.bodyCard}>
                                 <div className={styles.bodyCardTitle}>Education</div>
-                                <div style={{ padding: '16px 18px' }}>
+                                <div style={{ padding: '14px 18px' }}>
                                     <ul className={styles.bulletList}>
                                         {educationBullets.map((b, i) => (
                                             <li key={i} className={styles.bulletItem}>{b}</li>
@@ -388,7 +371,7 @@ export default function CandidateSelfProfile() {
                         {/* Basic Info — editable */}
                         <div className={styles.bodyCard}>
                             <div className={styles.bodyCardTitle}>Basic Information</div>
-                            <div style={{ padding: '16px 18px' }}>
+                            <div style={{ padding: '14px 18px' }}>
                                 {editing ? (
                                     <div className={styles.fieldRow}>
                                         <div className={styles.fieldGroup}>
@@ -439,10 +422,22 @@ export default function CandidateSelfProfile() {
                                     </div>
                                 ) : (
                                     <div className={styles.roGrid}>
-                                        <ReadOnlyField label="Title" value={profile.current_title} />
-                                        <ReadOnlyField label="Company" value={profile.current_company} />
-                                        <ReadOnlyField label="Location" value={profile.location} />
-                                        <ReadOnlyField label="Phone" value={profile.phone} />
+                                        <div className={styles.roField}>
+                                            <span className={styles.roLabel}>Title</span>
+                                            {profile.current_title && <span className={styles.roValue}>{profile.current_title}</span>}
+                                        </div>
+                                        <div className={styles.roField}>
+                                            <span className={styles.roLabel}>Company</span>
+                                            {profile.current_company && <span className={styles.roValue}>{profile.current_company}</span>}
+                                        </div>
+                                        <div className={styles.roField}>
+                                            <span className={styles.roLabel}>Location</span>
+                                            {profile.location && <span className={styles.roValue}>{profile.location}</span>}
+                                        </div>
+                                        <div className={styles.roField}>
+                                            <span className={styles.roLabel}>Phone</span>
+                                            {profile.phone && <span className={styles.roValue}>{profile.phone}</span>}
+                                        </div>
                                     </div>
                                 )}
                             </div>
@@ -452,24 +447,36 @@ export default function CandidateSelfProfile() {
                         {(careerLevelLabel || profile.ai_years_experience || profile.ai_certifications) && (
                             <div className={styles.bodyCard}>
                                 <div className={styles.bodyCardTitle}>Career Details</div>
-                                <div style={{ padding: '16px 18px' }}>
+                                <div style={{ padding: '14px 18px' }}>
                                     <div className={styles.roGrid}>
-                                        <ReadOnlyField label="Level" value={careerLevelLabel} />
-                                        <ReadOnlyField
-                                            label="Experience"
-                                            value={profile.ai_years_experience ? `${profile.ai_years_experience} years` : null}
-                                        />
-                                        <ReadOnlyField label="Certifications" value={profile.ai_certifications} />
+                                        {careerLevelLabel && (
+                                            <div className={styles.roField}>
+                                                <span className={styles.roLabel}>Level</span>
+                                                <span className={styles.roValue}>{careerLevelLabel}</span>
+                                            </div>
+                                        )}
+                                        {profile.ai_years_experience && (
+                                            <div className={styles.roField}>
+                                                <span className={styles.roLabel}>Experience</span>
+                                                <span className={styles.roValue}>{profile.ai_years_experience} years</span>
+                                            </div>
+                                        )}
+                                        {profile.ai_certifications && (
+                                            <div className={styles.roField} style={{ gridColumn: '1 / -1' }}>
+                                                <span className={styles.roLabel}>Certifications</span>
+                                                <span className={styles.roValue}>{profile.ai_certifications}</span>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
                         )}
 
-                        {/* Skills */}
+                        {/* Skills — mirrors .skill-tag */}
                         {skills.length > 0 && (
                             <div className={styles.bodyCard}>
                                 <div className={styles.bodyCardTitle}>Skills</div>
-                                <div style={{ padding: '14px 18px' }}>
+                                <div style={{ padding: '12px 18px' }}>
                                     <div className={styles.skillsWrap}>
                                         {skills.map((skill, i) => (
                                             <span key={i} className={styles.skillTag}>{skill}</span>
@@ -482,7 +489,7 @@ export default function CandidateSelfProfile() {
                         {/* Contact */}
                         <div className={styles.bodyCard}>
                             <div className={styles.bodyCardTitle}>Contact</div>
-                            <div style={{ padding: '16px 18px' }}>
+                            <div style={{ padding: '14px 18px' }}>
                                 <div className={styles.detailList}>
                                     {profile.email && (
                                         <div className={styles.detailRow}>
@@ -513,6 +520,20 @@ export default function CandidateSelfProfile() {
                             </div>
                         </div>
 
+                    </div>
+                </div>
+
+                {/* ── RYZE footer — mirrors PDF footer ── */}
+                <div className={styles.profileFooter}>
+                    <div className={styles.footerLeft}>
+                        <span className={styles.footerBrand}>RYZE.ai</span>
+                        <span className={styles.footerSep} />
+                        <span className={styles.footerTagline}>Your Candidate Profile</span>
+                    </div>
+                    <div className={styles.footerRight}>
+                        {profile.ai_parsed_at
+                            ? `Enriched ${new Date(profile.ai_parsed_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`
+                            : 'Not yet enriched'}
                     </div>
                 </div>
 

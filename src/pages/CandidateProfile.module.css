@@ -1,22 +1,28 @@
 /* ══════════════════════════════════════════════════════
    RYZE.ai — Admin Candidate Profile
-   Banner-inside-card layout matching CandidateSelfProfile
-   Variables scoped to .page to avoid :root conflicts
+   Design system mirrors candidate_pdf_template.py exactly:
+   navy #0f2444, card #fff, bg #f1f5f9, border #e2e8f0,
+   gradient border-bottom on name block, 10px card radius,
+   245px sidebar, #f8fafc card headers, #94a3b8 labels
    ══════════════════════════════════════════════════════ */
 
 .page {
+    /* ── Design tokens (match PDF exactly) ── */
     --bg: #f1f5f9;
     --card: #ffffff;
+    --border: #e2e8f0;
     --blue: #0a66c2;
-    --blue-hover: #004182;
-    --border: rgba(0, 0, 0, 0.12);
-    --text: rgba(0, 0, 0, 0.9);
-    --sub: rgba(0, 0, 0, 0.6);
-    --muted: rgba(0, 0, 0, 0.4);
-    --avatar: 120px;
-    --radius: 8px;
+    --blue-h: #004182;
+    --navy: #0f2444;
+    --navy2: #1e3a5f;
+    --text: #1e293b;
+    --sub: #475569;
+    --muted: #94a3b8;
+    --green: #16a34a;
+    --radius: 10px;
+    --avatar: 88px;
+    --banner-h: 140px;
     --font: 'DM Sans', system-ui, -apple-system, sans-serif;
-    --avatar: 96px;
 
     min-height: 100vh;
     background: var(--bg);
@@ -56,7 +62,7 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   PROFILE BODY — centered, max-width container
+   PAGE CONTAINER
    ══════════════════════════════════════════════════════ */
 .profileBody {
     max-width: 900px;
@@ -64,10 +70,9 @@
     padding: 24px 16px 64px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
 }
 
-/* ── Back button above the card ── */
 .backBtn {
     background: none;
     border: none;
@@ -89,43 +94,229 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   IDENTITY CARD — contains banner + avatar + name block
-   overflow: hidden clips the banner to rounded corners
+   IDENTITY CARD
+   Mirrors PDF: banner → identityZone (avatar) → nameBlock
    ══════════════════════════════════════════════════════ */
 .identityCard {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-/* ── Banner — purely visual, no buttons on top ── */
+/* Banner — mirrors .banner-strip in PDF */
 .banner {
-    height: 160px;
+    height: var(--banner-h);
     background: linear-gradient(120deg, #1c3f6e 0%, #0a66c2 60%, #378fe9 100%);
     background-size: cover;
     background-position: center;
     display: block;
+    flex-shrink: 0;
 }
 
-.profileHeaderContent {
-    display: grid;
-    grid-template-columns: 96px 1fr;
-    align-items: start;
-    gap: 16px;
-    padding: 0 24px 18px;
-    margin-top: -42px;
+/* Identity zone — mirrors .identity-zone: avatar only, overlaps banner */
+.identityZone {
+    display: flex;
+    align-items: flex-end;
+    padding: 0 28px 0 24px;
+    margin-top: -44px;
+    position: relative;
+    z-index: 2;
 }
 
+/* Avatar — mirrors .avatar */
+.avatarWrap {
+    position: relative;
+    width: var(--avatar);
+    height: var(--avatar);
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.avatarImg {
+    width: var(--avatar);
+    height: var(--avatar);
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    border: 4px solid #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+    display: block;
+}
+
+.avatarInitial {
+    width: var(--avatar);
+    height: var(--avatar);
+    border-radius: 50%;
+    background: #1c3f6e;
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+    letter-spacing: -1px;
+    user-select: none;
+}
+
+.avatarOverlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.1rem;
+    opacity: 0;
+    transition: opacity 160ms;
+}
+
+.avatarWrap:hover .avatarOverlay {
+    opacity: 1;
+}
+
+/* Name block — mirrors .name-block with gradient border-bottom */
+.nameBlock {
+    padding: 10px 24px 18px;
+    border-bottom: 3px solid transparent;
+    border-image: linear-gradient(to right, #1e3a5f, #2563eb, #1e3a5f) 1;
+    background: var(--card);
+}
+
+/* Mirrors .candidate-name */
+.candidateName {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.4px;
+    line-height: 1.15;
+    margin-bottom: 4px;
+}
+
+/* Mirrors .candidate-meta */
+.candidateMeta {
+    font-size: 13px;
+    color: var(--sub);
+    font-weight: 500;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.metaDivider {
+    color: var(--muted);
+}
+
+/* Mirrors .candidate-location */
+.candidateLocation {
+    font-size: 12px;
+    color: var(--blue);
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Action buttons row */
+.profileActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+/* ── Buttons ── */
+.actionBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--sub);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+    font-family: var(--font);
+    white-space: nowrap;
+}
+
+.actionBtn:hover:not(:disabled) {
+    border-color: var(--blue);
+    color: var(--blue);
+}
+
+.actionBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.actionBtnGreen {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    background: transparent;
+    border: 1.5px solid var(--green);
+    color: var(--green);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    font-family: var(--font);
+    white-space: nowrap;
+}
+
+.actionBtnGreen:hover {
+    background: var(--green);
+    color: #fff;
+}
+
+.actionBtnBlue {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    background: var(--blue);
+    border: 1.5px solid var(--blue);
+    color: #fff;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: var(--font);
+    white-space: nowrap;
+}
+
+.actionBtnBlue:hover:not(:disabled) {
+    background: var(--blue-h);
+    border-color: var(--blue-h);
+}
+
+.actionBtnBlue:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
 
 /* ── Spinners ── */
-.spinner,
-.spinnerSmall {
+.spinner {
     display: inline-block;
     width: 12px;
     height: 12px;
-    border: 2px solid rgba(0, 0, 0, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.35);
     border-top-color: currentColor;
     border-radius: 50%;
     animation: spin 0.6s linear infinite;
@@ -149,250 +340,6 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   IDENTITY ROW — avatar (left) + name/title/location (right)
-   Pulls up to overlap the banner via negative margin-top
-   ══════════════════════════════════════════════════════ */
-
-/* ── Avatar ── */
-.avatarWrap {
-    position: relative;
-    width: var(--avatar);
-    height: var(--avatar);
-    border-radius: 50%;
-    cursor: pointer;
-    flex-shrink: 0;
-    z-index: 2;
-}
-
-.avatarImg {
-    width: var(--avatar);
-    height: var(--avatar);
-    border-radius: 50%;
-    object-fit: cover;
-    object-position: center top;
-    border: 4px solid #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    display: block;
-}
-
-.avatarInitial {
-    width: var(--avatar);
-    height: var(--avatar);
-    border-radius: 50%;
-    background: #1c3f6e;
-    color: #fff;
-    font-size: 2.4rem;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 4px solid #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    user-select: none;
-    letter-spacing: -1px;
-}
-
-/* Camera overlay on avatar */
-.avatarOverlay {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.42);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 1.2rem;
-    opacity: 0;
-    transition: opacity 160ms;
-}
-
-.avatarWrap:hover .avatarOverlay {
-    opacity: 1;
-}
-
-.profileIntro {
-    min-width: 0;
-    padding-top: 42px;
-}
-
-
-
-/* ── Name strip: horizontal 3-col bar below avatar row ── */
-
-.identityName {
-    font-size: 1.45rem;
-    font-weight: 800;
-    color: var(--text);
-    line-height: 1.15;
-    letter-spacing: -0.4px;
-}
-
-.identityHeadline {
-    margin-top: 4px;
-    font-size: 14px;
-    color: var(--sub);
-    font-weight: 500;
-    line-height: 1.35;
-}
-
-
-.identityHeadline {
-    font-size: 14px;
-    color: var(--sub);
-    font-weight: 400;
-    line-height: 1.4;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.headlineDot {
-    color: var(--muted);
-}
-
-.identityLocation {
-    margin-top: 6px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 13px;
-    color: var(--blue);
-    font-weight: 600;
-}
-
-.profileActions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 8px;
-    padding: 14px 0 0;
-    max-width: none;
-}
-
-.actionBtn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 16px;
-    background: transparent;
-    border: 1.5px solid var(--border);
-    color: var(--sub);
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: border-color 0.15s, color 0.15s, background 0.15s;
-    font-family: var(--font);
-    white-space: nowrap;
-}
-
-.actionBtn:hover:not(:disabled) {
-    border-color: var(--blue);
-    color: var(--blue);
-}
-
-.actionBtn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.actionBtnGreen {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 16px;
-    background: transparent;
-    border: 1.5px solid #16a34a;
-    color: #16a34a;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-    font-family: var(--font);
-    white-space: nowrap;
-}
-
-.actionBtnGreen:hover {
-    background: #16a34a;
-    color: #fff;
-}
-
-.actionBtnPurple {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 16px;
-    background: var(--blue);
-    border: 1.5px solid var(--blue);
-    color: #fff;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s;
-    font-family: var(--font);
-    white-space: nowrap;
-}
-
-.actionBtnPurple:hover:not(:disabled) {
-    background: var(--blue-hover);
-    border-color: var(--blue-hover);
-}
-
-.actionBtnPurple:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-}
-
-/* ── Badges row (below action buttons) ── */
-.nameBlock {
-    padding: 0 24px 16px;
-}
-
-.nameRow {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.callBadge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 11px;
-    font-weight: 700;
-    color: #6d28d9;
-    background: #ede9fe;
-    border: 1px solid #c4b5fd;
-    border-radius: 4px;
-    padding: 2px 8px;
-}
-
-.certBadge {
-    font-size: 0.72rem;
-    font-weight: 800;
-    border-radius: 20px;
-    background: var(--blue);
-    color: #fff;
-    padding: 3px 11px;
-}
-
-.levelBadge {
-    display: inline-flex;
-    align-items: center;
-    font-size: 11px;
-    font-weight: 700;
-    color: #1d4ed8;
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
-    border-radius: 4px;
-    padding: 2px 8px;
-}
-
-/* ══════════════════════════════════════════════════════
    STUB NOTICE
    ══════════════════════════════════════════════════════ */
 .stubNotice {
@@ -400,9 +347,6 @@
     border: 1px solid #e9d5ff;
     border-radius: var(--radius);
     padding: 16px 20px;
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
 }
 
 .stubTitle {
@@ -432,69 +376,80 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   TWO-COLUMN GRID (mirrors PDF layout)
+   TWO-COLUMN BODY — mirrors PDF .body layout
+   gap: 18px, side col: 245px, main: flex 1
    ══════════════════════════════════════════════════════ */
 .profileBodyInner {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 280px;
-    gap: 10px;
+    grid-template-columns: minmax(0, 1fr) 245px;
+    gap: 18px;
     align-items: start;
 }
 
 .mainCol {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 13px;
 }
 
 .sideCol {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 13px;
     position: sticky;
     top: 80px;
 }
 
 /* ══════════════════════════════════════════════════════
-   SECTION CARDS
+   SECTION CARDS — mirrors .card / .card-title / .card-body
    ══════════════════════════════════════════════════════ */
 .section {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    page-break-inside: avoid;
 }
 
+/* mirrors .card-title */
 .sectionTitle {
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.7px;
     color: var(--muted);
-    padding: 12px 18px 10px;
+    padding: 10px 18px 9px;
     border-bottom: 1px solid #f1f5f9;
     background: #f8fafc;
 }
 
+/* mirrors .card-body */
 .sectionBody {
-    padding: 16px 18px;
+    padding: 14px 18px;
 }
 
+/* mirrors .summary-text */
 .summaryText {
     font-size: 14px;
     color: var(--sub);
     line-height: 1.75;
     margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
+/* mirrors .body-text */
 .bodyText {
-    font-size: 14px;
+    font-size: 13.5px;
     color: var(--sub);
     line-height: 1.7;
     margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
+/* mirrors .bullet-list / .bullet-list li */
 .bulletList {
     margin: 0;
     padding: 0 0 0 18px;
@@ -504,9 +459,10 @@
 }
 
 .bulletItem {
-    font-size: 14px;
+    font-size: 13.5px;
     color: var(--sub);
     line-height: 1.55;
+    padding-left: 2px;
 }
 
 .expandBtn {
@@ -542,7 +498,7 @@
     background: #f8fafc;
     border: 1px solid var(--border);
     border-radius: 6px;
-    padding: 14px 16px;
+    padding: 12px 14px;
 }
 
 .transcriptFade {
@@ -550,8 +506,8 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 60px;
-    background: linear-gradient(to bottom, transparent, #fff);
+    height: 56px;
+    background: linear-gradient(to bottom, transparent, var(--card));
     pointer-events: none;
 }
 
@@ -562,7 +518,7 @@
 
 .notesInternalBadge {
     display: inline-block;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 700;
     background: #fef3c7;
     color: #92400e;
@@ -573,12 +529,12 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   SIDEBAR
+   SIDEBAR — mirrors .info-list / .info-row / .info-label / .info-value
    ══════════════════════════════════════════════════════ */
 .infoList {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
 .infoRow {
@@ -587,26 +543,29 @@
     gap: 10px;
 }
 
+/* mirrors .info-label: 8px → scaled to 11px for web */
 .infoLabel {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     color: var(--muted);
     flex-shrink: 0;
-    width: 76px;
+    width: 72px;
     padding-top: 1px;
 }
 
+/* mirrors .info-value */
 .infoValue {
-    font-size: 0.875rem;
+    font-size: 13px;
     color: var(--text);
     word-break: break-word;
     font-weight: 500;
+    line-height: 1.35;
 }
 
 .infoLink {
-    font-size: 0.875rem;
+    font-size: 13px;
     color: var(--blue);
     text-decoration: none;
     font-weight: 500;
@@ -616,12 +575,35 @@
     text-decoration: underline;
 }
 
+/* ── Skills — mirrors .skill-tag: #f1f5f9 bg, 6px radius ── */
+.skillsWrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.skillTag {
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: #f1f5f9;
+    border: 1px solid var(--border);
+    color: var(--sub);
+    border-radius: 6px;
+    padding: 3px 10px;
+    transition: background 140ms;
+}
+
+.skillTag:hover {
+    background: #e2e8f0;
+}
+
+/* ── Cert badges — mirrors .cert-badge ── */
 .certRow {
-    margin-bottom: 14px;
+    margin-bottom: 12px;
 }
 
 .sideLabel {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -634,34 +616,22 @@
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    margin-top: 2px;
+}
+
+.certBadge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    border-radius: 20px;
+    background: #1d4ed8;
+    border: 1px solid #3b82f6;
+    color: #fff;
+    padding: 3px 11px;
 }
 
 .certText {
-    font-size: 0.875rem;
+    font-size: 13px;
     color: var(--text);
     margin: 0;
-}
-
-.skillsWrap {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-
-.skillTag {
-    font-size: 0.78rem;
-    font-weight: 600;
-    background: #edf3fb;
-    border: 1px solid #c0d9f0;
-    color: var(--blue);
-    border-radius: 20px;
-    padding: 3px 12px;
-    transition: background 140ms;
-}
-
-.skillTag:hover {
-    background: #d0e5f7;
 }
 
 /* ── PDF export card ── */
@@ -669,22 +639,30 @@
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 18px 20px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.pdfCardTitle {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 6px;
+.pdfCardHeader {
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: var(--muted);
+    padding: 10px 18px 9px;
+    border-bottom: 1px solid #f1f5f9;
+    background: #f8fafc;
+}
+
+.pdfCardBody {
+    padding: 14px 18px;
 }
 
 .pdfCardDesc {
     font-size: 0.82rem;
     color: var(--sub);
     line-height: 1.5;
-    margin: 0 0 14px;
+    margin: 0 0 12px;
 }
 
 .pdfCardBtn {
@@ -706,7 +684,7 @@
 }
 
 .pdfCardBtn:hover:not(:disabled) {
-    background: var(--blue-hover);
+    background: var(--blue-h);
 }
 
 .pdfCardBtn:disabled {
@@ -715,49 +693,81 @@
 }
 
 /* ══════════════════════════════════════════════════════
+   FOOTER — mirrors PDF footer exactly
+   ══════════════════════════════════════════════════════ */
+.profileFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 2px solid var(--navy2);
+    background: var(--navy);
+    border-radius: 0 0 var(--radius) var(--radius);
+    padding: 10px 24px;
+    margin-top: 8px;
+}
+
+.footerLeft {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.footerBrand {
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.footerSep {
+    display: inline-block;
+    width: 1px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.3);
+    margin: 0 10px;
+}
+
+.footerTagline {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.footerRight {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+/* ══════════════════════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════════════════════ */
 @media (max-width: 840px) {
     .page {
-        --avatar: 96px;
-    }
-
-    .banner {
-        height: 148px;
-    }
-
-
-
-    .identityMeta {
-        padding: 0 10px 8px;
-    }
-
-    .identityName {
-        font-size: 1.2rem;
-    }
-
-    .profileActions {
-        justify-content: flex-start;
-        padding: 6px 16px 10px;
-        gap: 6px;
-    }
-
-    .actionBtn,
-    .actionBtnGreen,
-    .actionBtnPurple {
-        font-size: 0.72rem;
-        padding: 5px 10px;
+        --avatar: 80px;
+        --banner-h: 130px;
     }
 
     .profileBodyInner {
         grid-template-columns: 1fr;
+        gap: 10px;
     }
 
     .sideCol {
         position: static;
     }
 
-    .nameBlock {
-        padding: 0 16px 14px;
+    .profileActions {
+        gap: 6px;
+    }
+
+    .actionBtn,
+    .actionBtnGreen,
+    .actionBtnBlue {
+        font-size: 0.72rem;
+        padding: 5px 12px;
+    }
+
+    .candidateName {
+        font-size: 1.2rem;
     }
 }
