@@ -147,6 +147,14 @@
     background: linear-gradient(to bottom, transparent 52px, var(--bannerCard) 52px);
 }
 
+.identityLeft {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+}
+
 .avatarWrap {
     position: relative;
     width: 100px;
@@ -207,15 +215,13 @@
 }
 
 .identityName {
-    padding: 0 14px 8px;
+    padding: 0 0 8px;
     font-size: 1.1rem;
     font-weight: 700;
     color: #4b5563;
-    /* slightly lighter dark grey */
     letter-spacing: -0.2px;
     align-self: flex-end;
     text-align: left;
-    /* add this */
     min-width: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -227,8 +233,9 @@
     flex-wrap: wrap;
     align-items: flex-end;
     justify-content: flex-end;
-    gap: 8px;
+    gap: 12px;
     padding-bottom: 6px;
+    padding-right: 10px;
     flex-shrink: 0;
 }
 
