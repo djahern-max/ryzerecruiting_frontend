@@ -248,41 +248,17 @@ export default function CandidateProfile() {
 
                     {/* ACTION BUTTONS */}
                     <div className={styles.identityActions}>
-                        <button
-                            className={styles.actionBtn}
-                            onClick={() => bannerInputRef.current?.click()}
-                            disabled={bannerUploading}
-                            title="Change Banner"
-                        >
-                            {bannerUploading
-                                ? <span className={styles.spinner} />
-                                : <img src={bannerImageIcon} alt="Change Banner" className={styles.actionIcon} />
-                            }
+                        <button className={styles.actionBtn} onClick={() => bannerInputRef.current?.click()} disabled={bannerUploading} title="Change Banner">
+                            {bannerUploading ? <span className={styles.spinner} /> : <img src={bannerImageIcon} alt="" className={styles.actionIcon} />}
                         </button>
-                        <button
-                            className={styles.actionBtn}
-                            onClick={() => setEnrichOpen(true)}
-                            title="Enrich Profile"
-                        >
-                            <img src={enhanceProfileIcon} alt="Enrich Profile" className={styles.actionIcon} />
+                        <button className={styles.actionBtn} onClick={() => setEnrichOpen(true)} title="Enrich Profile">
+                            <img src={enhanceProfileIcon} alt="" className={styles.actionIcon} />
                         </button>
-                        <button
-                            className={styles.actionBtn}
-                            onClick={handleDownloadPdf}
-                            disabled={pdfLoading}
-                            title="Download PDF"
-                        >
-                            {pdfLoading
-                                ? <span className={styles.spinner} />
-                                : <img src={changeIcon} alt="Download PDF" className={styles.actionIcon} />
-                            }
+                        <button className={styles.actionBtn} onClick={handleDownloadPdf} disabled={pdfLoading} title="Download PDF">
+                            {pdfLoading ? <span className={styles.spinner} /> : <img src={changeIcon} alt="" className={styles.actionIcon} />}
                         </button>
-                        <button
-                            className={styles.actionBtn}
-                            onClick={() => setEditOpen(true)}
-                            title="Edit Profile"
-                        >
-                            <img src={editIcon} alt="Edit Profile" className={styles.actionIcon} />
+                        <button className={styles.actionBtn} onClick={() => setEditOpen(true)} title="Edit Profile">
+                            <img src={editIcon} alt="" className={styles.actionIcon} />
                         </button>
                     </div>
                 </div>

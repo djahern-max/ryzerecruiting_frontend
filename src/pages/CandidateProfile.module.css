@@ -232,26 +232,20 @@
 
 /* Icon-only action buttons */
 .actionBtn {
-    border: 1.5px solid var(--border);
-    background: var(--card);
+    border: none;
+    background: transparent;
     padding: 0;
-    width: 38px;
-    height: 38px;
+    width: 26px;
+    height: 26px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: var(--sub);
-    border-radius: 8px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.10);
-    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
 }
 
-.actionBtn:hover:not(:disabled) {
-    border-color: var(--blue);
-    background: #eff6ff;
-    box-shadow: 0 2px 8px rgba(10, 102, 194, 0.15);
-    color: var(--blue);
+.actionBtn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
 .actionBtn:disabled {
@@ -622,8 +616,6 @@
     width: 22px;
     height: 22px;
     display: block;
-    opacity: 0.75;
-    transition: opacity 0.15s;
 }
 
 .actionBtn:hover:not(:disabled) .actionIcon {
