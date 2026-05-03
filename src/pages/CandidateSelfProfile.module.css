@@ -1,13 +1,9 @@
 /* ══════════════════════════════════════════════════════
    RYZE.ai — Candidate Self-Profile
-   Design system mirrors candidate_pdf_template.py exactly:
-   navy #0f2444, card #fff, bg #f1f5f9, border #e2e8f0,
-   gradient border-bottom on name block, 10px card radius,
-   245px sidebar, #f8fafc card headers, #94a3b8 labels
+   Same fix as CandidateProfile: flat banner, no card wrapper.
    ══════════════════════════════════════════════════════ */
 
 .page {
-    /* ── Design tokens (match PDF exactly) ── */
     --bg: #f1f5f9;
     --card: #ffffff;
     --border: #e2e8f0;
@@ -19,8 +15,6 @@
     --sub: #475569;
     --muted: #94a3b8;
     --radius: 10px;
-    --avatar: 100px;
-    --banner-h: 160px;
     --font: 'DM Sans', system-ui, -apple-system, sans-serif;
 
     min-height: 100vh;
@@ -29,19 +23,14 @@
     color: var(--text);
 }
 
-/* ══════════════════════════════════════════════════════
-   PAGE / MAIN
-   ══════════════════════════════════════════════════════ */
 .main {
     max-width: 900px;
     margin: 0 auto;
     padding: 24px 16px 64px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
 }
 
-/* ── Loading / Empty ── */
 .loadingState,
 .emptyState {
     display: flex;
@@ -90,7 +79,6 @@
     }
 }
 
-/* ── Back button ── */
 .backBtn {
     background: none;
     border: none;
@@ -105,6 +93,7 @@
     transition: color 0.15s;
     width: fit-content;
     font-family: var(--font);
+    margin-bottom: 10px;
 }
 
 .backBtn:hover {
@@ -122,72 +111,53 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   IDENTITY CARD
-   Mirrors PDF: banner → identityZone (avatar) → nameBlock
+   BANNER — flat, no card wrapper
    ══════════════════════════════════════════════════════ */
-.profileCard {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-}
-
-/* Banner — mirrors .banner-strip */
 .banner {
-    height: var(--banner-h);
+    height: 160px;
     background: linear-gradient(120deg, #1c3f6e 0%, #0a66c2 60%, #378fe9 100%);
     background-size: cover;
     background-position: center;
     display: block;
+    width: 100%;
 }
 
-/* Identity zone — avatar only, overlaps banner (mirrors .identity-zone) */
+/* ══════════════════════════════════════════════════════
+   IDENTITY ZONE — avatar + actions, overlaps banner
+   ══════════════════════════════════════════════════════ */
 .identityZone {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    padding: 0 24px 0 20px;
-    margin-top: calc(var(--avatar) * -0.48);
+    padding: 0 2px;
+    margin-top: -52px;
     position: relative;
     z-index: 2;
 }
 
-/* Right side of identity zone — action buttons float opposite avatar */
-.identityActions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: flex-end;
-    gap: 8px;
-    padding-bottom: 8px;
-    flex-shrink: 0;
-}
-
-/* ── Avatar ── */
 .avatarWrap {
     position: relative;
-    width: var(--avatar);
-    height: var(--avatar);
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     cursor: pointer;
     flex-shrink: 0;
 }
 
 .avatarImg {
-    width: var(--avatar);
-    height: var(--avatar);
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     object-fit: cover;
     object-position: center top;
     border: 4px solid #fff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     display: block;
 }
 
 .avatarInitial {
-    width: var(--avatar);
-    height: var(--avatar);
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     background: #1c3f6e;
     color: #fff;
@@ -197,7 +167,7 @@
     align-items: center;
     justify-content: center;
     border: 4px solid #fff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     letter-spacing: -1px;
     user-select: none;
 }
@@ -220,63 +190,16 @@
     opacity: 1;
 }
 
-/* Name block — white bg, gradient border-bottom (mirrors .name-block) */
-.nameBlock {
-    padding: 10px 24px 18px;
-    border-bottom: 3px solid transparent;
-    border-image: linear-gradient(to right, #1e3a5f, #2563eb, #1e3a5f) 1;
-    background: var(--card);
-}
-
-/* Mirrors .candidate-name */
-.candidateName {
-    font-size: 1.55rem;
-    font-weight: 800;
-    color: var(--navy);
-    letter-spacing: -0.4px;
-    line-height: 1.15;
-    margin-bottom: 4px;
-}
-
-/* Mirrors .candidate-meta */
-.candidateMeta {
-    font-size: 13px;
-    color: var(--sub);
-    font-weight: 500;
-    margin-bottom: 2px;
+.identityActions {
     display: flex;
-    align-items: center;
-    gap: 6px;
     flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-bottom: 6px;
+    flex-shrink: 0;
 }
 
-.metaDivider {
-    color: var(--muted);
-}
-
-/* Mirrors .candidate-location */
-.candidateLocation {
-    font-size: 12px;
-    color: var(--blue);
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-/* Save message */
-.saveMsg {
-    font-size: 12px;
-    color: #16a34a;
-    font-weight: 600;
-    padding: 8px 0 0;
-}
-
-.saveMsgErr {
-    color: #dc2626;
-}
-
-/* ── Spinners ── */
 .spinner {
     display: inline-block;
     width: 12px;
@@ -294,7 +217,61 @@
     }
 }
 
-/* ── Buttons ── */
+/* ══════════════════════════════════════════════════════
+   NAME BLOCK — white bg, gradient border-bottom
+   ══════════════════════════════════════════════════════ */
+.nameBlock {
+    background: var(--card);
+    padding: 12px 4px 16px;
+    border-bottom: 3px solid transparent;
+    border-image: linear-gradient(to right, #1e3a5f, #2563eb, #1e3a5f) 1;
+}
+
+.candidateName {
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.4px;
+    line-height: 1.15;
+    margin-bottom: 4px;
+}
+
+.candidateMeta {
+    font-size: 13px;
+    color: var(--sub);
+    font-weight: 500;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.metaDivider {
+    color: var(--muted);
+}
+
+.candidateLocation {
+    font-size: 12px;
+    color: var(--blue);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.saveMsg {
+    font-size: 12px;
+    color: #16a34a;
+    font-weight: 600;
+    padding: 8px 0 0;
+}
+
+.saveMsgErr {
+    color: #dc2626;
+}
+
+/* Buttons */
 .changeBannerBtn {
     display: inline-flex;
     align-items: center;
@@ -394,9 +371,10 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   TWO-COLUMN BODY — mirrors PDF .body layout
+   TWO-COLUMN BODY
    ══════════════════════════════════════════════════════ */
 .profileBodyGrid {
+    padding-top: 18px;
     display: grid;
     grid-template-columns: minmax(0, 1fr) 245px;
     gap: 18px;
@@ -417,28 +395,28 @@
     top: 80px;
 }
 
-/* ── Body cards — mirrors .card ── */
 .bodyCard {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/* mirrors .card-title */
 .bodyCardTitle {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.7px;
     color: var(--muted);
-    padding: 10px 18px 9px;
+    padding: 10px 16px 9px;
     border-bottom: 1px solid #f1f5f9;
     background: #f8fafc;
 }
 
-/* mirrors .summary-text */
+.bodyCardBody {
+    padding: 14px 16px;
+}
+
 .summaryText {
     font-size: 14px;
     color: var(--sub);
@@ -448,7 +426,6 @@
     word-break: break-word;
 }
 
-/* mirrors .bullet-list */
 .bulletList {
     margin: 0;
     padding: 0 0 0 18px;
@@ -461,10 +438,9 @@
     font-size: 13.5px;
     color: var(--sub);
     line-height: 1.55;
-    padding-left: 2px;
 }
 
-/* ── Skills — mirrors .skill-tag: #f1f5f9 bg, 6px radius ── */
+/* SKILLS — grey chips, not blue pills */
 .skillsWrap {
     display: flex;
     flex-wrap: wrap;
@@ -476,7 +452,7 @@
     font-weight: 500;
     background: #f1f5f9;
     border: 1px solid var(--border);
-    color: var(--sub);
+    color: #334155;
     border-radius: 6px;
     padding: 3px 10px;
     transition: background 140ms;
@@ -486,7 +462,6 @@
     background: #e2e8f0;
 }
 
-/* ── Contact / detail list — mirrors .info-row ── */
 .detailList {
     display: flex;
     flex-direction: column;
@@ -522,7 +497,6 @@
     text-decoration: underline;
 }
 
-/* ── Read-only grid ── */
 .roGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -549,7 +523,6 @@
     font-weight: 500;
 }
 
-/* ── Editing form ── */
 .fieldRow {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -586,18 +559,16 @@
     border-color: var(--blue);
 }
 
-/* ══════════════════════════════════════════════════════
-   FOOTER — mirrors PDF footer
-   ══════════════════════════════════════════════════════ */
+/* Footer */
 .profileFooter {
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-top: 2px solid var(--navy2);
     background: var(--navy);
-    border-radius: 0 0 var(--radius) var(--radius);
-    padding: 10px 24px;
-    margin-top: 8px;
+    border-radius: var(--radius);
+    padding: 10px 20px;
+    margin-top: 20px;
 }
 
 .footerLeft {
@@ -631,13 +602,9 @@
     color: rgba(255, 255, 255, 0.55);
 }
 
-/* ══════════════════════════════════════════════════════
-   RESPONSIVE
-   ══════════════════════════════════════════════════════ */
 @media (max-width: 680px) {
-    .page {
-        --avatar: 80px;
-        --banner-h: 140px;
+    .banner {
+        height: 130px;
     }
 
     .profileBodyGrid {
@@ -665,13 +632,6 @@
     .identityActions {
         justify-content: flex-start;
         width: 100%;
-        padding-bottom: 4px;
-    }
-
-    .changeBannerBtn,
-    .editBtn {
-        font-size: 0.72rem;
-        padding: 5px 10px;
     }
 
     .candidateName {

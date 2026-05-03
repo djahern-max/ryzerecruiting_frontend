@@ -13,9 +13,7 @@ function parseJsonField(value) {
     try {
         const parsed = JSON.parse(value);
         return Array.isArray(parsed) ? parsed : [];
-    } catch {
-        return [];
-    }
+    } catch { return []; }
 }
 
 function parseToDisplayBullets(text, maxItems = 6) {
@@ -50,13 +48,10 @@ function InfoRow({ label, value, href }) {
     return (
         <div className={styles.infoRow}>
             <span className={styles.infoLabel}>{label}</span>
-            {href ? (
-                <a href={href} target="_blank" rel="noopener noreferrer" className={styles.infoLink}>
-                    {value}
-                </a>
-            ) : (
-                <span className={styles.infoValue}>{value}</span>
-            )}
+            {href
+                ? <a href={href} target="_blank" rel="noopener noreferrer" className={styles.infoLink}>{value}</a>
+                : <span className={styles.infoValue}>{value}</span>
+            }
         </div>
     );
 }
@@ -179,28 +174,24 @@ export default function CandidateProfile() {
         }
     }
 
-    if (loading) {
-        return (
-            <div className={styles.page}>
-                <AdminHeader active="candidates" />
-                <div className={styles.loadingState}>Loading profile…</div>
-            </div>
-        );
-    }
+    if (loading) return (
+        <div className={styles.page}>
+            <AdminHeader active="candidates" />
+            <div className={styles.loadingState}>Loading profile…</div>
+        </div>
+    );
 
-    if (error || !candidate) {
-        return (
-            <div className={styles.page}>
-                <AdminHeader active="candidates" />
-                <div className={styles.errorState}>
-                    <p>{error || "Candidate not found."}</p>
-                    <button onClick={() => navigate("/admin/candidates")} className={styles.errorBackBtn}>
-                        ← Back to Candidates
-                    </button>
-                </div>
+    if (error || !candidate) return (
+        <div className={styles.page}>
+            <AdminHeader active="candidates" />
+            <div className={styles.errorState}>
+                <p>{error || "Candidate not found."}</p>
+                <button onClick={() => navigate("/admin/candidates")} className={styles.errorBackBtn}>
+                    ← Back to Candidates
+                </button>
             </div>
-        );
-    }
+        </div>
+    );
 
     const skills = parseJsonField(candidate.ai_skills);
     const hasCPA = candidate.ai_certifications?.toUpperCase().includes("CPA");
@@ -221,98 +212,83 @@ export default function CandidateProfile() {
                     ← Back to Candidates
                 </button>
 
+                {/* ── Hidden file inputs ── */}
+                <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleBannerChange} />
+                <input ref={photoInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoChange} />
+
                 {/* ══════════════════════════════════════════
-                    IDENTITY CARD — mirrors PDF structure exactly:
-                    banner → identityZone (avatar) → nameBlock (gradient border)
+                    BANNER — flat, no card, no clipping.
+                    Sits directly on the grey page background.
                 ══════════════════════════════════════════ */}
-                <div className={styles.identityCard}>
+                <div
+                    className={styles.banner}
+                    style={candidate.banner_url ? {
+                        backgroundImage: `url(${candidate.banner_url})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                    } : {}}
+                />
 
-                    {/* Banner — purely visual */}
+                {/* ══════════════════════════════════════════
+                    IDENTITY ZONE — avatar overlaps banner.
+                    margin-top: -44px. No background color.
+                ══════════════════════════════════════════ */}
+                <div className={styles.identityZone}>
                     <div
-                        className={styles.banner}
-                        style={candidate.banner_url ? {
-                            backgroundImage: `url(${candidate.banner_url})`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                        } : {}}
-                    />
-
-                    {/* Hidden file inputs */}
-                    <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleBannerChange} />
-                    <input ref={photoInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoChange} />
-
-                    {/* Identity zone: avatar overlaps banner seam (mirrors .identity-zone) */}
-                    <div className={styles.identityZone}>
-                        <div
-                            className={styles.avatarWrap}
-                            onClick={() => !photoUploading && photoInputRef.current?.click()}
-                            title="Click to upload photo"
-                        >
-                            {candidate.photo_url ? (
-                                <img src={candidate.photo_url} alt={candidate.name} className={styles.avatarImg} />
-                            ) : (
-                                <div className={styles.avatarInitial}>
-                                    {candidate.name?.charAt(0).toUpperCase()}
-                                </div>
-                            )}
-                            <div className={styles.avatarOverlay}>
-                                {photoUploading
-                                    ? <span className={styles.spinnerDark} />
-                                    : <i className="fi fi-rr-camera" />}
-                            </div>
+                        className={styles.avatarWrap}
+                        onClick={() => !photoUploading && photoInputRef.current?.click()}
+                        title="Click to upload photo"
+                    >
+                        {candidate.photo_url
+                            ? <img src={candidate.photo_url} alt={candidate.name} className={styles.avatarImg} />
+                            : <div className={styles.avatarInitial}>{candidate.name?.charAt(0).toUpperCase()}</div>
+                        }
+                        <div className={styles.avatarOverlay}>
+                            {photoUploading ? <span className={styles.spinnerDark} /> : <i className="fi fi-rr-camera" />}
                         </div>
                     </div>
+                </div>
 
-                    {/* Name block — white bg, gradient border-bottom (mirrors .name-block) */}
-                    <div className={styles.nameBlock}>
-                        <div className={styles.candidateName}>{candidate.name}</div>
+                {/* ══════════════════════════════════════════
+                    NAME BLOCK — white bg, gradient border-bottom.
+                    No other borders. Sits on grey bg.
+                ══════════════════════════════════════════ */}
+                <div className={styles.nameBlock}>
+                    <div className={styles.candidateName}>{candidate.name}</div>
 
-                        {(candidate.current_title || candidate.current_company) && (
-                            <div className={styles.candidateMeta}>
-                                {candidate.current_title}
-                                {candidate.current_title && candidate.current_company && (
-                                    <span className={styles.metaDivider}>·</span>
-                                )}
-                                {candidate.current_company}
-                            </div>
-                        )}
-
-                        {candidate.location && (
-                            <div className={styles.candidateLocation}>
-                                <i className="fi fi-rr-marker" /> {candidate.location}
-                            </div>
-                        )}
-
-                        {/* Action buttons */}
-                        <div className={styles.profileActions}>
-                            <button
-                                className={styles.actionBtn}
-                                onClick={() => bannerInputRef.current?.click()}
-                                disabled={bannerUploading}
-                            >
-                                {bannerUploading
-                                    ? <><span className={styles.spinner} /> Uploading…</>
-                                    : <><i className="fi fi-rr-picture" /> Change Banner</>}
-                            </button>
-
-                            <button className={styles.actionBtnGreen} onClick={() => setEnrichOpen(true)}>
-                                <i className="fi fi-rr-magic-wand" /> Enrich Profile
-                            </button>
-
-                            <button
-                                className={styles.actionBtnBlue}
-                                onClick={handleDownloadPdf}
-                                disabled={pdfLoading}
-                            >
-                                {pdfLoading
-                                    ? <><span className={styles.spinner} /> Generating…</>
-                                    : <><i className="fi fi-rr-file-pdf" /> Download PDF</>}
-                            </button>
-
-                            <button className={styles.actionBtn} onClick={() => setEditOpen(true)}>
-                                <i className="fi fi-rr-edit" /> Edit Profile
-                            </button>
+                    {(candidate.current_title || candidate.current_company) && (
+                        <div className={styles.candidateMeta}>
+                            {candidate.current_title}
+                            {candidate.current_title && candidate.current_company && (
+                                <span className={styles.metaDivider}>·</span>
+                            )}
+                            {candidate.current_company}
                         </div>
+                    )}
+
+                    {candidate.location && (
+                        <div className={styles.candidateLocation}>
+                            <i className="fi fi-rr-marker" /> {candidate.location}
+                        </div>
+                    )}
+
+                    <div className={styles.profileActions}>
+                        <button
+                            className={styles.actionBtn}
+                            onClick={() => bannerInputRef.current?.click()}
+                            disabled={bannerUploading}
+                        >
+                            {bannerUploading ? <><span className={styles.spinner} /> Uploading…</> : <><i className="fi fi-rr-picture" /> Change Banner</>}
+                        </button>
+                        <button className={styles.actionBtnGreen} onClick={() => setEnrichOpen(true)}>
+                            <i className="fi fi-rr-magic-wand" /> Enrich Profile
+                        </button>
+                        <button className={styles.actionBtnBlue} onClick={handleDownloadPdf} disabled={pdfLoading}>
+                            {pdfLoading ? <><span className={styles.spinner} /> Generating…</> : <><i className="fi fi-rr-file-pdf" /> Download PDF</>}
+                        </button>
+                        <button className={styles.actionBtn} onClick={() => setEditOpen(true)}>
+                            <i className="fi fi-rr-edit" /> Edit Profile
+                        </button>
                     </div>
                 </div>
 
@@ -331,46 +307,36 @@ export default function CandidateProfile() {
                 )}
 
                 {/* ══════════════════════════════════════════
-                    TWO-COLUMN BODY — mirrors PDF .body layout
+                    TWO-COLUMN BODY — grey bg, no border/line above
                 ══════════════════════════════════════════ */}
                 <div className={styles.profileBodyInner}>
 
-                    {/* ── Main column ── */}
                     <div className={styles.mainCol}>
-
                         {candidate.ai_summary && (
                             <Section title="About">
                                 <p className={styles.summaryText}>{candidate.ai_summary}</p>
                             </Section>
                         )}
-
                         {experienceBullets.length > 0 && (
                             <Section title="Experience">
                                 <ul className={styles.bulletList}>
-                                    {experienceBullets.map((b, i) => (
-                                        <li key={i} className={styles.bulletItem}>{b}</li>
-                                    ))}
+                                    {experienceBullets.map((b, i) => <li key={i} className={styles.bulletItem}>{b}</li>)}
                                 </ul>
                             </Section>
                         )}
-
                         {educationBullets.length > 0 && (
                             <Section title="Education">
                                 <ul className={styles.bulletList}>
-                                    {educationBullets.map((b, i) => (
-                                        <li key={i} className={styles.bulletItem}>{b}</li>
-                                    ))}
+                                    {educationBullets.map((b, i) => <li key={i} className={styles.bulletItem}>{b}</li>)}
                                 </ul>
                             </Section>
                         )}
-
                         {candidate.ai_outreach_message && (
                             <Section title="Outreach Message">
                                 <p className={styles.bodyText}>
                                     {outreachExpanded
                                         ? candidate.ai_outreach_message
-                                        : candidate.ai_outreach_message.slice(0, 300) +
-                                        (candidate.ai_outreach_message.length > 300 ? "…" : "")}
+                                        : candidate.ai_outreach_message.slice(0, 300) + (candidate.ai_outreach_message.length > 300 ? "…" : "")}
                                 </p>
                                 {candidate.ai_outreach_message.length > 300 && (
                                     <button className={styles.expandBtn} onClick={() => setOutreachExpanded(p => !p)}>
@@ -379,15 +345,13 @@ export default function CandidateProfile() {
                                 )}
                             </Section>
                         )}
-
                         {candidate.meeting_transcript && (
                             <Section title="Call Transcript">
                                 <div className={styles.transcriptWrap}>
                                     <pre className={styles.transcriptPre}>
                                         {transcriptExpanded
                                             ? candidate.meeting_transcript
-                                            : candidate.meeting_transcript.slice(0, 600) +
-                                            (candidate.meeting_transcript.length > 600 ? "…" : "")}
+                                            : candidate.meeting_transcript.slice(0, 600) + (candidate.meeting_transcript.length > 600 ? "…" : "")}
                                     </pre>
                                     {candidate.meeting_transcript.length > 600 && !transcriptExpanded && (
                                         <div className={styles.transcriptFade} />
@@ -400,7 +364,6 @@ export default function CandidateProfile() {
                                 )}
                             </Section>
                         )}
-
                         {candidate.recruiter_notes && (
                             <Section title="Recruiter Notes" className={styles.notesSection}>
                                 <span className={styles.notesInternalBadge}>Internal Only</span>
@@ -409,9 +372,7 @@ export default function CandidateProfile() {
                         )}
                     </div>
 
-                    {/* ── Side column ── */}
                     <div className={styles.sideCol}>
-
                         <Section title="Contact">
                             <div className={styles.infoList}>
                                 <InfoRow label="Email" value={candidate.email} href={candidate.email ? `mailto:${candidate.email}` : null} />
@@ -437,9 +398,7 @@ export default function CandidateProfile() {
                                 )}
                                 {skills.length > 0 && (
                                     <div className={styles.skillsWrap}>
-                                        {skills.map((skill, i) => (
-                                            <span key={i} className={styles.skillTag}>{skill}</span>
-                                        ))}
+                                        {skills.map((skill, i) => <span key={i} className={styles.skillTag}>{skill}</span>)}
                                     </div>
                                 )}
                             </Section>
@@ -447,54 +406,31 @@ export default function CandidateProfile() {
 
                         <Section title="Profile Details">
                             <div className={styles.infoList}>
-                                <InfoRow
-                                    label="Level"
-                                    value={candidate.ai_career_level
-                                        ? candidate.ai_career_level.charAt(0).toUpperCase() + candidate.ai_career_level.slice(1)
-                                        : null}
-                                />
+                                <InfoRow label="Level" value={candidate.ai_career_level ? candidate.ai_career_level.charAt(0).toUpperCase() + candidate.ai_career_level.slice(1) : null} />
                                 <InfoRow label="Experience" value={candidate.ai_years_experience ? `${candidate.ai_years_experience} years` : null} />
                                 <InfoRow label="Source" value={isFromCall ? "From Call" : "Manual Entry"} />
                                 {candidate.ai_parsed_at && (
-                                    <InfoRow
-                                        label="Parsed"
-                                        value={new Date(candidate.ai_parsed_at).toLocaleDateString("en-US", {
-                                            month: "short", day: "numeric", year: "numeric",
-                                        })}
-                                    />
+                                    <InfoRow label="Parsed" value={new Date(candidate.ai_parsed_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })} />
                                 )}
-                                <InfoRow
-                                    label="Added"
-                                    value={candidate.created_at
-                                        ? new Date(candidate.created_at).toLocaleDateString("en-US", {
-                                            month: "short", day: "numeric", year: "numeric",
-                                        })
-                                        : "—"}
-                                />
+                                <InfoRow label="Added" value={candidate.created_at ? new Date(candidate.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—"} />
                                 <InfoRow label="AI Search" value={candidate.embedded_at ? "✓ Indexed" : "Not indexed"} />
                                 {candidate.meeting_transcript && <InfoRow label="Transcript" value="✓ Available" />}
                             </div>
                         </Section>
 
-                        {/* PDF export card — mirrors PDF card style */}
                         <div className={styles.pdfCard}>
                             <div className={styles.pdfCardHeader}>Export Profile</div>
                             <div className={styles.pdfCardBody}>
-                                <p className={styles.pdfCardDesc}>
-                                    Download a clean PDF to share with potential employers.
-                                </p>
+                                <p className={styles.pdfCardDesc}>Download a clean PDF to share with potential employers.</p>
                                 <button className={styles.pdfCardBtn} onClick={handleDownloadPdf} disabled={pdfLoading}>
-                                    {pdfLoading
-                                        ? <><span className={styles.spinner} /> Generating…</>
-                                        : <><i className="fi fi-rr-file-pdf" /> Download PDF</>}
+                                    {pdfLoading ? <><span className={styles.spinner} /> Generating…</> : <><i className="fi fi-rr-file-pdf" /> Download PDF</>}
                                 </button>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
-                {/* ── RYZE footer — mirrors PDF footer ── */}
+                {/* RYZE footer */}
                 <div className={styles.profileFooter}>
                     <div className={styles.footerLeft}>
                         <span className={styles.footerBrand}>RYZE.ai</span>
@@ -510,23 +446,8 @@ export default function CandidateProfile() {
 
             </div>
 
-            {enrichOpen && (
-                <CandidateModal
-                    candidate={candidate}
-                    token={token}
-                    enrichMode={true}
-                    onSaved={handleSaved}
-                    onClose={() => setEnrichOpen(false)}
-                />
-            )}
-            {editOpen && (
-                <CandidateModal
-                    candidate={candidate}
-                    token={token}
-                    onSaved={handleSaved}
-                    onClose={() => setEditOpen(false)}
-                />
-            )}
+            {enrichOpen && <CandidateModal candidate={candidate} token={token} enrichMode={true} onSaved={handleSaved} onClose={() => setEnrichOpen(false)} />}
+            {editOpen && <CandidateModal candidate={candidate} token={token} onSaved={handleSaved} onClose={() => setEditOpen(false)} />}
         </div>
     );
 }
