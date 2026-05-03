@@ -227,38 +227,42 @@ export default function CandidateSelfProfile() {
                         )}
 
                         {/* EDIT / SAVE MODE */}
+                        {/* EDIT / SAVE MODE */}
                         {editing ? (
                             <div className={styles.editActions}>
                                 <button
                                     type="button"
-                                    className={styles.cancelBtn}
+                                    className={styles.iconButton}
                                     onClick={handleCancel}
                                     disabled={saving}
+                                    title="Cancel"
+                                    aria-label="Cancel"
                                 >
-                                    Cancel
+                                    ✕
                                 </button>
 
                                 <button
                                     type="button"
-                                    className={styles.saveBtn}
+                                    className={styles.iconButtonPrimary}
                                     onClick={handleSave}
                                     disabled={saving}
+                                    title="Save Changes"
+                                    aria-label="Save Changes"
                                 >
                                     {saving ? (
-                                        <>
-                                            <span className={styles.spinner} />
-                                            Saving…
-                                        </>
+                                        <span className={styles.spinner} />
                                     ) : (
-                                        'Save Changes'
+                                        '✓'
                                     )}
                                 </button>
                             </div>
                         ) : (
                             <button
                                 type="button"
-                                className={styles.editBtn}
+                                className={styles.iconButtonPrimary}
                                 onClick={() => setEditing(true)}
+                                title="Edit Profile"
+                                aria-label="Edit Profile"
                             >
                                 <img
                                     src={editIcon}
@@ -266,7 +270,6 @@ export default function CandidateSelfProfile() {
                                     aria-hidden="true"
                                     className={styles.btnIcon}
                                 />
-                                Edit Profile
                             </button>
                         )}
                     </div>

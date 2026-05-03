@@ -644,6 +644,43 @@
     color: #fff;
 }
 
+.iconButton,
+.iconButtonPrimary {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.iconButton {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    color: var(--sub);
+}
+
+.iconButtonPrimary {
+    background: #fff;
+    border: 1.5px solid var(--blue);
+    color: var(--blue);
+}
+
+.iconButtonPrimary:hover {
+    background: var(--blue);
+    color: #fff;
+}
+
+.btnIcon {
+    width: 16px;
+    height: 16px;
+    display: block;
+}
+
 @media (max-width: 680px) {
     .banner {
         height: 130px;
