@@ -426,7 +426,7 @@
 }
 
 .bodyCardBody {
-    padding: 14px 16px;
+    padding: 12px 14px;
 }
 
 .summaryText {
@@ -509,16 +509,20 @@
     text-decoration: underline;
 }
 
+/* 2. Fix roGrid — single column in narrow sidebar eliminates blank gaps */
 .roGrid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    grid-template-columns: 1fr;
+    /* was: 1fr 1fr */
+    gap: 10px;
 }
 
 .roField {
     display: flex;
-    flex-direction: column;
-    gap: 3px;
+    flex-direction: row;
+    /* was: column — now label + value on same line */
+    align-items: baseline;
+    gap: 8px;
 }
 
 .roLabel {
@@ -527,6 +531,9 @@
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 0.04em;
+    flex-shrink: 0;
+    width: 80px;
+    /* fixed label width keeps values aligned */
 }
 
 .roValue {
@@ -614,6 +621,22 @@
     color: rgba(255, 255, 255, 0.55);
 }
 
+/* 1. Add this new rule for SVG button icons */
+.btnIcon {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 4px;
+    /* Make icon match button text color */
+    filter: brightness(0) saturate(100%) invert(22%) sepia(70%) saturate(600%) hue-rotate(190deg) brightness(90%);
+}
+
+/* For white-text buttons (changeBannerBtn), override to white */
+.changeBannerBtn .btnIcon {
+    filter: brightness(0) invert(1);
+}
+
 @media (max-width: 680px) {
     .banner {
         height: 130px;
@@ -628,8 +651,17 @@
         position: static;
     }
 
-    .roGrid {
-        grid-template-columns: 1fr;
+    /* roGrid override removed — base is already 1fr */
+
+    .roField {
+        flex-direction: column;
+        /* stack label above value on small screens */
+        gap: 2px;
+    }
+
+    .roLabel {
+        width: auto;
+        /* release the fixed 80px width */
     }
 
     .fieldRow {

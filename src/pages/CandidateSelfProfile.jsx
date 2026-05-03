@@ -5,6 +5,8 @@ import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import { apiFetch } from '../services/api';
 import styles from './CandidateSelfProfile.module.css';
+import editIcon from '../assets/icons/edit.svg';
+import changeIcon from '../assets/icons/change.svg';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -178,7 +180,10 @@ export default function CandidateSelfProfile() {
                     <div className={styles.identityActions}>
                         {!editing && (
                             <button className={styles.changeBannerBtn} onClick={() => bannerInputRef.current?.click()} disabled={bannerUploading}>
-                                {bannerUploading ? <><span className={styles.spinner} /> Uploading…</> : <><i className="fi fi-rr-picture" /> Change Banner</>}
+                                {bannerUploading
+                                    ? <><span className={styles.spinner} /> Uploading…</>
+                                    : <><img src={changeIcon} alt="" className={styles.btnIcon} /> Change Banner</>
+                                }
                             </button>
                         )}
                         {editing ? (
@@ -190,7 +195,7 @@ export default function CandidateSelfProfile() {
                             </div>
                         ) : (
                             <button className={styles.editBtn} onClick={() => setEditing(true)}>
-                                <i className="fi fi-rr-edit" /> Edit Profile
+                                <img src={editIcon} alt="" className={styles.btnIcon} /> Edit Profile
                             </button>
                         )}
                     </div>
