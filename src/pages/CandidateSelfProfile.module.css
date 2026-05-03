@@ -1,9 +1,10 @@
 /* ══════════════════════════════════════════════════════
    RYZE.ai — Candidate Self-Profile
    LinkedIn-style layout, light mode, high contrast
+   Variables scoped to .page (not :root) to avoid leaking
    ══════════════════════════════════════════════════════ */
 
-:root {
+.page {
     --li-blue: #0a66c2;
     --li-blue-hover: #004182;
     --li-card: #ffffff;
@@ -16,18 +17,16 @@
     --li-banner-h: 200px;
     --li-radius: 8px;
     --font: 'DM Sans', system-ui, -apple-system, sans-serif;
-}
 
-/* ══════════════════════════════════════════════════════
-   PAGE / MAIN
-   ══════════════════════════════════════════════════════ */
-.page {
     min-height: 100vh;
     background: var(--li-bg);
     font-family: var(--font);
     color: var(--li-text);
 }
 
+/* ══════════════════════════════════════════════════════
+   PAGE / MAIN
+   ══════════════════════════════════════════════════════ */
 .main {
     max-width: 900px;
     margin: 0 auto;
@@ -155,7 +154,10 @@
     }
 }
 
-/* ── Avatar — overlaps banner ── */
+/* ══════════════════════════════════════════════════════
+   IDENTITY ROW — avatar (left) + meta (center) + actions (right)
+   Pulls up to overlap the banner via negative margin-top
+   ══════════════════════════════════════════════════════ */
 .identityRow {
     display: flex;
     align-items: flex-end;
@@ -163,8 +165,10 @@
     padding: 0 24px 0 20px;
     margin-top: calc(var(--li-avatar-size) * -0.46);
     margin-bottom: 6px;
+    gap: 0;
 }
 
+/* ── Avatar ── */
 .avatarWrap {
     position: relative;
     width: var(--li-avatar-size);
@@ -221,7 +225,52 @@
     opacity: 1;
 }
 
-/* ── Identity actions (right of avatar) ── */
+/* ── Inline identity meta: name / title / location ── */
+.identityMeta {
+    flex: 1;
+    min-width: 0;
+    padding: 0 14px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    align-self: flex-end;
+}
+
+.identityName {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--li-text);
+    line-height: 1.2;
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.identityHeadline {
+    font-size: 14px;
+    color: var(--li-sub);
+    font-weight: 400;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.headlineDot {
+    color: var(--li-muted);
+}
+
+.identityLocation {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--li-blue);
+    font-weight: 500;
+}
+
+/* ── Identity actions (right of meta) ── */
 .identityActions {
     display: flex;
     flex-wrap: wrap;
@@ -229,9 +278,10 @@
     justify-content: flex-end;
     gap: 8px;
     padding-bottom: 10px;
+    flex-shrink: 0;
 }
 
-/* Change Banner button — below the banner in white space */
+/* Change Banner button */
 .changeBannerBtn {
     display: inline-flex;
     align-items: center;
@@ -284,6 +334,9 @@
 }
 
 .saveBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     padding: 8px 20px;
     background: var(--li-blue);
     border: none;
@@ -310,6 +363,7 @@
     font-size: 12px;
     color: #16a34a;
     font-weight: 600;
+    padding: 0 24px 12px;
 }
 
 .saveMsgErr {
@@ -336,41 +390,6 @@
 .editBtn:hover {
     background: var(--li-blue);
     color: #fff;
-}
-
-/* ── Name block ── */
-.nameBlock {
-    padding: 8px 24px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.name {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--li-text);
-    margin: 0;
-    line-height: 1.2;
-    letter-spacing: -0.3px;
-}
-
-.headline {
-    font-size: 15px;
-    color: var(--li-sub);
-    margin: 0;
-    font-weight: 500;
-    line-height: 1.4;
-}
-
-.locationLine {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 13px;
-    color: var(--li-blue);
-    margin: 2px 0 0;
-    font-weight: 500;
 }
 
 /* ══════════════════════════════════════════════════════
@@ -402,7 +421,6 @@
     background: var(--li-card);
     border: 1px solid var(--li-border);
     border-radius: var(--li-radius);
-    padding: 0;
     overflow: hidden;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 }
@@ -423,48 +441,37 @@
     color: var(--li-sub);
     line-height: 1.75;
     margin: 0;
-    padding: 14px 18px;
-}
-
-.bodyText {
-    font-size: 13px;
-    color: var(--li-sub);
-    line-height: 1.65;
-    margin: 0;
-    padding: 14px 18px;
 }
 
 .bulletList {
     margin: 0;
-    padding: 12px 18px 14px 34px;
+    padding: 0 0 0 18px;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    list-style: disc;
 }
 
-.bulletList li {
-    font-size: 13.5px;
+.bulletItem {
+    font-size: 14px;
     color: var(--li-sub);
-    line-height: 1.6;
-    padding-left: 2px;
+    line-height: 1.55;
 }
 
+/* ── Skills ── */
 .skillsWrap {
     display: flex;
     flex-wrap: wrap;
-    gap: 7px;
-    padding: 14px 18px;
+    gap: 6px;
 }
 
 .skillTag {
-    padding: 4px 13px;
-    background: #edf3fb;
-    color: var(--li-blue);
-    border: 1px solid #c0d9f0;
-    border-radius: 999px;
-    font-size: 12px;
+    font-size: 0.78rem;
     font-weight: 600;
+    background: #edf3fb;
+    border: 1px solid #c0d9f0;
+    color: var(--li-blue);
+    border-radius: 20px;
+    padding: 3px 12px;
     transition: background 140ms;
 }
 
@@ -472,12 +479,11 @@
     background: #d0e5f7;
 }
 
-/* Detail list (sidebar Profile Details card) */
+/* ── Contact / detail list ── */
 .detailList {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 14px 18px;
+    gap: 12px;
 }
 
 .detailRow {
@@ -487,7 +493,7 @@
 }
 
 .detailLabel {
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -497,54 +503,19 @@
     padding-top: 1px;
 }
 
-.detailValue {
-    font-size: 13px;
-    color: var(--li-text);
-    font-weight: 500;
-    word-break: break-word;
-}
-
 .detailLink {
-    font-size: 13px;
+    font-size: 0.875rem;
     color: var(--li-blue);
     text-decoration: none;
     font-weight: 500;
-    word-break: break-all;
+    word-break: break-word;
 }
 
 .detailLink:hover {
     text-decoration: underline;
 }
 
-/* ══════════════════════════════════════════════════════
-   EDITABLE BASIC INFO SECTION
-   ══════════════════════════════════════════════════════ */
-.section {
-    background: var(--li-card);
-    border: 1px solid var(--li-border);
-    border-radius: var(--li-radius);
-    padding: 20px 24px 24px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
-}
-
-.sectionHeader {
-    margin-bottom: 16px;
-}
-
-.sectionTitle {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--li-text);
-    margin: 0 0 4px;
-}
-
-.sectionSub {
-    font-size: 13px;
-    color: var(--li-muted);
-    margin: 0;
-}
-
-/* Edit form */
+/* ── Editing form ── */
 .fieldRow {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -624,7 +595,7 @@
    RESPONSIVE
    ══════════════════════════════════════════════════════ */
 @media (max-width: 680px) {
-    :root {
+    .page {
         --li-avatar-size: 88px;
         --li-banner-h: 148px;
     }
@@ -646,26 +617,30 @@
     }
 
     .identityRow {
-        flex-direction: column;
-        align-items: flex-start;
-        margin-top: calc(var(--li-avatar-size) * -0.46);
-        gap: 12px;
-        padding-bottom: 0;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 0 16px 0 16px;
+    }
+
+    .identityMeta {
+        flex-basis: calc(100% - var(--li-avatar-size) - 20px);
+        padding: 0 0 8px;
     }
 
     .identityActions {
         align-items: flex-start;
         justify-content: flex-start;
         width: 100%;
-    }
-
-    .nameBlock {
-        padding: 10px 20px 18px;
+        padding-bottom: 12px;
     }
 
     .changeBannerBtn,
     .editBtn {
         font-size: 0.72rem;
         padding: 5px 10px;
+    }
+
+    .identityName {
+        font-size: 1.2rem;
     }
 }

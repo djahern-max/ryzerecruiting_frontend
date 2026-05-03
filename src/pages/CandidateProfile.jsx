@@ -208,6 +208,9 @@ export default function CandidateProfile() {
     const hasCMA = candidate.ai_certifications?.toUpperCase().includes("CMA");
     const isFromCall = candidate.source === "booking";
     const isStub = isFromCall && !candidate.ai_summary && !candidate.current_title;
+    const experienceBullets = parseToDisplayBullets(candidate.ai_experience);
+    const educationBullets = parseToDisplayBullets(candidate.ai_education, 4);
+    const hasBadges = isFromCall || hasCPA || hasCFA || hasCMA || candidate.ai_career_level;
 
     return (
         <div className={styles.page}>
@@ -239,8 +242,10 @@ export default function CandidateProfile() {
                     <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleBannerChange} />
                     <input ref={photoInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoChange} />
 
-                    {/* Avatar only — overlaps banner via negative margin */}
+                    {/* ── Identity row: avatar + name / title / location ── */}
                     <div className={styles.identityRow}>
+
+                        {/* Avatar — click to upload */}
                         <div
                             className={styles.avatarWrap}
                             onClick={() => !photoUploading && photoInputRef.current?.click()}
@@ -254,12 +259,33 @@ export default function CandidateProfile() {
                                 </div>
                             )}
                             <div className={styles.avatarOverlay}>
-                                {photoUploading ? <span className={styles.spinnerDark} /> : <i className="fi fi-rr-camera" />}
+                                {photoUploading
+                                    ? <span className={styles.spinnerDark} />
+                                    : <i className="fi fi-rr-camera" />}
                             </div>
+                        </div>
+
+                        {/* Inline name / title / location */}
+                        <div className={styles.identityMeta}>
+                            <div className={styles.identityName}>{candidate.name}</div>
+                            {(candidate.current_title || candidate.current_company) && (
+                                <div className={styles.identityHeadline}>
+                                    {candidate.current_title}
+                                    {candidate.current_title && candidate.current_company && (
+                                        <span className={styles.headlineDot}> · </span>
+                                    )}
+                                    {candidate.current_company}
+                                </div>
+                            )}
+                            {candidate.location && (
+                                <div className={styles.identityLocation}>
+                                    <i className="fi fi-rr-marker" /> {candidate.location}
+                                </div>
+                            )}
                         </div>
                     </div>
 
-                    {/* Action buttons — separate div, structurally below the banner, cannot overlap */}
+                    {/* ── Action buttons row ── */}
                     <div className={styles.profileActions}>
                         <button
                             className={styles.actionBtn}
@@ -267,143 +293,149 @@ export default function CandidateProfile() {
                             disabled={bannerUploading}
                         >
                             {bannerUploading
-                                ? <><span className={styles.spinnerSmall} />Uploading…</>
-                                : <><i className="fi fi-rr-picture" />Change Banner</>
-                            }
+                                ? <span className={styles.spinner} />
+                                : <i className="fi fi-rr-picture" />}
+                            {bannerUploading ? "Uploading…" : "Change Banner"}
                         </button>
-                        <button className={styles.actionBtnGreen} onClick={handleDownloadPdf} disabled={pdfLoading}>
+                        <button
+                            className={styles.actionBtnGreen}
+                            onClick={() => setEnrichOpen(true)}
+                        >
+                            <i className="fi fi-rr-magic-wand" /> Enrich Profile
+                        </button>
+                        <button
+                            className={styles.actionBtnPurple}
+                            onClick={handleDownloadPdf}
+                            disabled={pdfLoading}
+                        >
                             {pdfLoading
-                                ? <><span className={styles.spinnerSmall} />Generating…</>
-                                : <><i className="fi fi-rr-file-pdf" />Download PDF</>
-                            }
+                                ? <span className={styles.spinner} />
+                                : <i className="fi fi-rr-file-pdf" />}
+                            {pdfLoading ? "Generating…" : "Download PDF"}
                         </button>
-                        {isFromCall && (
-                            <button className={styles.actionBtnPurple} onClick={() => setEnrichOpen(true)}>
-                                <i className="fi fi-rr-add" />Enrich Profile
-                            </button>
-                        )}
-                        <button className={styles.editBtn} onClick={() => setEditOpen(true)}>
+                        <button
+                            className={styles.actionBtn}
+                            onClick={() => setEditOpen(true)}
+                        >
                             <i className="fi fi-rr-edit" /> Edit Profile
                         </button>
                     </div>
 
-                    {/* Name + headline + location */}
-                    {/* <div className={styles.nameBlock}>
-                        <div className={styles.nameRow}>
-                            <h1 className={styles.name}>{candidate.name}</h1>
-                            {isFromCall && (
-                                <span className={styles.callBadge}>
-                                    <i className="fi fi-rr-phone-call" style={{ fontSize: "10px" }} />
-                                    From Call
-                                </span>
-                            )}
+                    {/* ── Badges row (name/title/location moved up to identityRow) ── */}
+                    {hasBadges && (
+                        <div className={styles.nameBlock}>
+                            <div className={styles.nameRow}>
+                                {isFromCall && (
+                                    <span className={styles.callBadge}>
+                                        <i className="fi fi-rr-phone-call" /> From Call
+                                    </span>
+                                )}
+                                {hasCPA && <span className={styles.certBadge}>CPA</span>}
+                                {hasCFA && <span className={styles.certBadge}>CFA</span>}
+                                {hasCMA && <span className={styles.certBadge}>CMA</span>}
+                                {candidate.ai_career_level && (
+                                    <span className={styles.levelBadge}>
+                                        {candidate.ai_career_level.charAt(0).toUpperCase() + candidate.ai_career_level.slice(1)}
+                                    </span>
+                                )}
+                            </div>
                         </div>
-                        {(candidate.current_title || candidate.current_company) && (
-                            <p className={styles.headline}>
-                                {candidate.current_title}
-                                {candidate.current_title && candidate.current_company && (
-                                    <span className={styles.headlineDot}> · </span>
-                                )}
-                                {candidate.current_company && (
-                                    <strong>{candidate.current_company}</strong>
-                                )}
-                            </p>
-                        )}
-                        {candidate.location && (
-                            <p className={styles.locationLine}>
-                                <i className="fi fi-rr-marker" /> {candidate.location}
-                            </p>
-                        )}
-                    </div> */}
+                    )}
                 </div>
 
                 {/* ── Stub notice ── */}
                 {isStub && (
                     <div className={styles.stubNotice}>
-                        <i className="fi fi-rr-info" style={{ color: "#7c3aed", marginTop: "2px", flexShrink: 0 }} />
                         <div>
-                            <div className={styles.stubTitle}>Profile created from a scheduled call</div>
+                            <div className={styles.stubTitle}>Profile stub — resume not yet parsed</div>
                             <div className={styles.stubBody}>
-                                This candidate was automatically added when the call was confirmed.
-                                Upload a resume or paste their LinkedIn profile to enrich the record.
+                                This candidate was added from a call booking. Upload their resume or paste
+                                their LinkedIn to enrich the profile with AI-generated details.
                             </div>
                             <button className={styles.stubBtn} onClick={() => setEnrichOpen(true)}>
-                                Enrich Profile →
+                                Enrich with Resume / LinkedIn
                             </button>
                         </div>
                     </div>
                 )}
 
-                {/* ── Two-column grid (mirrors PDF layout) ── */}
+                {/* ══════════════════════════════════════════
+                    TWO-COLUMN PROFILE BODY
+                ══════════════════════════════════════════ */}
                 <div className={styles.profileBodyInner}>
+
+                    {/* ── Main column ── */}
                     <div className={styles.mainCol}>
+
                         {candidate.ai_summary && (
                             <Section title="About">
                                 <p className={styles.summaryText}>{candidate.ai_summary}</p>
                             </Section>
                         )}
-                        {candidate.ai_experience && (
+
+                        {experienceBullets.length > 0 && (
                             <Section title="Experience">
                                 <ul className={styles.bulletList}>
-                                    {parseToDisplayBullets(candidate.ai_experience, 6).map((bullet, i) => (
-                                        <li key={i} className={styles.bulletItem}>{bullet}</li>
+                                    {experienceBullets.map((b, i) => (
+                                        <li key={i} className={styles.bulletItem}>{b}</li>
                                     ))}
                                 </ul>
                             </Section>
                         )}
-                        {candidate.ai_education && (
+
+                        {educationBullets.length > 0 && (
                             <Section title="Education">
                                 <ul className={styles.bulletList}>
-                                    {parseToDisplayBullets(candidate.ai_education, 3).map((bullet, i) => (
-                                        <li key={i} className={styles.bulletItem}>{bullet}</li>
+                                    {educationBullets.map((b, i) => (
+                                        <li key={i} className={styles.bulletItem}>{b}</li>
                                     ))}
                                 </ul>
                             </Section>
                         )}
+
                         {candidate.ai_outreach_message && (
                             <Section title="Outreach Message">
-                                <div className={styles.outreachWrap}>
-                                    <p className={`${styles.bodyText} ${styles.outreachText} ${outreachExpanded ? styles.outreachExpanded : ""}`}>
-                                        {candidate.ai_outreach_message}
-                                    </p>
-                                    <button className={styles.outreachToggle} onClick={() => setOutreachExpanded(p => !p)}>
-                                        {outreachExpanded ? "Show less ↑" : "Read more ↓"}
+                                <p className={styles.bodyText}>
+                                    {outreachExpanded
+                                        ? candidate.ai_outreach_message
+                                        : candidate.ai_outreach_message.slice(0, 300) +
+                                        (candidate.ai_outreach_message.length > 300 ? "…" : "")}
+                                </p>
+                                {candidate.ai_outreach_message.length > 300 && (
+                                    <button
+                                        className={styles.expandBtn}
+                                        onClick={() => setOutreachExpanded(p => !p)}
+                                    >
+                                        {outreachExpanded ? "Show less ↑" : "Show full message ↓"}
                                     </button>
-                                </div>
+                                )}
                             </Section>
                         )}
+
                         {candidate.meeting_transcript && (
-                            <Section title="Meeting Transcript">
-                                <div className={styles.transcriptMeta}>
-                                    <span className={styles.transcriptBadge}>
-                                        <i className="fi fi-rr-microphone" style={{ fontSize: "9px" }} />
-                                        Zoom AI
-                                    </span>
-                                    <span className={styles.transcriptLen}>
-                                        {candidate.meeting_transcript.length.toLocaleString()} chars
-                                    </span>
-                                </div>
+                            <Section title="Call Transcript">
                                 <div className={styles.transcriptWrap}>
                                     <pre className={styles.transcriptPre}>
                                         {transcriptExpanded
                                             ? candidate.meeting_transcript
-                                            : candidate.meeting_transcript.slice(0, 800) + (candidate.meeting_transcript.length > 800 ? "…" : "")}
+                                            : candidate.meeting_transcript.slice(0, 600) +
+                                            (candidate.meeting_transcript.length > 600 ? "…" : "")}
                                     </pre>
-                                    {!transcriptExpanded && candidate.meeting_transcript.length > 800 && (
+                                    {candidate.meeting_transcript.length > 600 && !transcriptExpanded && (
                                         <div className={styles.transcriptFade} />
                                     )}
                                 </div>
-                                {candidate.meeting_transcript.length > 800 && (
+                                {candidate.meeting_transcript.length > 600 && (
                                     <button
-                                        className={styles.outreachToggle}
+                                        className={styles.expandBtn}
                                         onClick={() => setTranscriptExpanded(p => !p)}
-                                        style={{ marginTop: "8px" }}
                                     >
                                         {transcriptExpanded ? "Show less ↑" : "Show full transcript ↓"}
                                     </button>
                                 )}
                             </Section>
                         )}
+
                         {candidate.recruiter_notes && (
                             <Section title="Recruiter Notes" className={styles.notesSection}>
                                 <span className={styles.notesInternalBadge}>Internal Only</span>
@@ -412,7 +444,9 @@ export default function CandidateProfile() {
                         )}
                     </div>
 
+                    {/* ── Side column ── */}
                     <div className={styles.sideCol}>
+
                         <Section title="Contact">
                             <div className={styles.infoList}>
                                 <InfoRow
@@ -432,6 +466,7 @@ export default function CandidateProfile() {
                                 />
                             </div>
                         </Section>
+
                         {(candidate.ai_certifications || skills.length > 0) && (
                             <Section title="Skills & Certifications">
                                 {candidate.ai_certifications && (
@@ -456,6 +491,7 @@ export default function CandidateProfile() {
                                 )}
                             </Section>
                         )}
+
                         <Section title="Profile Details">
                             <div className={styles.infoList}>
                                 <InfoRow
@@ -489,13 +525,18 @@ export default function CandidateProfile() {
                                 {candidate.meeting_transcript && <InfoRow label="Transcript" value="✓ Available" />}
                             </div>
                         </Section>
+
                         <div className={styles.pdfCard}>
                             <div className={styles.pdfCardTitle}>Export Profile</div>
                             <p className={styles.pdfCardDesc}>Download a clean PDF to share with potential employers.</p>
                             <button className={styles.pdfCardBtn} onClick={handleDownloadPdf} disabled={pdfLoading}>
-                                {pdfLoading ? "Generating…" : <><i className="fi fi-rr-file-pdf" />Download PDF</>}
+                                {pdfLoading
+                                    ? <span className={styles.spinner} />
+                                    : <i className="fi fi-rr-file-pdf" />}
+                                {pdfLoading ? "Generating…" : "Download PDF"}
                             </button>
                         </div>
+
                     </div>
                 </div>
 

@@ -180,11 +180,15 @@ export default function CandidateSelfProfile() {
         }
     }
 
+    // ── Derived display values ──────────────────────────────────────────
     const skills = Array.isArray(profile?.ai_skills)
         ? profile.ai_skills
         : typeof profile?.ai_skills === 'string'
             ? profile.ai_skills.split(',').map(s => s.trim()).filter(Boolean)
             : [];
+
+    const experienceBullets = parseToDisplayBullets(profile?.ai_experience);
+    const educationBullets = parseToDisplayBullets(profile?.ai_education, 4);
 
     const careerLevelLabel = {
         entry: 'Entry Level',
@@ -193,6 +197,7 @@ export default function CandidateSelfProfile() {
         executive: 'Executive',
     }[profile?.ai_career_level] || profile?.ai_career_level || null;
 
+    // ── Loading / empty states ──────────────────────────────────────────
     if (loading) {
         return (
             <div className={styles.page}>
@@ -227,10 +232,12 @@ export default function CandidateSelfProfile() {
                     ← Back to Dashboard
                 </button>
 
-                {/* ── Profile card ── */}
+                {/* ══════════════════════════════════════════
+                    PROFILE CARD (identity section)
+                ══════════════════════════════════════════ */}
                 <div className={styles.profileCard}>
 
-                    {/* Banner — purely visual, no button on top */}
+                    {/* Banner — purely visual */}
                     <div
                         className={styles.banner}
                         style={profile.banner_url ? {
@@ -244,8 +251,9 @@ export default function CandidateSelfProfile() {
                     <input ref={photoInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handlePhotoChange} />
                     <input ref={bannerInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleBannerChange} />
 
-                    {/* Avatar + identity actions row */}
+                    {/* ── Identity row: avatar + name/title/location + actions ── */}
                     <div className={styles.identityRow}>
+
                         {/* Avatar — click to change photo */}
                         <div
                             className={styles.avatarWrap}
@@ -267,9 +275,27 @@ export default function CandidateSelfProfile() {
                             </div>
                         </div>
 
+                        {/* Inline name / title / location */}
+                        <div className={styles.identityMeta}>
+                            <div className={styles.identityName}>{profile.name}</div>
+                            {(profile.current_title || profile.current_company) && (
+                                <div className={styles.identityHeadline}>
+                                    {profile.current_title}
+                                    {profile.current_title && profile.current_company && (
+                                        <span className={styles.headlineDot}> · </span>
+                                    )}
+                                    {profile.current_company}
+                                </div>
+                            )}
+                            {profile.location && (
+                                <div className={styles.identityLocation}>
+                                    <i className="fi fi-rr-marker" /> {profile.location}
+                                </div>
+                            )}
+                        </div>
+
                         {/* Actions: Change Banner + Edit/Save/Cancel */}
                         <div className={styles.identityActions}>
-                            {/* Change Banner button — visible when not in edit mode */}
                             {!editing && (
                                 <button
                                     className={styles.changeBannerBtn}
@@ -277,28 +303,19 @@ export default function CandidateSelfProfile() {
                                     disabled={bannerUploading}
                                 >
                                     {bannerUploading
-                                        ? <><span className={styles.spinner} />Uploading…</>
-                                        : <><i className="fi fi-rr-picture" />Change Banner</>
+                                        ? <><span className={styles.spinner} /> Uploading…</>
+                                        : <><i className="fi fi-rr-picture" /> Change Banner</>
                                     }
                                 </button>
                             )}
 
-                            {/* Edit / Save / Cancel controls */}
                             {editing ? (
                                 <div className={styles.editActions}>
-                                    <button
-                                        className={styles.cancelBtn}
-                                        onClick={handleCancel}
-                                        disabled={saving}
-                                    >
+                                    <button className={styles.cancelBtn} onClick={handleCancel} disabled={saving}>
                                         Cancel
                                     </button>
-                                    <button
-                                        className={styles.saveBtn}
-                                        onClick={handleSave}
-                                        disabled={saving}
-                                    >
-                                        {saving ? 'Saving…' : 'Save Changes'}
+                                    <button className={styles.saveBtn} onClick={handleSave} disabled={saving}>
+                                        {saving ? <><span className={styles.spinner} /> Saving…</> : 'Save Changes'}
                                     </button>
                                 </div>
                             ) : (
@@ -306,215 +323,193 @@ export default function CandidateSelfProfile() {
                                     <i className="fi fi-rr-edit" /> Edit Profile
                                 </button>
                             )}
-                            {saveMsg && (
-                                <span className={`${styles.saveMsg} ${saveMsg.includes('failed') ? styles.saveMsgErr : ''}`}>
-                                    {saveMsg}
-                                </span>
-                            )}
                         </div>
                     </div>
 
-                    {/* Name + headline + location */}
-                    {/* <div className={styles.nameBlock}>
-                        <h1 className={styles.name}>{profile.name}</h1>
-                        {(profile.current_title || profile.current_company) && (
-                            <p className={styles.headline}>
-                                {[profile.current_title, profile.current_company].filter(Boolean).join(' · ')}
-                            </p>
-                        )}
-                        {profile.location && (
-                            <p className={styles.locationLine}>
-                                <i className="fi fi-rr-marker" /> {profile.location}
-                            </p>
-                        )}
-                    </div> */}
+                    {/* Save message */}
+                    {saveMsg && (
+                        <div className={`${styles.saveMsg} ${saveMsg.includes('failed') ? styles.saveMsgErr : ''}`}>
+                            {saveMsg}
+                        </div>
+                    )}
                 </div>
 
                 {/* ══════════════════════════════════════════
-                    TWO-COLUMN BODY — mirrors PDF layout
+                    TWO-COLUMN PROFILE BODY
                 ══════════════════════════════════════════ */}
                 <div className={styles.profileBodyGrid}>
-                    {/* Main column: About, Experience, Education */}
+
+                    {/* ── Main column ── */}
                     <div className={styles.mainCol}>
+
                         {profile.ai_summary && (
                             <div className={styles.bodyCard}>
                                 <div className={styles.bodyCardTitle}>About</div>
-                                <p className={styles.summaryText}>{profile.ai_summary}</p>
+                                <div style={{ padding: '16px 18px' }}>
+                                    <p className={styles.summaryText}>{profile.ai_summary}</p>
+                                </div>
                             </div>
                         )}
-                        {profile.ai_experience && (
+
+                        {experienceBullets.length > 0 && (
                             <div className={styles.bodyCard}>
                                 <div className={styles.bodyCardTitle}>Experience</div>
-                                <ul className={styles.bulletList}>
-                                    {parseToDisplayBullets(profile.ai_experience, 6).map((b, i) => (
-                                        <li key={i}>{b}</li>
-                                    ))}
-                                </ul>
+                                <div style={{ padding: '16px 18px' }}>
+                                    <ul className={styles.bulletList}>
+                                        {experienceBullets.map((b, i) => (
+                                            <li key={i} className={styles.bulletItem}>{b}</li>
+                                        ))}
+                                    </ul>
+                                </div>
                             </div>
                         )}
-                        {profile.ai_education && (
+
+                        {educationBullets.length > 0 && (
                             <div className={styles.bodyCard}>
                                 <div className={styles.bodyCardTitle}>Education</div>
-                                <ul className={styles.bulletList}>
-                                    {parseToDisplayBullets(profile.ai_education, 3).map((b, i) => (
-                                        <li key={i}>{b}</li>
-                                    ))}
-                                </ul>
+                                <div style={{ padding: '16px 18px' }}>
+                                    <ul className={styles.bulletList}>
+                                        {educationBullets.map((b, i) => (
+                                            <li key={i} className={styles.bulletItem}>{b}</li>
+                                        ))}
+                                    </ul>
+                                </div>
                             </div>
                         )}
                     </div>
 
-                    {/* Side column: Skills, Certifications, Details */}
+                    {/* ── Side column ── */}
                     <div className={styles.sideCol}>
+
+                        {/* Basic Info — editable */}
+                        <div className={styles.bodyCard}>
+                            <div className={styles.bodyCardTitle}>Basic Information</div>
+                            <div style={{ padding: '16px 18px' }}>
+                                {editing ? (
+                                    <div className={styles.fieldRow}>
+                                        <div className={styles.fieldGroup}>
+                                            <label className={styles.fieldLabel}>Current Title</label>
+                                            <input
+                                                className={styles.fieldInput}
+                                                value={form.current_title}
+                                                onChange={e => setForm(p => ({ ...p, current_title: e.target.value }))}
+                                                placeholder="e.g. Senior Accountant"
+                                            />
+                                        </div>
+                                        <div className={styles.fieldGroup}>
+                                            <label className={styles.fieldLabel}>Current Company</label>
+                                            <input
+                                                className={styles.fieldInput}
+                                                value={form.current_company}
+                                                onChange={e => setForm(p => ({ ...p, current_company: e.target.value }))}
+                                                placeholder="e.g. Acme Corp"
+                                            />
+                                        </div>
+                                        <div className={styles.fieldGroup}>
+                                            <label className={styles.fieldLabel}>Location</label>
+                                            <input
+                                                className={styles.fieldInput}
+                                                value={form.location}
+                                                onChange={e => setForm(p => ({ ...p, location: e.target.value }))}
+                                                placeholder="e.g. Manchester, NH"
+                                            />
+                                        </div>
+                                        <div className={styles.fieldGroup}>
+                                            <label className={styles.fieldLabel}>Phone</label>
+                                            <input
+                                                className={styles.fieldInput}
+                                                value={form.phone}
+                                                onChange={e => setForm(p => ({ ...p, phone: e.target.value }))}
+                                                placeholder="e.g. 603-555-0100"
+                                            />
+                                        </div>
+                                        <div className={styles.fieldGroup}>
+                                            <label className={styles.fieldLabel}>LinkedIn URL</label>
+                                            <input
+                                                className={styles.fieldInput}
+                                                value={form.linkedin_url}
+                                                onChange={e => setForm(p => ({ ...p, linkedin_url: e.target.value }))}
+                                                placeholder="https://linkedin.com/in/…"
+                                            />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className={styles.roGrid}>
+                                        <ReadOnlyField label="Title" value={profile.current_title} />
+                                        <ReadOnlyField label="Company" value={profile.current_company} />
+                                        <ReadOnlyField label="Location" value={profile.location} />
+                                        <ReadOnlyField label="Phone" value={profile.phone} />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Career info — read-only */}
+                        {(careerLevelLabel || profile.ai_years_experience || profile.ai_certifications) && (
+                            <div className={styles.bodyCard}>
+                                <div className={styles.bodyCardTitle}>Career Details</div>
+                                <div style={{ padding: '16px 18px' }}>
+                                    <div className={styles.roGrid}>
+                                        <ReadOnlyField label="Level" value={careerLevelLabel} />
+                                        <ReadOnlyField
+                                            label="Experience"
+                                            value={profile.ai_years_experience ? `${profile.ai_years_experience} years` : null}
+                                        />
+                                        <ReadOnlyField label="Certifications" value={profile.ai_certifications} />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Skills */}
                         {skills.length > 0 && (
                             <div className={styles.bodyCard}>
                                 <div className={styles.bodyCardTitle}>Skills</div>
-                                <div className={styles.skillsWrap}>
-                                    {skills.map((s, i) => (
-                                        <span key={i} className={styles.skillTag}>{s}</span>
-                                    ))}
+                                <div style={{ padding: '14px 18px' }}>
+                                    <div className={styles.skillsWrap}>
+                                        {skills.map((skill, i) => (
+                                            <span key={i} className={styles.skillTag}>{skill}</span>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         )}
-                        {profile.ai_certifications && (
-                            <div className={styles.bodyCard}>
-                                <div className={styles.bodyCardTitle}>Certifications</div>
-                                <p className={styles.bodyText}>{profile.ai_certifications}</p>
-                            </div>
-                        )}
+
+                        {/* Contact */}
                         <div className={styles.bodyCard}>
-                            <div className={styles.bodyCardTitle}>Profile Details</div>
-                            <div className={styles.detailList}>
-                                {careerLevelLabel && (
-                                    <div className={styles.detailRow}>
-                                        <span className={styles.detailLabel}>Level</span>
-                                        <span className={styles.detailValue}>{careerLevelLabel}</span>
-                                    </div>
-                                )}
-                                {profile.ai_years_experience && (
-                                    <div className={styles.detailRow}>
-                                        <span className={styles.detailLabel}>Experience</span>
-                                        <span className={styles.detailValue}>{profile.ai_years_experience} years</span>
-                                    </div>
-                                )}
-                                {profile.location && (
-                                    <div className={styles.detailRow}>
-                                        <span className={styles.detailLabel}>Location</span>
-                                        <span className={styles.detailValue}>{profile.location}</span>
-                                    </div>
-                                )}
-                                {profile.email && (
-                                    <div className={styles.detailRow}>
-                                        <span className={styles.detailLabel}>Email</span>
-                                        <a href={`mailto:${profile.email}`} className={styles.detailLink}>{profile.email}</a>
-                                    </div>
-                                )}
-                                {profile.phone && (
-                                    <div className={styles.detailRow}>
-                                        <span className={styles.detailLabel}>Phone</span>
-                                        <a href={`tel:${profile.phone}`} className={styles.detailLink}>{profile.phone}</a>
-                                    </div>
-                                )}
-                                {profile.linkedin_url && (
-                                    <div className={styles.detailRow}>
-                                        <span className={styles.detailLabel}>LinkedIn</span>
-                                        <a
-                                            href={profile.linkedin_url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className={styles.detailLink}
-                                        >
-                                            View Profile
-                                        </a>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* ══════════════════════════════════════════
-                    EDITABLE BASIC INFO
-                ══════════════════════════════════════════ */}
-                <div className={styles.section}>
-                    <div className={styles.sectionHeader}>
-                        <h2 className={styles.sectionTitle}>Basic Information</h2>
-                        <p className={styles.sectionSub}>
-                            {editing
-                                ? 'Update your contact and position details below.'
-                                : 'Your contact and position details.'}
-                        </p>
-                    </div>
-
-                    {editing ? (
-                        <div className={styles.fieldRow}>
-                            <div className={styles.fieldGroup}>
-                                <label className={styles.fieldLabel}>Current Title</label>
-                                <input
-                                    className={styles.fieldInput}
-                                    value={form.current_title}
-                                    onChange={e => setForm(p => ({ ...p, current_title: e.target.value }))}
-                                    placeholder="e.g. Senior Accountant"
-                                />
-                            </div>
-                            <div className={styles.fieldGroup}>
-                                <label className={styles.fieldLabel}>Current Company</label>
-                                <input
-                                    className={styles.fieldInput}
-                                    value={form.current_company}
-                                    onChange={e => setForm(p => ({ ...p, current_company: e.target.value }))}
-                                    placeholder="e.g. Acme Corp"
-                                />
-                            </div>
-                            <div className={styles.fieldGroup}>
-                                <label className={styles.fieldLabel}>Location</label>
-                                <input
-                                    className={styles.fieldInput}
-                                    value={form.location}
-                                    onChange={e => setForm(p => ({ ...p, location: e.target.value }))}
-                                    placeholder="e.g. Manchester, NH"
-                                />
-                            </div>
-                            <div className={styles.fieldGroup}>
-                                <label className={styles.fieldLabel}>Phone</label>
-                                <input
-                                    className={styles.fieldInput}
-                                    value={form.phone}
-                                    onChange={e => setForm(p => ({ ...p, phone: e.target.value }))}
-                                    placeholder="e.g. (603) 555-0100"
-                                />
-                            </div>
-                            <div className={styles.fieldGroup}>
-                                <label className={styles.fieldLabel}>LinkedIn URL</label>
-                                <input
-                                    className={styles.fieldInput}
-                                    value={form.linkedin_url}
-                                    onChange={e => setForm(p => ({ ...p, linkedin_url: e.target.value }))}
-                                    placeholder="https://linkedin.com/in/..."
-                                />
-                            </div>
-                        </div>
-                    ) : (
-                        <div className={styles.roGrid}>
-                            <ReadOnlyField label="Title" value={profile.current_title} />
-                            <ReadOnlyField label="Company" value={profile.current_company} />
-                            <ReadOnlyField label="Location" value={profile.location} />
-                            <ReadOnlyField label="Phone" value={profile.phone} />
-                            {profile.linkedin_url && (
-                                <div className={styles.roField}>
-                                    <span className={styles.roLabel}>LinkedIn</span>
-                                    <a
-                                        href={profile.linkedin_url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className={styles.roLink}
-                                    >
-                                        {profile.linkedin_url.replace('https://', '')}
-                                    </a>
+                            <div className={styles.bodyCardTitle}>Contact</div>
+                            <div style={{ padding: '16px 18px' }}>
+                                <div className={styles.detailList}>
+                                    {profile.email && (
+                                        <div className={styles.detailRow}>
+                                            <span className={styles.detailLabel}>Email</span>
+                                            <a href={`mailto:${profile.email}`} className={styles.detailLink}>{profile.email}</a>
+                                        </div>
+                                    )}
+                                    {profile.phone && (
+                                        <div className={styles.detailRow}>
+                                            <span className={styles.detailLabel}>Phone</span>
+                                            <a href={`tel:${profile.phone}`} className={styles.detailLink}>{profile.phone}</a>
+                                        </div>
+                                    )}
+                                    {profile.linkedin_url && (
+                                        <div className={styles.detailRow}>
+                                            <span className={styles.detailLabel}>LinkedIn</span>
+                                            <a
+                                                href={profile.linkedin_url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className={styles.detailLink}
+                                            >
+                                                View Profile
+                                            </a>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
+                            </div>
                         </div>
-                    )}
+
+                    </div>
                 </div>
 
             </main>

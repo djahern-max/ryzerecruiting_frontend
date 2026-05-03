@@ -137,25 +137,20 @@
     }
 }
 
-/* ── Identity row: avatar (left, overlaps banner) + action buttons (right) ── */
+/* ══════════════════════════════════════════════════════
+   IDENTITY ROW — avatar (left) + name/title/location (right)
+   Pulls up to overlap the banner via negative margin-top
+   ══════════════════════════════════════════════════════ */
 .identityRow {
     display: flex;
     align-items: flex-end;
-    padding: 0 0 0 20px;
+    padding: 0 20px 0 20px;
     margin-top: calc(var(--avatar) * -0.46);
     margin-bottom: 0;
+    gap: 0;
 }
 
-.profileActions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 8px;
-    padding: 6px 24px 10px;
-}
-
-/* Avatar */
+/* ── Avatar ── */
 .avatarWrap {
     position: relative;
     width: var(--avatar);
@@ -194,36 +189,80 @@
     letter-spacing: -1px;
 }
 
-/* Camera overlay on hover */
+/* Camera overlay on avatar */
 .avatarOverlay {
     position: absolute;
-    inset: 4px;
+    inset: 0;
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0, 0, 0, 0.42);
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
     font-size: 1.2rem;
     opacity: 0;
-    transition: opacity 150ms;
+    transition: opacity 160ms;
 }
 
 .avatarWrap:hover .avatarOverlay {
     opacity: 1;
 }
 
-/* ── Action buttons — right side, below banner in white space ── */
-.identityActions {
+/* ── Inline identity meta: name / title / location ── */
+.identityMeta {
+    flex: 1;
+    min-width: 0;
+    padding: 0 16px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    align-self: flex-end;
+}
+
+.identityName {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.identityHeadline {
+    font-size: 14px;
+    color: var(--sub);
+    font-weight: 400;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.headlineDot {
+    color: var(--muted);
+}
+
+.identityLocation {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--blue);
+    font-weight: 500;
+}
+
+/* ── Action buttons row ── */
+.profileActions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: flex-end;
     gap: 8px;
-    padding-bottom: 10px;
+    padding: 6px 24px 10px;
 }
 
-/* Base action button */
 .actionBtn {
     display: inline-flex;
     align-items: center;
@@ -232,12 +271,12 @@
     background: transparent;
     border: 1.5px solid var(--border);
     color: var(--sub);
-    font-size: 0.78rem;
-    font-weight: 600;
-    font-family: var(--font);
     border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
-    transition: border-color 150ms, color 150ms;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+    font-family: var(--font);
     white-space: nowrap;
 }
 
@@ -247,11 +286,10 @@
 }
 
 .actionBtn:disabled {
-    opacity: 0.55;
+    opacity: 0.5;
     cursor: not-allowed;
 }
 
-/* Green variant — PDF download */
 .actionBtnGreen {
     display: inline-flex;
     align-items: center;
@@ -260,113 +298,57 @@
     background: transparent;
     border: 1.5px solid #16a34a;
     color: #16a34a;
-    font-size: 0.78rem;
-    font-weight: 600;
-    font-family: var(--font);
     border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 150ms;
+    transition: background 0.15s, color 0.15s;
+    font-family: var(--font);
     white-space: nowrap;
 }
 
-.actionBtnGreen:hover:not(:disabled) {
-    background: #f0fdf4;
+.actionBtnGreen:hover {
+    background: #16a34a;
+    color: #fff;
 }
 
-.actionBtnGreen:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-}
-
-/* Purple variant — Enrich */
 .actionBtnPurple {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     padding: 7px 16px;
-    background: transparent;
-    border: 1.5px solid #7c3aed;
-    color: #7c3aed;
-    font-size: 0.78rem;
-    font-weight: 600;
-    font-family: var(--font);
+    background: var(--blue);
+    border: 1.5px solid var(--blue);
+    color: #fff;
     border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 150ms;
+    transition: background 0.15s;
+    font-family: var(--font);
     white-space: nowrap;
 }
 
 .actionBtnPurple:hover:not(:disabled) {
-    background: #f5f3ff;
+    background: var(--blue-hover);
+    border-color: var(--blue-hover);
 }
 
-/* Edit Profile button */
-.editBtn {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 8px 20px;
-    background: transparent;
-    border: 1.5px solid var(--blue);
-    color: var(--blue);
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-    font-family: var(--font);
+.actionBtnPurple:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
 }
 
-.editBtn:hover {
-    background: var(--blue);
-    color: #fff;
-}
-
-/* Name / headline / location */
+/* ── Badges row (below action buttons) ── */
 .nameBlock {
-    padding: 8px 24px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    padding: 0 24px 16px;
 }
 
 .nameRow {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
-    margin-bottom: 2px;
-}
-
-.name {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text);
-    margin: 0;
-    line-height: 1.2;
-    letter-spacing: -0.3px;
-}
-
-.headline {
-    font-size: 15px;
-    color: var(--sub);
-    margin: 0;
-    font-weight: 400;
-    line-height: 1.4;
-}
-
-.headlineDot {
-    color: var(--muted);
-}
-
-.locationLine {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 13px;
-    color: var(--blue);
-    margin: 2px 0 0;
-    font-weight: 500;
 }
 
 .callBadge {
@@ -378,6 +360,27 @@
     color: #6d28d9;
     background: #ede9fe;
     border: 1px solid #c4b5fd;
+    border-radius: 4px;
+    padding: 2px 8px;
+}
+
+.certBadge {
+    font-size: 0.72rem;
+    font-weight: 800;
+    border-radius: 20px;
+    background: var(--blue);
+    color: #fff;
+    padding: 3px 11px;
+}
+
+.levelBadge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1d4ed8;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
     border-radius: 4px;
     padding: 2px 8px;
 }
@@ -426,7 +429,7 @@
    ══════════════════════════════════════════════════════ */
 .profileBodyInner {
     display: grid;
-    grid-template-columns: 1fr 300px;
+    grid-template-columns: 1fr 268px;
     gap: 8px;
     align-items: start;
 }
@@ -457,29 +460,32 @@
 }
 
 .sectionTitle {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--text);
-    padding: 16px 20px 0;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    padding: 12px 18px 10px;
+    border-bottom: 1px solid #f1f5f9;
+    background: #f8fafc;
 }
 
 .sectionBody {
-    padding: 12px 20px 20px;
+    padding: 16px 18px;
 }
 
 .summaryText {
-    font-size: 0.9rem;
+    font-size: 14px;
     color: var(--sub);
     line-height: 1.75;
     margin: 0;
 }
 
 .bodyText {
-    font-size: 0.875rem;
+    font-size: 14px;
     color: var(--sub);
-    line-height: 1.75;
+    line-height: 1.7;
     margin: 0;
-    white-space: pre-wrap;
 }
 
 .bulletList {
@@ -487,79 +493,32 @@
     padding: 0 0 0 18px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    list-style: disc;
+    gap: 8px;
 }
 
 .bulletItem {
-    font-size: 0.875rem;
+    font-size: 14px;
     color: var(--sub);
-    line-height: 1.65;
-    padding-left: 4px;
+    line-height: 1.55;
 }
 
-/* Outreach */
-.outreachWrap {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.outreachText {
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.outreachExpanded {
-    display: block;
-    -webkit-line-clamp: unset;
-}
-
-.outreachToggle {
-    align-self: flex-start;
+.expandBtn {
     background: none;
     border: none;
-    font-size: 0.8rem;
-    font-weight: 700;
-    font-family: var(--font);
     color: var(--blue);
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
-    padding: 0;
+    padding: 8px 0 0;
+    font-family: var(--font);
+    display: block;
 }
 
-.outreachToggle:hover {
-    color: var(--blue-hover);
+.expandBtn:hover {
     text-decoration: underline;
 }
 
 /* Transcript */
-.transcriptMeta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-}
-
-.transcriptBadge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 11px;
-    font-weight: 700;
-    color: #0369a1;
-    background: #e0f2fe;
-    border: 1px solid #bae6fd;
-    border-radius: 4px;
-    padding: 2px 7px;
-}
-
-.transcriptLen {
-    font-size: 12px;
-    color: var(--muted);
-}
-
 .transcriptWrap {
     position: relative;
     overflow: hidden;
@@ -664,15 +623,6 @@
     margin-bottom: 6px;
 }
 
-.certBadge {
-    font-size: 0.72rem;
-    font-weight: 800;
-    border-radius: 20px;
-    background: var(--blue);
-    color: #fff;
-    padding: 3px 11px;
-}
-
 .certBadgeRow {
     display: flex;
     flex-wrap: wrap;
@@ -707,6 +657,7 @@
     background: #d0e5f7;
 }
 
+/* ── PDF export card ── */
 .pdfCard {
     background: var(--card);
     border: 1px solid var(--border);
@@ -768,7 +719,21 @@
         height: 148px;
     }
 
-    .identityActions {
+    .identityRow {
+        padding: 0 12px 0 12px;
+    }
+
+    .identityMeta {
+        padding: 0 10px 8px;
+    }
+
+    .identityName {
+        font-size: 1.2rem;
+    }
+
+    .profileActions {
+        justify-content: flex-start;
+        padding: 6px 16px 10px;
         gap: 6px;
     }
 
@@ -788,33 +753,6 @@
     }
 
     .nameBlock {
-        padding: 10px 20px 18px;
-    }
-
-    .identityRow {
-        padding: 0 16px 0 16px;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .identityActions {
-        justify-content: flex-start;
-    }
-
-    .name {
-        font-size: 1.3rem;
-    }
-
-    .profileActions {
-        justify-content: flex-start;
-        padding: 6px 16px 10px;
-        gap: 6px;
-    }
-
-    .actionBtn,
-    .actionBtnGreen,
-    .actionBtnPurple {
-        font-size: 0.72rem;
-        padding: 5px 10px;
+        padding: 0 16px 14px;
     }
 }
