@@ -69,6 +69,7 @@
   flex-shrink: 0;
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 /* ── Sections ───────────────────────────────────────────────────────────── */
@@ -619,6 +620,23 @@
   justify-content: center;
   z-index: 1000;
   padding: 24px;
+}
+
+.profileBtn {
+  padding: 8px 18px;
+  background: #1c3f6e;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.15s;
+}
+
+.profileBtn:hover {
+  background: #2563eb;
 }
 
 /* ── Responsive ─────────────────────────────────────────────────────────── */

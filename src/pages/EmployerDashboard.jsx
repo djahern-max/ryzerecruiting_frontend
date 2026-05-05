@@ -6,6 +6,7 @@ import ScheduleCallButton from '../components/ScheduleCallButton';
 import zoomIcon from '../assets/icons/zoom.svg';
 import styles from './EmployerDashboard.module.css';
 import { apiFetch } from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const TRUNCATE = 200;
@@ -217,6 +218,7 @@ function JobCard({ job, candidateMatches, matchesLoading, onSchedule }) {
 
 export default function EmployerDashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const firstName = user?.full_name?.split(' ')[0] || 'there';
 
@@ -321,6 +323,9 @@ export default function EmployerDashboard() {
           </div>
           <div className={styles.bannerRight}>
             <ScheduleCallButton variant="primary" size="md" label="Schedule a Call" />
+            <button className={styles.profileBtn} onClick={() => navigate('/employer/profile')}>
+              View My Profile
+            </button>
           </div>
         </div>
 

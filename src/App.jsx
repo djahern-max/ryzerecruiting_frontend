@@ -23,6 +23,7 @@ import BillingSuccess from './pages/BillingSuccess';
 import InviteForm from './pages/admin/InviteForm';
 import ChangePassword from './pages/ChangePassword';
 import CandidateSelfProfile from './pages/CandidateSelfProfile';
+import EmployerSelfProfile from './pages/EmployerSelfProfile';
 
 const loadingScreen = (
   <div style={{
@@ -125,6 +126,16 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/employer/profile"
+            element={
+              <ProtectedRoute allowedRoles={['EMPLOYER']}>
+                <EmployerSelfProfile />
+              </ProtectedRoute>
+            }
+          />
+
 
           {/* ── Admin — superuser only ──────────────────────────────── */}
           <Route
