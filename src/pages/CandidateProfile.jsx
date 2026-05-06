@@ -8,6 +8,7 @@ import bannerImageIcon from "../assets/icons/banner_image.svg";
 import enhanceProfileIconV2 from "../assets/icons/enhance_profileV2.svg";
 import downloadV2 from "../assets/icons/downloadV2.svg";
 import editIcon from "../assets/icons/edit.svg";
+import { resizeImage } from '../utils/imageResize';
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
@@ -114,8 +115,9 @@ export default function CandidateProfile() {
         if (!file) return;
         setPhotoUploading(true);
         try {
+            const resized = await resizeImage(file, 400, 400, 0.92);  // ← add this
             const formData = new FormData();
-            formData.append("file", file);
+            formData.append("file", resized, "photo.jpg");             // ← use resized
             const res = await fetch(`${API_BASE}/api/candidates/${id}/photo`, {
                 method: "POST",
                 headers: { Authorization: `Bearer ${token}` },
@@ -137,8 +139,9 @@ export default function CandidateProfile() {
         if (!file) return;
         setBannerUploading(true);
         try {
+            const resized = await resizeImage(file, 1400, 400, 0.90);  // ← add this
             const formData = new FormData();
-            formData.append("file", file);
+            formData.append("file", resized, "banner.jpg");             // ← use resized
             const res = await fetch(`${API_BASE}/api/candidates/${id}/banner`, {
                 method: "POST",
                 headers: { Authorization: `Bearer ${token}` },

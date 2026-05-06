@@ -7,6 +7,7 @@ import { apiFetch } from '../services/api';
 import styles from './CandidateSelfProfile.module.css';
 // import editIcon from '../assets/icons/edit.svg';
 import changeIcon from '../assets/icons/banner_image.svg';
+import { resizeImage } from '../utils/imageResize';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -115,7 +116,8 @@ export default function CandidateSelfProfile() {
         const file = e.target.files?.[0]; if (!file) return;
         setPhotoUploading(true);
         try {
-            const fd = new FormData(); fd.append('file', file);
+            const resized = await resizeImage(file, 400, 400, 0.92);  // ← add
+            const fd = new FormData(); fd.append('file', resized, 'photo.jpg');  // ← use resized
             const res = await fetch(`${API_BASE}/api/candidates/me/photo`, { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: fd });
             if (!res.ok) throw new Error('Upload failed');
             const data = await res.json();
@@ -128,7 +130,8 @@ export default function CandidateSelfProfile() {
         const file = e.target.files?.[0]; if (!file) return;
         setBannerUploading(true);
         try {
-            const fd = new FormData(); fd.append('file', file);
+            const resized = await resizeImage(file, 1400, 400, 0.90);  // ← add
+            const fd = new FormData(); fd.append('file', resized, 'banner.jpg');  // ← use resized
             const res = await fetch(`${API_BASE}/api/candidates/me/banner`, { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: fd });
             if (!res.ok) throw new Error('Upload failed');
             const data = await res.json();
