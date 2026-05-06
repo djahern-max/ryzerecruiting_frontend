@@ -105,8 +105,15 @@ function EmployerRow({ profile, onUpdate, defaultExpanded = false }) {
     return (
         <>
             <tr className={`${styles.row} ${expanded ? styles.rowExpanded : ''}`}>
+
+
                 <td className={styles.companyCell}>
-                    <div className={styles.companyName}>{profile.company_name}</div>
+                    <button
+                        className={styles.companyNameLink}
+                        onClick={() => navigate(`/admin/employers/${profile.id}`)}
+                    >
+                        {profile.company_name}
+                    </button>
 
                     {profile.website_url && (
                         <a
