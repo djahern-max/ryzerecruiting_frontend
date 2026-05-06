@@ -22,11 +22,19 @@ import EP15 from "../assets/landing_page_thumbnails/EP15.png";
 import EP16 from "../assets/landing_page_thumbnails/EP16.png";
 import EP17 from "../assets/landing_page_thumbnails/EP17.png";
 import EP18 from "../assets/landing_page_thumbnails/EP18.png";
+import EP19 from "../assets/landing_page_thumbnails/EP19.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
-const CURRENT_VERSION = 17;
+const CURRENT_VERSION = 19;
 
 const EPISODES = [
+  {
+    num: 19,
+    title: "Employer Profile & Self-Profile",
+    thumb: EP19,
+    url: "https://www.linkedin.com/posts/daneahern_ep-19-building-a-recruiting-platform-in-ugcPost-7457725762259812352-GcL-?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "EP18 gave candidates a branded profile. EP19 closes the triangle for employers. Company profiles now have a logo upload, banner image, and the same identity-zone layout — all stored in DigitalOcean Spaces. Employers log in and see their own profile page with editable company info, AI-generated overview, hiring needs, and talking points. A bug hiding in plain sight: the Alembic migration had added the columns to the database, but they were never added to the SQLAlchemy model — so every upload silently saved to Spaces and then vanished. One fix. Everything persists.",
+  },
   {
     num: 18,
     title: "Candidate Profile",
@@ -345,6 +353,22 @@ const PHASES = [
       "PDF export via Playwright — branded HTML template rendered by headless Chromium",
       "PDF mirrors the UI — same banner, headshot, skills, certs, and layout",
       "Streaming PDF response — downloads directly from the browser in one click",
+    ],
+  },
+  {
+    id: "14",
+    title: "Employer Profile & Self-Profile",
+    status: "complete",
+    summary: "Mirrored the candidate profile pattern on the employer side. Every employer now has a branded profile page with logo upload, banner image, and a polished identity-zone layout. Employers can log in, view their own profile, edit company details, and upload images — all stored in DigitalOcean Spaces with automatic replacement on re-upload. A silent SQLAlchemy model bug was caught and fixed: the migration had added the columns to the DB but the ORM didn't know about them, so every upload succeeded in Spaces but the URL was never persisted.",
+    bullets: [
+      "EmployerSelfProfile.jsx — employer-facing profile page at /employer/profile",
+      "Logo upload — stored in DigitalOcean Spaces, replaces previous file on re-upload",
+      "Banner upload — same pattern, auto-cleanup of orphaned files",
+      "PATCH /api/employer-profiles/me — self-edit for whitelisted fields",
+      "POST /api/employer-profiles/me/logo and /me/banner — image upload endpoints",
+      "primary_contact_email linking — profile resolved by matching user email",
+      "SQLAlchemy model fix — logo_url and banner_url columns added to EmployerProfile model",
+      "Re-embedding on save — background task fires after every profile edit",
     ],
   },
 
@@ -700,37 +724,36 @@ export default function Landing() {
           <div className={styles.nextGrid}>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 18</div>
-              <div className={styles.nextTitle}>Candidate Profile &amp; PDF Export</div>
+              <div className={styles.nextNum}>EP 19</div>
+              <div className={styles.nextTitle}>Employer Profile &amp; Self-Profile</div>
               <p className={styles.nextDesc}>
-                Candidate profiles rebuilt for presentation — branded banner, headshot upload,
-                and a hero layout with identity overlaid directly on the image. AI content
-                restructured into scannable bullets. One-click PDF export produces a
-                recruiter-grade deliverable ready to send to a hiring manager.
+                Employers get the same branded profile treatment as candidates — logo upload,
+                banner image, identity-zone layout, and a self-edit flow. A silent ORM bug
+                (columns existed in the DB but not the model) was caught and fixed along the way.
               </p>
               <span className={styles.nextBadgePosted}>✓ Complete</span>
             </div>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 19</div>
-              <div className={styles.nextTitle}>AI Headline Generator</div>
+              <div className={styles.nextNum}>EP 20</div>
+              <div className={styles.nextTitle}>Job Orders Admin UI &amp; PDF Exports</div>
               <p className={styles.nextDesc}>
-                Instead of "Controller at Rye Beach Landscaping," Claude reads the candidate's
-                full profile and suggests 3–5 punchy, skills-first headlines. One click to
-                generate. One click to save. The profile starts selling the candidate, not
-                just describing them.
+                The recruiter gets a full Job Orders workflow — roster, create, detail, edit,
+                and delete. AI parses a raw job description into structured fields in one click.
+                PDF exports ship for both job orders and employer profiles, giving recruiters
+                a branded deliverable they can send to candidates immediately.
               </p>
               <span className={styles.nextBadge}>Up next</span>
             </div>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 20</div>
-              <div className={styles.nextTitle}>First External Recruiters</div>
+              <div className={styles.nextNum}>EP 21</div>
+              <div className={styles.nextTitle}>Landing Page Rebuild &amp; MVP Launch</div>
               <p className={styles.nextDesc}>
-                The invite system is live and the platform is polished enough to hand to
-                real users. The first recruiting firms get access. Onboarding feedback
-                shapes the next round of improvements — what breaks, what's missing,
-                what gets in the way.
+                The build-in-public timeline moves to /about. The front page becomes a real
+                SaaS marketing landing — focused on converting recruiters into trial users.
+                Final tenant isolation pass, Twilio A2P resubmission, and the platform opens
+                to external recruiting firms.
               </p>
               <span className={styles.nextBadge}>Coming soon</span>
             </div>
