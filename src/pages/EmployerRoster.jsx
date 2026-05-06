@@ -25,6 +25,7 @@ const STATUS_STYLES = {
 };
 
 function EmployerRow({ profile, onUpdate, defaultExpanded = false }) {
+    const navigate = useNavigate();
     const [expanded, setExpanded] = useState(defaultExpanded);
     const [notes, setNotes] = useState(profile.recruiter_notes || '');
     const [editingNotes, setEditingNotes] = useState(false);
