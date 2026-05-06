@@ -441,8 +441,12 @@ export default function CandidateProfile() {
                                         )}
                                         {candidate.ai_certifications && (
                                             <div className={styles.roField}>
-                                                <span className={styles.roLabelWide}>Certification</span>
-                                                <span className={styles.roValue}>{candidate.ai_certifications}</span>
+                                                <span className={styles.roLabel}>Certs</span>
+                                                <span className={styles.roValue}>
+                                                    {['CPA', 'CFA', 'CMA'].filter(c =>
+                                                        candidate.ai_certifications.toUpperCase().includes(c)
+                                                    ).join(', ') || candidate.ai_certifications}
+                                                </span>
                                             </div>
                                         )}
                                     </div>
