@@ -174,6 +174,20 @@ export default function EmployerProfile() {
         }
     }
 
+    async function handleDownloadPdf() {
+        const res = await fetch(`${API_BASE}/api/employer-profiles/${id}/pdf`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) return;
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${profile.company_name}_Profile.pdf`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
     if (loading) {
         return (
             <div className={styles.page}>
@@ -261,15 +275,14 @@ export default function EmployerProfile() {
                     </div>
                 </div>
                 <div className={styles.identityActions}>
+                    <button onClick={handleDownloadPdf} className={styles.rawIconButton} title="Download PDF">
+                        ↓ PDF
+                    </button>
+                    <button onClick={() => navigate(`/admin/employers?expand=${id}`)} className={styles.rawIconButton} title="Notes & Status">
+                        ✏ Notes & Status
+                    </button>
                     <button onClick={() => navigate(-1)} className={styles.rawIconButton} title="Back">
                         ← Back
-                    </button>
-                    <button
-                        onClick={() => navigate(`/admin/employers?expand=${id}`)}
-                        className={styles.rawIconButton}
-                        title="Edit"
-                    >
-                        ✏ Notes & Status
                     </button>
                 </div>
             </div>
