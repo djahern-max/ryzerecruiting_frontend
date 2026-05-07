@@ -257,13 +257,7 @@ export default function EmployerProfile() {
                     </div>
                     <div className={styles.identityInfo}>
                         <h1 className={styles.identityName}>{profile.company_name}</h1>
-                        <div className={styles.companyMeta}>
-                            {profile.ai_industry && <span>{profile.ai_industry}</span>}
-                            {profile.ai_industry && profile.ai_company_size && (
-                                <span className={styles.metaDot}>·</span>
-                            )}
-                            {profile.ai_company_size && <span>{profile.ai_company_size}</span>}
-                        </div>
+
                     </div>
                 </div>
                 <div className={styles.identityActions}>
@@ -282,6 +276,12 @@ export default function EmployerProfile() {
 
             {/* ── Badges row ── */}
             <div className={styles.badgeRow}>
+                {profile.ai_industry && (
+                    <span className={styles.metaText}>{profile.ai_industry}</span>
+                )}
+                {profile.ai_company_size && (
+                    <span className={styles.metaText}>· {profile.ai_company_size}</span>
+                )}
                 {relLabel && (
                     <span className={styles.relBadge} style={{
                         background: relStyle.bg, color: relStyle.color, borderColor: relStyle.border,
