@@ -470,6 +470,137 @@
     margin-top: 2px;
 }
 
+/* ── Banner ── */
+.banner {
+    width: 100%;
+    height: 160px;
+    background: #e2e8f0;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.bannerOverlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    color: #fff;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.banner:hover .bannerOverlay {
+    opacity: 1;
+}
+
+/* ── Identity Zone ── */
+.identityZone {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 2rem 1rem;
+    margin-top: -40px;
+    position: relative;
+    z-index: 1;
+}
+
+.identityLeft {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+}
+
+.logoWrap {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    border: 3px solid #fff;
+    background: #f1f5f9;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.logoImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.logoInitial {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #64748b;
+    background: #e2e8f0;
+}
+
+.logoOverlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.logoWrap:hover .logoOverlay {
+    opacity: 1;
+}
+
+.identityInfo {
+    padding-bottom: 4px;
+}
+
+.identityName {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 2px;
+}
+
+.identityActions {
+    display: flex;
+    gap: 0.5rem;
+    padding-bottom: 4px;
+}
+
+.rawIconButton {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    color: #475569;
+    transition: background 0.15s;
+}
+
+.rawIconButton:hover {
+    background: #f1f5f9;
+}
+
+/* ── Badge row ── */
+.badgeRow {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0 2rem 1rem;
+}
+
+
 /* ══════════════════════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════════════════════ */
