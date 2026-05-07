@@ -269,7 +269,7 @@ export default function EmployerProfile() {
                         className={styles.rawIconButton}
                         title="Edit"
                     >
-                        ✏ Edit
+                        ✏ Notes & Status
                     </button>
                 </div>
             </div>
