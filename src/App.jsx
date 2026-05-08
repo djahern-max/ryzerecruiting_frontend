@@ -25,6 +25,7 @@ import ChangePassword from './pages/ChangePassword';
 import CandidateSelfProfile from './pages/CandidateSelfProfile';
 import EmployerSelfProfile from './pages/EmployerSelfProfile';
 import JobOrderRoster from './pages/JobOrderRoster';
+import JobOrderDetail from './pages/JobOrderDetail';
 
 const loadingScreen = (
   <div style={{
@@ -212,6 +213,7 @@ function App() {
             }
           />
           <Route path="/admin/job-orders" element={<AdminRoute><JobOrderRoster /></AdminRoute>} />
+          <Route path="/admin/job-orders/:id" element={<AdminRoute><JobOrderDetail /></AdminRoute>} />
 
           {/* ── Fallback ────────────────────────────────────────────── */}
           <Route path="*" element={<Navigate to="/" replace />} />

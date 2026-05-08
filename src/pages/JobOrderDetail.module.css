@@ -1,0 +1,629 @@
+/* src/pages/JobOrderDetail.module.css */
+
+.page {
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --blue: #0a66c2;
+    --navy: #1e3a5f;
+    --text: #1e293b;
+    --sub: #475569;
+    --muted: #94a3b8;
+    --radius: 10px;
+    --font: 'DM Sans', system-ui, sans-serif;
+
+    min-height: 100vh;
+    background: var(--bg);
+    font-family: var(--font);
+    color: var(--text);
+}
+
+/* ── Main ────────────────────────────────────────────── */
+.main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 24px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ── Loading / Error ─────────────────────────────────── */
+.loadingState,
+.errorState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    min-height: 60vh;
+    color: var(--sub);
+    font-size: 0.95rem;
+}
+
+.loadingDots {
+    display: flex;
+    gap: 6px;
+}
+
+.loadingDots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--blue);
+    animation: dotPulse 1.2s ease-in-out infinite;
+}
+
+.loadingDots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.loadingDots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes dotPulse {
+
+    0%,
+    80%,
+    100% {
+        opacity: 0.25;
+        transform: scale(0.8);
+    }
+
+    40% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ── Back Button ─────────────────────────────────────── */
+.backBtn {
+    background: none;
+    border: none;
+    color: var(--sub);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font);
+    transition: color 120ms;
+    align-self: flex-start;
+}
+
+.backBtn:hover {
+    color: var(--navy);
+}
+
+/* ── Identity Card ───────────────────────────────────── */
+.identityCard {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.identityLeft {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+}
+
+/* ── Employer Logo ───────────────────────────────────── */
+.logoWrap {
+    width: 64px;
+    height: 64px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #f8fafc;
+}
+
+.logoImg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #fff;
+}
+
+.logoInitial {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--sub);
+    background: #e2e8f0;
+}
+
+/* ── Identity Info ───────────────────────────────────── */
+.identityInfo {
+    flex: 1;
+    min-width: 0;
+}
+
+.jobTitle {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--navy);
+    margin: 0 0 6px;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+}
+
+.jobMeta {
+    font-size: 0.875rem;
+    color: var(--sub);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.metaDot {
+    color: var(--muted);
+}
+
+.employerLink {
+    background: none;
+    border: none;
+    color: var(--blue);
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: var(--font);
+    cursor: pointer;
+    padding: 0;
+    transition: color 120ms;
+}
+
+.employerLink:hover {
+    color: #004182;
+    text-decoration: underline;
+}
+
+.badgeRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.statusBadge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.matchCountBadge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: #eff6ff;
+    color: #1e3a5f;
+    border: 1px solid #bfdbfe;
+    border-radius: 20px;
+    padding: 3px 10px;
+}
+
+/* ── Action Buttons ──────────────────────────────────── */
+.identityActions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.actionBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--sub);
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: var(--font);
+    cursor: pointer;
+    transition: background 140ms, color 140ms;
+    white-space: nowrap;
+}
+
+.actionBtn:hover:not(:disabled) {
+    background: #f8fafc;
+    color: var(--navy);
+}
+
+.actionBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.actionBtnDanger:hover:not(:disabled) {
+    background: #fff1f2;
+    border-color: #fecaca;
+    color: #dc2626;
+}
+
+/* ── Two-column body ─────────────────────────────────── */
+.bodyGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 16px;
+    align-items: start;
+}
+
+.mainCol {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.sideCol {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: sticky;
+    top: 76px;
+}
+
+/* ── Body Cards ──────────────────────────────────────── */
+.bodyCard {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.notesCard {
+    border-left: 3px solid #f59e0b;
+}
+
+.bodyCardTitle {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: var(--muted);
+    padding: 10px 16px 9px;
+    border-bottom: 1px solid #f1f5f9;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.matchTitleCount {
+    background: #1e3a5f;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    border-radius: 20px;
+    padding: 1px 7px;
+    letter-spacing: 0;
+}
+
+.bodyCardBody {
+    padding: 14px 16px;
+}
+
+.requirementsText {
+    font-size: 13.5px;
+    color: var(--sub);
+    line-height: 1.75;
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.bodyText {
+    font-size: 13.5px;
+    color: var(--sub);
+    line-height: 1.7;
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+/* ── Candidate Matches ───────────────────────────────── */
+.emptyMatches {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+    font-style: italic;
+}
+
+.matchList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.matchRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.matchRank {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--muted);
+    width: 24px;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+.matchInfo {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.matchName {
+    background: none;
+    border: none;
+    color: var(--blue);
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: var(--font);
+    cursor: pointer;
+    padding: 0;
+    text-align: left;
+    transition: color 120ms;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.matchName:hover {
+    color: #004182;
+    text-decoration: underline;
+}
+
+.matchTitle {
+    font-size: 0.75rem;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.matchBarWrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    width: 140px;
+}
+
+.matchBarTrack {
+    flex: 1;
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.matchBarFill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 400ms ease;
+}
+
+.matchPct {
+    font-size: 0.75rem;
+    font-weight: 700;
+    width: 34px;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+/* ── Side: Info List ─────────────────────────────────── */
+.infoList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.infoRow {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.infoLabel {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    flex-shrink: 0;
+    width: 64px;
+    padding-top: 1px;
+}
+
+.infoValue {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+}
+
+.infoLink {
+    background: none;
+    border: none;
+    color: var(--blue);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--font);
+    cursor: pointer;
+    padding: 0;
+    transition: color 120ms;
+}
+
+.infoLink:hover {
+    color: #004182;
+    text-decoration: underline;
+}
+
+/* ── Side: Status Update ─────────────────────────────── */
+.statusSelect {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.875rem;
+    font-family: var(--font);
+    color: var(--text);
+    background: white;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    transition: border-color 140ms;
+}
+
+.statusSelect:focus {
+    outline: none;
+    border-color: var(--blue);
+}
+
+.statusSaveBtn {
+    width: 100%;
+    background: #1e3a5f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: var(--font);
+    cursor: pointer;
+    transition: background 140ms;
+}
+
+.statusSaveBtn:hover:not(:disabled) {
+    background: #0f2444;
+}
+
+.statusSaveBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ── Side: Employer Quick View ───────────────────────── */
+.employerQuick {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.employerQuickLogo {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #f8fafc;
+}
+
+.employerQuickImg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.employerQuickInitial {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--sub);
+    background: #e2e8f0;
+}
+
+.employerQuickName {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.employerQuickMeta {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 2px;
+}
+
+.viewEmployerBtn {
+    width: 100%;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    color: var(--blue);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: var(--font);
+    cursor: pointer;
+    text-align: center;
+    transition: background 140ms;
+}
+
+.viewEmployerBtn:hover {
+    background: #eff6ff;
+}
+
+/* ── Responsive ──────────────────────────────────────── */
+@media (max-width: 840px) {
+    .main {
+        padding: 16px 12px 48px;
+    }
+
+    .identityCard {
+        flex-direction: column;
+    }
+
+    .identityActions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .actionBtn {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .bodyGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .sideCol {
+        position: static;
+    }
+
+    .matchBarWrap {
+        width: 100px;
+    }
+}
