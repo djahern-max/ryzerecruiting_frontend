@@ -13,8 +13,8 @@ const STATUS_OPTIONS = [
 ];
 
 const STATUS_STYLES = {
-    open:    { background: '#f0fdf4', color: '#15803d', border: '1px solid #bbf7d0' },
-    filled:  { background: '#eff6ff', color: '#1e3a5f', border: '1px solid #bfdbfe' },
+    open: { background: '#f0fdf4', color: '#15803d', border: '1px solid #bbf7d0' },
+    filled: { background: '#eff6ff', color: '#1e3a5f', border: '1px solid #bfdbfe' },
     on_hold: { background: '#fff7ed', color: '#c2410c', border: '1px solid #fed7aa' },
 };
 
@@ -83,7 +83,7 @@ function JobOrderDrawer({ isOpen, onClose, onSaved, editOrder, employers }) {
             const res = await fetch(`${API_BASE}/api/job-orders/parse`, {
                 method: 'POST',
                 headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ raw_text: parseText }),
+                body: JSON.stringify({ text: parseText }),
             });
             if (!res.ok) throw new Error('Parse failed');
             const data = await res.json();
@@ -388,8 +388,8 @@ export default function JobOrderRoster() {
     }
 
     // Stats
-    const total  = orders.length;
-    const open   = orders.filter(o => o.status === 'open').length;
+    const total = orders.length;
+    const open = orders.filter(o => o.status === 'open').length;
     const filled = orders.filter(o => o.status === 'filled').length;
     const onHold = orders.filter(o => o.status === 'on_hold').length;
 
