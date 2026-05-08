@@ -43,6 +43,7 @@ export default function AdminHeader({ active }) {
         { key: "dashboard", label: "Dashboard", icon: "fi-rr-apps", path: "/admin" },
         { key: "employers", label: "Employers", icon: "fi-rr-building", path: "/admin/employers" },
         { key: "candidates", label: "Candidates", icon: "fi-rr-users", path: "/admin/candidates" },
+        { key: "job-orders", label: "Job Orders", icon: "fi-rr-briefcase", path: "/admin/job-orders" },
         { key: "intelligence", label: "Intelligence", icon: "fi-rr-bolt", path: "/admin/chat" },
         { key: "db", label: "DB Explorer", icon: "fi-rr-database", path: "/admin/db-explorer" },
     ];

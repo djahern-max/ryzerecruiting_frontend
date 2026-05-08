@@ -24,6 +24,7 @@ import InviteForm from './pages/admin/InviteForm';
 import ChangePassword from './pages/ChangePassword';
 import CandidateSelfProfile from './pages/CandidateSelfProfile';
 import EmployerSelfProfile from './pages/EmployerSelfProfile';
+import JobOrderRoster from './pages/JobOrderRoster';
 
 const loadingScreen = (
   <div style={{
@@ -210,6 +211,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/admin/job-orders" element={<AdminRoute><JobOrderRoster /></AdminRoute>} />
 
           {/* ── Fallback ────────────────────────────────────────────── */}
           <Route path="*" element={<Navigate to="/" replace />} />
