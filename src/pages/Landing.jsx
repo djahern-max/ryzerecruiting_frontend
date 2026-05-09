@@ -23,11 +23,27 @@ import EP16 from "../assets/landing_page_thumbnails/EP16.png";
 import EP17 from "../assets/landing_page_thumbnails/EP17.png";
 import EP18 from "../assets/landing_page_thumbnails/EP18.png";
 import EP19 from "../assets/landing_page_thumbnails/EP19.png";
+import EP20 from "../assets/landing_page_thumbnails/EP20.png";
+import EP21 from "../assets/landing_page_thumbnails/EP21.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
-const CURRENT_VERSION = 19;
+const CURRENT_VERSION = 21;
 
 const EPISODES = [
+  {
+    num: 21,
+    title: "Job Orders Admin UI + PDF Exports",
+    thumb: EP21,
+    url: "https://www.linkedin.com/posts/daneahern_ep21-job-orders-admin-ui-pdf-exports-ugcPost-7458825320306036737-UbTV?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "Built the complete recruiter job order workflow in one episode — roster, create form with AI parsing, detail page, inline editing, status management, and one-click branded PDF export. The AI parser takes raw job posting text pasted from anywhere and extracts the title, location, salary range, and requirements automatically. PDF exports now work for both Job Orders and Employer Profiles, downloadable in one click from the admin panel. PDF generation runs server-side via Playwright.",
+  },
+  {
+    num: 20,
+    title: "Recruiter Workflow & Employer Profile PDF",
+    thumb: EP20,
+    url: "https://www.linkedin.com/posts/daneahern_ep20-of-building-ryzeai-in-public-walked-ugcPost-7458086260092518400-Pg4b?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "Walked through the full recruiter workflow from booking through employer profile setup, then shipped branded PDF exports for employer profiles — downloadable in one click from the admin panel. Built with Python, FastAPI, PostgreSQL, and React. pgvector powers the AI candidate matching underneath.",
+  },
   {
     num: 19,
     title: "Employer Profile & Self-Profile",
@@ -369,6 +385,24 @@ const PHASES = [
       "primary_contact_email linking — profile resolved by matching user email",
       "SQLAlchemy model fix — logo_url and banner_url columns added to EmployerProfile model",
       "Re-embedding on save — background task fires after every profile edit",
+    ],
+  },
+  {
+    id: "15",
+    title: "Job Orders & PDF Exports",
+    status: "complete",
+    summary: "Built the complete job order workflow and shipped branded PDF exports for both job orders and employer profiles. The AI parser takes raw job posting text — copy/pasted from anywhere — and auto-extracts the title, location, salary range, and requirements in one click. PDF generation runs server-side via Playwright (headless Chromium), producing branded deliverables recruiters can send to candidates immediately from the admin panel.",
+    bullets: [
+      "Job Orders roster — paginated table with status badges and quick actions",
+      "Create form — manual entry or AI-parsed from raw job posting text",
+      "AI parser — Claude extracts title, location, salary range, and requirements from pasted text",
+      "Job Order detail page — full view with all structured fields",
+      "Inline editing — edit any field directly from the detail page",
+      "Status management — draft, active, filled, cancelled transitions",
+      "PDF export for Job Orders — branded Playwright render, one-click download",
+      "PDF export for Employer Profiles — same pipeline, downloadable from admin panel",
+      "Playwright server-side rendering — headless Chromium generates all PDFs",
+      "Streaming PDF response — browser download triggered in one click",
     ],
   },
 
@@ -736,18 +770,29 @@ export default function Landing() {
 
             <div className={styles.nextCard}>
               <div className={styles.nextNum}>EP 20</div>
-              <div className={styles.nextTitle}>Job Orders Admin UI &amp; PDF Exports</div>
+              <div className={styles.nextTitle}>Recruiter Workflow &amp; Employer Profile PDF</div>
               <p className={styles.nextDesc}>
-                The recruiter gets a full Job Orders workflow — roster, create, detail, edit,
-                and delete. AI parses a raw job description into structured fields in one click.
-                PDF exports ship for both job orders and employer profiles, giving recruiters
-                a branded deliverable they can send to candidates immediately.
+                Walked the full recruiter workflow from booking through employer profile setup,
+                then shipped branded PDF exports for employer profiles — downloadable in one click
+                from the admin panel. pgvector powers AI candidate matching throughout.
               </p>
-              <span className={styles.nextBadge}>Up next</span>
+              <span className={styles.nextBadgePosted}>✓ Complete</span>
             </div>
 
             <div className={styles.nextCard}>
               <div className={styles.nextNum}>EP 21</div>
+              <div className={styles.nextTitle}>Job Orders Admin UI &amp; PDF Exports</div>
+              <p className={styles.nextDesc}>
+                Built the complete job order workflow — roster, create form with AI parsing,
+                detail page, inline editing, and status management. AI extracts title, location,
+                salary, and requirements from raw pasted text. PDF exports ship for both job
+                orders and employer profiles via Playwright server-side rendering.
+              </p>
+              <span className={styles.nextBadgePosted}>✓ Complete</span>
+            </div>
+
+            <div className={styles.nextCard}>
+              <div className={styles.nextNum}>EP 22</div>
               <div className={styles.nextTitle}>Landing Page Rebuild &amp; MVP Launch</div>
               <p className={styles.nextDesc}>
                 The build-in-public timeline moves to /about. The front page becomes a real
@@ -755,7 +800,7 @@ export default function Landing() {
                 Final tenant isolation pass, Twilio A2P resubmission, and the platform opens
                 to external recruiting firms.
               </p>
-              <span className={styles.nextBadge}>Coming soon</span>
+              <span className={styles.nextBadge}>Up next</span>
             </div>
 
           </div>

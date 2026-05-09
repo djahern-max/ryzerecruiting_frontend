@@ -221,13 +221,14 @@ export default function JobOrderDetail() {
                             <h1 className={styles.jobTitle}>{order.title}</h1>
                             <div className={styles.jobMeta}>
                                 {employer && (
-                                    <button
-                                        className={styles.employerLink}
-                                        onClick={() => navigate(`/admin/employers/${order.employer_profile_id}`)}
-                                    >
-                                        {employer.company_name}
-                                    </button>
+                                    <div
+                                        className={styles.banner}
+                                        style={employer.banner_url
+                                            ? { backgroundImage: `url(${employer.banner_url})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                                            : {}}
+                                    />
                                 )}
+
                                 {order.location && (
                                     <>
                                         {employer && <span className={styles.metaDot}>·</span>}

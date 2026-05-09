@@ -595,6 +595,15 @@
     background: #eff6ff;
 }
 
+.banner {
+    height: 160px;
+    background: linear-gradient(120deg, #1c3f6e 0%, #0a66c2 60%, #378fe9 100%);
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    border-radius: var(--radius);
+}
+
 /* ── Responsive ──────────────────────────────────────── */
 @media (max-width: 840px) {
     .main {
