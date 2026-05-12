@@ -56,6 +56,7 @@ function Section({ title, children, className = "" }) {
 }
 
 function JobOrderCard({ order }) {
+    const navigate = useNavigate();
     const statusStyle = STATUS_COLORS[order.status?.toLowerCase()] || STATUS_COLORS.open;
     const salary = order.salary_min && order.salary_max
         ? `$${(order.salary_min / 1000).toFixed(0)}K – $${(order.salary_max / 1000).toFixed(0)}K`
@@ -63,6 +64,9 @@ function JobOrderCard({ order }) {
 
     return (
         <div className={styles.jobCard}>
+            className={styles.jobCard}
+            onClick={() => navigate(`/admin/job-orders/${order.id}`)}
+            style={{ cursor: 'pointer' }}
             <div className={styles.jobCardMain}>
                 <div className={styles.jobTitle}>{order.title}</div>
                 <div className={styles.jobMeta}>
