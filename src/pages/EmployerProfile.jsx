@@ -63,10 +63,11 @@ function JobOrderCard({ order }) {
         : order.salary_min ? `From $${(order.salary_min / 1000).toFixed(0)}K` : null;
 
     return (
-        <div className={styles.jobCard}>
+        <div
             className={styles.jobCard}
             onClick={() => navigate(`/admin/job-orders/${order.id}`)}
             style={{ cursor: 'pointer' }}
+        >
             <div className={styles.jobCardMain}>
                 <div className={styles.jobTitle}>{order.title}</div>
                 <div className={styles.jobMeta}>
