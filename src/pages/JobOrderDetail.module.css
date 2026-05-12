@@ -98,14 +98,28 @@
     color: var(--navy);
 }
 
-/* ── Identity Card ───────────────────────────────────── */
-.identityCard {
+/* ── Hero Banner ─────────────────────────────────────── */
+.heroBanner {
+    height: 180px;
+    width: 100%;
+    background: linear-gradient(120deg, #1c3f6e 0%, #0a66c2 60%, #378fe9 100%);
+    background-size: cover;
+    background-position: center;
+    border-radius: var(--radius);
+    display: block;
+}
+
+/* ── Identity Zone ───────────────────────────────────── */
+.identityZone {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 20px 24px;
+    padding: 0 24px 20px;
+    margin-top: -44px;
+    position: relative;
+    z-index: 2;
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end;
     justify-content: space-between;
     gap: 20px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -113,7 +127,7 @@
 
 .identityLeft {
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end;
     gap: 16px;
     flex: 1;
     min-width: 0;
@@ -121,13 +135,15 @@
 
 /* ── Employer Logo ───────────────────────────────────── */
 .logoWrap {
-    width: 64px;
-    height: 64px;
-    border-radius: 10px;
-    border: 2px solid var(--border);
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    border: 3px solid #fff;
     overflow: hidden;
     flex-shrink: 0;
     background: #f8fafc;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    margin-top: -28px;
 }
 
 .logoImg {
@@ -153,6 +169,7 @@
 .identityInfo {
     flex: 1;
     min-width: 0;
+    padding-bottom: 2px;
 }
 
 .jobTitle {
@@ -227,6 +244,8 @@
     display: flex;
     gap: 8px;
     flex-shrink: 0;
+    align-self: flex-end;
+    padding-bottom: 2px;
 }
 
 .actionBtn {
@@ -294,7 +313,8 @@
 }
 
 .notesCard {
-    border-left: 3px solid #f59e0b;
+    border-left: 3px solid #1e3a5f;
+    background: #f8fafc;
 }
 
 .bodyCardTitle {
@@ -595,14 +615,7 @@
     background: #eff6ff;
 }
 
-.banner {
-    height: 160px;
-    background: linear-gradient(120deg, #1c3f6e 0%, #0a66c2 60%, #378fe9 100%);
-    background-size: cover;
-    background-position: center;
-    width: 100%;
-    border-radius: var(--radius);
-}
+
 
 /* ── Responsive ──────────────────────────────────────── */
 @media (max-width: 840px) {
@@ -610,8 +623,9 @@
         padding: 16px 12px 48px;
     }
 
-    .identityCard {
+    .identityZone {
         flex-direction: column;
+        margin-top: 0;
     }
 
     .identityActions {

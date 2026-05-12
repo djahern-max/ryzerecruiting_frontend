@@ -206,8 +206,16 @@ export default function JobOrderDetail() {
                     ← Back to Job Orders
                 </button>
 
+                {/* ── Hero Banner ── */}
+                <div
+                    className={styles.heroBanner}
+                    style={employer?.banner_url
+                        ? { backgroundImage: `url(${employer.banner_url})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                        : {}}
+                />
+
                 {/* ── Identity Zone ── */}
-                <div className={styles.identityCard}>
+                <div className={styles.identityZone}>
                     <div className={styles.identityLeft}>
                         {/* Employer logo or initial */}
                         <div className={styles.logoWrap}>
@@ -221,14 +229,13 @@ export default function JobOrderDetail() {
                             <h1 className={styles.jobTitle}>{order.title}</h1>
                             <div className={styles.jobMeta}>
                                 {employer && (
-                                    <div
-                                        className={styles.banner}
-                                        style={employer.banner_url
-                                            ? { backgroundImage: `url(${employer.banner_url})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-                                            : {}}
-                                    />
+                                    <button
+                                        className={styles.employerLink}
+                                        onClick={() => navigate(`/admin/employers/${order.employer_profile_id}`)}
+                                    >
+                                        {employer.company_name}
+                                    </button>
                                 )}
-
                                 {order.location && (
                                     <>
                                         {employer && <span className={styles.metaDot}>·</span>}

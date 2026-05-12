@@ -387,7 +387,9 @@
 }
 
 .notesCard {
-    border-left: 3px solid #f59e0b;
+    border-left: 3px solid #1e3a5f;
+    background: #f8fafc;
+}
 }
 
 .bodyCardTitle {
