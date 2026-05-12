@@ -758,17 +758,6 @@ export default function Landing() {
           <div className={styles.nextGrid}>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 19</div>
-              <div className={styles.nextTitle}>Employer Profile &amp; Self-Profile</div>
-              <p className={styles.nextDesc}>
-                Employers get the same branded profile treatment as candidates — logo upload,
-                banner image, identity-zone layout, and a self-edit flow. A silent ORM bug
-                (columns existed in the DB but not the model) was caught and fixed along the way.
-              </p>
-              <span className={styles.nextBadgePosted}>✓ Complete</span>
-            </div>
-
-            <div className={styles.nextCard}>
               <div className={styles.nextNum}>EP 20</div>
               <div className={styles.nextTitle}>Recruiter Workflow &amp; Employer Profile PDF</div>
               <p className={styles.nextDesc}>
@@ -793,12 +782,12 @@ export default function Landing() {
 
             <div className={styles.nextCard}>
               <div className={styles.nextNum}>EP 22</div>
-              <div className={styles.nextTitle}>Landing Page Rebuild &amp; MVP Launch</div>
+              <div className={styles.nextTitle}>Styling the Job Order UI &amp; PDF Export</div>
               <p className={styles.nextDesc}>
-                The build-in-public timeline moves to /about. The front page becomes a real
-                SaaS marketing landing — focused on converting recruiters into trial users.
-                Final tenant isolation pass, Twilio A2P resubmission, and the platform opens
-                to external recruiting firms.
+                The job order functionality works — now it needs to look the part. Full UI
+                polish pass on the roster, detail page, and create form. Branded PDF export
+                gets the same treatment as candidate and employer profiles — clean, professional,
+                and ready to hand to a hiring manager.
               </p>
               <span className={styles.nextBadge}>Up next</span>
             </div>
