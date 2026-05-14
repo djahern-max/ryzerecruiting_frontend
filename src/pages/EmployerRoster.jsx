@@ -24,6 +24,22 @@ const STATUS_STYLES = {
     not_a_fit: { background: '#fee2e2', color: '#b91c1c', border: '1px solid #fca5a5' },
 };
 
+function getHiringNeeds(profile) {
+    if (profile.ai_hiring_needs?.length) return profile.ai_hiring_needs;
+    if (profile.ai_brief_raw) {
+        try {
+            const cleaned = profile.ai_brief_raw
+                .replace(/^```json\s*/m, '').replace(/^```\s*/m, '').replace(/\s*```$/m, '').trim();
+            const parsed = JSON.parse(cleaned);
+            return parsed.hiring_needs || [];
+        } catch { return []; }
+    }
+    return [];
+}
+
+// ---------------------------------------------------------------------------
+// Table row (desktop)
+// ---------------------------------------------------------------------------
 function EmployerRow({ profile, onUpdate, defaultExpanded = false }) {
     const navigate = useNavigate();
     const [expanded, setExpanded] = useState(defaultExpanded);
@@ -38,17 +54,11 @@ function EmployerRow({ profile, onUpdate, defaultExpanded = false }) {
             const token = localStorage.getItem('token');
             const res = await fetch(`${API_BASE}/api/employer-profiles/${profile.id}`, {
                 method: 'PATCH',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
+                headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ recruiter_notes: notes }),
             });
-
             if (!res.ok) throw new Error('Failed to save notes');
-
-            const updated = await res.json();
-            onUpdate(updated);
+            onUpdate(await res.json());
             setEditingNotes(false);
         } catch (err) {
             alert('Error saving notes: ' + (err?.message || String(err)));
@@ -63,66 +73,28 @@ function EmployerRow({ profile, onUpdate, defaultExpanded = false }) {
             const token = localStorage.getItem('token');
             const res = await fetch(`${API_BASE}/api/employer-profiles/${profile.id}`, {
                 method: 'PATCH',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
+                headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ relationship_status: newStatus }),
             });
-
             if (!res.ok) throw new Error('Failed to update status');
-
-            const updated = await res.json();
-            onUpdate(updated);
+            onUpdate(await res.json());
         } catch (err) {
             alert('Error updating status: ' + (err?.message || String(err)));
         }
     }
 
-    // Parse hiring needs from raw if structured fields empty
-    function getHiringNeeds() {
-        if (profile.ai_hiring_needs?.length) return profile.ai_hiring_needs;
-
-        if (profile.ai_brief_raw) {
-            try {
-                const cleaned = profile.ai_brief_raw
-                    .replace(/^```json\s*/m, '')
-                    .replace(/^```\s*/m, '')
-                    .replace(/\s*```$/m, '')
-                    .trim();
-
-                const parsed = JSON.parse(cleaned);
-                return parsed.hiring_needs || [];
-            } catch {
-                return [];
-            }
-        }
-
-        return [];
-    }
-
-    const hiringNeeds = getHiringNeeds();
+    const hiringNeeds = getHiringNeeds(profile);
 
     return (
         <>
             <tr className={`${styles.row} ${expanded ? styles.rowExpanded : ''}`}>
-
-
                 <td className={styles.companyCell}>
-                    <button
-                        className={styles.companyNameLink}
-                        onClick={() => navigate(`/admin/employers/${profile.id}`)}
-                    >
+                    <button className={styles.companyNameLink} onClick={() => navigate(`/admin/employers/${profile.id}`)}>
                         {profile.company_name}
                     </button>
-
                     {profile.website_url && (
                         <a
-                            href={
-                                profile.website_url.startsWith('http')
-                                    ? profile.website_url
-                                    : `https://${profile.website_url}`
-                            }
+                            href={profile.website_url.startsWith('http') ? profile.website_url : `https://${profile.website_url}`}
                             className={styles.websiteLink}
                             target="_blank"
                             rel="noreferrer"
@@ -131,35 +103,13 @@ function EmployerRow({ profile, onUpdate, defaultExpanded = false }) {
                         </a>
                     )}
                 </td>
-
                 <td>{profile.ai_industry || <span className={styles.empty}>—</span>}</td>
                 <td>{profile.ai_company_size || <span className={styles.empty}>—</span>}</td>
-
                 <td>
-                    <select
-                        className={styles.statusSelect}
-                        value={status}
-                        onChange={e => saveStatus(e.target.value)}
-                    >
-                        {RELATIONSHIP_OPTIONS.map(o => (
-                            <option key={o.value} value={o.value}>
-                                {o.label}
-                            </option>
-                        ))}
+                    <select className={styles.statusSelect} value={status} onChange={e => saveStatus(e.target.value)}>
+                        {RELATIONSHIP_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                     </select>
-
                 </td>
-
-                {/* <td>
-                    {profile.primary_contact_email ? (
-                        <a href={`mailto:${profile.primary_contact_email}`} className={styles.emailLink}>
-                            {profile.primary_contact_email}
-                        </a>
-                    ) : (
-                        <span className={styles.empty}>—</span>
-                    )}
-                </td> */}
-
                 <td>
                     <button
                         className={`${styles.expandBtn} ${expanded ? styles.expandBtnActive : ''}`}
@@ -175,103 +125,16 @@ function EmployerRow({ profile, onUpdate, defaultExpanded = false }) {
             {expanded && (
                 <tr className={styles.detailRow}>
                     <td colSpan={5} className={styles.detailCell}>
-                        <div className={styles.detailPanel}>
-                            {/* Overview + Size/Industry */}
-                            {profile.ai_company_overview && (
-                                <div className={styles.detailSection}>
-                                    <div className={styles.detailLabel}>Company Overview</div>
-                                    <div className={styles.detailContent}>{profile.ai_company_overview}</div>
-                                </div>
-                            )}
-
-                            {/* Hiring Needs */}
-                            {hiringNeeds.length > 0 && (
-                                <div className={styles.detailSection}>
-                                    <div className={styles.detailLabel}>Likely Hiring Needs</div>
-                                    <div className={styles.tagRow}>
-                                        {hiringNeeds.map((need, i) => (
-                                            <span key={i} className={styles.tag}>
-                                                {need}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Talking Points */}
-                            {profile.ai_talking_points?.length > 0 && (
-                                <div className={styles.detailSection}>
-                                    <div className={styles.detailLabel}>Key Talking Points</div>
-                                    <ul className={styles.detailList}>
-                                        {profile.ai_talking_points.map((pt, i) => (
-                                            <li key={i}>{pt}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-
-                            {/* Red Flags */}
-                            {profile.ai_red_flags && (
-                                <div className={styles.detailSection}>
-                                    <div className={styles.detailLabel}>⚠️ Red Flags</div>
-                                    <div className={styles.redFlags}>{profile.ai_red_flags}</div>
-                                </div>
-                            )}
-
-                            {/* Recruiter Notes */}
-                            <div className={styles.detailSection}>
-                                <div className={styles.detailLabel}>📝 Recruiter Notes</div>
-
-                                {editingNotes ? (
-                                    <div className={styles.notesEditor}>
-                                        <textarea
-                                            className={styles.notesTextarea}
-                                            value={notes}
-                                            onChange={e => setNotes(e.target.value)}
-                                            rows={4}
-                                            placeholder="Add your post-call notes here..."
-                                            autoFocus
-                                        />
-                                        <div className={styles.notesActions}>
-                                            <button
-                                                className={styles.saveBtn}
-                                                onClick={saveNotes}
-                                                disabled={savingNotes}
-                                                type="button"
-                                            >
-                                                {savingNotes ? 'Saving…' : 'Save Notes'}
-                                            </button>
-                                            <button
-                                                className={styles.cancelBtn}
-                                                onClick={() => {
-                                                    setNotes(profile.recruiter_notes || '');
-                                                    setEditingNotes(false);
-                                                }}
-                                                type="button"
-                                            >
-                                                Cancel
-                                            </button>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div
-                                        className={styles.notesDisplay}
-                                        onClick={() => setEditingNotes(true)}
-                                        role="button"
-                                        tabIndex={0}
-                                        onKeyDown={e => {
-                                            if (e.key === 'Enter' || e.key === ' ') setEditingNotes(true);
-                                        }}
-                                    >
-                                        {notes || (
-                                            <span className={styles.notesPlaceholder}>
-                                                Click to add recruiter notes…
-                                            </span>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
+                        <DetailPanel
+                            profile={profile}
+                            hiringNeeds={hiringNeeds}
+                            notes={notes}
+                            setNotes={setNotes}
+                            editingNotes={editingNotes}
+                            setEditingNotes={setEditingNotes}
+                            savingNotes={savingNotes}
+                            saveNotes={saveNotes}
+                        />
                     </td>
                 </tr>
             )}
@@ -279,6 +142,193 @@ function EmployerRow({ profile, onUpdate, defaultExpanded = false }) {
     );
 }
 
+// ---------------------------------------------------------------------------
+// Shared detail panel (used by both table row and mobile card)
+// ---------------------------------------------------------------------------
+function DetailPanel({ profile, hiringNeeds, notes, setNotes, editingNotes, setEditingNotes, savingNotes, saveNotes }) {
+    return (
+        <div className={styles.detailPanel}>
+            {profile.ai_company_overview && (
+                <div className={styles.detailSection}>
+                    <div className={styles.detailLabel}>Company Overview</div>
+                    <div className={styles.detailContent}>{profile.ai_company_overview}</div>
+                </div>
+            )}
+            {hiringNeeds.length > 0 && (
+                <div className={styles.detailSection}>
+                    <div className={styles.detailLabel}>Likely Hiring Needs</div>
+                    <div className={styles.tagRow}>
+                        {hiringNeeds.map((need, i) => <span key={i} className={styles.tag}>{need}</span>)}
+                    </div>
+                </div>
+            )}
+            {profile.ai_talking_points?.length > 0 && (
+                <div className={styles.detailSection}>
+                    <div className={styles.detailLabel}>Key Talking Points</div>
+                    <ul className={styles.detailList}>
+                        {profile.ai_talking_points.map((pt, i) => <li key={i}>{pt}</li>)}
+                    </ul>
+                </div>
+            )}
+            {profile.ai_red_flags && (
+                <div className={styles.detailSection}>
+                    <div className={styles.detailLabel}>⚠️ Red Flags</div>
+                    <div className={styles.redFlags}>{profile.ai_red_flags}</div>
+                </div>
+            )}
+            <div className={styles.detailSection}>
+                <div className={styles.detailLabel}>📝 Recruiter Notes</div>
+                {editingNotes ? (
+                    <div className={styles.notesEditor}>
+                        <textarea
+                            className={styles.notesTextarea}
+                            value={notes}
+                            onChange={e => setNotes(e.target.value)}
+                            rows={4}
+                            placeholder="Add your post-call notes here..."
+                            autoFocus
+                        />
+                        <div className={styles.notesActions}>
+                            <button className={styles.saveBtn} onClick={saveNotes} disabled={savingNotes} type="button">
+                                {savingNotes ? 'Saving…' : 'Save Notes'}
+                            </button>
+                            <button
+                                className={styles.cancelBtn}
+                                onClick={() => { setNotes(profile.recruiter_notes || ''); setEditingNotes(false); }}
+                                type="button"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <div
+                        className={styles.notesDisplay}
+                        onClick={() => setEditingNotes(true)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setEditingNotes(true); }}
+                    >
+                        {notes || <span className={styles.notesPlaceholder}>Click to add recruiter notes…</span>}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
+// ---------------------------------------------------------------------------
+// Mobile card
+// ---------------------------------------------------------------------------
+function EmployerCard({ profile, onUpdate }) {
+    const navigate = useNavigate();
+    const [expanded, setExpanded] = useState(false);
+    const [notes, setNotes] = useState(profile.recruiter_notes || '');
+    const [editingNotes, setEditingNotes] = useState(false);
+    const [savingNotes, setSavingNotes] = useState(false);
+    const [status, setStatus] = useState(profile.relationship_status || '');
+
+    async function saveNotes() {
+        setSavingNotes(true);
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_BASE}/api/employer-profiles/${profile.id}`, {
+                method: 'PATCH',
+                headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ recruiter_notes: notes }),
+            });
+            if (!res.ok) throw new Error('Failed to save notes');
+            onUpdate(await res.json());
+            setEditingNotes(false);
+        } catch (err) {
+            alert('Error saving notes: ' + (err?.message || String(err)));
+        } finally {
+            setSavingNotes(false);
+        }
+    }
+
+    async function saveStatus(newStatus) {
+        setStatus(newStatus);
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_BASE}/api/employer-profiles/${profile.id}`, {
+                method: 'PATCH',
+                headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ relationship_status: newStatus }),
+            });
+            if (!res.ok) throw new Error('Failed to update status');
+            onUpdate(await res.json());
+        } catch (err) {
+            alert('Error updating status: ' + (err?.message || String(err)));
+        }
+    }
+
+    const hiringNeeds = getHiringNeeds(profile);
+    const statusStyle = STATUS_STYLES[status];
+
+    return (
+        <div className={styles.employerCard}>
+            {/* Main tappable area */}
+            <div className={styles.cardMain} onClick={() => navigate(`/admin/employers/${profile.id}`)}>
+                <div className={styles.cardCompanyName}>{profile.company_name}</div>
+                {profile.website_url && (
+                    <div className={styles.cardWebsite}>
+                        {profile.website_url.replace(/^https?:\/\//, '')}
+                    </div>
+                )}
+                <div className={styles.cardMeta}>
+                    {profile.ai_industry && <span>{profile.ai_industry}</span>}
+                    {profile.ai_industry && profile.ai_company_size && (
+                        <span className={styles.cardMetaDot}>·</span>
+                    )}
+                    {profile.ai_company_size && <span>{profile.ai_company_size}</span>}
+                </div>
+            </div>
+
+            {/* Footer: status + brief toggle */}
+            <div className={styles.cardFooter}>
+                <select
+                    className={styles.cardStatusSelect}
+                    value={status}
+                    onChange={e => { e.stopPropagation(); saveStatus(e.target.value); }}
+                    style={statusStyle ? {
+                        background: statusStyle.background,
+                        color: statusStyle.color,
+                        border: statusStyle.border,
+                    } : {}}
+                >
+                    {RELATIONSHIP_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                </select>
+
+                <button
+                    className={`${styles.expandBtn} ${expanded ? styles.expandBtnActive : ''}`}
+                    onClick={() => setExpanded(p => !p)}
+                    type="button"
+                >
+                    {expanded ? '▲ Hide' : '▼ Brief'}
+                </button>
+            </div>
+
+            {/* Expandable detail panel */}
+            {expanded && (
+                <DetailPanel
+                    profile={profile}
+                    hiringNeeds={hiringNeeds}
+                    notes={notes}
+                    setNotes={setNotes}
+                    editingNotes={editingNotes}
+                    setEditingNotes={setEditingNotes}
+                    savingNotes={savingNotes}
+                    saveNotes={saveNotes}
+                />
+            )}
+        </div>
+    );
+}
+
+// ---------------------------------------------------------------------------
+// Main
+// ---------------------------------------------------------------------------
 export default function EmployerRoster() {
     const { user } = useAuth();
     const navigate = useNavigate();
@@ -288,7 +338,7 @@ export default function EmployerRoster() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const [expandedId, setExpandedId] = useState(() => {
+    const [expandedId] = useState(() => {
         const params = new URLSearchParams(location.search);
         const id = params.get("expand");
         return id ? parseInt(id) : null;
@@ -301,18 +351,14 @@ export default function EmployerRoster() {
                 const res = await fetch(`${API_BASE}/api/employer-profiles`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-
                 if (!res.ok) throw new Error('Failed to load employer profiles');
-
-                const data = await res.json();
-                setProfiles(data);
+                setProfiles(await res.json());
             } catch (err) {
                 setError(err?.message || String(err));
             } finally {
                 setLoading(false);
             }
         }
-
         fetchProfiles();
     }, []);
 
@@ -320,8 +366,7 @@ export default function EmployerRoster() {
         setProfiles(prev => prev.map(p => (p.id === updated.id ? updated : p)));
     }
 
-    // (kept if you want later)
-    // const firstName = user?.full_name?.split(' ')[0] || 'there';
+    const hasProfiles = !loading && !error && profiles.length > 0;
 
     return (
         <div className={styles.page}>
@@ -340,15 +385,16 @@ export default function EmployerRoster() {
                     </div>
                 </div>
 
-                {loading ? (
-                    <div className={styles.emptyState}>Loading employers…</div>
-                ) : error ? (
-                    <div className={styles.errorState}>{error}</div>
-                ) : profiles.length === 0 ? (
+                {loading && <div className={styles.emptyState}>Loading employers…</div>}
+                {error && <div className={styles.errorState}>{error}</div>}
+                {!loading && !error && profiles.length === 0 && (
                     <div className={styles.emptyState}>
                         No employer profiles yet. Confirm a booking to generate the first one.
                     </div>
-                ) : (
+                )}
+
+                {/* ── Desktop table ── */}
+                {hasProfiles && (
                     <div className={styles.tableWrapper}>
                         <table className={styles.table}>
                             <thead>
@@ -357,12 +403,11 @@ export default function EmployerRoster() {
                                     <th>Industry</th>
                                     <th>Est. Size</th>
                                     <th>Status</th>
-                                    {/* <th>Contact</th> */}
                                     <th>Intel</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {profiles.map((profile) => (
+                                {profiles.map(profile => (
                                     <EmployerRow
                                         key={profile.id}
                                         profile={profile}
@@ -372,6 +417,19 @@ export default function EmployerRoster() {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+                )}
+
+                {/* ── Mobile card list ── */}
+                {hasProfiles && (
+                    <div className={styles.cardList}>
+                        {profiles.map(profile => (
+                            <EmployerCard
+                                key={profile.id}
+                                profile={profile}
+                                onUpdate={handleUpdate}
+                            />
+                        ))}
                     </div>
                 )}
             </main>
