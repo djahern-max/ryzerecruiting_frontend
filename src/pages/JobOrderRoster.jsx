@@ -1,5 +1,5 @@
 /* src/pages/JobOrderRoster.jsx */
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminHeader from '../components/AdminHeader';
 import styles from './JobOrderRoster.module.css';
@@ -28,10 +28,9 @@ function formatSalary(min, max) {
 
 function StatusBadge({ status }) {
     const s = STATUS_STYLES[status] || STATUS_STYLES.open;
-    const label = status === 'on_hold' ? 'On Hold' : status.charAt(0).toUpperCase() + status.slice(1);
-    return (
-        <span className={styles.statusBadge} style={s}>{label}</span>
-    );
+    const label = status === 'on_hold' ? 'On Hold'
+        : status.charAt(0).toUpperCase() + status.slice(1);
+    return <span className={styles.statusBadge} style={s}>{label}</span>;
 }
 
 // ---------------------------------------------------------------------------
@@ -49,7 +48,6 @@ function JobOrderDrawer({ isOpen, onClose, onSaved, editOrder, employers }) {
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
 
-    // Pre-populate on edit
     useEffect(() => {
         if (editOrder) {
             setForm({
@@ -106,45 +104,31 @@ function JobOrderDrawer({ isOpen, onClose, onSaved, editOrder, employers }) {
     }
 
     async function handleSave() {
-        if (!form.title.trim()) { setError('Job title is required.'); return; }
+        if (!form.title.trim()) { setError('Title is required.'); return; }
         setSaving(true);
         setError('');
         try {
             const token = localStorage.getItem('token');
             const payload = {
-                title: form.title.trim(),
+                ...form,
                 employer_profile_id: form.employer_profile_id ? Number(form.employer_profile_id) : null,
-                location: form.location || null,
                 salary_min: form.salary_min ? Number(form.salary_min) : null,
                 salary_max: form.salary_max ? Number(form.salary_max) : null,
-                status: form.status,
-                requirements: form.requirements || null,
-                notes: form.notes || null,
             };
-            // Add filled_at timestamp when status is 'filled'
-            if (form.status === 'filled' && (!editOrder || editOrder.status !== 'filled')) {
-                payload.filled_at = new Date().toISOString();
-            }
-
             const url = editOrder
                 ? `${API_BASE}/api/job-orders/${editOrder.id}`
                 : `${API_BASE}/api/job-orders`;
-            const method = editOrder ? 'PATCH' : 'POST';
-
             const res = await fetch(url, {
-                method,
+                method: editOrder ? 'PATCH' : 'POST',
                 headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
             });
-            if (!res.ok) {
-                const d = await res.json().catch(() => ({}));
-                throw new Error(d.detail || 'Save failed');
-            }
+            if (!res.ok) throw new Error('Save failed');
             const saved = await res.json();
             onSaved(saved, !!editOrder);
             onClose();
         } catch (err) {
-            setError(err.message || 'Save failed');
+            setError('Save failed — check your connection and try again.');
         } finally {
             setSaving(false);
         }
@@ -156,72 +140,70 @@ function JobOrderDrawer({ isOpen, onClose, onSaved, editOrder, employers }) {
         <div className={styles.drawerOverlay} onClick={onClose}>
             <div className={styles.drawer} onClick={e => e.stopPropagation()}>
                 <div className={styles.drawerHeader}>
-                    <h2 className={styles.drawerTitle}>
+                    <h3 className={styles.drawerTitle}>
                         {editOrder ? 'Edit Job Order' : 'New Job Order'}
-                    </h2>
+                    </h3>
                     <button className={styles.drawerClose} onClick={onClose}>✕</button>
                 </div>
 
                 <div className={styles.drawerBody}>
                     {/* AI Parse toggle */}
-                    <div className={styles.parseToggleRow}>
-                        <button
-                            type="button"
-                            className={`${styles.parseToggleBtn} ${showParseArea ? styles.parseToggleBtnActive : ''}`}
-                            onClick={() => setShowParseArea(p => !p)}
-                        >
-                            <i className="fi fi-rr-magic-wand" />
-                            {showParseArea ? 'Hide Parser' : 'Parse from Job Description'}
-                        </button>
-                        <span className={styles.parseHint}>Paste raw text → AI fills the form</span>
-                    </div>
-
-                    {showParseArea && (
-                        <div className={styles.parseArea}>
-                            <textarea
-                                className={styles.parseTextarea}
-                                value={parseText}
-                                onChange={e => setParseText(e.target.value)}
-                                placeholder="Paste the raw job description here..."
-                                rows={6}
-                            />
+                    {!editOrder && (
+                        <div>
                             <button
-                                type="button"
-                                className={styles.parseBtn}
-                                onClick={handleParse}
-                                disabled={parsing || !parseText.trim()}
+                                className={styles.parseToggleBtn}
+                                onClick={() => setShowParseArea(v => !v)}
                             >
-                                {parsing ? 'Parsing…' : 'Parse →'}
+                                {showParseArea ? '− Hide AI Parser' : '✦ Paste job posting to auto-fill'}
                             </button>
+                            {showParseArea && (
+                                <div className={styles.parseArea}>
+                                    <textarea
+                                        className={styles.fieldTextarea}
+                                        rows={6}
+                                        placeholder="Paste the full job description here…"
+                                        value={parseText}
+                                        onChange={e => setParseText(e.target.value)}
+                                    />
+                                    <button
+                                        className={styles.parseBtn}
+                                        onClick={handleParse}
+                                        disabled={parsing || !parseText.trim()}
+                                    >
+                                        {parsing ? 'Parsing…' : 'Extract Fields'}
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     )}
 
+                    {/* Form fields */}
                     <div className={styles.formGrid}>
-                        <div className={styles.fieldFull}>
+                        <div className={`${styles.fieldGroup} ${styles.fieldFull}`}>
                             <label className={styles.fieldLabel}>Job Title *</label>
                             <input
                                 className={styles.fieldInput}
                                 value={form.title}
                                 onChange={e => setForm(p => ({ ...p, title: e.target.value }))}
-                                placeholder="e.g. Senior Accountant"
+                                placeholder="e.g. Senior Fund Accountant"
                             />
                         </div>
 
-                        <div className={styles.fieldFull}>
+                        <div className={`${styles.fieldGroup} ${styles.fieldFull}`}>
                             <label className={styles.fieldLabel}>Employer</label>
                             <select
                                 className={styles.fieldSelect}
                                 value={form.employer_profile_id}
                                 onChange={e => setForm(p => ({ ...p, employer_profile_id: e.target.value }))}
                             >
-                                <option value="">— Select employer —</option>
+                                <option value="">— No employer linked —</option>
                                 {employers.map(emp => (
                                     <option key={emp.id} value={emp.id}>{emp.company_name}</option>
                                 ))}
                             </select>
                         </div>
 
-                        <div className={styles.fieldHalf}>
+                        <div className={styles.fieldGroup}>
                             <label className={styles.fieldLabel}>Location</label>
                             <input
                                 className={styles.fieldInput}
@@ -231,7 +213,7 @@ function JobOrderDrawer({ isOpen, onClose, onSaved, editOrder, employers }) {
                             />
                         </div>
 
-                        <div className={styles.fieldHalf}>
+                        <div className={styles.fieldGroup}>
                             <label className={styles.fieldLabel}>Status</label>
                             <select
                                 className={styles.fieldSelect}
@@ -244,49 +226,47 @@ function JobOrderDrawer({ isOpen, onClose, onSaved, editOrder, employers }) {
                             </select>
                         </div>
 
-                        <div className={styles.fieldHalf}>
+                        <div className={styles.fieldGroup}>
                             <label className={styles.fieldLabel}>Salary Min</label>
                             <input
                                 className={styles.fieldInput}
                                 type="number"
                                 value={form.salary_min}
                                 onChange={e => setForm(p => ({ ...p, salary_min: e.target.value }))}
-                                placeholder="e.g. 85000"
+                                placeholder="e.g. 90000"
                             />
                         </div>
 
-                        <div className={styles.fieldHalf}>
+                        <div className={styles.fieldGroup}>
                             <label className={styles.fieldLabel}>Salary Max</label>
                             <input
                                 className={styles.fieldInput}
                                 type="number"
                                 value={form.salary_max}
                                 onChange={e => setForm(p => ({ ...p, salary_max: e.target.value }))}
-                                placeholder="e.g. 110000"
+                                placeholder="e.g. 120000"
                             />
                         </div>
 
-                        <div className={styles.fieldFull}>
+                        <div className={`${styles.fieldGroup} ${styles.fieldFull}`}>
                             <label className={styles.fieldLabel}>Requirements</label>
                             <textarea
                                 className={styles.fieldTextarea}
+                                rows={5}
                                 value={form.requirements}
                                 onChange={e => setForm(p => ({ ...p, requirements: e.target.value }))}
-                                placeholder="Describe the role requirements, qualifications, and responsibilities..."
-                                rows={8}
+                                placeholder="Key qualifications and responsibilities…"
                             />
                         </div>
 
-                        <div className={styles.fieldFull}>
-                            <label className={styles.fieldLabel}>
-                                Recruiter Notes <span className={styles.optionalLabel}>(private)</span>
-                            </label>
+                        <div className={`${styles.fieldGroup} ${styles.fieldFull}`}>
+                            <label className={styles.fieldLabel}>Recruiter Notes</label>
                             <textarea
                                 className={styles.fieldTextarea}
+                                rows={3}
                                 value={form.notes}
                                 onChange={e => setForm(p => ({ ...p, notes: e.target.value }))}
-                                placeholder="Internal notes — not visible to candidates or employers"
-                                rows={3}
+                                placeholder="Internal notes — not visible to candidates…"
                             />
                         </div>
                     </div>
@@ -353,15 +333,8 @@ export default function JobOrderRoster() {
         }
     }
 
-    function openCreate() {
-        setEditOrder(null);
-        setDrawerOpen(true);
-    }
-
-    function openEdit(order) {
-        setEditOrder(order);
-        setDrawerOpen(true);
-    }
+    function openCreate() { setEditOrder(null); setDrawerOpen(true); }
+    function openEdit(order) { setEditOrder(order); setDrawerOpen(true); }
 
     async function handleDelete(order) {
         if (!window.confirm(`Delete "${order.title}"? This cannot be undone.`)) return;
@@ -387,17 +360,19 @@ export default function JobOrderRoster() {
         return emp?.company_name || null;
     }
 
-    // Stats
     const total = orders.length;
     const open = orders.filter(o => o.status === 'open').length;
     const filled = orders.filter(o => o.status === 'filled').length;
     const onHold = orders.filter(o => o.status === 'on_hold').length;
+
+    const hasOrders = !loading && !error && orders.length > 0;
 
     return (
         <div className={styles.page}>
             <AdminHeader active="job-orders" />
 
             <main className={styles.main}>
+
                 {/* Page header */}
                 <div className={styles.pageHeader}>
                     <div>
@@ -442,19 +417,20 @@ export default function JobOrderRoster() {
                     </div>
                 </div>
 
-                {/* Table */}
-                {loading ? (
-                    <div className={styles.emptyState}>Loading job orders…</div>
-                ) : error ? (
-                    <div className={styles.errorState}>{error}</div>
-                ) : orders.length === 0 ? (
+                {/* Loading / error / empty states */}
+                {loading && <div className={styles.emptyState}>Loading job orders…</div>}
+                {error && <div className={styles.errorState}>{error}</div>}
+                {!loading && !error && orders.length === 0 && (
                     <div className={styles.emptyState}>
                         No job orders yet.{' '}
                         <button className={styles.emptyCreateBtn} onClick={openCreate}>
                             Create your first one →
                         </button>
                     </div>
-                ) : (
+                )}
+
+                {/* ── Desktop table ── */}
+                {hasOrders && (
                     <div className={styles.tableWrapper}>
                         <table className={styles.table}>
                             <thead>
@@ -488,9 +464,7 @@ export default function JobOrderRoster() {
                                         <td className={styles.salaryCell}>
                                             {formatSalary(order.salary_min, order.salary_max)}
                                         </td>
-                                        <td>
-                                            <StatusBadge status={order.status} />
-                                        </td>
+                                        <td><StatusBadge status={order.status} /></td>
                                         <td className={styles.dateCell}>
                                             {order.created_at
                                                 ? new Date(order.created_at).toLocaleDateString('en-US', {
@@ -530,6 +504,67 @@ export default function JobOrderRoster() {
                         </table>
                     </div>
                 )}
+
+                {/* ── Mobile card list ── */}
+                {hasOrders && (
+                    <div className={styles.cardList}>
+                        {orders.map(order => {
+                            const employerName = getEmployerName(order.employer_profile_id);
+                            const salary = formatSalary(order.salary_min, order.salary_max);
+                            return (
+                                <div key={order.id} className={styles.orderCard}>
+                                    {/* Clickable main area */}
+                                    <div
+                                        className={styles.cardMain}
+                                        onClick={() => navigate(`/admin/job-orders/${order.id}`)}
+                                    >
+                                        <div className={styles.cardTitle}>{order.title}</div>
+                                        {employerName && (
+                                            <div className={styles.cardEmployer}>{employerName}</div>
+                                        )}
+                                        <div className={styles.cardMeta}>
+                                            {order.location && <span>{order.location}</span>}
+                                            {order.location && salary !== '—' && (
+                                                <span className={styles.cardMetaDot}>·</span>
+                                            )}
+                                            {salary !== '—' && <span>{salary}</span>}
+                                        </div>
+                                    </div>
+
+                                    {/* Footer: badge + actions */}
+                                    <div className={styles.cardFooter}>
+                                        <StatusBadge status={order.status} />
+                                        <div className={styles.cardActions}>
+                                            <button
+                                                className={styles.viewBtn}
+                                                onClick={() => navigate(`/admin/job-orders/${order.id}`)}
+                                                title="View"
+                                            >
+                                                <i className="fi fi-rr-eye" />
+                                            </button>
+                                            <button
+                                                className={styles.editBtn}
+                                                onClick={() => openEdit(order)}
+                                                title="Edit"
+                                            >
+                                                <i className="fi fi-rr-pencil" />
+                                            </button>
+                                            <button
+                                                className={styles.deleteBtn}
+                                                onClick={() => handleDelete(order)}
+                                                disabled={deletingId === order.id}
+                                                title="Delete"
+                                            >
+                                                <i className="fi fi-rr-trash" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+
             </main>
 
             <JobOrderDrawer
