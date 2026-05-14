@@ -622,20 +622,42 @@
 @media (max-width: 840px) {
     .main {
         padding: 16px 12px 48px;
+        gap: 12px;
+    }
+
+    .heroBanner {
+        height: 150px;
+        border-radius: 8px;
     }
 
     .identityZone {
         flex-direction: column;
-        margin-top: 0;
+        align-items: flex-start;
+        gap: 12px;
+        margin-top: -28px;
+        padding: 0 4px 12px;
+    }
+
+    .identityLeft {
+        padding-top: 36px;
+        width: 100%;
+    }
+
+    .jobTitle {
+        font-size: 1.15rem;
     }
 
     .identityActions {
         width: 100%;
         flex-wrap: wrap;
+        align-self: auto;
+        padding-bottom: 0;
+        gap: 6px;
     }
 
     .actionBtn {
-        flex: 1;
+        flex: 0 1 auto;
+        /* ← key fix: size to content, don't stretch */
         justify-content: center;
     }
 
@@ -648,6 +670,6 @@
     }
 
     .matchBarWrap {
-        width: 100px;
+        width: 80px;
     }
 }
