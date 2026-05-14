@@ -25,11 +25,19 @@ import EP18 from "../assets/landing_page_thumbnails/EP18.png";
 import EP19 from "../assets/landing_page_thumbnails/EP19.png";
 import EP20 from "../assets/landing_page_thumbnails/EP20.png";
 import EP21 from "../assets/landing_page_thumbnails/EP21.png";
+import EP22 from "../assets/landing_page_thumbnails/EP22.png";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
-const CURRENT_VERSION = 21;
+const CURRENT_VERSION = 22;
 
 const EPISODES = [
+  {
+    num: 22,
+    title: "Styling the Job Order UI & PDF Export",
+    thumb: EP22,
+    url: "https://www.linkedin.com/posts/daneahern_ep22-styling-the-job-order-ui-pdf-export-ugcPost-7460564507652739072-30AL?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "The job order detail page got the full employer profile treatment — full-width banner image, logo overlapping the edge, identity zone with title and meta sitting cleanly below it. When Harbor Financial Group uploaded their banner, it showed up on their job order page automatically. Clicking an open role on the Employer Profile now navigates directly to the job order — and from the job order, the employer profile link was already there. Full two-way navigation. The PDF got the same polish pass: banner height up, identity zone card removed, Recruiter Notes accent changed from mustard yellow to navy. The PDF now mirrors the UI.",
+  },
   {
     num: 21,
     title: "Job Orders Admin UI + PDF Exports",
@@ -62,7 +70,7 @@ const EPISODES = [
     num: 17,
     title: "Invite System, Free Trial & Stripe Billing",
     thumb: EP17,
-    url: "https://www.linkedin.com/posts/daneahern_building-ryzeai-in-public-ep17-invitation-ugcPost-7448296134080348160-e8rh?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo", // ← swap in post URL when published
+    url: "https://www.linkedin.com/posts/daneahern_building-ryzeai-in-public-ep17-invitation-ugcPost-7448296134080348160-e8rh?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
     desc: "EP16 proved the walls hold. EP17 opened the doors. Admin invite flow onboards any recruiting firm in one action — tenant created, 30-day trial started, branded welcome email fired. Stripe handles the full billing lifecycle from trial to paying subscriber. A firm goes from zero to paying customer in under 5 minutes.",
   },
   {
@@ -86,7 +94,6 @@ const EPISODES = [
     url: "https://www.linkedin.com/posts/daneahern_ep14-of-building-ryzeai-candidate-and-ugcPost-7444089991846121474-ixgX?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
     desc: "Built out the Candidate and Employer dashboards end-to-end — with static data first. Candidates see their profile, upcoming calls, and open job opportunities. Employers see their company brief, linked job orders, and candidate activity. Getting the structure and layout right before wiring in live AI matching in the next episode.",
   },
-
   {
     num: 13,
     title: "Fixing the Zoom Webhook — Getting the Transcript",
@@ -405,6 +412,21 @@ const PHASES = [
       "Streaming PDF response — browser download triggered in one click",
     ],
   },
+  {
+    id: "16",
+    title: "Job Order UI Polish & Two-Way Navigation",
+    status: "complete",
+    summary: "Polished the job order detail page to match the employer profile design standard — full-width banner, logo overlapping the edge, and a clean identity zone with title and meta below it. Banner images uploaded to an employer profile now automatically propagate to all their job order pages with zero extra work. Two-way navigation wired end-to-end: clicking an open role on the Employer Profile navigates directly to the job order, and the job order links back. The PDF got the same treatment — banner height increased, identity zone card removed, Recruiter Notes accent corrected from mustard yellow to navy.",
+    bullets: [
+      "Job order detail page — full employer profile treatment (banner, logo, identity zone)",
+      "Banner propagation — employer banner upload auto-surfaces on all linked job orders",
+      "Two-way navigation — Employer Profile → Job Order → Employer Profile",
+      "PDF polish — banner height increased, identity zone card removed",
+      "PDF accent color — Recruiter Notes updated from mustard yellow to navy",
+      "PDF mirrors the UI — consistent visual language across web and export",
+      "PostCSS brace bug squashed — prevented CSS Modules from compiling correctly",
+    ],
+  },
 
 ];
 
@@ -605,7 +627,7 @@ export default function Landing() {
         <div className={styles.heroContent}>
           <div className={styles.docTag}>
             <span className={styles.livePulse} />
-            Version {CURRENT_VERSION} &nbsp;·&nbsp; April 2026 &nbsp;·&nbsp; Building in Public
+            Version {CURRENT_VERSION} &nbsp;·&nbsp; May 2026 &nbsp;·&nbsp; Building in Public
           </div>
 
           <h1 className={styles.heroTitle}>
@@ -758,17 +780,6 @@ export default function Landing() {
           <div className={styles.nextGrid}>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 20</div>
-              <div className={styles.nextTitle}>Recruiter Workflow &amp; Employer Profile PDF</div>
-              <p className={styles.nextDesc}>
-                Walked the full recruiter workflow from booking through employer profile setup,
-                then shipped branded PDF exports for employer profiles — downloadable in one click
-                from the admin panel. pgvector powers AI candidate matching throughout.
-              </p>
-              <span className={styles.nextBadgePosted}>✓ Complete</span>
-            </div>
-
-            <div className={styles.nextCard}>
               <div className={styles.nextNum}>EP 21</div>
               <div className={styles.nextTitle}>Job Orders Admin UI &amp; PDF Exports</div>
               <p className={styles.nextDesc}>
@@ -784,10 +795,19 @@ export default function Landing() {
               <div className={styles.nextNum}>EP 22</div>
               <div className={styles.nextTitle}>Styling the Job Order UI &amp; PDF Export</div>
               <p className={styles.nextDesc}>
-                The job order functionality works — now it needs to look the part. Full UI
-                polish pass on the roster, detail page, and create form. Branded PDF export
-                gets the same treatment as candidate and employer profiles — clean, professional,
-                and ready to hand to a hiring manager.
+                Job order detail page got the full employer profile treatment — banner, logo,
+                identity zone. Employer banners auto-surface on linked job orders. Two-way
+                navigation wired between employer profiles and job orders. PDF polished to
+                mirror the UI — accent colors corrected, identity zone card removed.
+              </p>
+              <span className={styles.nextBadgePosted}>✓ Complete</span>
+            </div>
+
+            <div className={styles.nextCard}>
+              <div className={styles.nextNum}>EP 23</div>
+              <div className={styles.nextTitle}>Coming Soon</div>
+              <p className={styles.nextDesc}>
+                Next episode in progress. Follow along on LinkedIn to see what ships next.
               </p>
               <span className={styles.nextBadge}>Up next</span>
             </div>
