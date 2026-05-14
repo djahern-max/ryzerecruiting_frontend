@@ -6,12 +6,15 @@
     color: #1a2e44;
     font-family: "DM Sans", sans-serif;
     -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
 }
 
 .layout {
+    flex: 1;
+    min-height: 0;
     display: grid;
     grid-template-columns: 200px 1fr;
-    height: 100%;
     overflow: hidden;
 }
 
