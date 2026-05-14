@@ -65,9 +65,12 @@ function AdminLogin() {
               id="email"
               type="email"
               autoComplete="email"
+              autoCorrect="off"
+              autoCapitalize="none"
+              spellCheck="false"
               placeholder="dane@ryze.ai"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value.trim().replace(/[^\x00-\x7F@]/g, (c) => c === '＠' ? '@' : c))}
               required
             />
           </div>
