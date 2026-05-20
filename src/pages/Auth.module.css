@@ -1,194 +1,105 @@
-/*src/pages/Auth.module.css*/
+/* src/pages/Auth.module.css */
+
+/* ── Page background ─────────────────────────────────────────── */
 .authPage {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--bg-50);
   padding: 2rem;
+  gap: 1.25rem;
+
+  /* Rich blue gradient — RYZE brand */
+  background:
+    radial-gradient(ellipse at 25% 15%, rgba(91, 174, 240, 0.35) 0%, transparent 55%),
+    radial-gradient(ellipse at 75% 85%, rgba(10, 60, 140, 0.45) 0%, transparent 55%),
+    linear-gradient(160deg, #1660b8 0%, #2080d8 45%, #0d3d7a 100%);
 }
 
+/* ── Card ────────────────────────────────────────────────────── */
 .authContainer {
-  background: white;
-  border-radius: var(--radius);
-  padding: 3rem;
-  max-width: 450px;
+  background: #0b1929;
+  border-radius: 16px;
+  padding: 2.5rem 2.5rem 2rem;
+  max-width: 420px;
   width: 100%;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-200);
+  position: relative;
+  overflow: hidden;
+
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.07);
 }
 
+/* Subtle RYZE watermark inside card */
+.authContainer::before {
+  content: 'RYZE';
+  position: absolute;
+  right: -16px;
+  bottom: -28px;
+  font-size: 8.5rem;
+  font-weight: 900;
+  letter-spacing: -4px;
+  color: rgba(255, 255, 255, 0.028);
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+}
+
+/* ── Logo & heading ──────────────────────────────────────────── */
 .authHeader {
-  text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 
 .logo {
-  color: var(--brand-700);
-  font-size: 1.8rem;
+  color: #ffffff;
+  font-size: 1.45rem;
   font-weight: 800;
-  margin: 0 0 1rem 0;
-  cursor: pointer;
-  letter-spacing: -0.3px;
-  transition: color 150ms ease;
+  letter-spacing: -0.5px;
+  margin-bottom: 1.2rem;
+  font-family: var(--font-sans);
 }
 
-.logo:hover {
-  color: var(--brand-800);
+.logoAi {
+  color: #5aabea;
 }
 
 .authTitle {
-  color: var(--text-900);
-  font-size: 1.8rem;
-  margin: 0 0 1rem 0;
+  color: #ffffff;
+  font-size: 1.5rem;
   font-weight: 700;
+  margin: 0 0 0.4rem 0;
   letter-spacing: -0.3px;
+  font-family: var(--font-sans);
 }
 
-.userTypeBadge {
-  display: inline-block;
-  background: rgba(28, 102, 214, 0.08);
-  color: var(--brand-700);
-  padding: 0.5rem 1.5rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 700;
+.authSubtitle {
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 0.875rem;
   margin: 0;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
+  line-height: 1.5;
+  font-family: var(--font-sans);
 }
 
+/* ── Error ───────────────────────────────────────────────────── */
 .error {
-  background: #fee;
-  color: #c33;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  border: 1px solid #fcc;
-  font-size: 0.9rem;
-}
-
-.authForm {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.formGroup label {
-  color: var(--text-900);
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.formGroup input {
-  padding: 0.875rem;
-  border: 2px solid var(--border-200);
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: all 180ms ease;
+  background: rgba(210, 55, 55, 0.14);
+  color: #ff8585;
+  border: 1px solid rgba(210, 55, 55, 0.25);
+  padding: 0.8rem 1rem;
+  border-radius: 9px;
+  margin-bottom: 1.25rem;
+  font-size: 0.875rem;
   font-family: var(--font-sans);
-  color: var(--text-900);
+  line-height: 1.5;
 }
 
-.formGroup input:focus {
-  outline: none;
-  border-color: var(--brand-700);
-  box-shadow: 0 0 0 3px rgba(28, 102, 214, 0.1);
-}
-
-.formGroup input::placeholder {
-  color: var(--text-500);
-}
-
-.helpText {
-  color: var(--text-500);
-  font-size: 0.85rem;
-  margin-top: -0.25rem;
-}
-
-.submitButton {
-  background: var(--brand-800);
-  color: white;
-  border: none;
-  padding: 1rem;
-  font-size: 1.1rem;
-  font-weight: 700;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 180ms ease;
-  margin-top: 0.5rem;
-  font-family: var(--font-sans);
-  box-shadow: var(--shadow-sm);
-}
-
-.submitButton:hover:not(:disabled) {
-  background: var(--brand-700);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.submitButton:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.submitButton:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.authFooter {
-  margin-top: 2rem;
-  text-align: center;
-}
-
-.authFooter p {
-  color: var(--text-500);
-  margin-bottom: 1rem;
-}
-
-.toggleButton {
-  background: none;
-  border: none;
-  color: var(--brand-700);
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: underline;
-  padding: 0;
-  font-family: var(--font-sans);
-  transition: color 150ms ease;
-}
-
-.toggleButton:hover {
-  color: var(--brand-800);
-}
-
-.backButton {
-  background: none;
-  border: none;
-  color: var(--text-500);
-  cursor: pointer;
-  font-size: 0.9rem;
-  padding: 0.5rem;
-  font-family: var(--font-sans);
-  transition: color 150ms ease;
-}
-
-.backButton:hover {
-  color: var(--brand-700);
-}
-
-/* Add to the end of your existing Auth.module.css */
-
+/* ── OAuth buttons ───────────────────────────────────────────── */
 .oauthButtons {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.65rem;
   margin-bottom: 1.5rem;
 }
 
@@ -197,23 +108,24 @@
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  padding: 0.875rem 1.5rem;
-  border: 2px solid var(--border-200);
+  padding: 0.8rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 10px;
-  background: white;
-  font-size: 1rem;
-  font-weight: 600;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 180ms ease;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
   font-family: var(--font-sans);
-  color: var(--text-900);
+  width: 100%;
+  text-align: center;
 }
 
 .oauthButton:hover {
-  background: var(--bg-50);
-  border-color: var(--brand-700);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
 }
 
 .oauthButton:active {
@@ -221,11 +133,12 @@
 }
 
 .oauthIcon {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   flex-shrink: 0;
 }
 
+/* ── Divider ─────────────────────────────────────────────────── */
 .divider {
   position: relative;
   text-align: center;
@@ -239,68 +152,66 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: var(--border-200);
+  background: rgba(255, 255, 255, 0.09);
 }
 
 .divider span {
   position: relative;
-  background: white;
+  background: #0b1929;
   padding: 0 1rem;
-  color: var(--text-500);
-  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.32);
+  font-size: 0.8rem;
   font-weight: 500;
-}
-
-.userTypeSelection {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.userTypeButton {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 16px 18px;
-  border: 2px solid var(--border-200);
-  border-radius: 10px;
-  background: white;
-  cursor: pointer;
-  text-align: left;
-  transition: all 180ms ease;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   font-family: var(--font-sans);
 }
 
-.userTypeButton:hover {
-  border-color: var(--brand-700);
-  background: var(--bg-50);
+/* ── Form ────────────────────────────────────────────────────── */
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
 }
 
-.userTypeButtonActive {
-  border-color: var(--brand-700);
-  background: color-mix(in srgb, var(--brand-700) 6%, white);
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
 }
 
-.userTypeIcon {
-  font-size: 1.5rem;
-  flex-shrink: 0;
+.formGroup label {
+  color: rgba(255, 255, 255, 0.68);
+  font-weight: 500;
+  font-size: 0.875rem;
+  font-family: var(--font-sans);
 }
 
-.userTypeLabel {
-  font-weight: 700;
-  font-size: 1rem;
-  color: var(--text-900);
-  display: block;
+.formGroup input {
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  color: #ffffff;
+  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.userTypeDesc {
-  font-size: 0.85rem;
-  color: var(--text-500);
-  display: block;
-  margin-top: 2px;
+.formGroup input:focus {
+  outline: none;
+  border-color: #4da3e8;
+  background: rgba(255, 255, 255, 0.09);
+  box-shadow: 0 0 0 3px rgba(77, 163, 232, 0.18);
 }
 
+.formGroup input::placeholder {
+  color: rgba(255, 255, 255, 0.22);
+}
+
+/* ── Password row ────────────────────────────────────────────── */
 .passwordRow {
   position: relative;
   display: flex;
@@ -310,67 +221,120 @@
 .passwordRow input {
   width: 100%;
   padding-right: 2.75rem;
-  /* space for the eye button */
 }
 
 .eyeButton {
   position: absolute;
   right: 10px;
-  height: 36px;
-  width: 36px;
+  height: 34px;
+  width: 34px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   border: none;
   background: transparent;
-  color: var(--text-500);
+  color: rgba(255, 255, 255, 0.35);
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 7px;
+  transition: color 150ms ease, background 150ms ease;
 }
 
 .eyeButton:hover {
-  color: var(--text-900);
-  background: var(--bg-50);
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.07);
 }
 
-.errorText {
-  color: #c33;
-  font-size: 0.85rem;
-  margin-top: -0.25rem;
+/* ── Submit button ───────────────────────────────────────────── */
+.submitButton {
+  background: #1e7dd4;
+  color: #ffffff;
+  border: none;
+  padding: 0.9rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+  margin-top: 0.25rem;
+  width: 100%;
+  letter-spacing: 0.01em;
 }
 
+.submitButton:hover:not(:disabled) {
+  background: #2b8de8;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(30, 125, 212, 0.4);
+}
+
+.submitButton:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Admin ghost link ────────────────────────────────────────── */
 .adminAccess {
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border-100, #f1f5f9);
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   text-align: center;
 }
 
 .adminAccessLink {
-  font-size: 0.78rem;
-  color: var(--text-400, #94a3b8);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.22);
   text-decoration: none;
   font-weight: 500;
+  font-family: var(--font-sans);
   transition: color 150ms ease;
+  letter-spacing: 0.02em;
 }
 
 .adminAccessLink:hover {
-  color: var(--text-600, #475569);
-  text-decoration: underline;
+  color: rgba(255, 255, 255, 0.55);
 }
 
+/* ── Legal text below card ───────────────────────────────────── */
+.legalText {
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 0.775rem;
+  text-align: center;
+  max-width: 360px;
+  line-height: 1.6;
+  font-family: var(--font-sans);
+  margin: 0;
+}
 
-@media (max-width: 640px) {
+.legalText a {
+  color: rgba(255, 255, 255, 0.62);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 150ms ease;
+}
+
+.legalText a:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ── Mobile ──────────────────────────────────────────────────── */
+@media (max-width: 480px) {
   .authPage {
     padding: 1rem;
+    justify-content: flex-start;
+    padding-top: 3rem;
   }
 
   .authContainer {
-    padding: 2rem 1.5rem;
+    padding: 2rem 1.5rem 1.75rem;
+    border-radius: 14px;
   }
 
   .authTitle {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
   }
 }
