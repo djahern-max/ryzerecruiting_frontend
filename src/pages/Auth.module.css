@@ -338,3 +338,79 @@
     font-size: 1.35rem;
   }
 }
+
+/* ── CompleteOAuthSignup — user type selection ───────────────── */
+.userTypeSelection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.userTypeButton {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  text-align: left;
+  transition: background 160ms ease, border-color 160ms ease;
+  font-family: var(--font-sans);
+  width: 100%;
+}
+
+.userTypeButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.userTypeButtonActive {
+  border-color: #4da3e8;
+  background: rgba(77, 163, 232, 0.14);
+}
+
+.userTypeLabel {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  display: block;
+}
+
+.userTypeDesc {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.42);
+  display: block;
+  margin-top: 3px;
+}
+
+/* ── Auth footer (back button row) ───────────────────────────── */
+.authFooter {
+  margin-top: 1.25rem;
+  text-align: center;
+}
+
+.authSubtitle {
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 0.875rem;
+  margin: 0.25rem 0 0 0;
+  line-height: 1.5;
+  font-family: var(--font-sans);
+}
+
+.backButton {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.32);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.5rem;
+  font-family: var(--font-sans);
+  transition: color 150ms ease;
+}
+
+.backButton:hover {
+  color: rgba(255, 255, 255, 0.68);
+}

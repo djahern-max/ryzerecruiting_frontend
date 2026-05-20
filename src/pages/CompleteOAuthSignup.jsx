@@ -63,7 +63,7 @@ function CompleteOAuthSignup() {
         <div className={styles.authHeader}>
           <h1 className={styles.logo}>RYZE.ai</h1>
           <h2 className={styles.authTitle}>Complete Your Sign Up</h2>
-          <p style={{ color: 'var(--text-500)', marginTop: '0.5rem' }}>
+          <p className={styles.authSubtitle}>
             Please select your account type to continue
           </p>
         </div>
