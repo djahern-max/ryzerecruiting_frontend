@@ -6,7 +6,7 @@ import styles from './Auth.module.css';   // ← reuse the dark-card styles
 
 function AdminLogin() {
   const navigate = useNavigate();
-  const { adminLogin } = useAuth();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -17,7 +17,7 @@ function AdminLogin() {
     setError('');
     setLoading(true);
     try {
-      const result = await adminLogin(email, password);
+      const result = await login(email, password);
       if (!result.success) setError(result.error || 'Invalid credentials.');
     } catch {
       setError('An unexpected error occurred. Please try again.');
