@@ -1,7 +1,8 @@
-/* App.jsx */
+/* src/App.jsx */
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { useEffect } from 'react';
+import Landing from './pages/Landing';
 import Auth from './pages/Auth';
 import AdminLogin from './pages/AdminLogin';
 import OAuthCallback from './pages/OAuthCallback';
@@ -60,7 +61,7 @@ function ProtectedRoute({ children, allowedRoles = null }) {
   if (allowedRoles && !allowedRoles.includes(user.user_type)) {
     if (user.user_type === 'EMPLOYER') return <Navigate to="/employer/dashboard" replace />;
     if (user.user_type === 'CANDIDATE') return <Navigate to="/candidate/dashboard" replace />;
-    return <Navigate to="/auth" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return children;
@@ -74,7 +75,7 @@ function AdminRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading) return loadingScreen;
   if (!user) return <Navigate to="/admin/login" replace />;
-  if (user.user_type !== 'ADMIN' || !user.is_superuser) return <Navigate to="/auth" replace />;
+  if (user.user_type !== 'ADMIN' || !user.is_superuser) return <Navigate to="/" replace />;
   return children;
 }
 
@@ -87,10 +88,9 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          {/* ── Root → auth ─────────────────────────────────────────── */}
-          <Route path="/" element={<Navigate to="/auth" replace />} />
 
           {/* ── Public ─────────────────────────────────────────────── */}
+          <Route path="/" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/auth/callback" element={<OAuthCallback />} />
           <Route path="/auth/complete-signup" element={<CompleteOAuthSignup />} />
@@ -106,14 +106,6 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['EMPLOYER']}>
                 <EmployerDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employer/roster"
-            element={
-              <ProtectedRoute allowedRoles={['EMPLOYER']}>
-                <EmployerRoster />
               </ProtectedRoute>
             }
           />
@@ -146,55 +138,7 @@ function App() {
 
           {/* ── Shared protected ────────────────────────────────────── */}
           <Route
-            path="/candidates"
-            element={
-              <ProtectedRoute>
-                <CandidatesPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/candidates/:id"
-            element={
-              <ProtectedRoute>
-                <CandidateProfile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employers/:id"
-            element={
-              <ProtectedRoute>
-                <EmployerProfile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/job-orders"
-            element={
-              <ProtectedRoute>
-                <JobOrderRoster />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/job-orders/:id"
-            element={
-              <ProtectedRoute>
-                <JobOrderDetail />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/chat"
-            element={
-              <ProtectedRoute>
-                <ChatPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/change-password"
+            path="/settings"
             element={
               <ProtectedRoute>
                 <ChangePassword />
@@ -202,12 +146,68 @@ function App() {
             }
           />
 
-          {/* ── Admin ───────────────────────────────────────────────── */}
+          {/* ── Admin — superuser only ──────────────────────────────── */}
           <Route
             path="/admin"
             element={
               <AdminRoute>
                 <AdminDashboard />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/employers"
+            element={
+              <AdminRoute>
+                <EmployerRoster />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/employers/:id"
+            element={
+              <AdminRoute>
+                <EmployerProfile />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/candidates"
+            element={
+              <AdminRoute>
+                <CandidatesPage />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/candidates/:id"
+            element={
+              <AdminRoute>
+                <CandidateProfile />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/job-orders"
+            element={
+              <AdminRoute>
+                <JobOrderRoster />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/job-orders/:id"
+            element={
+              <AdminRoute>
+                <JobOrderDetail />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/chat"
+            element={
+              <AdminRoute>
+                <ChatPage />
               </AdminRoute>
             }
           />
@@ -220,7 +220,7 @@ function App() {
             }
           />
           <Route
-            path="/admin/invite"
+            path="/ryze/invite"
             element={
               <AdminRoute>
                 <InviteForm />
@@ -228,8 +228,9 @@ function App() {
             }
           />
 
-          {/* ── Catch-all ───────────────────────────────────────────── */}
-          <Route path="*" element={<Navigate to="/auth" replace />} />
+          {/* ── Fallback ────────────────────────────────────────────── */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+
         </Routes>
       </BrowserRouter>
     </AuthProvider>
