@@ -1,77 +1,59 @@
 /* src/pages/AdminLogin.jsx */
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import styles from './AdminLogin.module.css';
+import styles from './Auth.module.css';   // ← reuse the dark-card styles
 
 function AdminLogin() {
   const navigate = useNavigate();
-  const { user, login, loading } = useAuth();
-
-  const [email, setEmail] = useState('dane@ryze.ai');
+  const { adminLogin } = useAuth();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    if (!loading && user) {
-      if (user.user_type === 'ADMIN') {
-        navigate('/admin');
-      } else {
-        navigate('/');
-      }
-    }
-  }, [user, loading, navigate]);
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
-    setSubmitting(true);
-
+    setLoading(true);
     try {
-      const result = await login(email, password);
-      if (!result.success) {
-        setError(result.error || 'Login failed. Check your credentials.');
-      }
-    } catch (err) {
-      setError('An unexpected error occurred.');
+      const result = await adminLogin(email, password);
+      if (!result.success) setError(result.error || 'Invalid credentials.');
+    } catch {
+      setError('An unexpected error occurred. Please try again.');
     } finally {
-      setSubmitting(false);
+      setLoading(false);
     }
   }
 
-  if (loading) return null;
-
   return (
-    <div className={styles.page}>
-      <div className={styles.card}>
-        <div className={styles.header}>
-          <h1 className={styles.logo} onClick={() => navigate('/')}>
-            RYZE.ai
-          </h1>
-          <span className={styles.adminBadge}>Admin Access</span>
+    <div className={styles.authPage}>
+      <div className={styles.authContainer}>
+
+        {/* ── Logo & heading ──────────────────────── */}
+        <div className={styles.authHeader}>
+          <div className={styles.logo}>
+            RYZE<span className={styles.logoAi}>.ai</span>
+          </div>
+          <h1 className={styles.authTitle}>Admin Access</h1>
+          <p className={styles.authSubtitle}>
+            Restricted to authorised administrators only.
+          </p>
         </div>
 
-        {error && (
-          <div className={styles.error} role="alert">
-            {error}
-          </div>
-        )}
+        {error && <div className={styles.error}>{error}</div>}
 
-        <form className={styles.form} onSubmit={handleSubmit} noValidate>
+        <form className={styles.authForm} onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">Email address</label>
             <input
               id="email"
               type="email"
-              autoComplete="email"
-              autoCorrect="off"
-              autoCapitalize="none"
-              spellCheck="false"
-              placeholder="dane@ryze.ai"
+              placeholder="you@ryze.ai"
               value={email}
-              onChange={(e) => setEmail(e.target.value.trim().replace(/[^\x00-\x7F@]/g, (c) => c === '＠' ? '@' : c))}
+              onChange={(e) => { setEmail(e.target.value); setError(''); }}
               required
+              autoComplete="email"
             />
           </div>
 
@@ -80,30 +62,30 @@ function AdminLogin() {
             <input
               id="password"
               type="password"
-              autoComplete="current-password"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              autoComplete="current-password"
             />
           </div>
 
-          <button
-            type="submit"
-            className={styles.submitButton}
-            disabled={submitting}
-          >
-            {submitting ? 'Signing in…' : 'Sign In'}
+          <button type="submit" className={styles.submitButton} disabled={loading}>
+            {loading ? 'Signing in…' : 'Sign In'}
           </button>
         </form>
 
-        <button
-          className={styles.backLink}
-          onClick={() => navigate('/')}
-          type="button"
-        >
-          ← Back to home
-        </button>
+        {/* ── Back to login ────────────────────────── */}
+        <div className={styles.adminAccess}>
+          <button
+            className={styles.adminAccessLink}
+            onClick={() => navigate('/auth')}
+            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+          >
+            ← Back to login
+          </button>
+        </div>
+
       </div>
     </div>
   );
