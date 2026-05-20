@@ -414,3 +414,28 @@
 .backButton:hover {
   color: rgba(255, 255, 255, 0.68);
 }
+
+/* ── Login / Register toggle ─────────────────────────────────── */
+.toggleText {
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 0.875rem;
+  margin: 0;
+  font-family: var(--font-sans);
+}
+
+.toggleButton {
+  background: none;
+  border: none;
+  color: #5aabea;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.875rem;
+  font-family: var(--font-sans);
+  transition: color 150ms ease;
+}
+
+.toggleButton:hover {
+  color: #7dc0f5;
+  text-decoration: underline;
+}
