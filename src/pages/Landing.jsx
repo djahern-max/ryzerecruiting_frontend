@@ -26,11 +26,20 @@ import EP19 from "../assets/landing_page_thumbnails/EP19.png";
 import EP20 from "../assets/landing_page_thumbnails/EP20.png";
 import EP21 from "../assets/landing_page_thumbnails/EP21.png";
 import EP22 from "../assets/landing_page_thumbnails/EP22.png";
+import EP23 from "../assets/landing_page_thumbnails/EP23.png";
+
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
-const CURRENT_VERSION = 22;
+const CURRENT_VERSION = 23;
 
 const EPISODES = [
+  {
+    num: 23,
+    title: "Media Queries & Mobile Responsiveness",
+    thumb: EP23,
+    url: "https://www.linkedin.com/posts/daneahern_title-ep23-media-queries-mobile-responsiveness-ugcPost-7462429012812992512-BmJT?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+    desc: "The original goal was polishing the PDF exports for Employer Profiles and Job Orders. Pulled them up, took a look — they already looked great. Nothing to fix. What followed was a full sweep of the application for mobile responsiveness, page by page, with desktop on the left and iPhone Mirroring on the right. Employer Profile, Job Order Detail, Job Order Roster, Employer Roster, the RYZE Intelligence chat page — each one tightened up with media queries until it looked right on both screens.",
+  },
   {
     num: 22,
     title: "Styling the Job Order UI & PDF Export",
@@ -780,18 +789,6 @@ export default function Landing() {
           <div className={styles.nextGrid}>
 
             <div className={styles.nextCard}>
-              <div className={styles.nextNum}>EP 21</div>
-              <div className={styles.nextTitle}>Job Orders Admin UI &amp; PDF Exports</div>
-              <p className={styles.nextDesc}>
-                Built the complete job order workflow — roster, create form with AI parsing,
-                detail page, inline editing, and status management. AI extracts title, location,
-                salary, and requirements from raw pasted text. PDF exports ship for both job
-                orders and employer profiles via Playwright server-side rendering.
-              </p>
-              <span className={styles.nextBadgePosted}>✓ Complete</span>
-            </div>
-
-            <div className={styles.nextCard}>
               <div className={styles.nextNum}>EP 22</div>
               <div className={styles.nextTitle}>Styling the Job Order UI &amp; PDF Export</div>
               <p className={styles.nextDesc}>
@@ -805,9 +802,21 @@ export default function Landing() {
 
             <div className={styles.nextCard}>
               <div className={styles.nextNum}>EP 23</div>
+              <div className={styles.nextTitle}>Media Queries &amp; Mobile Responsiveness</div>
+              <p className={styles.nextDesc}>
+                Full mobile responsiveness sweep — Employer Profile, Job Order Detail,
+                Job Order Roster, Employer Roster, and RYZE Intelligence. iPhone Mirroring
+                made the workflow fast: real device rendering live next to the code, no
+                picking up the phone. Media queries until every page looked right on both screens.
+              </p>
+              <span className={styles.nextBadgePosted}>✓ Complete</span>
+            </div>
+
+            <div className={styles.nextCard}>
+              <div className={styles.nextNum}>EP 24</div>
               <div className={styles.nextTitle}>Coming Soon</div>
               <p className={styles.nextDesc}>
-                Next episode in progress. Follow along on LinkedIn to see what ships next.
+                Next episode in progress. Follow along on LinkedIn to see what comes next.
               </p>
               <span className={styles.nextBadge}>Up next</span>
             </div>
