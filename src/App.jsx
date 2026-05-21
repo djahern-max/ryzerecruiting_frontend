@@ -2,6 +2,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { useEffect } from 'react';
+import SaasLanding from './pages/SaasLanding';
 import Landing from './pages/Landing';
 import Auth from './pages/Auth';
 import AdminLogin from './pages/AdminLogin';
@@ -79,16 +80,6 @@ function AdminRoute({ children }) {
   return children;
 }
 
-function RootRoute() {
-  const { user, loading } = useAuth();
-  if (loading) return loadingScreen;
-  if (!user) return <Navigate to="/auth" replace />;
-  if (user.user_type === 'ADMIN') return <Navigate to="/admin" replace />;
-  if (user.user_type === 'EMPLOYER') return <Navigate to="/employer/dashboard" replace />;
-  if (user.user_type === 'CANDIDATE') return <Navigate to="/candidate/dashboard" replace />;
-  return <Navigate to="/auth" replace />;
-}
-
 function App() {
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", "blue");
@@ -100,7 +91,7 @@ function App() {
         <Routes>
 
           {/* ── Public ─────────────────────────────────────────────── */}
-          <Route path="/" element={<RootRoute />} />
+          <Route path="/" element={<SaasLanding />} />
           <Route path="/about" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/auth/callback" element={<OAuthCallback />} />
