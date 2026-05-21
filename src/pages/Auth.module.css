@@ -1,4 +1,7 @@
 /* src/pages/Auth.module.css */
+/* ══════════════════════════════════════════════════════
+   LIGHT THEME — matches AdminDashboard design language
+   ══════════════════════════════════════════════════════ */
 
 /* ── Page background ─────────────────────────────────────────── */
 .authPage {
@@ -9,27 +12,23 @@
   justify-content: center;
   padding: 2rem;
   gap: 1.25rem;
-
-  /* Rich blue gradient — RYZE brand */
-  background:
-    radial-gradient(ellipse at 25% 15%, rgba(91, 174, 240, 0.35) 0%, transparent 55%),
-    radial-gradient(ellipse at 75% 85%, rgba(10, 60, 140, 0.45) 0%, transparent 55%),
-    linear-gradient(160deg, #1660b8 0%, #2080d8 45%, #0d3d7a 100%);
+  background: var(--bg-50, #f1f5f9);
+  font-family: var(--font-sans);
 }
 
 /* ── Card ────────────────────────────────────────────────────── */
 .authContainer {
-  background: #0b1929;
+  background: #ffffff;
+  border: 1px solid var(--border-200, #e2e8f0);
   border-radius: 16px;
   padding: 2.5rem 2.5rem 2rem;
   max-width: 420px;
   width: 100%;
   position: relative;
   overflow: hidden;
-
   box-shadow:
-    0 32px 80px rgba(0, 0, 0, 0.55),
-    0 0 0 1px rgba(255, 255, 255, 0.07);
+    0 1px 3px rgba(0, 0, 0, 0.06),
+    0 8px 32px rgba(0, 0, 0, 0.07);
 }
 
 /* Subtle RYZE watermark inside card */
@@ -41,7 +40,7 @@
   font-size: 8.5rem;
   font-weight: 900;
   letter-spacing: -4px;
-  color: rgba(255, 255, 255, 0.028);
+  color: rgba(10, 102, 194, 0.04);
   pointer-events: none;
   user-select: none;
   line-height: 1;
@@ -53,29 +52,29 @@
 }
 
 .logo {
-  color: #ffffff;
+  color: var(--brand-800, #1e3a5f);
   font-size: 1.45rem;
-  font-weight: 800;
+  font-weight: 900;
   letter-spacing: -0.5px;
   margin-bottom: 1.2rem;
   font-family: var(--font-sans);
 }
 
 .logoAi {
-  color: #5aabea;
+  color: #0a66c2;
 }
 
 .authTitle {
-  color: #ffffff;
+  color: var(--text-900, #0f172a);
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 800;
   margin: 0 0 0.4rem 0;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.4px;
   font-family: var(--font-sans);
 }
 
 .authSubtitle {
-  color: rgba(255, 255, 255, 0.48);
+  color: var(--text-500, #64748b);
   font-size: 0.875rem;
   margin: 0;
   line-height: 1.5;
@@ -84,9 +83,9 @@
 
 /* ── Error ───────────────────────────────────────────────────── */
 .error {
-  background: rgba(210, 55, 55, 0.14);
-  color: #ff8585;
-  border: 1px solid rgba(210, 55, 55, 0.25);
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
   padding: 0.8rem 1rem;
   border-radius: 9px;
   margin-bottom: 1.25rem;
@@ -108,28 +107,31 @@
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  padding: 0.8rem 1.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.11);
+  padding: 0.75rem 1.25rem;
+  border: 1.5px solid var(--border-200, #e2e8f0);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.88);
+  background: #ffffff;
+  color: var(--text-700, #334155);
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
   font-family: var(--font-sans);
   width: 100%;
   text-align: center;
 }
 
 .oauthButton:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: var(--bg-50, #f8fafc);
+  border-color: #0a66c2;
+  color: #0a66c2;
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(10, 102, 194, 0.1);
 }
 
 .oauthButton:active {
   transform: translateY(0);
+  box-shadow: none;
 }
 
 .oauthIcon {
@@ -152,16 +154,16 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: rgba(255, 255, 255, 0.09);
+  background: var(--border-200, #e2e8f0);
 }
 
 .divider span {
   position: relative;
-  background: #0b1929;
+  background: #ffffff;
   padding: 0 1rem;
-  color: rgba(255, 255, 255, 0.32);
+  color: var(--text-400, #94a3b8);
   font-size: 0.8rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-family: var(--font-sans);
@@ -181,34 +183,35 @@
 }
 
 .formGroup label {
-  color: rgba(255, 255, 255, 0.68);
-  font-weight: 500;
-  font-size: 0.875rem;
+  color: var(--text-500, #64748b);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   font-family: var(--font-sans);
 }
 
 .formGroup input {
-  padding: 0.85rem 1rem;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  font-size: 0.95rem;
+  padding: 9px 12px;
+  background: #ffffff;
+  border: 1.5px solid var(--border-200, #e2e8f0);
+  border-radius: 8px;
+  font-size: 14px;
   font-family: var(--font-sans);
-  color: #ffffff;
-  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+  color: var(--text-900, #0f172a);
+  transition: border-color 130ms ease, box-shadow 130ms ease;
   width: 100%;
   box-sizing: border-box;
 }
 
 .formGroup input:focus {
   outline: none;
-  border-color: #4da3e8;
-  background: rgba(255, 255, 255, 0.09);
-  box-shadow: 0 0 0 3px rgba(77, 163, 232, 0.18);
+  border-color: #0a66c2;
+  box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.1);
 }
 
 .formGroup input::placeholder {
-  color: rgba(255, 255, 255, 0.22);
+  color: var(--text-400, #94a3b8);
 }
 
 /* ── Password row ────────────────────────────────────────────── */
@@ -225,46 +228,47 @@
 
 .eyeButton {
   position: absolute;
-  right: 10px;
-  height: 34px;
-  width: 34px;
+  right: 8px;
+  height: 32px;
+  width: 32px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: none;
   background: transparent;
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--text-400, #94a3b8);
   cursor: pointer;
-  border-radius: 7px;
+  border-radius: 6px;
   transition: color 150ms ease, background 150ms ease;
 }
 
 .eyeButton:hover {
-  color: rgba(255, 255, 255, 0.75);
-  background: rgba(255, 255, 255, 0.07);
+  color: var(--text-700, #334155);
+  background: var(--bg-100, #f1f5f9);
 }
 
 /* ── Submit button ───────────────────────────────────────────── */
 .submitButton {
-  background: #1e7dd4;
+  background: var(--brand-800, #1e3a5f);
   color: #ffffff;
   border: none;
-  padding: 0.9rem 1rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 10px;
+  padding: 10px 1rem;
+  font-size: 0.925rem;
+  font-weight: 700;
+  border-radius: 9px;
   cursor: pointer;
   font-family: var(--font-sans);
-  transition: background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
   margin-top: 0.25rem;
   width: 100%;
   letter-spacing: 0.01em;
+  box-shadow: 0 2px 8px rgba(30, 58, 95, 0.2);
+  transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
 }
 
 .submitButton:hover:not(:disabled) {
-  background: #2b8de8;
+  background: #0a66c2;
   transform: translateY(-1px);
-  box-shadow: 0 6px 24px rgba(30, 125, 212, 0.4);
+  box-shadow: 0 6px 20px rgba(10, 102, 194, 0.3);
 }
 
 .submitButton:active:not(:disabled) {
@@ -281,13 +285,13 @@
 .adminAccess {
   margin-top: 1.75rem;
   padding-top: 1.25rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--border-200, #e2e8f0);
   text-align: center;
 }
 
 .adminAccessLink {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.22);
+  color: var(--text-400, #94a3b8);
   text-decoration: none;
   font-weight: 500;
   font-family: var(--font-sans);
@@ -296,12 +300,12 @@
 }
 
 .adminAccessLink:hover {
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--text-700, #334155);
 }
 
 /* ── Legal text below card ───────────────────────────────────── */
 .legalText {
-  color: rgba(255, 255, 255, 0.38);
+  color: var(--text-400, #94a3b8);
   font-size: 0.775rem;
   text-align: center;
   max-width: 360px;
@@ -311,14 +315,14 @@
 }
 
 .legalText a {
-  color: rgba(255, 255, 255, 0.62);
+  color: var(--text-500, #64748b);
   text-decoration: underline;
   text-underline-offset: 2px;
   transition: color 150ms ease;
 }
 
 .legalText a:hover {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--brand-800, #1e3a5f);
 }
 
 /* ── Mobile ──────────────────────────────────────────────────── */
@@ -327,11 +331,15 @@
     padding: 1rem;
     justify-content: flex-start;
     padding-top: 3rem;
+    background: #ffffff;
+    /* full white on mobile — card bleeds into page */
   }
 
   .authContainer {
     padding: 2rem 1.5rem 1.75rem;
     border-radius: 14px;
+    box-shadow: none;
+    border: none;
   }
 
   .authTitle {
@@ -339,7 +347,9 @@
   }
 }
 
-/* ── CompleteOAuthSignup — user type selection ───────────────── */
+/* ══════════════════════════════════════════════════════
+   USER TYPE SELECTION (Register + CompleteOAuthSignup)
+   ══════════════════════════════════════════════════════ */
 .userTypeSelection {
   display: flex;
   flex-direction: column;
@@ -351,37 +361,39 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 14px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.11);
+  padding: 13px 16px;
+  border: 1.5px solid var(--border-200, #e2e8f0);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.05);
+  background: #ffffff;
   cursor: pointer;
   text-align: left;
-  transition: background 160ms ease, border-color 160ms ease;
+  transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
   font-family: var(--font-sans);
   width: 100%;
 }
 
 .userTypeButton:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.22);
+  background: var(--bg-50, #f8fafc);
+  border-color: #0a66c2;
+  box-shadow: 0 2px 8px rgba(10, 102, 194, 0.08);
 }
 
 .userTypeButtonActive {
-  border-color: #4da3e8;
-  background: rgba(77, 163, 232, 0.14);
+  border-color: #0a66c2;
+  background: #eff6ff;
+  box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.1);
 }
 
 .userTypeLabel {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-900, #0f172a);
   display: block;
 }
 
 .userTypeDesc {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.42);
+  color: var(--text-500, #64748b);
   display: block;
   margin-top: 3px;
 }
@@ -392,18 +404,10 @@
   text-align: center;
 }
 
-.authSubtitle {
-  color: rgba(255, 255, 255, 0.48);
-  font-size: 0.875rem;
-  margin: 0.25rem 0 0 0;
-  line-height: 1.5;
-  font-family: var(--font-sans);
-}
-
 .backButton {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.32);
+  color: var(--text-400, #94a3b8);
   cursor: pointer;
   font-size: 0.85rem;
   padding: 0.4rem 0.5rem;
@@ -412,12 +416,12 @@
 }
 
 .backButton:hover {
-  color: rgba(255, 255, 255, 0.68);
+  color: var(--text-700, #334155);
 }
 
 /* ── Login / Register toggle ─────────────────────────────────── */
 .toggleText {
-  color: rgba(255, 255, 255, 0.38);
+  color: var(--text-500, #64748b);
   font-size: 0.875rem;
   margin: 0;
   font-family: var(--font-sans);
@@ -426,8 +430,8 @@
 .toggleButton {
   background: none;
   border: none;
-  color: #5aabea;
-  font-weight: 600;
+  color: #0a66c2;
+  font-weight: 700;
   cursor: pointer;
   padding: 0;
   font-size: 0.875rem;
@@ -436,6 +440,6 @@
 }
 
 .toggleButton:hover {
-  color: #7dc0f5;
+  color: var(--brand-800, #1e3a5f);
   text-decoration: underline;
 }
