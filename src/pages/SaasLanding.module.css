@@ -2,7 +2,6 @@
 /* ══════════════════════════════════════════════════════════════
    RYZE.ai — SaaS Demo Landing Page
    Design language: navy (#1e3a5f) + blue (#0a66c2), white base.
-   Matches the existing AdminDashboard / employer design system.
    ══════════════════════════════════════════════════════════════ */
 
 /* ── Base ─────────────────────────────────────────────────────── */
@@ -352,67 +351,15 @@
 }
 
 /* ══════════════════════════════════════════════════
-   DEMO VIDEO SECTION
+   THE PROBLEM
 ══════════════════════════════════════════════════ */
-.demoSection {
+.problemSection {
     padding: 80px 2rem;
     background: #ffffff;
 }
 
-.videoWrap {
-    margin-top: 8px;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 8px 40px rgba(30, 58, 95, 0.10), 0 2px 8px rgba(0, 0, 0, 0.04);
-    border: 1px solid #e2e8f0;
-    aspect-ratio: 16 / 9;
-    max-width: 860px;
-}
-
-.videoPlaceholder {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #1e3a5f 0%, #163050 60%, #0a66c2 100%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    cursor: pointer;
-    min-height: 200px;
-}
-
-.videoPlayBtn {
-    width: 68px;
-    height: 68px;
-    background: rgba(255, 255, 255, 0.15);
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    backdrop-filter: blur(4px);
-    transition: background 200ms, transform 150ms;
-}
-
-.videoPlaceholder:hover .videoPlayBtn {
-    background: rgba(255, 255, 255, 0.25);
-    transform: scale(1.08);
-}
-
-.videoPlaceholderText {
-    font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.6);
-    font-weight: 500;
-    margin: 0;
-}
-
-.videoEmbed {
-    width: 100%;
-    height: 100%;
-    display: block;
-    border: none;
+.problemContent {
+    max-width: 700px;
 }
 
 /* ══════════════════════════════════════════════════
@@ -424,9 +371,10 @@
     border-top: 1px solid #e2e8f0;
 }
 
+/* Updated to a 2x2 grid for the 4 core AI features */
 .featureGrid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
     margin-top: 8px;
 }
@@ -493,7 +441,6 @@
 
 .stepConnector {
     display: none;
-    /* reserved for future decorative connector use */
 }
 
 .stepNum {
@@ -516,6 +463,101 @@
 .stepDesc {
     font-size: 0.875rem;
     line-height: 1.65;
+    color: var(--text-500, #64748b);
+    margin: 0;
+}
+
+/* ══════════════════════════════════════════════════
+   DEMO VIDEO SECTION
+══════════════════════════════════════════════════ */
+.demoSection {
+    padding: 80px 2rem;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+}
+
+.videoWrap {
+    margin-top: 8px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(30, 58, 95, 0.10), 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e2e8f0;
+    aspect-ratio: 16 / 9;
+    max-width: 860px;
+}
+
+.videoPlaceholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1e3a5f 0%, #163050 60%, #0a66c2 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    cursor: pointer;
+    min-height: 200px;
+}
+
+.videoPlayBtn {
+    width: 68px;
+    height: 68px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    backdrop-filter: blur(4px);
+    transition: background 200ms, transform 150ms;
+}
+
+.videoPlaceholder:hover .videoPlayBtn {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.08);
+}
+
+.videoPlaceholderText {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 500;
+    margin: 0;
+}
+
+/* ══════════════════════════════════════════════════
+   PORTALS (Team access)
+══════════════════════════════════════════════════ */
+.portals {
+    padding: 80px 2rem;
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+}
+
+.portalGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 8px;
+}
+
+.portalCard {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.portalTitle {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: #1e3a5f;
+    margin: 0 0 8px;
+}
+
+.portalDesc {
+    font-size: 0.875rem;
+    line-height: 1.6;
     color: var(--text-500, #64748b);
     margin: 0;
 }
@@ -688,7 +730,6 @@
     color: #e2e8f0;
 }
 
-/* Hidden admin link */
 .adminGhost {
     position: absolute;
     bottom: 6px;
@@ -720,8 +761,9 @@
         max-width: 100%;
     }
 
-    .featureGrid {
-        grid-template-columns: repeat(2, 1fr);
+    .featureGrid,
+    .portalGrid {
+        grid-template-columns: 1fr;
     }
 
     .stepsRow {
@@ -756,10 +798,6 @@
     .ctaSecondary {
         width: 100%;
         justify-content: center;
-    }
-
-    .featureGrid {
-        grid-template-columns: 1fr;
     }
 
     .footerInner {

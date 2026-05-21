@@ -1,7 +1,7 @@
 /* src/pages/SaasLanding.jsx */
 /* ══════════════════════════════════════════════════════════════
    RYZE.ai — SaaS Demo Landing Page
-   Template for iteration alongside the demo video build.
+   General Recruiting Focus (AI-Native ATS & CRM)
    ══════════════════════════════════════════════════════════════ */
 
 import { useNavigate } from "react-router-dom";
@@ -38,70 +38,71 @@ function RyzeLogo({ size = 28, color = "#1e3a5f" }) {
 }
 
 // ══════════════════════════════════════════════════════════════
-// SECTION DATA — edit these as your demo evolves
+// SECTION DATA 
 // ══════════════════════════════════════════════════════════════
 
-// ── Hero ─────────────────────────────────────────────────────────
 const HERO = {
-    eyebrow: "AI-Powered Recruiting",
-    headline: "The recruiting platform\nbuilt for the AI era.",
-    subhead: "RYZE connects AI-fluent talent with the companies building tomorrow — powered by intelligent matching, not keyword filters.",
-    ctaPrimary: "Request Access",
+    eyebrow: "The New Standard in Recruiting",
+    headline: "Stop Parsing.\nStart Placing.",
+    subhead: "RYZE.ai is the AI-native ATS and CRM that reads resumes, takes your meeting notes, and surfaces your perfect candidates automatically. Build relationships, let the AI handle the data entry.",
+    ctaPrimary: "Get Early Access",
     ctaSecondary: "See how it works",
 };
 
-// ── Features — add / remove as you build the demo ────────────────
 const FEATURES = [
     {
-        icon: "🤖",
-        title: "AI Candidate Matching",
-        desc: "pgvector cosine similarity ranks candidates by real fit — not resume keywords.",
-    },
-    {
-        icon: "💬",
-        title: "RYZE Intelligence",
-        desc: "Ask anything about your pipeline. Get answers in plain English, instantly.",
-    },
-    {
-        icon: "📋",
-        title: "Structured Job Orders",
-        desc: "Paste any job posting and AI extracts the role, requirements, and salary range automatically.",
-    },
-    {
-        icon: "🏢",
-        title: "Employer Profiles",
-        desc: "Branded company pages with banner images, AI-generated overviews, and open roles.",
-    },
-    {
-        icon: "🔒",
-        title: "Multi-Tenant Isolation",
-        desc: "Every recruiting firm gets its own fully isolated data partition. Built-in from day one.",
-    },
-    {
         icon: "📄",
-        title: "One-Click PDF Export",
-        desc: "Branded candidate and employer profile PDFs. Recruiter-grade. Ready to send.",
+        title: "Autonomous Data Parsing",
+        desc: "Stop manual data entry. Upload a resume or paste a job description, and RYZE automatically extracts skills, calculates experience, and generates recruiter-ready summaries.",
+    },
+    {
+        icon: "🎯",
+        title: "Semantic Matching",
+        desc: "Boolean search is dead. Ask for what you want using natural language. Our vector search understands context and mathematically ranks your best-fit candidates.",
+    },
+    {
+        icon: "📹",
+        title: "Meeting Intelligence",
+        desc: "Be fully present. RYZE tracks your calendar, ingests Zoom transcripts, and automatically generates summaries and action items so your database is always up-to-date.",
+    },
+    {
+        icon: "🧠",
+        title: "Agentic Chat Assistant",
+        desc: "Talk to your database. Ask RYZE Intelligence questions like 'Who am I calling today?' and get immediate, actionable answers directly from your live pipeline.",
     },
 ];
 
-// ── Steps — how it works ─────────────────────────────────────────
 const STEPS = [
-    { num: "01", title: "Connect", desc: "A recruiter onboards their firm in minutes. Candidates and employers follow." },
-    { num: "02", title: "Match", desc: "AI ranks candidates against open roles using semantic similarity, not filters." },
-    { num: "03", title: "Place", desc: "Schedule calls, export profiles, and close roles — all in one place." },
+    { num: "01", title: "Capture", desc: "Sync your calendar and upload resumes. RYZE instantly structures the unstructured data." },
+    { num: "02", title: "Command", desc: "Use natural language to search, match, and organize your candidates and employer prospects." },
+    { num: "03", title: "Connect", desc: "Spend the hours you saved on data entry doing what actually matters: building relationships." },
 ];
 
-// ── Social proof — update as you get real quotes ─────────────────
+const PORTALS = [
+    {
+        title: "For Recruiters",
+        desc: "The ultimate command center and AI assistant to manage your entire desk.",
+    },
+    {
+        title: "For Clients",
+        desc: "A dedicated dashboard to manage company profiles, view active job orders, and collaborate.",
+    },
+    {
+        title: "For Candidates",
+        desc: "A private portal to manage their profile, upload fresh resumes, and stay in the loop.",
+    }
+];
+
 const TESTIMONIALS = [
     {
         quote: "Finally a recruiting tool that actually understands what we're looking for.",
         author: "Hiring Manager",
-        role: "Series B AI Company",
+        role: "Series B Tech Company",
     },
     {
         quote: "I placed a candidate in three days. The AI matching is genuinely different.",
         author: "Independent Recruiter",
-        role: "Technical Recruiting",
+        role: "Agency Owner",
     },
 ];
 
@@ -172,7 +173,6 @@ export default function SaasLanding() {
                         </div>
                     </div>
 
-                    {/* ── Hero visual — swap for screenshot/mockup as demo evolves ── */}
                     <div className={styles.heroVisual}>
                         <div className={styles.heroCard}>
                             <div className={styles.heroCardHeader}>
@@ -187,13 +187,13 @@ export default function SaasLanding() {
                                 <div className={styles.chatMsg}>
                                     <span className={styles.chatLabel}>You</span>
                                     <div className={styles.chatBubbleUser}>
-                                        Who are the top candidates for our Senior ML Engineer role?
+                                        Who are the top candidates for our Senior Developer role?
                                     </div>
                                 </div>
                                 <div className={styles.chatMsg}>
                                     <span className={styles.chatLabel}>RYZE</span>
                                     <div className={styles.chatBubbleAi}>
-                                        Based on semantic match scores, your top 3 candidates are Jordan Kim (94%), Alex Chen (91%), and Marcus Webb (88%). All three have production LLM experience and are open to remote.
+                                        Based on semantic match scores, your top 3 candidates are Jordan Kim (94%), Alex Chen (91%), and Marcus Webb (88%). All three have startup experience and are open to remote.
                                     </div>
                                 </div>
                             </div>
@@ -203,45 +203,27 @@ export default function SaasLanding() {
             </section>
 
             {/* ══════════════════════════════════════════════════
-                DEMO VIDEO SECTION
-                — Replace placeholder with actual embed as you build
+                THE PROBLEM
             ══════════════════════════════════════════════════ */}
-            <section className={styles.demoSection} id="demo">
+            <section className={styles.problemSection}>
                 <div className={styles.sectionInner}>
-                    <div className={styles.sectionLabel}>See it in action</div>
-                    <h2 className={styles.sectionH2}>Watch the platform in 3 minutes.</h2>
-                    <p className={styles.sectionSub}>
-                        From candidate upload to AI match to placed hire — the full workflow, live.
-                    </p>
-
-                    {/* ── VIDEO PLACEHOLDER — replace src with real embed URL ── */}
-                    <div className={styles.videoWrap}>
-                        <div className={styles.videoPlaceholder}>
-                            <div className={styles.videoPlayBtn}>
-                                <IconPlay />
-                            </div>
-                            <p className={styles.videoPlaceholderText}>Demo video coming soon</p>
-                        </div>
-                        {/* UNCOMMENT when you have a real embed:
-                        <iframe
-                            src="https://www.loom.com/embed/YOUR_VIDEO_ID"
-                            frameBorder="0"
-                            allowFullScreen
-                            className={styles.videoEmbed}
-                            title="RYZE.ai Demo"
-                        />
-                        */}
+                    <div className={styles.problemContent}>
+                        <div className={styles.sectionLabel}>The Problem</div>
+                        <h2 className={styles.sectionH2}>The old way of recruiting is broken.</h2>
+                        <p className={styles.sectionSub} style={{ margin: 0 }}>
+                            Traditional ATS platforms are just digital filing cabinets. You spend hours reading resumes, tagging skills, copying Zoom notes, and running endless boolean searches just to find a candidate you already spoke to six months ago.
+                        </p>
                     </div>
                 </div>
             </section>
 
             {/* ══════════════════════════════════════════════════
-                FEATURES
+                FEATURES (The Solution)
             ══════════════════════════════════════════════════ */}
             <section className={styles.features}>
                 <div className={styles.sectionInner}>
-                    <div className={styles.sectionLabel}>The platform</div>
-                    <h2 className={styles.sectionH2}>Built for quality matches, not volume.</h2>
+                    <div className={styles.sectionLabel}>The Solution</div>
+                    <h2 className={styles.sectionH2}>Meet your new AI recruiting assistant.</h2>
                     <div className={styles.featureGrid}>
                         {FEATURES.map((f) => (
                             <div key={f.title} className={styles.featureCard}>
@@ -259,8 +241,8 @@ export default function SaasLanding() {
             ══════════════════════════════════════════════════ */}
             <section className={styles.howItWorks}>
                 <div className={styles.sectionInner}>
-                    <div className={styles.sectionLabel}>How it works</div>
-                    <h2 className={styles.sectionH2}>Simple by design.</h2>
+                    <div className={styles.sectionLabel}>Workflow</div>
+                    <h2 className={styles.sectionH2}>Seamless workflow from intake to placement.</h2>
                     <div className={styles.stepsRow}>
                         {STEPS.map((s, i) => (
                             <div key={s.num} className={styles.step}>
@@ -275,8 +257,49 @@ export default function SaasLanding() {
             </section>
 
             {/* ══════════════════════════════════════════════════
+                DEMO VIDEO SECTION
+            ══════════════════════════════════════════════════ */}
+            <section className={styles.demoSection} id="demo">
+                <div className={styles.sectionInner}>
+                    <div className={styles.sectionLabel}>See it in action</div>
+                    <h2 className={styles.sectionH2}>Watch the platform in 3 minutes.</h2>
+                    <p className={styles.sectionSub}>
+                        From candidate upload to AI match to placed hire — the full workflow, live.
+                    </p>
+
+                    <div className={styles.videoWrap}>
+                        <div className={styles.videoPlaceholder}>
+                            <div className={styles.videoPlayBtn}>
+                                <IconPlay />
+                            </div>
+                            <p className={styles.videoPlaceholderText}>Demo video coming soon</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ══════════════════════════════════════════════════
+                PORTALS
+            ══════════════════════════════════════════════════ */}
+            <section className={styles.portals}>
+                <div className={styles.sectionInner}>
+                    <div className={styles.sectionLabel}>Portals</div>
+                    <h2 className={styles.sectionH2}>Built for the whole team.</h2>
+                    <p className={styles.sectionSub}>RYZE features strict, multi-tenant portals designed to keep everyone aligned.</p>
+
+                    <div className={styles.portalGrid}>
+                        {PORTALS.map((p) => (
+                            <div key={p.title} className={styles.portalCard}>
+                                <h3 className={styles.portalTitle}>{p.title}</h3>
+                                <p className={styles.portalDesc}>{p.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ══════════════════════════════════════════════════
                 SOCIAL PROOF
-                — Placeholder quotes; replace with real ones as you get them
             ══════════════════════════════════════════════════ */}
             <section className={styles.testimonials}>
                 <div className={styles.sectionInner}>
@@ -300,12 +323,12 @@ export default function SaasLanding() {
             ══════════════════════════════════════════════════ */}
             <section className={styles.ctaBand}>
                 <div className={styles.ctaBandInner}>
-                    <h2 className={styles.ctaBandH2}>Ready to find your match?</h2>
+                    <h2 className={styles.ctaBandH2}>Ready to elevate your recruiting?</h2>
                     <p className={styles.ctaBandSub}>
-                        Whether you build with AI or need someone who does — RYZE is where that connection happens.
+                        Join the modern recruiters using RYZE.ai to automate the busywork and close more roles.
                     </p>
                     <button className={styles.ctaBandBtn} onClick={() => navigate("/auth")}>
-                        Request access <IconArrow />
+                        Start Your Free Trial Today <IconArrow />
                     </button>
                 </div>
             </section>
