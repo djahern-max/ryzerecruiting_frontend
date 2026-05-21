@@ -38,7 +38,7 @@ const EPISODES = [
     title: "Media Queries & Mobile Responsiveness",
     thumb: EP23,
     url: "https://www.linkedin.com/posts/daneahern_title-ep23-media-queries-mobile-responsiveness-ugcPost-7462429012812992512-BmJT?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
-    desc: "The original goal was polishing the PDF exports for Employer Profiles and Job Orders. Pulled them up, took a look — they already looked great. Nothing to fix. What followed was a full sweep of the application for mobile responsiveness, page by page, with desktop on the left and iPhone Mirroring on the right. Employer Profile, Job Order Detail, Job Order Roster, Employer Roster, the RYZE Intelligence chat page — each one tightened up with media queries until it looked right on both screens.",
+    desc: "The original goal was polishing the PDF exports for Employer Profiles and Job Orders. Pulled them up, took a look — they already looked great. Nothing to fix. What followed was a full sweep of the application for mobile responsiveness, page by page, with desktop on the left and iPhone Mirroring on the right. Employer Profile, Job Order Detail, Job Order Roster, Employer Roster, the RYZE Intelligence chat page — each one tightened up with media queries until it looked right on both screens.  Looking great.",
   },
   {
     num: 22,
