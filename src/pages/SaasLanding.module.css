@@ -575,3 +575,86 @@
         gap: 12px;
     }
 }
+
+/* ── Two Sides section ───────────────────────────────────────── */
+.twoSides {
+    padding: 88px 0;
+    background: #ffffff;
+}
+
+.sidesGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.sideCard {
+    background: var(--bg-50, #f1f5f9);
+    border: 1px solid var(--border-200, #e2e8f0);
+    border-radius: 16px;
+    padding: 40px 36px;
+    transition: box-shadow 200ms, transform 200ms;
+}
+
+.sideCard:hover {
+    box-shadow: 0 8px 28px rgba(10, 102, 194, 0.1);
+    transform: translateY(-2px);
+}
+
+.sideLabel {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #0a66c2;
+    margin-bottom: 20px;
+}
+
+.sideIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #ffffff;
+    border: 1px solid var(--border-200, #e2e8f0);
+    color: #0a66c2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.sideIcon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.sideTitle {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #1e3a5f;
+    margin: 0 0 12px;
+    letter-spacing: -0.3px;
+    line-height: 1.25;
+}
+
+.sideDesc {
+    font-size: 0.925rem;
+    color: var(--text-500, #64748b);
+    line-height: 1.7;
+    margin: 0;
+}
+
+@media (max-width: 640px) {
+    .twoSides {
+        padding: 64px 0;
+    }
+
+    .sidesGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .sideCard {
+        padding: 28px 24px;
+    }
+}

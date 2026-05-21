@@ -37,14 +37,10 @@ function IconUsers() {
     );
 }
 
-function IconFileText() {
+function IconZap() {
     return (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-            <polyline points="14 2 14 8 20 8" />
-            <line x1="16" y1="13" x2="8" y2="13" />
-            <line x1="16" y1="17" x2="8" y2="17" />
-            <polyline points="10 9 9 9 8 9" />
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
         </svg>
     );
 }
@@ -66,35 +62,63 @@ function IconLinkedIn() {
     );
 }
 
-// ── Feature card data ─────────────────────────────────────────────
+// ── Two-sided value props ─────────────────────────────────────────
+const SIDES = [
+    {
+        label: 'For Talent',
+        icon: <IconBrain />,
+        title: 'Showcase what you actually build.',
+        desc: "A profile that goes beyond a resume. Show your AI tools, automation work, and the real outcomes you've delivered — and get matched with companies that are ready to move.",
+    },
+    {
+        label: 'For Companies',
+        icon: <IconZap />,
+        title: 'Find people who can actually do it.',
+        desc: "Stop sorting through generalists. Every person on RYZE has been vetted for hands-on AI and automation capability. Book a call, see their work, and know exactly what you're getting.",
+    },
+];
+
+// ── Platform features ─────────────────────────────────────────────
 const FEATURES = [
     {
         icon: <IconBrain />,
         title: 'AI-Powered Matching',
-        desc: 'pgvector cosine similarity surfaces the right candidates for every open role — ranked by fit, not recency.',
+        desc: 'Profiles are embedded and ranked by fit — not keyword overlap. The right talent surfaces for the right company.',
     },
     {
         icon: <IconCalendar />,
-        title: 'Automated Booking',
-        desc: 'Candidates and employers book directly. Zoom links generate automatically. No back-and-forth.',
+        title: 'Frictionless Booking',
+        desc: 'Book directly from a profile. Zoom links generate automatically. No back-and-forth.',
     },
     {
         icon: <IconUsers />,
-        title: 'Intelligence Briefs',
-        desc: 'Walk into every call prepared. AI pre-call briefs pull company intel from the web before you pick up the phone.',
+        title: 'Curated, Invite-Only',
+        desc: 'Quality over volume. Every talent profile on RYZE is vetted. Companies know exactly who they\'re talking to.',
     },
     {
-        icon: <IconFileText />,
-        title: 'Branded PDF Exports',
-        desc: 'One-click recruiter-grade candidate profiles and employer briefs — ready to send to any hiring manager.',
+        icon: <IconZap />,
+        title: 'Intelligence Briefs',
+        desc: 'AI-generated pre-call briefs give both sides context before the conversation starts.',
     },
 ];
 
 // ── Steps ─────────────────────────────────────────────────────────
 const STEPS = [
-    { num: '01', title: 'Onboard your firm', desc: 'Your team gets its own tenant. Data stays isolated. Billing starts on a 30-day trial.' },
-    { num: '02', title: 'Build your pipeline', desc: 'Add candidates and employers. AI embeds profiles automatically — no manual tagging.' },
-    { num: '03', title: 'Let RYZE work', desc: 'Matches surface, briefs generate, calls get booked. You focus on the conversation.' },
+    {
+        num: '01',
+        title: 'Request access',
+        desc: 'RYZE is invite-only. Tell us whether you\'re talent or a company and we\'ll get you set up.',
+    },
+    {
+        num: '02',
+        title: 'Build your profile',
+        desc: 'Talent: show your tools, your work, your outcomes. Companies: tell us what you\'re trying to solve.',
+    },
+    {
+        num: '03',
+        title: 'Get matched',
+        desc: 'AI surfaces the right fit. You review, book a call, and take it from there.',
+    },
 ];
 
 // ─────────────────────────────────────────────────────────────────
@@ -121,7 +145,7 @@ export default function SaasLanding() {
                 <div className={styles.navInner}>
                     <div className={styles.navBrand}>
                         <span className={styles.navLogo}>RYZE<span className={styles.navLogoAi}>.ai</span></span>
-                        <span className={styles.navTagline}>Accounting &amp; Finance Recruiting</span>
+                        <span className={styles.navTagline}>AI Talent Matching</span>
                     </div>
                     <div className={styles.navRight}>
                         <a
@@ -144,26 +168,39 @@ export default function SaasLanding() {
                 <div className={styles.heroInner}>
                     <div className={styles.heroBadge}>
                         <span className={styles.heroBadgeDot} />
-                        Built in public · EP23
+                        Invite only · Built in public
                     </div>
                     <h1 className={styles.heroH1}>
-                        The recruiting platform<br />
-                        <span className={styles.heroAccent}>built for accounting &amp; finance.</span>
+                        The people who know how to use AI —<br />
+                        <span className={styles.heroAccent}>matched to the businesses that need them.</span>
                     </h1>
                     <p className={styles.heroSub}>
-                        AI matching, automated booking, and intelligence briefs — purpose-built for recruiters
-                        who place accounting and finance professionals.
+                        RYZE connects vetted AI practitioners and builders with companies
+                        that are ready to move — but don't know where to start.
                     </p>
                     <div className={styles.heroCtas}>
                         <button className={styles.ctaPrimary} onClick={() => navigate('/auth')}>
-                            Get started <IconArrow />
+                            Request access <IconArrow />
                         </button>
-                        <a
-                            href="/about"
-                            className={styles.ctaSecondary}
-                        >
+                        <a href="/about" className={styles.ctaSecondary}>
                             Watch the build
                         </a>
+                    </div>
+                </div>
+            </section>
+
+            {/* ── Two sides ─────────────────────────────────────── */}
+            <section className={styles.twoSides}>
+                <div className={styles.sectionInner}>
+                    <div className={styles.sidesGrid}>
+                        {SIDES.map(s => (
+                            <div key={s.label} className={styles.sideCard}>
+                                <div className={styles.sideLabel}>{s.label}</div>
+                                <div className={styles.sideIcon}>{s.icon}</div>
+                                <h3 className={styles.sideTitle}>{s.title}</h3>
+                                <p className={styles.sideDesc}>{s.desc}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
@@ -171,8 +208,8 @@ export default function SaasLanding() {
             {/* ── Features ──────────────────────────────────────── */}
             <section className={styles.features}>
                 <div className={styles.sectionInner}>
-                    <div className={styles.sectionLabel}>What RYZE does</div>
-                    <h2 className={styles.sectionH2}>Everything a recruiting firm needs — nothing it doesn't.</h2>
+                    <div className={styles.sectionLabel}>The platform</div>
+                    <h2 className={styles.sectionH2}>Built for quality matches, not volume.</h2>
                     <div className={styles.featureGrid}>
                         {FEATURES.map(f => (
                             <div key={f.title} className={styles.featureCard}>
@@ -189,14 +226,13 @@ export default function SaasLanding() {
             <section className={styles.howItWorks}>
                 <div className={styles.sectionInner}>
                     <div className={styles.sectionLabel}>How it works</div>
-                    <h2 className={styles.sectionH2}>Up and running in minutes.</h2>
+                    <h2 className={styles.sectionH2}>Simple by design.</h2>
                     <div className={styles.stepsRow}>
-                        {STEPS.map((s, i) => (
+                        {STEPS.map((s) => (
                             <div key={s.num} className={styles.step}>
                                 <div className={styles.stepNum}>{s.num}</div>
                                 <h3 className={styles.stepTitle}>{s.title}</h3>
                                 <p className={styles.stepDesc}>{s.desc}</p>
-                                {i < STEPS.length - 1 && <div className={styles.stepConnector} />}
                             </div>
                         ))}
                     </div>
@@ -206,10 +242,12 @@ export default function SaasLanding() {
             {/* ── CTA band ──────────────────────────────────────── */}
             <section className={styles.ctaBand}>
                 <div className={styles.ctaBandInner}>
-                    <h2 className={styles.ctaBandH2}>Ready to run a smarter desk?</h2>
-                    <p className={styles.ctaBandSub}>Request access and get started in under five minutes.</p>
+                    <h2 className={styles.ctaBandH2}>Ready to find your match?</h2>
+                    <p className={styles.ctaBandSub}>
+                        Whether you build with AI or need someone who does — RYZE is where that connection happens.
+                    </p>
                     <button className={styles.ctaBandBtn} onClick={() => navigate('/auth')}>
-                        Get access <IconArrow />
+                        Request access <IconArrow />
                     </button>
                 </div>
             </section>
