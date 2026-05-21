@@ -91,8 +91,8 @@ function App() {
         <Routes>
 
           {/* ── Public ─────────────────────────────────────────────── */}
-          <Route path="/" element={<SaasLanding />} />
-          <Route path="/about" element={<Landing />} />
+          <Route path="/" element={<Landing />} />
+          <Route path="/about" element={<SaasLanding />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/auth/callback" element={<OAuthCallback />} />
           <Route path="/auth/complete-signup" element={<CompleteOAuthSignup />} />
