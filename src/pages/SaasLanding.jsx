@@ -1,7 +1,10 @@
+import sendInviteIcon from '../assets/icons/send_invite.svg';
+
 const SaasLanding = () => {
     return (
         <div>
-            Landing Page
+            <img src={sendInviteIcon} alt="Send Invite" />
+            <p>Step 1</p>
         </div>
     );
 };
