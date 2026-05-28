@@ -480,10 +480,11 @@
 
 .stepCard {
   position: relative;
-  padding: 0 2rem 0 0;
+  padding: 0 1.5rem;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  text-align: center;
 }
 
 .stepNum {
@@ -499,6 +500,7 @@
 .stepIconWrap {
   display: flex;
   align-items: center;
+  justify-content: center;
   margin-bottom: 18px;
 }
 
@@ -507,10 +509,11 @@
 }
 
 .stepIcon {
-  width: 38px;
-  height: 38px;
+  width: 56px;
+  height: 56px;
   object-fit: contain;
 }
+
 
 .stepTitle {
   font-size: 1rem;
@@ -518,6 +521,7 @@
   color: #001a33;
   margin: 0 0 10px;
   line-height: 1.3;
+  text-align: center;
 }
 
 .stepDesc {
@@ -525,6 +529,7 @@
   line-height: 1.65;
   color: #4a6580;
   margin: 0;
+  text-align: center;
 }
 
 /* Arrow between steps — absolutely positioned */

@@ -339,15 +339,11 @@ export default function Landing() {
           <div className={styles.stepsGrid}>
             {STEPS.map((step, i) => (
               <div key={step.num} className={styles.stepCard}>
-                <div className={styles.stepNum}>{step.num}</div>
                 <div className={styles.stepIconWrap}>
                   <img src={step.icon} alt="" className={styles.stepIcon} />
                 </div>
                 <h3 className={styles.stepTitle}>{step.title}</h3>
                 <p className={styles.stepDesc}>{step.desc}</p>
-                {i < STEPS.length - 1 && (
-                  <div className={styles.stepArrow}>→</div>
-                )}
               </div>
             ))}
           </div>
