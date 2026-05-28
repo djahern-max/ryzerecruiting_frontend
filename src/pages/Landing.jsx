@@ -15,6 +15,7 @@ import indexedIcon from "../assets/icons/indexed.svg";
 import downloadIcon from "../assets/icons/downloadV2.svg";
 import sendInviteIcon from "../assets/icons/send_invite.svg";
 import aiNotesIcon from "../assets/icons/ai_notes.svg";
+import ryzeLogo from "../assets/RYZE_LOGO.svg";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
