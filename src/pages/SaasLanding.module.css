@@ -1351,6 +1351,32 @@
     color: rgba(255, 255, 255, 0.2);
 }
 
+.brand {
+    text-decoration: none;
+    /* add this to the existing .brand rule */
+}
+
+.headerRight {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.homeBtn {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4a6580;
+    text-decoration: none;
+    padding: 0.38rem 0.85rem;
+    border-radius: 7px;
+    transition: background 140ms, color 140ms;
+}
+
+.homeBtn:hover {
+    background: #eef3f9;
+    color: #001a33;
+}
+
 /* ── Responsive ────────────────────────────────────────────────── */
 @media (max-width: 760px) {
     .brandSub {

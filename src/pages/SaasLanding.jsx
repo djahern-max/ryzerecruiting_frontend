@@ -615,19 +615,26 @@ export default function Landing() {
             {/* ── Header ─────────────────────────────────── */}
             <header className={styles.header}>
                 <div className={styles.headerInner}>
-                    <div className={styles.brand}>
+                    <a href="/" className={styles.brand}>
                         <span className={styles.brandName}>RYZE.ai</span>
                         <span className={styles.brandPipe}>|</span>
                         <span className={styles.brandSub}>AI Intelligence Platform</span>
-                    </div>
-                    <a
-                        href="https://www.linkedin.com/in/daneahern/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.linkedinBtn}
-                    >
-                        Follow on LinkedIn
                     </a>
+
+                    <div className={styles.headerRight}>
+                        <a href="/" className={styles.homeBtn}>
+                            ← Home
+                        </a>
+
+                        <a
+                            href="https://www.linkedin.com/in/daneahern/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.linkedinBtn}
+                        >
+                            Follow on LinkedIn
+                        </a>
+                    </div>
                 </div>
             </header>
 
