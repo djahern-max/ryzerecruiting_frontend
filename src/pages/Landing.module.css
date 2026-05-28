@@ -497,16 +497,9 @@
 }
 
 .stepIconWrap {
-  width: 68px;
-  height: 68px;
-  background: #f0f6ff;
-  border: 1.5px solid #dce8f7;
-  border-radius: 16px;
   display: flex;
   align-items: center;
-  justify-content: center;
   margin-bottom: 18px;
-  transition: box-shadow 200ms;
 }
 
 .stepCard:hover .stepIconWrap {
@@ -576,14 +569,8 @@
 }
 
 .featureIconWrap {
-  width: 56px;
-  height: 56px;
-  background: #f0f6ff;
-  border: 1px solid #d4e6f8;
-  border-radius: 12px;
   display: flex;
   align-items: center;
-  justify-content: center;
   margin-bottom: 16px;
 }
 
