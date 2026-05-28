@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useEffect, useState, useRef } from "react";
 import { Building2, BriefcaseBusiness, Binoculars } from "lucide-react";
-import styles from "./Landing.module.css";
+import styles from "./SaasLanding.module.css";
 import EP1 from "../assets/landing_page_thumbnails/EP1.png";
 import EP2 from "../assets/landing_page_thumbnails/EP2.png";
 import EP3 from "../assets/landing_page_thumbnails/EP3.png";
