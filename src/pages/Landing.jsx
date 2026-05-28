@@ -95,9 +95,9 @@ const FEATURES = [
 ];
 
 const INTENT_OPTIONS = [
-  { value: "hiring", icon: Building2, label: "I'm hiring" },
-  { value: "job_seeking", icon: BriefcaseBusiness, label: "I'm job hunting" },
-  { value: "following", icon: Binoculars, label: "Following the build" },
+  { value: "solo", icon: BriefcaseBusiness, label: "Solo recruiter" },
+  { value: "firm", icon: Building2, label: "Recruiting firm" },
+  { value: "following", icon: Binoculars, label: "Just following along" },
 ];
 
 // ── Inline RYZE logo SVG ────────────────────────────────────────────────────
@@ -376,10 +376,11 @@ export default function Landing() {
       {/* ── Waitlist ───────────────────────────────── */}
       <section className={styles.waitlistSection} ref={waitlistRef}>
         <div className={styles.waitlistInner}>
-          <h2 className={styles.waitlistTitle}>Get early access.</h2>
+          <h2 className={styles.waitlistTitle}>Built for recruiters. Early access open now.</h2>
           <p className={styles.waitlistSub}>
-            RYZE is opening to recruiting firms in accounting and finance.
-            Drop your email to get notified first.
+            Candidates and employers can already sign in. This waitlist is for
+            recruiting firms — solo desks to growing teams — who want early
+            access before the public launch.
           </p>
 
           {wlStatus === "success" ? (
