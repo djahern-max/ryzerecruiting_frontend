@@ -269,6 +269,7 @@ export default function Landing() {
         <div className={styles.navInner}>
           <div className={styles.navBrand}>
             <img src={ryzeLogo} alt="RYZE.ai" className={styles.navLogo} />
+            <span className={styles.navBrandName}>RYZE.ai</span>
           </div>
           <nav className={styles.navLinks}>
             <a href="#how-it-works" className={styles.navLink}>How It Works</a>
