@@ -1,4 +1,4 @@
-/* src/pages/Landing.jsx */
+/* src/pages/SaasLanding.jsx */
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useEffect, useState, useRef } from "react";
@@ -27,12 +27,20 @@ import EP20 from "../assets/landing_page_thumbnails/EP20.png";
 import EP21 from "../assets/landing_page_thumbnails/EP21.png";
 import EP22 from "../assets/landing_page_thumbnails/EP22.png";
 import EP23 from "../assets/landing_page_thumbnails/EP23.png";
+import EP24 from "../assets/landing_page_thumbnails/EP24.png";
 
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
-const CURRENT_VERSION = 23;
+const CURRENT_VERSION = 24;
 
 const EPISODES = [
+    {
+        num: 24,
+        title: "Thank You for Watching — Build in Public Series Complete",
+        thumb: EP24,
+        url: "https://www.linkedin.com/posts/daneahern_ep24-building-ryzeai-the-final-episode-ugcPost-7466110725019631616-I-AA/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFhYcIkB3YuEArnJ31c8xMk_UxADZZURwzo",
+        desc: "For three months I set my alarm for 2:00 AM every morning to build my own ATS from scratch. EP24 is the final episode of the build-in-public series — and the beginning of something else. RYZE.ai is now a working recruiting platform: AI-powered candidate and job matching, a full booking system, Zoom + Calendar integration, conversational database search, branded profiles with PDF export, Stripe billing, and multi-tenant architecture. The next chapter is using it — launching a recruiting business for accounting and finance professionals, and building the pipeline to prove the platform works.",
+    },
     {
         num: 23,
         title: "Media Queries & Mobile Responsiveness",
@@ -793,19 +801,8 @@ export default function Landing() {
                     <div className={styles.eyebrow}>What's Next</div>
                     <h2 className={styles.sectionH2}>Still building. Here's what's coming.</h2>
 
-                    <div className={styles.nextGrid}>
 
-                        <div className={styles.nextCard}>
-                            <div className={styles.nextNum}>EP 22</div>
-                            <div className={styles.nextTitle}>Styling the Job Order UI &amp; PDF Export</div>
-                            <p className={styles.nextDesc}>
-                                Job order detail page got the full employer profile treatment — banner, logo,
-                                identity zone. Employer banners auto-surface on linked job orders. Two-way
-                                navigation wired between employer profiles and job orders. PDF polished to
-                                mirror the UI — accent colors corrected, identity zone card removed.
-                            </p>
-                            <span className={styles.nextBadgePosted}>✓ Complete</span>
-                        </div>
+                    <div className={styles.nextGrid}>
 
                         <div className={styles.nextCard}>
                             <div className={styles.nextNum}>EP 23</div>
@@ -821,14 +818,29 @@ export default function Landing() {
 
                         <div className={styles.nextCard}>
                             <div className={styles.nextNum}>EP 24</div>
-                            <div className={styles.nextTitle}>Coming Soon</div>
+                            <div className={styles.nextTitle}>MVP / Business Launch — Series Complete</div>
                             <p className={styles.nextDesc}>
-                                Next episode in progress. Follow along on LinkedIn to see what comes next.
+                                The final episode. Three months of 2:00 AM builds, 24 episodes, and one
+                                working recruiting platform. The series is done — the business starts now.
+                                Launching a recruiting practice for accounting and finance professionals,
+                                using RYZE.ai as the tool.
                             </p>
-                            <span className={styles.nextBadge}>Up next</span>
+                            <span className={styles.nextBadgePosted}>✓ Complete</span>
+                        </div>
+
+                        <div className={styles.nextCard}>
+                            <div className={styles.nextNum}>What's Next</div>
+                            <div className={styles.nextTitle}>Launching the Recruiting Business</div>
+                            <p className={styles.nextDesc}>
+                                The build-in-public series is complete. Now comes the real test — using
+                                RYZE.ai to run an actual recruiting business. Follow along on LinkedIn
+                                as the platform gets its first real-world workout.
+                            </p>
+                            <span className={styles.nextBadge}>In progress</span>
                         </div>
 
                     </div>
+
                 </div>
             </section>
 
