@@ -691,7 +691,7 @@ export default function Landing() {
             <section className={styles.episodesSection}>
                 <div className={styles.container}>
                     <div className={styles.eyebrow}>Building in Public</div>
-                    <h2 className={styles.sectionH2}>{EPISODES.length} episodes. Still building.</h2>
+                    <h2 className={styles.sectionH2}>{EPISODES.length} episodes. Now launching.</h2>
                     <p className={styles.sectionP}>
                         Every major milestone gets a video — published on <strong>LinkedIn</strong>. Hover any episode to see what was built.
                     </p>
