@@ -851,7 +851,8 @@ export default function Landing() {
                 <div className={styles.waitlistInner}>
                     <h2 className={styles.waitlistTitle}>Stay in the loop.</h2>
                     <p className={styles.waitlistSub}>
-                        Get notified when RYZE opens to recruiters — and follow along as each new feature ships.
+                        The platform is built. The business starts now.
+                        Drop your email to follow along as RYZE goes live.
                     </p>
 
                     {wlStatus === "success" ? (
