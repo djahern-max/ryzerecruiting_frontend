@@ -655,8 +655,8 @@ export default function Landing() {
                     </div>
 
                     <h1 className={styles.heroTitle}>
-                        I'm building an AI-powered recruiting platform from scratch —
-                        <em> and documenting every step.</em>
+                        I'm buillt an AI-powered recruiting platform from scratch —
+                        <em> and documented every step.</em>
                     </h1>
 
                     <p className={styles.heroSub}>
