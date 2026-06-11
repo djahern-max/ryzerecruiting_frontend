@@ -215,11 +215,7 @@ export default function CandidateDashboard() {
         <div className={styles.banner}>
           <div className={styles.bannerLeft}>
             <h1 className={styles.bannerTitle}>Welcome back, {firstName}.</h1>
-            <p className={styles.bannerSub}>
-              {isRanked
-                ? 'Your matched roles, ranked by AI fit.'
-                : 'Your RYZE career dashboard — accounting & finance roles.'}
-            </p>
+
           </div>
           <div className={styles.bannerRight}>
             <button className={styles.profileBtn} onClick={() => navigate('/candidate/profile')}>
@@ -236,7 +232,6 @@ export default function CandidateDashboard() {
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
             <h3 className={styles.sectionTitle}>My Scheduled Calls</h3>
-            <p className={styles.sectionSub}>Your intro calls with RYZE.ai</p>
           </div>
 
           {bookingsLoading ? (
