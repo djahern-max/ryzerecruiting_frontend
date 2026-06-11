@@ -294,15 +294,23 @@ export default function CandidateDashboard() {
             <div className={styles.sectionHeaderTop}>
               <div>
                 <h3 className={styles.sectionTitle}>
-                  {isRanked ? 'Matched Opportunities' : 'Open Opportunities'}
-                </h3>
-                <p className={styles.sectionSub}>
-                  {profileLoading || rolesLoading
-                    ? 'Running AI matching…'
+                  {profileLoading
+                    ? 'Opportunities'
                     : isRanked
-                      ? `${matchedRoles.length} role${matchedRoles.length !== 1 ? 's' : ''} ranked by AI fit for your profile`
-                      : 'Your profile is being set up — check back soon'}
-                </p>
+                      ? 'Matched Opportunities'
+                      : hasProfile
+                        ? 'Open Opportunities'
+                        : 'Set Up Your Profile'}
+                </h3>
+
+                {/* subtitle only when it actually says something true */}
+                {(profileLoading || rolesLoading || isRanked) && (
+                  <p className={styles.sectionSub}>
+                    {profileLoading || rolesLoading
+                      ? 'Running AI matching…'
+                      : `${matchedRoles.length} role${matchedRoles.length !== 1 ? 's' : ''} ranked by AI fit for your profile`}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -317,7 +325,7 @@ export default function CandidateDashboard() {
           ) : !hasProfile ? (
             <div className={styles.rolesEmpty}>
               <i className={`fi fi-rr-user-add ${styles.rolesEmptyIcon}`} />
-              <p>No profile found. Contact RYZE to get set up.</p>
+              <p>Matched roles appear once your profile is set up.</p>
               <button className={styles.scheduleBtnSm} onClick={() => setBookingOpen(true)}>
                 Talk to a Recruiter
               </button>
@@ -333,12 +341,7 @@ export default function CandidateDashboard() {
           ) : (
             <div className={styles.matchList}>
               {matchedRoles.map((job, idx) => (
-                <JobMatchCard
-                  key={job.id}
-                  job={job}
-                  rank={idx + 1}
-
-                />
+                <JobMatchCard key={job.id} job={job} rank={idx + 1} />
               ))}
             </div>
           )}
