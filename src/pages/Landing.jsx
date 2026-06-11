@@ -5,178 +5,100 @@ import { useAuth } from "../contexts/AuthContext";
 import styles from "./Landing.module.css";
 import ryzeLogo from "../assets/RYZE_LOGO.svg";
 
+import timeIcon from "../assets/icons/calendar.svg";
+import apIcon from "../assets/icons/downloadV2.svg";
+import poIcon from "../assets/icons/confirmed.svg";
+import workflowIcon from "../assets/icons/change.svg";
+import dashboardIcon from "../assets/icons/indexed.svg";
+import aiIcon from "../assets/icons/artificial-intelligence.svg";
+import buildIcon from "../assets/icons/edit.svg";
+import businessIcon from "../assets/icons/Portfolio_RYZE.png";
+import followIcon from "../assets/icons/happy_face.svg";
+
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-/* ── Custom inline SVG icons ──────────────────────────────────────────────
-   Hand-rolled, 24×24, stroke-based — no icon library dependency.        */
-const iconProps = (size) => ({
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  width: size,
-  height: size,
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: 1.75,
-  strokeLinecap: "round",
-  strokeLinejoin: "round",
-  "aria-hidden": "true",
-});
-
-const IconCode = ({ size = 24, className }) => (
-  <svg {...iconProps(size)} className={className}>
-    <polyline points="8 6 3 12 8 18" />
-    <polyline points="16 6 21 12 16 18" />
-    <line x1="13.5" y1="4.5" x2="10.5" y2="19.5" />
-  </svg>
-);
-
-const IconGrid = ({ size = 24, className }) => (
-  <svg {...iconProps(size)} className={className}>
-    <rect x="3" y="3" width="8" height="8" rx="1.5" />
-    <rect x="13" y="3" width="8" height="5" rx="1.5" />
-    <rect x="13" y="10" width="8" height="11" rx="1.5" />
-    <rect x="3" y="13" width="8" height="8" rx="1.5" />
-  </svg>
-);
-
-const IconSpark = ({ size = 24, className }) => (
-  <svg {...iconProps(size)} className={className}>
-    <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z" />
-    <path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z" />
-  </svg>
-);
-
-const IconFlow = ({ size = 24, className }) => (
-  <svg {...iconProps(size)} className={className}>
-    <rect x="3" y="4" width="6" height="6" rx="1.5" />
-    <rect x="15" y="14" width="6" height="6" rx="1.5" />
-    <path d="M9 7h5a3 3 0 0 1 3 3v4" />
-    <polyline points="14.5 11.5 17 14 19.5 11.5" />
-  </svg>
-);
-
-const IconKey = ({ size = 24, className }) => (
-  <svg {...iconProps(size)} className={className}>
-    <circle cx="8" cy="14" r="4.5" />
-    <path d="M11.5 10.5L20 2" />
-    <path d="M16.5 5.5L19.5 8.5" />
-    <path d="M14 8l2 2" />
-  </svg>
-);
-
-const IconShield = ({ size = 24, className }) => (
-  <svg {...iconProps(size)} className={className}>
-    <path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6l7-3z" />
-    <polyline points="9 12 11.2 14.2 15.5 9.5" />
-  </svg>
-);
-
-const IconHammer = ({ size = 24, className }) => (
-  <svg {...iconProps(size)} className={className}>
-    <path d="M14.5 4.5l5 5-2 2-5-5 2-2z" />
-    <path d="M13 8L4 17a1.8 1.8 0 0 0 0 2.5v0a1.8 1.8 0 0 0 2.5 0l9-9" />
-    <path d="M16 3l5 5" />
-  </svg>
-);
-
-const IconBriefcase = ({ size = 24, className }) => (
-  <svg {...iconProps(size)} className={className}>
-    <rect x="3" y="7" width="18" height="13" rx="2" />
-    <path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7" />
-    <path d="M3 12h18" />
-  </svg>
-);
-
-const IconBulb = ({ size = 24, className }) => (
-  <svg {...iconProps(size)} className={className}>
-    <path d="M9 18h6" />
-    <path d="M10 21h4" />
-    <path d="M12 3a6 6 0 0 0-4 10.5c.8.7 1.3 1.5 1.5 2.5h5c.2-1 .7-1.8 1.5-2.5A6 6 0 0 0 12 3z" />
-  </svg>
-);
-
-// ── Hero showcase: current builds in the pipeline ───────────────────────────
+// ── Current business problems RYZE.ai is being shaped around ───────────────────────────
 const PROJECTS = [
   {
     tag: "Operations",
     title: "Time Tracking App",
-    desc: "Time and resource tracking designed around an existing operations workflow — instead of forcing the team into a new one.",
+    desc: "A simple way for teams to track time, review hours, approve work, and make payroll easier without chasing spreadsheets or screenshots.",
     stack: ["FastAPI", "Postgres", "React"],
   },
   {
-    tag: "Finance Automation",
+    tag: "Accounting",
     title: "AP Automation",
-    desc: "Accounts payable without the manual grind — invoice capture, approval routing, and payment prep wired into the actual close process.",
-    stack: ["FastAPI", "Postgres", "React", "Claude"],
+    desc: "Invoice intake, vendor review, approvals, coding, and payment prep built around how the accounting process actually works.",
+    stack: ["FastAPI", "Postgres", "React", "AI"],
   },
   {
-    tag: "Risk & Insurance",
-    title: "Workers' Comp Cost Mitigation",
-    desc: "A tool that tracks claims, classifications, and experience-mod drivers to surface where premiums can actually be reduced.",
+    tag: "Purchasing",
+    title: "Purchase Order System",
+    desc: "A clean PO workflow for requests, approvals, vendor orders, receiving, and visibility before money is already out the door.",
     stack: ["FastAPI", "Postgres", "React"],
   },
 ];
 
 const SERVICES = [
   {
-    icon: IconShield,
-    title: "Vetted Builders",
-    desc: "Every builder on the platform is invited based on software they've actually shipped — proof of work, not promises.",
+    icon: workflowIcon,
+    title: "Workflow Apps",
+    desc: "Custom tools for the messy internal processes that do not fit neatly inside QuickBooks, payroll software, or spreadsheets.",
   },
   {
-    icon: IconCode,
-    title: "Custom Applications",
-    desc: "Full applications built around a real workflow — not a template the business has to bend itself to fit.",
+    icon: timeIcon,
+    title: "Time Tracking",
+    desc: "Crew, employee, manager, and payroll workflows built around how time is actually captured and approved.",
   },
   {
-    icon: IconGrid,
-    title: "Internal Tools & Dashboards",
-    desc: "The admin panels, trackers, and dashboards a team needs but can't buy off the shelf.",
+    icon: apIcon,
+    title: "AP Automation",
+    desc: "Invoice capture, routing, coding, approvals, and payment prep designed to reduce duplicate entry and confusion.",
   },
   {
-    icon: IconSpark,
-    title: "AI Integration",
-    desc: "Semantic search, RAG, document parsing, and LLM features wired into real workflows — not bolted on as a gimmick.",
+    icon: poIcon,
+    title: "PO Systems",
+    desc: "Purchase requests, approvals, vendor tracking, receiving, and budget visibility without making the process harder than it needs to be.",
   },
   {
-    icon: IconFlow,
-    title: "Automation & Workflows",
-    desc: "Scheduling, notifications, webhooks, and pipelines that remove the manual steps eating a team's time.",
+    icon: dashboardIcon,
+    title: "Dashboards & Admin Tools",
+    desc: "The internal screens, reports, and trackers a business needs but usually cannot buy off the shelf.",
   },
   {
-    icon: IconKey,
-    title: "The Business Owns the Code",
-    desc: "No per-seat SaaS rent. The software belongs to the company that paid for it — deployed, documented, and handed over.",
+    icon: aiIcon,
+    title: "Practical AI Features",
+    desc: "Document parsing, search, summaries, and workflow assistance where AI saves time instead of being added as a buzzword.",
   },
 ];
 
 const PROCESS = [
   {
     num: "01",
-    title: "Builders prove it",
-    desc: "Invitations go to people who can demonstrably build professional custom software — shipped products, not keyword-stuffed resumes.",
+    title: "Start with the real problem",
+    desc: "The first step is understanding the workflow, who touches it, where things break down, and what the business actually needs to see.",
   },
   {
     num: "02",
-    title: "A profile is created",
-    desc: "Each builder gets a profile showcasing what they've built, how they work, and what they're ready to take on next.",
+    title: "Build the simplest useful version",
+    desc: "The goal is not to create a bloated platform. It is to build a clean tool that solves the highest-friction part of the process first.",
   },
   {
     num: "03",
-    title: "Employers bring the work",
-    desc: "Businesses describe what they need built. Projects are matched to the builder whose track record actually fits.",
+    title: "Connect it to the business",
+    desc: "Users, approvals, notifications, exports, documents, and reporting are added around the way the team already operates.",
   },
   {
     num: "04",
-    title: "The work flows",
-    desc: "As work comes in from the employer side, everyone involved stays busy — and every project shipped strengthens a builder's profile.",
+    title: "Improve it from real use",
+    desc: "Once people use it, the software gets better. The workflow becomes clearer, the data gets cleaner, and the tool becomes more valuable.",
   },
 ];
 
 const INTENTS = [
-  { value: "builder", icon: IconHammer, label: "I build software" },
-  { value: "employer", icon: IconBriefcase, label: "I need software built" },
-  { value: "following", icon: IconBulb, label: "Just following along" },
+  { value: "employer", icon: businessIcon, label: "I need custom software" },
+  { value: "builder", icon: buildIcon, label: "I have a workflow problem" },
+  { value: "following", icon: followIcon, label: "Just following along" },
 ];
 
 // ── Inline RYZE logo SVG (footer) ───────────────────────────────────────────
@@ -313,8 +235,8 @@ export default function Landing() {
             <span className={styles.navBrandName}>RYZE.ai</span>
           </div>
           <nav className={styles.navLinks}>
-            <a href="#services" className={styles.navLink}>What Gets Built</a>
-            <a href="#process" className={styles.navLink}>How It Works</a>
+            <a href="#services" className={styles.navLink}>Use Cases</a>
+            <a href="#process" className={styles.navLink}>Approach</a>
             <a href="#work" className={styles.navLink}>Current Builds</a>
           </nav>
           <div className={styles.navActions}>
@@ -332,23 +254,23 @@ export default function Landing() {
           <div className={styles.heroContent}>
             <div className={styles.heroBadge}>
               <span className={styles.heroPulse} />
-              Invite-only · Proven builders
+              Practical software for real business workflows
             </div>
             <h1 className={styles.heroH1}>
-              Software built by people who've{" "}
-              <em className={styles.heroEm}>actually&nbsp;shipped.</em>
+              Custom software for{" "}
+              <em className={styles.heroEm}>messy&nbsp;business processes.</em>
             </h1>
             <p className={styles.heroSub}>
-              An invite-only network of builders who can deliver professional
-              custom software — matched with businesses that have real work to
-              be done.
+              RYZE.ai helps businesses replace spreadsheets, email threads,
+              and clunky workflows with simple internal tools built around how
+              the team actually works.
             </p>
             <div className={styles.heroCtas}>
               <button className={styles.heroCtaPrimary} onClick={scrollToContact}>
                 Get in Touch
               </button>
               <a href="#work" className={styles.heroCtaSecondary}>
-                See Current Builds →
+                See Practical Examples →
               </a>
             </div>
             <p className={styles.heroStack}>
@@ -362,28 +284,25 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── What Gets Built (services) ─────────────── */}
+      {/* ── Use Cases (services) ─────────────── */}
       <section className={styles.servicesSection} id="services">
         <div className={styles.container}>
-          <div className={styles.eyebrow}>What Gets Built</div>
+          <div className={styles.eyebrow}>Use Cases</div>
           <h2 className={styles.sectionH2}>
-            Software shaped to the business,<br />
-            not the other way around.
+            Internal tools for the work that<br />
+            off-the-shelf software does not handle well.
           </h2>
 
           <div className={styles.servicesGrid}>
-            {SERVICES.map((s) => {
-              const Icon = s.icon;
-              return (
-                <div key={s.title} className={styles.serviceCard}>
-                  <div className={styles.serviceIconWrap}>
-                    <Icon className={styles.serviceIcon} size={24} />
-                  </div>
-                  <h3 className={styles.serviceTitle}>{s.title}</h3>
-                  <p className={styles.serviceDesc}>{s.desc}</p>
+            {SERVICES.map((s) => (
+              <div key={s.title} className={styles.serviceCard}>
+                <div className={styles.serviceIconWrap}>
+                  <img src={s.icon} alt="" className={styles.serviceIconImg} />
                 </div>
-              );
-            })}
+                <h3 className={styles.serviceTitle}>{s.title}</h3>
+                <p className={styles.serviceDesc}>{s.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -391,10 +310,10 @@ export default function Landing() {
       {/* ── Process ────────────────────────────────── */}
       <section className={styles.processSection} id="process">
         <div className={styles.container}>
-          <div className={styles.eyebrow}>How It Works</div>
+          <div className={styles.eyebrow}>Approach</div>
           <h2 className={styles.sectionH2}>
-            Proven builders on one side.<br />
-            Real projects on the other.
+            Start with the workflow.<br />
+            Then build the software around it.
           </h2>
 
           <div className={styles.processGrid}>
@@ -413,7 +332,7 @@ export default function Landing() {
       <section className={styles.workSection} id="work">
         <div className={styles.container}>
           <div className={styles.eyebrow}>Current Builds</div>
-          <h2 className={styles.sectionH2}>Real projects, in the pipeline now.</h2>
+          <h2 className={styles.sectionH2}>Practical examples from real business needs.</h2>
 
           <div className={styles.workGrid}>
             {PROJECTS.map((p) => (
@@ -434,23 +353,19 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Why RYZE band ──────────────────────────── */}
+      {/* ── Origin band ──────────────────────────── */}
       <section className={styles.operatorSection}>
         <div className={styles.operatorInner}>
-          <div className={styles.operatorEyebrow}>Why RYZE</div>
+          <div className={styles.operatorEyebrow}>Origin</div>
           <h2 className={styles.operatorTitle}>
-            Resumes don't ship software.
-            Shipped software does.
+            RYZE.ai started as an ATS.
+            The bigger idea is custom business software.
           </h2>
           <p className={styles.operatorText}>
-            Builders are invited based on what they've actually built, then that
-            proof is put in front of businesses with real work. No
-            keyword-matched resumes, no agencies marking up junior talent — just
-            a direct line between people who can build professional custom
-            software and the companies that need it built.
+            The first version of RYZE.ai was built as an Applicant Tracking System for recruiters. But building it made something obvious: companies have dozens of practical workflows that are still stuck in spreadsheets, email, and systems that do not quite fit. The platform is now evolving around that reality — useful custom tools for operators, accounting teams, and business owners who know where the friction is.
           </p>
           <div className={styles.operatorSig}>
-            Proof of work · Direct matches · No middle layers
+            Accounting workflows · Operations tools · Practical AI
           </div>
         </div>
       </section>
@@ -458,10 +373,9 @@ export default function Landing() {
       {/* ── Contact ────────────────────────────────── */}
       <section className={styles.contactSection} ref={contactRef}>
         <div className={styles.contactInner}>
-          <h2 className={styles.contactTitle}>Build, or get something built.</h2>
+          <h2 className={styles.contactTitle}>Have a workflow that needs software?</h2>
           <p className={styles.contactSub}>
-            Builders: show what's been shipped. Employers: describe what's
-            needed. Either way, leave an email below and expect a real reply.
+            Describe the process that is slowing your team down. Time tracking, AP, purchase orders, reporting, approvals — whatever it is, start with the real problem.
           </p>
 
           {status === "success" ? (
@@ -475,7 +389,7 @@ export default function Landing() {
           ) : (
             <div className={styles.contactForm}>
               <div className={styles.intentRow}>
-                {INTENTS.map(({ value, icon: Icon, label }) => (
+                {INTENTS.map(({ value, icon, label }) => (
                   <button
                     key={value}
                     type="button"
@@ -483,7 +397,7 @@ export default function Landing() {
                     onClick={() => setIntent((v) => (v === value ? null : value))}
                     disabled={status === "loading"}
                   >
-                    <Icon size={16} />
+                    <img src={icon} alt="" className={styles.intentIconImg} />
                     {label}
                   </button>
                 ))}
@@ -512,7 +426,7 @@ export default function Landing() {
               </div>
 
               {errorMsg && <p className={styles.errMsg}>{errorMsg}</p>}
-              <p className={styles.trustLine}>No spam, no sales funnel — just a reply.</p>
+              <p className={styles.trustLine}>No spam, no sales funnel — just a real reply.</p>
             </div>
           )}
         </div>
@@ -526,7 +440,7 @@ export default function Landing() {
             <span>RYZE.ai</span>
           </div>
           <div className={styles.footerLinks}>
-            <a href="#services">What Gets Built</a>
+            <a href="#services">Use Cases</a>
             <a href="#work">Current Builds</a>
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>

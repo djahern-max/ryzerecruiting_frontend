@@ -466,6 +466,13 @@
   color: #0a66c2;
 }
 
+.serviceIconImg {
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+  display: block;
+}
+
 .serviceTitle {
   font-size: 1rem;
   font-weight: 700;
@@ -707,6 +714,14 @@
 .intentBtn:hover {
   background: rgba(255, 255, 255, 0.12);
   color: rgba(255, 255, 255, 0.85);
+}
+
+.intentIconImg {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
 }
 
 .intentBtnOn {
