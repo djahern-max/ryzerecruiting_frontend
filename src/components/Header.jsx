@@ -19,10 +19,6 @@ function Header() {
     else navigate("/candidate/dashboard");
   };
 
-  const roleBadge = user?.user_type === "EMPLOYER" ? "Employer"
-    : user?.user_type === "CANDIDATE" ? "Candidate"
-      : null;
-
   return (
     <header className={styles.header}>
       <div className={styles.headerContent}>
@@ -31,11 +27,6 @@ function Header() {
           <span className={styles.logo} onClick={handleLogoClick}>
             RYZE.ai
           </span>
-          {roleBadge && (
-            <span className={`${styles.badge} ${styles[`badge_${user.user_type.toLowerCase()}`]}`}>
-              {roleBadge}
-            </span>
-          )}
         </div>
 
         <div className={styles.headerRight}>

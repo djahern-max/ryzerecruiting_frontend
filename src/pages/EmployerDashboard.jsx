@@ -317,7 +317,6 @@ export default function EmployerDashboard() {
         {/* ── Welcome Banner ── */}
         <div className={styles.banner}>
           <div className={styles.bannerLeft}>
-            <span className={styles.bannerBadge}>Employer</span>
             <h1 className={styles.bannerTitle}>Welcome back, {firstName}.</h1>
             {profile && <p className={styles.companyLine}>{profile.company_name}</p>}
           </div>
@@ -357,7 +356,7 @@ export default function EmployerDashboard() {
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
             <h3 className={styles.sectionTitle}>My Scheduled Calls</h3>
-            <p className={styles.sectionSub}>Your discovery calls with RYZE.ai</p>
+
           </div>
 
           {bookingsLoading ? (
