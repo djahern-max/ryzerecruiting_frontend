@@ -97,7 +97,7 @@ const PROCESS = [
 
 const INTENTS = [
   { value: "employer", icon: businessIcon, label: "I need custom software" },
-  { value: "builder", icon: buildIcon, label: "I have a workflow problem" },
+  { value: "builder", icon: buildIcon, label: "I build awesome tools" },
   { value: "following", icon: followIcon, label: "Just following along" },
 ];
 
