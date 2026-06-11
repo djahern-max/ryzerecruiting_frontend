@@ -353,22 +353,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Origin band ──────────────────────────── */}
-      <section className={styles.operatorSection}>
-        <div className={styles.operatorInner}>
-          <div className={styles.operatorEyebrow}>Origin</div>
-          <h2 className={styles.operatorTitle}>
-            RYZE.ai started as an ATS.
-            The bigger idea is custom business software.
-          </h2>
-          <p className={styles.operatorText}>
-            The first version of RYZE.ai was built as an Applicant Tracking System for recruiters. But building it made something obvious: companies have dozens of practical workflows that are still stuck in spreadsheets, email, and systems that do not quite fit. The platform is now evolving around that reality — useful custom tools for operators, accounting teams, and business owners who know where the friction is.
-          </p>
-          <div className={styles.operatorSig}>
-            Accounting workflows · Operations tools · Practical AI
-          </div>
-        </div>
-      </section>
 
       {/* ── Contact ────────────────────────────────── */}
       <section className={styles.contactSection} ref={contactRef}>
