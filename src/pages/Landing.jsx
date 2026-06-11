@@ -2,105 +2,109 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { Building2, BriefcaseBusiness, Binoculars } from "lucide-react";
+import {
+  Code2,
+  LayoutDashboard,
+  Sparkles,
+  Workflow,
+  KeyRound,
+  Calculator,
+  AppWindow,
+  Wrench,
+  Lightbulb,
+} from "lucide-react";
 import styles from "./Landing.module.css";
-
-// Flaticon SVG icons
-import aiIcon from "../assets/icons/artificial-intelligence.svg";
-import calendarIcon from "../assets/icons/calendar.svg";
-import zoomIcon from "../assets/icons/zoom.svg";
-import addCandidateIcon from "../assets/icons/add-candidate.svg";
-import enhanceIcon from "../assets/icons/enhance_profileV2.svg";
-import indexedIcon from "../assets/icons/indexed.svg";
-import downloadIcon from "../assets/icons/downloadV2.svg";
-import sendInviteIcon from "../assets/icons/send_invite.svg";
-import aiNotesIcon from "../assets/icons/ai_notes.svg";
 import ryzeLogo from "../assets/RYZE_LOGO.svg";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-const DEMO_QUERIES = [
+// ── Hero showcase: cycles through real builds ───────────────────────────────
+// NOTE: RYZE.ai is real. Replace the two client entries below with your
+// actual project details (name, one-line description, stack) when ready.
+const PROJECTS = [
   {
-    q: "Who are my best candidates for a Controller role?",
-    a: "3 strong matches: Sarah Chen (Big 4, CPA, 8 yrs), Marcus Webb (Manufacturing controller, $140K target), and Priya Nair (IPO experience, currently open).",
+    tag: "AI Recruiting Platform",
+    title: "RYZE.ai",
+    desc: "Multi-tenant SaaS with AI candidate matching, semantic search, automated scheduling, and post-call intelligence. Designed and built end to end.",
+    stack: ["FastAPI", "pgvector", "React", "Claude"],
   },
   {
-    q: "Which employers haven't heard from us in 30 days?",
-    a: "4 employers need a touchpoint: Harbor Financial, Apex Manufacturing, TechBridge Group, and Summit Capital. Last contact was 31–47 days ago.",
+    tag: "Finance & Operations",
+    title: "Accounting Workflow App",
+    desc: "A custom application replacing spreadsheets and manual reconciliation for a finance team — built around their actual close process.",
+    stack: ["FastAPI", "Postgres", "React"],
   },
   {
-    q: "What do we know about our Deloitte alumni candidates?",
-    a: "4 Deloitte alumni in your pipeline. Avg target: $130–160K. Top reason for leaving: better work-life balance.",
+    tag: "Operations",
+    title: "Time Tracking System",
+    desc: "Time and resource tracking designed around an existing operations workflow, instead of forcing the team into a new one.",
+    stack: ["FastAPI", "Postgres", "React"],
   },
 ];
 
-const STEPS = [
+const SERVICES = [
   {
-    icon: addCandidateIcon,
+    icon: Code2,
+    title: "Custom Applications",
+    desc: "Full applications built around your workflow — not a template you have to bend your business to fit.",
+  },
+  {
+    icon: LayoutDashboard,
+    title: "Internal Tools & Dashboards",
+    desc: "The admin panels, trackers, and dashboards your team needs but can't buy off the shelf.",
+  },
+  {
+    icon: Sparkles,
+    title: "AI Integration",
+    desc: "Semantic search, RAG, document parsing, and LLM features wired into real workflows — not bolted on as a gimmick.",
+  },
+  {
+    icon: Workflow,
+    title: "Automation & Workflows",
+    desc: "Scheduling, notifications, webhooks, and pipelines that remove the manual steps eating your team's time.",
+  },
+  {
+    icon: KeyRound,
+    title: "You Own the Code",
+    desc: "No per-seat SaaS rent. The software is yours — deployed, documented, and handed over.",
+  },
+  {
+    icon: Calculator,
+    title: "Built by an Operator",
+    desc: "A CPA and Controller who codes. I understand finance and operations first, then build the system to match.",
+  },
+];
+
+const PROCESS = [
+  {
     num: "01",
-    title: "Add Candidates & Employers",
-    desc: "Paste a resume, upload a PDF, or copy a LinkedIn profile. RYZE parses everything into structured records automatically.",
+    title: "Understand the workflow",
+    desc: "I learn how your business actually runs — the steps, the edge cases, the spreadsheets holding it together.",
   },
   {
-    icon: zoomIcon,
     num: "02",
-    title: "Book & Run Zoom Calls",
-    desc: "Integrated booking with Zoom and Google Calendar. AI pre-call briefs generated automatically before every meeting.",
+    title: "Design the system",
+    desc: "Map the workflow to software with no bloat. You see the structure before a line of code is written.",
   },
   {
-    icon: aiNotesIcon,
     num: "03",
-    title: "AI Captures Everything",
-    desc: "Post-call summaries written and saved automatically. Every conversation becomes queryable intelligence in your database.",
+    title: "Build it fast",
+    desc: "Production software in weeks, not quarters — the same AI-assisted build process that produced RYZE.ai.",
   },
   {
-    icon: indexedIcon,
     num: "04",
-    title: "Match, Present & Export",
-    desc: "Semantic matching surfaces the right candidates. One-click branded PDFs ready to send to hiring managers.",
+    title: "You own it",
+    desc: "Deployed, documented, and yours to keep. Clean hand-off or ongoing support — your call.",
   },
 ];
 
-const FEATURES = [
-  {
-    icon: enhanceIcon,
-    title: "AI-Generated Profiles",
-    desc: "Claude writes candidate summaries, outreach messages, and recruiter notes from raw resume text — instantly.",
-  },
-  {
-    icon: calendarIcon,
-    title: "Smart Scheduling",
-    desc: "Four booking flows for every recruiter scenario. Auto-confirms, sends reminders, no manual follow-up required.",
-  },
-  {
-    icon: zoomIcon,
-    title: "Zoom + Calendar Sync",
-    desc: "Meetings create in Zoom and Google Calendar automatically. Links delivered by email and SMS.",
-  },
-  {
-    icon: aiIcon,
-    title: "Semantic Matching",
-    desc: "pgvector cosine similarity ranks candidates against job orders by meaning — not just keywords.",
-  },
-  {
-    icon: downloadIcon,
-    title: "Branded PDF Exports",
-    desc: "One-click recruiter-grade PDFs for candidates and job orders. Mirrors the UI layout exactly.",
-  },
-  {
-    icon: sendInviteIcon,
-    title: "Multi-Tenant Platform",
-    desc: "Built for scale from day one. Each recruiting firm gets an isolated tenant environment with Stripe billing.",
-  },
+const PROJECT_TYPES = [
+  { value: "custom_app", icon: AppWindow, label: "Custom app" },
+  { value: "internal_tool", icon: Wrench, label: "Internal tool" },
+  { value: "not_sure", icon: Lightbulb, label: "Not sure yet" },
 ];
 
-const INTENT_OPTIONS = [
-  { value: "solo", icon: BriefcaseBusiness, label: "Solo recruiter" },
-  { value: "firm", icon: Building2, label: "Recruiting firm" },
-  { value: "following", icon: Binoculars, label: "Just following along" },
-];
-
-// ── Inline RYZE logo SVG ────────────────────────────────────────────────────
+// ── Inline RYZE logo SVG (footer) ───────────────────────────────────────────
 function RyzeLogo({ size = 32, color = "#004aad" }) {
   return (
     <svg
@@ -119,92 +123,51 @@ function RyzeLogo({ size = 32, color = "#004aad" }) {
   );
 }
 
-// ── Animated intelligence demo widget ──────────────────────────────────────
-function DemoChat() {
+// ── Hero project showcase (cycling) ─────────────────────────────────────────
+function ProjectShowcase() {
   const [idx, setIdx] = useState(0);
-  const [phase, setPhase] = useState("typing");
-  const [displayQ, setDisplayQ] = useState("");
-  const [displayA, setDisplayA] = useState("");
 
   useEffect(() => {
-    const entry = DEMO_QUERIES[idx];
-    setDisplayQ("");
-    setDisplayA("");
-    setPhase("typing");
+    const t = setInterval(() => setIdx((i) => (i + 1) % PROJECTS.length), 4200);
+    return () => clearInterval(t);
+  }, []);
 
-    let qi = 0;
-    const typingTimer = setInterval(() => {
-      qi++;
-      setDisplayQ(entry.q.slice(0, qi));
-      if (qi >= entry.q.length) {
-        clearInterval(typingTimer);
-        setTimeout(() => {
-          setPhase("answering");
-          let ai = 0;
-          const ansTimer = setInterval(() => {
-            ai += 3;
-            setDisplayA(entry.a.slice(0, ai));
-            if (ai >= entry.a.length) {
-              setDisplayA(entry.a);
-              clearInterval(ansTimer);
-              setPhase("done");
-              setTimeout(() => {
-                setPhase("fading");
-                setTimeout(() => setIdx(i => (i + 1) % DEMO_QUERIES.length), 500);
-              }, 3500);
-            }
-          }, 16);
-        }, 500);
-      }
-    }, 35);
-    return () => clearInterval(typingTimer);
-  }, [idx]);
+  const p = PROJECTS[idx];
 
   return (
-    <div className={`${styles.demo} ${phase === "fading" ? styles.demoFading : ""}`}>
-      <div className={styles.demoTitleBar}>
-        <div className={styles.demoTrafficLights}>
+    <div className={styles.showcase}>
+      <div className={styles.showcaseBar}>
+        <div className={styles.showcaseLights}>
           <span style={{ background: "#ff5f57" }} />
           <span style={{ background: "#febc2e" }} />
           <span style={{ background: "#28c840" }} />
         </div>
-        <span className={styles.demoWindowTitle}>RYZE Intelligence</span>
+        <span className={styles.showcaseWindowTitle}>
+          <RyzeLogo size={12} color="#57a0d3" /> Selected Work
+        </span>
       </div>
-      <div className={styles.demoMessages}>
-        {displayQ && (
-          <div className={styles.demoMsgUser}>
-            <div className={styles.demoMsgLabel}>You</div>
-            <div className={styles.demoMsgBubble}>
-              {displayQ}
-              {phase === "typing" && <span className={styles.cursor}>|</span>}
-            </div>
+
+      <div className={styles.showcaseBody}>
+        <div key={idx} className={styles.showcaseCard}>
+          <span className={styles.showcaseTag}>{p.tag}</span>
+          <h3 className={styles.showcaseTitle}>{p.title}</h3>
+          <p className={styles.showcaseDesc}>{p.desc}</p>
+          <div className={styles.showcaseStack}>
+            {p.stack.map((s) => (
+              <span key={s} className={styles.stackChip}>
+                {s}
+              </span>
+            ))}
           </div>
-        )}
-        {phase === "answering" && !displayA && (
-          <div className={styles.demoMsgAi}>
-            <div className={styles.demoMsgLabel}>
-              <RyzeLogo size={12} color="#fff" /> RYZE
-            </div>
-            <div className={styles.demoThinking}>
-              <span /><span /><span />
-            </div>
-          </div>
-        )}
-        {displayA && (
-          <div className={styles.demoMsgAi}>
-            <div className={styles.demoMsgLabel}>
-              <RyzeLogo size={12} color="#fff" /> RYZE
-            </div>
-            <div className={styles.demoMsgAiBubble}>
-              {displayA}
-              {phase === "answering" && <span className={styles.cursor}>|</span>}
-            </div>
-          </div>
-        )}
+        </div>
       </div>
-      <div className={styles.demoPips}>
-        {DEMO_QUERIES.map((_, i) => (
-          <span key={i} className={`${styles.pip} ${i === idx ? styles.pipActive : ""}`} />
+
+      <div className={styles.showcasePips}>
+        {PROJECTS.map((_, i) => (
+          <span
+            key={i}
+            className={`${styles.pip} ${i === idx ? styles.pipActive : ""}`}
+          />
         ))}
       </div>
     </div>
@@ -215,11 +178,11 @@ function DemoChat() {
 export default function Landing() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const waitlistRef = useRef(null);
+  const contactRef = useRef(null);
 
   const [email, setEmail] = useState("");
   const [intent, setIntent] = useState(null);
-  const [wlStatus, setWlStatus] = useState("idle");
+  const [status, setStatus] = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
   // Redirect authenticated users to their dashboard
@@ -231,39 +194,42 @@ export default function Landing() {
     }
   }, [user, navigate]);
 
-  async function handleWaitlist() {
+  function scrollToContact() {
+    contactRef.current?.scrollIntoView({ behavior: "smooth" });
+  }
+
+  async function handleSubmit() {
     setErrorMsg("");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setErrorMsg("Please enter a valid email address.");
+      setErrorMsg("Enter a valid email so I can reply.");
       return;
     }
-    setWlStatus("loading");
+    setStatus("loading");
     try {
       const res = await fetch(`${API_BASE}/api/waitlist`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: email.trim(),
-          intent: intent || "following",
+          intent: intent || "not_sure",
           source: "ryze_ai_landing",
         }),
       });
       if (res.ok || res.status === 409) {
-        setWlStatus("success");
+        setStatus("success");
       } else {
         const d = await res.json().catch(() => ({}));
-        setErrorMsg(d.detail || "Something went wrong. Please try again.");
-        setWlStatus("idle");
+        setErrorMsg(d.detail || "Something went wrong. Try again.");
+        setStatus("idle");
       }
     } catch {
-      setErrorMsg("Network error. Please try again.");
-      setWlStatus("idle");
+      setErrorMsg("Network error. Try again.");
+      setStatus("idle");
     }
   }
 
   return (
     <div className={styles.page}>
-
       {/* ── Navigation ─────────────────────────────── */}
       <header className={styles.nav}>
         <div className={styles.navInner}>
@@ -272,17 +238,14 @@ export default function Landing() {
             <span className={styles.navBrandName}>RYZE.ai</span>
           </div>
           <nav className={styles.navLinks}>
-            <a href="#how-it-works" className={styles.navLink}>How It Works</a>
-            <a href="#features" className={styles.navLink}>Features</a>
-            <a href="/about" className={styles.navLink}>About the Build</a>
+            <a href="#services" className={styles.navLink}>What I Build</a>
+            <a href="#process" className={styles.navLink}>Process</a>
+            <a href="#work" className={styles.navLink}>Work</a>
           </nav>
           <div className={styles.navActions}>
             <a href="/auth" className={styles.navSignIn}>Sign In</a>
-            <button
-              className={styles.navCta}
-              onClick={() => waitlistRef.current?.scrollIntoView({ behavior: "smooth" })}
-            >
-              Get Early Access
+            <button className={styles.navCta} onClick={scrollToContact}>
+              Start a Project
             </button>
           </div>
         </div>
@@ -294,27 +257,23 @@ export default function Landing() {
           <div className={styles.heroContent}>
             <div className={styles.heroBadge}>
               <span className={styles.heroPulse} />
-              Built for Accounting &amp; Finance Recruiting
+              Built by a CPA who builds
             </div>
             <h1 className={styles.heroH1}>
-              Your Recruiting Pipeline,{" "}
-              <em className={styles.heroEm}>Powered&nbsp;by&nbsp;AI</em>
+              We build the software{" "}
+              <em className={styles.heroEm}>you&nbsp;can't&nbsp;buy.</em>
             </h1>
             <p className={styles.heroSub}>
-              RYZE.ai turns every candidate call, resume, and job order into
-              searchable, actionable recruiting intelligence — automatically.
+              Custom apps, internal tools, and automation — built around how your
+              business actually works, not how an off-the-shelf vendor thinks it
+              should.
             </p>
             <div className={styles.heroCtas}>
-              <button
-                className={styles.heroCtaPrimary}
-                onClick={() =>
-                  waitlistRef.current?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                Get Early Access
+              <button className={styles.heroCtaPrimary} onClick={scrollToContact}>
+                Start a Project
               </button>
-              <a href="/about" className={styles.heroCtaSecondary}>
-                Follow the Build →
+              <a href="#work" className={styles.heroCtaSecondary}>
+                See the Work →
               </a>
             </div>
             <p className={styles.heroStack}>
@@ -323,88 +282,131 @@ export default function Landing() {
           </div>
 
           <div className={styles.heroVisual}>
-            <DemoChat />
+            <ProjectShowcase />
           </div>
         </div>
       </section>
 
-      {/* ── How It Works ───────────────────────────── */}
-      <section className={styles.stepsSection} id="how-it-works">
+      {/* ── What I Build (services) ────────────────── */}
+      <section className={styles.servicesSection} id="services">
+        <div className={styles.container}>
+          <div className={styles.eyebrow}>What I Build</div>
+          <h2 className={styles.sectionH2}>
+            Software shaped to your business,<br />
+            not the other way around.
+          </h2>
+
+          <div className={styles.servicesGrid}>
+            {SERVICES.map((s) => {
+              const Icon = s.icon;
+              return (
+                <div key={s.title} className={styles.serviceCard}>
+                  <div className={styles.serviceIconWrap}>
+                    <Icon className={styles.serviceIcon} size={24} strokeWidth={1.75} />
+                  </div>
+                  <h3 className={styles.serviceTitle}>{s.title}</h3>
+                  <p className={styles.serviceDesc}>{s.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Process ────────────────────────────────── */}
+      <section className={styles.processSection} id="process">
         <div className={styles.container}>
           <div className={styles.eyebrow}>How It Works</div>
           <h2 className={styles.sectionH2}>
-            From first call to placement,<br />
-            RYZE handles the intelligence layer.
+            From your workflow to working software<br />
+            in weeks, not quarters.
           </h2>
 
-          <div className={styles.stepsGrid}>
-            {STEPS.map((step, i) => (
-              <div key={step.num} className={styles.stepCard}>
-                <div className={styles.stepIconWrap}>
-                  <img src={step.icon} alt="" className={styles.stepIcon} />
-                </div>
-                <h3 className={styles.stepTitle}>{step.title}</h3>
-                <p className={styles.stepDesc}>{step.desc}</p>
+          <div className={styles.processGrid}>
+            {PROCESS.map((step) => (
+              <div key={step.num} className={styles.processCard}>
+                <div className={styles.processNum}>{step.num}</div>
+                <h3 className={styles.processTitle}>{step.title}</h3>
+                <p className={styles.processDesc}>{step.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Features ───────────────────────────────── */}
-      <section className={styles.featuresSection} id="features">
+      {/* ── Work / case studies ────────────────────── */}
+      <section className={styles.workSection} id="work">
         <div className={styles.container}>
-          <div className={styles.eyebrow}>The Platform</div>
-          <h2 className={styles.sectionH2}>
-            Everything you need to run<br />
-            a modern recruiting desk.
-          </h2>
+          <div className={styles.eyebrow}>Selected Work</div>
+          <h2 className={styles.sectionH2}>Real software, built end to end.</h2>
 
-          <div className={styles.featuresGrid}>
-            {FEATURES.map((f) => (
-              <div key={f.title} className={styles.featureCard}>
-                <div className={styles.featureIconWrap}>
-                  <img src={f.icon} alt="" className={styles.featureIcon} />
+          <div className={styles.workGrid}>
+            {PROJECTS.map((p) => (
+              <div key={p.title} className={styles.workCard}>
+                <span className={styles.workCardTag}>{p.tag}</span>
+                <h3 className={styles.workCardTitle}>{p.title}</h3>
+                <p className={styles.workCardDesc}>{p.desc}</p>
+                <div className={styles.workCardStack}>
+                  {p.stack.map((s) => (
+                    <span key={s} className={styles.stackChip}>
+                      {s}
+                    </span>
+                  ))}
                 </div>
-                <h3 className={styles.featureTitle}>{f.title}</h3>
-                <p className={styles.featureDesc}>{f.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Waitlist ───────────────────────────────── */}
-      <section className={styles.waitlistSection} ref={waitlistRef}>
-        <div className={styles.waitlistInner}>
-          <h2 className={styles.waitlistTitle}>Built for recruiters. Early access open now.</h2>
-          <p className={styles.waitlistSub}>
-            Candidates and employers can already sign in. This waitlist is for
-            recruiting firms — solo desks to growing teams — who want early
-            access before the public launch.
+      {/* ── Operator band ──────────────────────────── */}
+      <section className={styles.operatorSection}>
+        <div className={styles.operatorInner}>
+          <div className={styles.operatorEyebrow}>Why RYZE</div>
+          <h2 className={styles.operatorTitle}>
+            Most developers don't understand your business.
+            Most operators can't build. I do both.
+          </h2>
+          <p className={styles.operatorText}>
+            I'm Dane Ahern — a CPA and Controller with twelve years in finance
+            leadership who builds production software. That combination is rare,
+            and it's the whole point: less translation between what you need and
+            what gets built, fewer wrong turns, and software that fits the work
+            the first time. RYZE.ai is the proof — a full platform I designed and
+            built end to end. Now I build that caliber of software for other
+            companies.
+          </p>
+          <div className={styles.operatorSig}>Dane Ahern · CPA · Controller · Builder</div>
+        </div>
+      </section>
+
+      {/* ── Contact ────────────────────────────────── */}
+      <section className={styles.contactSection} ref={contactRef}>
+        <div className={styles.contactInner}>
+          <h2 className={styles.contactTitle}>Have something to build?</h2>
+          <p className={styles.contactSub}>
+            Tell me what you're trying to do and I'll tell you straight whether I
+            can build it. No sales funnel — it comes directly to me.
           </p>
 
-          {wlStatus === "success" ? (
+          {status === "success" ? (
             <div className={styles.successState}>
               <div className={styles.successCheck}>✓</div>
               <div>
-                <p className={styles.successTitle}>You're on the list.</p>
-                <p className={styles.successSub}>
-                  We'll reach out when RYZE is ready for you.
-                </p>
+                <p className={styles.successTitle}>Got it.</p>
+                <p className={styles.successSub}>I'll be in touch shortly.</p>
               </div>
             </div>
           ) : (
-            <div className={styles.wlForm}>
+            <div className={styles.contactForm}>
               <div className={styles.intentRow}>
-                {INTENT_OPTIONS.map(({ value, icon: Icon, label }) => (
+                {PROJECT_TYPES.map(({ value, icon: Icon, label }) => (
                   <button
                     key={value}
                     type="button"
-                    className={`${styles.intentBtn} ${intent === value ? styles.intentBtnOn : ""
-                      }`}
+                    className={`${styles.intentBtn} ${intent === value ? styles.intentBtnOn : ""}`}
                     onClick={() => setIntent((v) => (v === value ? null : value))}
-                    disabled={wlStatus === "loading"}
+                    disabled={status === "loading"}
                   >
                     <Icon size={16} />
                     {label}
@@ -421,26 +423,21 @@ export default function Landing() {
                     setEmail(e.target.value);
                     setErrorMsg("");
                   }}
-                  className={`${styles.emailInput} ${errorMsg ? styles.emailInputErr : ""
-                    }`}
-                  disabled={wlStatus === "loading"}
-                  onKeyDown={(e) => e.key === "Enter" && handleWaitlist()}
+                  className={`${styles.emailInput} ${errorMsg ? styles.emailInputErr : ""}`}
+                  disabled={status === "loading"}
+                  onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
                 />
                 <button
                   className={styles.notifyBtn}
-                  onClick={handleWaitlist}
-                  disabled={wlStatus === "loading"}
+                  onClick={handleSubmit}
+                  disabled={status === "loading"}
                 >
-                  {wlStatus === "loading" ? (
-                    <span className={styles.spinner} />
-                  ) : (
-                    "Notify Me"
-                  )}
+                  {status === "loading" ? <span className={styles.spinner} /> : "Send"}
                 </button>
               </div>
 
               {errorMsg && <p className={styles.errMsg}>{errorMsg}</p>}
-              <p className={styles.trustLine}>No spam. Unsubscribe any time.</p>
+              <p className={styles.trustLine}>Goes straight to my inbox. No spam.</p>
             </div>
           )}
         </div>
@@ -454,8 +451,8 @@ export default function Landing() {
             <span>RYZE.ai</span>
           </div>
           <div className={styles.footerLinks}>
-            <a href="/privacy">Privacy</a>
-            <a href="/terms">Terms</a>
+            <a href="#services">What I Build</a>
+            <a href="#work">Work</a>
             <a
               href="https://www.linkedin.com/in/daneahern/"
               target="_blank"
@@ -463,7 +460,8 @@ export default function Landing() {
             >
               LinkedIn
             </a>
-            <a href="/about">About the Build</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/terms">Terms</a>
           </div>
           <p className={styles.footerCopy}>
             © 2026 RYZE GROUP, Inc. d/b/a RYZE.ai
