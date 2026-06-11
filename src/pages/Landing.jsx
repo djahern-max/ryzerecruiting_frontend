@@ -2,106 +2,181 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import {
-  Code2,
-  LayoutDashboard,
-  Sparkles,
-  Workflow,
-  KeyRound,
-  Calculator,
-  AppWindow,
-  Wrench,
-  Lightbulb,
-} from "lucide-react";
 import styles from "./Landing.module.css";
 import ryzeLogo from "../assets/RYZE_LOGO.svg";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-// ── Hero showcase: cycles through real builds ───────────────────────────────
-// NOTE: RYZE.ai is real. Replace the two client entries below with your
-// actual project details (name, one-line description, stack) when ready.
+/* ── Custom inline SVG icons ──────────────────────────────────────────────
+   Hand-rolled, 24×24, stroke-based — no icon library dependency.        */
+const iconProps = (size) => ({
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  width: size,
+  height: size,
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.75,
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  "aria-hidden": "true",
+});
+
+const IconCode = ({ size = 24, className }) => (
+  <svg {...iconProps(size)} className={className}>
+    <polyline points="8 6 3 12 8 18" />
+    <polyline points="16 6 21 12 16 18" />
+    <line x1="13.5" y1="4.5" x2="10.5" y2="19.5" />
+  </svg>
+);
+
+const IconGrid = ({ size = 24, className }) => (
+  <svg {...iconProps(size)} className={className}>
+    <rect x="3" y="3" width="8" height="8" rx="1.5" />
+    <rect x="13" y="3" width="8" height="5" rx="1.5" />
+    <rect x="13" y="10" width="8" height="11" rx="1.5" />
+    <rect x="3" y="13" width="8" height="8" rx="1.5" />
+  </svg>
+);
+
+const IconSpark = ({ size = 24, className }) => (
+  <svg {...iconProps(size)} className={className}>
+    <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z" />
+    <path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z" />
+  </svg>
+);
+
+const IconFlow = ({ size = 24, className }) => (
+  <svg {...iconProps(size)} className={className}>
+    <rect x="3" y="4" width="6" height="6" rx="1.5" />
+    <rect x="15" y="14" width="6" height="6" rx="1.5" />
+    <path d="M9 7h5a3 3 0 0 1 3 3v4" />
+    <polyline points="14.5 11.5 17 14 19.5 11.5" />
+  </svg>
+);
+
+const IconKey = ({ size = 24, className }) => (
+  <svg {...iconProps(size)} className={className}>
+    <circle cx="8" cy="14" r="4.5" />
+    <path d="M11.5 10.5L20 2" />
+    <path d="M16.5 5.5L19.5 8.5" />
+    <path d="M14 8l2 2" />
+  </svg>
+);
+
+const IconShield = ({ size = 24, className }) => (
+  <svg {...iconProps(size)} className={className}>
+    <path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6l7-3z" />
+    <polyline points="9 12 11.2 14.2 15.5 9.5" />
+  </svg>
+);
+
+const IconHammer = ({ size = 24, className }) => (
+  <svg {...iconProps(size)} className={className}>
+    <path d="M14.5 4.5l5 5-2 2-5-5 2-2z" />
+    <path d="M13 8L4 17a1.8 1.8 0 0 0 0 2.5v0a1.8 1.8 0 0 0 2.5 0l9-9" />
+    <path d="M16 3l5 5" />
+  </svg>
+);
+
+const IconBriefcase = ({ size = 24, className }) => (
+  <svg {...iconProps(size)} className={className}>
+    <rect x="3" y="7" width="18" height="13" rx="2" />
+    <path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7" />
+    <path d="M3 12h18" />
+  </svg>
+);
+
+const IconBulb = ({ size = 24, className }) => (
+  <svg {...iconProps(size)} className={className}>
+    <path d="M9 18h6" />
+    <path d="M10 21h4" />
+    <path d="M12 3a6 6 0 0 0-4 10.5c.8.7 1.3 1.5 1.5 2.5h5c.2-1 .7-1.8 1.5-2.5A6 6 0 0 0 12 3z" />
+  </svg>
+);
+
+// ── Hero showcase: current builds in the pipeline ───────────────────────────
 const PROJECTS = [
   {
-    tag: "AI Recruiting Platform",
-    title: "RYZE.ai",
-    desc: "Multi-tenant SaaS with AI candidate matching, semantic search, automated scheduling, and post-call intelligence. Designed and built end to end.",
-    stack: ["FastAPI", "pgvector", "React", "Claude"],
-  },
-  {
-    tag: "Finance & Operations",
-    title: "Accounting Workflow App",
-    desc: "A custom application replacing spreadsheets and manual reconciliation for a finance team — built around their actual close process.",
+    tag: "Operations",
+    title: "Time Tracking App",
+    desc: "Time and resource tracking designed around an existing operations workflow — instead of forcing the team into a new one.",
     stack: ["FastAPI", "Postgres", "React"],
   },
   {
-    tag: "Operations",
-    title: "Time Tracking System",
-    desc: "Time and resource tracking designed around an existing operations workflow, instead of forcing the team into a new one.",
+    tag: "Finance Automation",
+    title: "AP Automation",
+    desc: "Accounts payable without the manual grind — invoice capture, approval routing, and payment prep wired into the actual close process.",
+    stack: ["FastAPI", "Postgres", "React", "Claude"],
+  },
+  {
+    tag: "Risk & Insurance",
+    title: "Workers' Comp Cost Mitigation",
+    desc: "A tool that tracks claims, classifications, and experience-mod drivers to surface where premiums can actually be reduced.",
     stack: ["FastAPI", "Postgres", "React"],
   },
 ];
 
 const SERVICES = [
   {
-    icon: Code2,
+    icon: IconShield,
+    title: "Vetted Builders",
+    desc: "Every builder on the platform is invited based on software they've actually shipped — proof of work, not promises.",
+  },
+  {
+    icon: IconCode,
     title: "Custom Applications",
-    desc: "Full applications built around your workflow — not a template you have to bend your business to fit.",
+    desc: "Full applications built around a real workflow — not a template the business has to bend itself to fit.",
   },
   {
-    icon: LayoutDashboard,
+    icon: IconGrid,
     title: "Internal Tools & Dashboards",
-    desc: "The admin panels, trackers, and dashboards your team needs but can't buy off the shelf.",
+    desc: "The admin panels, trackers, and dashboards a team needs but can't buy off the shelf.",
   },
   {
-    icon: Sparkles,
+    icon: IconSpark,
     title: "AI Integration",
     desc: "Semantic search, RAG, document parsing, and LLM features wired into real workflows — not bolted on as a gimmick.",
   },
   {
-    icon: Workflow,
+    icon: IconFlow,
     title: "Automation & Workflows",
-    desc: "Scheduling, notifications, webhooks, and pipelines that remove the manual steps eating your team's time.",
+    desc: "Scheduling, notifications, webhooks, and pipelines that remove the manual steps eating a team's time.",
   },
   {
-    icon: KeyRound,
-    title: "You Own the Code",
-    desc: "No per-seat SaaS rent. The software is yours — deployed, documented, and handed over.",
-  },
-  {
-    icon: Calculator,
-    title: "Built by an Operator",
-    desc: "A CPA and Controller who codes. I understand finance and operations first, then build the system to match.",
+    icon: IconKey,
+    title: "The Business Owns the Code",
+    desc: "No per-seat SaaS rent. The software belongs to the company that paid for it — deployed, documented, and handed over.",
   },
 ];
 
 const PROCESS = [
   {
     num: "01",
-    title: "Understand the workflow",
-    desc: "I learn how your business actually runs — the steps, the edge cases, the spreadsheets holding it together.",
+    title: "Builders prove it",
+    desc: "Invitations go to people who can demonstrably build professional custom software — shipped products, not keyword-stuffed resumes.",
   },
   {
     num: "02",
-    title: "Design the system",
-    desc: "Map the workflow to software with no bloat. You see the structure before a line of code is written.",
+    title: "A profile is created",
+    desc: "Each builder gets a profile showcasing what they've built, how they work, and what they're ready to take on next.",
   },
   {
     num: "03",
-    title: "Build it fast",
-    desc: "Production software in weeks, not quarters — the same AI-assisted build process that produced RYZE.ai.",
+    title: "Employers bring the work",
+    desc: "Businesses describe what they need built. Projects are matched to the builder whose track record actually fits.",
   },
   {
     num: "04",
-    title: "You own it",
-    desc: "Deployed, documented, and yours to keep. Clean hand-off or ongoing support — your call.",
+    title: "The work flows",
+    desc: "As work comes in from the employer side, everyone involved stays busy — and every project shipped strengthens a builder's profile.",
   },
 ];
 
-const PROJECT_TYPES = [
-  { value: "custom_app", icon: AppWindow, label: "Custom app" },
-  { value: "internal_tool", icon: Wrench, label: "Internal tool" },
-  { value: "not_sure", icon: Lightbulb, label: "Not sure yet" },
+const INTENTS = [
+  { value: "builder", icon: IconHammer, label: "I build software" },
+  { value: "employer", icon: IconBriefcase, label: "I need software built" },
+  { value: "following", icon: IconBulb, label: "Just following along" },
 ];
 
 // ── Inline RYZE logo SVG (footer) ───────────────────────────────────────────
@@ -143,7 +218,7 @@ function ProjectShowcase() {
           <span style={{ background: "#28c840" }} />
         </div>
         <span className={styles.showcaseWindowTitle}>
-          <RyzeLogo size={12} color="#57a0d3" /> Selected Work
+          <RyzeLogo size={12} color="#57a0d3" /> Current Builds
         </span>
       </div>
 
@@ -201,7 +276,7 @@ export default function Landing() {
   async function handleSubmit() {
     setErrorMsg("");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setErrorMsg("Enter a valid email so I can reply.");
+      setErrorMsg("Enter a valid email.");
       return;
     }
     setStatus("loading");
@@ -211,7 +286,7 @@ export default function Landing() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: email.trim(),
-          intent: intent || "not_sure",
+          intent: intent || "following",
           source: "ryze_ai_landing",
         }),
       });
@@ -238,14 +313,14 @@ export default function Landing() {
             <span className={styles.navBrandName}>RYZE.ai</span>
           </div>
           <nav className={styles.navLinks}>
-            <a href="#services" className={styles.navLink}>What I Build</a>
-            <a href="#process" className={styles.navLink}>Process</a>
-            <a href="#work" className={styles.navLink}>Work</a>
+            <a href="#services" className={styles.navLink}>What Gets Built</a>
+            <a href="#process" className={styles.navLink}>How It Works</a>
+            <a href="#work" className={styles.navLink}>Current Builds</a>
           </nav>
           <div className={styles.navActions}>
             <a href="/auth" className={styles.navSignIn}>Sign In</a>
             <button className={styles.navCta} onClick={scrollToContact}>
-              Start a Project
+              Get in Touch
             </button>
           </div>
         </div>
@@ -257,27 +332,27 @@ export default function Landing() {
           <div className={styles.heroContent}>
             <div className={styles.heroBadge}>
               <span className={styles.heroPulse} />
-              Built by a CPA who builds
+              Invite-only · Proven builders
             </div>
             <h1 className={styles.heroH1}>
-              We build the software{" "}
-              <em className={styles.heroEm}>you&nbsp;can't&nbsp;buy.</em>
+              Software built by people who've{" "}
+              <em className={styles.heroEm}>actually&nbsp;shipped.</em>
             </h1>
             <p className={styles.heroSub}>
-              Custom apps, internal tools, and automation — built around how your
-              business actually works, not how an off-the-shelf vendor thinks it
-              should.
+              An invite-only network of builders who can deliver professional
+              custom software — matched with businesses that have real work to
+              be done.
             </p>
             <div className={styles.heroCtas}>
               <button className={styles.heroCtaPrimary} onClick={scrollToContact}>
-                Start a Project
+                Get in Touch
               </button>
               <a href="#work" className={styles.heroCtaSecondary}>
-                See the Work →
+                See Current Builds →
               </a>
             </div>
             <p className={styles.heroStack}>
-              Python · FastAPI · pgvector · React · Claude API
+              Python · FastAPI · Postgres · React · AI
             </p>
           </div>
 
@@ -287,12 +362,12 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── What I Build (services) ────────────────── */}
+      {/* ── What Gets Built (services) ─────────────── */}
       <section className={styles.servicesSection} id="services">
         <div className={styles.container}>
-          <div className={styles.eyebrow}>What I Build</div>
+          <div className={styles.eyebrow}>What Gets Built</div>
           <h2 className={styles.sectionH2}>
-            Software shaped to your business,<br />
+            Software shaped to the business,<br />
             not the other way around.
           </h2>
 
@@ -302,7 +377,7 @@ export default function Landing() {
               return (
                 <div key={s.title} className={styles.serviceCard}>
                   <div className={styles.serviceIconWrap}>
-                    <Icon className={styles.serviceIcon} size={24} strokeWidth={1.75} />
+                    <Icon className={styles.serviceIcon} size={24} />
                   </div>
                   <h3 className={styles.serviceTitle}>{s.title}</h3>
                   <p className={styles.serviceDesc}>{s.desc}</p>
@@ -318,8 +393,8 @@ export default function Landing() {
         <div className={styles.container}>
           <div className={styles.eyebrow}>How It Works</div>
           <h2 className={styles.sectionH2}>
-            From your workflow to working software<br />
-            in weeks, not quarters.
+            Proven builders on one side.<br />
+            Real projects on the other.
           </h2>
 
           <div className={styles.processGrid}>
@@ -334,11 +409,11 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Work / case studies ────────────────────── */}
+      {/* ── Work / current builds ──────────────────── */}
       <section className={styles.workSection} id="work">
         <div className={styles.container}>
-          <div className={styles.eyebrow}>Selected Work</div>
-          <h2 className={styles.sectionH2}>Real software, built end to end.</h2>
+          <div className={styles.eyebrow}>Current Builds</div>
+          <h2 className={styles.sectionH2}>Real projects, in the pipeline now.</h2>
 
           <div className={styles.workGrid}>
             {PROJECTS.map((p) => (
@@ -359,34 +434,34 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Operator band ──────────────────────────── */}
+      {/* ── Why RYZE band ──────────────────────────── */}
       <section className={styles.operatorSection}>
         <div className={styles.operatorInner}>
           <div className={styles.operatorEyebrow}>Why RYZE</div>
           <h2 className={styles.operatorTitle}>
-            Most developers don't understand your business.
-            Most operators can't build. I do both.
+            Resumes don't ship software.
+            Shipped software does.
           </h2>
           <p className={styles.operatorText}>
-            I'm Dane Ahern — a CPA and Controller with twelve years in finance
-            leadership who builds production software. That combination is rare,
-            and it's the whole point: less translation between what you need and
-            what gets built, fewer wrong turns, and software that fits the work
-            the first time. RYZE.ai is the proof — a full platform I designed and
-            built end to end. Now I build that caliber of software for other
-            companies.
+            Builders are invited based on what they've actually built, then that
+            proof is put in front of businesses with real work. No
+            keyword-matched resumes, no agencies marking up junior talent — just
+            a direct line between people who can build professional custom
+            software and the companies that need it built.
           </p>
-          <div className={styles.operatorSig}>Dane Ahern · CPA · Controller · Builder</div>
+          <div className={styles.operatorSig}>
+            Proof of work · Direct matches · No middle layers
+          </div>
         </div>
       </section>
 
       {/* ── Contact ────────────────────────────────── */}
       <section className={styles.contactSection} ref={contactRef}>
         <div className={styles.contactInner}>
-          <h2 className={styles.contactTitle}>Have something to build?</h2>
+          <h2 className={styles.contactTitle}>Build, or get something built.</h2>
           <p className={styles.contactSub}>
-            Tell me what you're trying to do and I'll tell you straight whether I
-            can build it. No sales funnel — it comes directly to me.
+            Builders: show what's been shipped. Employers: describe what's
+            needed. Either way, leave an email below and expect a real reply.
           </p>
 
           {status === "success" ? (
@@ -394,13 +469,13 @@ export default function Landing() {
               <div className={styles.successCheck}>✓</div>
               <div>
                 <p className={styles.successTitle}>Got it.</p>
-                <p className={styles.successSub}>I'll be in touch shortly.</p>
+                <p className={styles.successSub}>Expect a reply shortly.</p>
               </div>
             </div>
           ) : (
             <div className={styles.contactForm}>
               <div className={styles.intentRow}>
-                {PROJECT_TYPES.map(({ value, icon: Icon, label }) => (
+                {INTENTS.map(({ value, icon: Icon, label }) => (
                   <button
                     key={value}
                     type="button"
@@ -437,7 +512,7 @@ export default function Landing() {
               </div>
 
               {errorMsg && <p className={styles.errMsg}>{errorMsg}</p>}
-              <p className={styles.trustLine}>Goes straight to my inbox. No spam.</p>
+              <p className={styles.trustLine}>No spam, no sales funnel — just a reply.</p>
             </div>
           )}
         </div>
@@ -451,15 +526,8 @@ export default function Landing() {
             <span>RYZE.ai</span>
           </div>
           <div className={styles.footerLinks}>
-            <a href="#services">What I Build</a>
-            <a href="#work">Work</a>
-            <a
-              href="https://www.linkedin.com/in/daneahern/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              LinkedIn
-            </a>
+            <a href="#services">What Gets Built</a>
+            <a href="#work">Current Builds</a>
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>
           </div>
