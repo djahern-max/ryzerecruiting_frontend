@@ -333,11 +333,7 @@ export default function EmployerDashboard() {
         {!profileLoading && !bookingsLoading && !profile && myBookings.length === 0 && (
           <div className={styles.intro}>
             <p className={styles.introText}>
-              Start by scheduling adiscovery call. RYZE reviews
-              your company, identifies practical AI use cases, and builds a
-              profile around the workflows where automation or custom tools could
-              create real value. As opportunities are defined, recommended builders
-              and implementation matches will appear here.
+              Start by scheduling a discovery call. This is simply the first step in understanding how your organization works today, where manual processes may be slowing things down, and where automation or practical technology could potentially help. From there, RYZE can help identify realistic opportunities, build a clearer profile of your needs, and determine whether there may be a good fit with someone who can help move the work forward.
             </p>
           </div>
         )}
