@@ -328,14 +328,16 @@ export default function EmployerDashboard() {
           </div>
         </div>
 
-        {/* ── What to expect ── */}
-        <div className={styles.intro}>
-          <p className={styles.introText}>
-            Start by scheduling a discovery call. RYZE reviews your company,
-            builds a profile, and surfaces vetted candidates matched against
-            your open roles. Everything appears here once your call is confirmed.
-          </p>
-        </div>
+        {/* ── What to expect (new users only) ── */}
+        {!profileLoading && !bookingsLoading && !profile && myBookings.length === 0 && (
+          <div className={styles.intro}>
+            <p className={styles.introText}>
+              Start by scheduling a discovery call. RYZE reviews your company,
+              builds a profile, and surfaces vetted candidates matched against
+              your open roles. Everything appears here once your call is confirmed.
+            </p>
+          </div>
+        )}
 
         {/* ── Your Open Roles (with AI candidate matches) ── */}
         {!rolesLoading && myRoles.length > 0 && (
