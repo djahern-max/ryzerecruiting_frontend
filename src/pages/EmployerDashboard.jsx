@@ -317,12 +317,12 @@ export default function EmployerDashboard() {
         {/* ── Welcome Banner ── */}
         <div className={styles.banner}>
           <div className={styles.bannerLeft}>
-            <span className={styles.bannerBadge}>AI Implementation Workspace</span>
+
             <h1 className={styles.bannerTitle}>Welcome back, {firstName}.</h1>
             {profile && <p className={styles.companyLine}>{profile.company_name}</p>}
           </div>
           <div className={styles.bannerRight}>
-            <ScheduleCallButton variant="primary" size="md" label="Schedule AI Discovery" />
+            <ScheduleCallButton variant="primary" size="md" label="Schedule Discovery Call" />
             <button className={styles.profileBtn} onClick={() => navigate('/employer/profile')}>
               View Company Profile
             </button>
@@ -333,7 +333,7 @@ export default function EmployerDashboard() {
         {!profileLoading && !bookingsLoading && !profile && myBookings.length === 0 && (
           <div className={styles.intro}>
             <p className={styles.introText}>
-              Start by scheduling an AI opportunity discovery call. RYZE reviews
+              Start by scheduling adiscovery call. RYZE reviews
               your company, identifies practical AI use cases, and builds a
               profile around the workflows where automation or custom tools could
               create real value. As opportunities are defined, recommended builders
