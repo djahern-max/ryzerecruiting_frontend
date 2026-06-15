@@ -290,39 +290,57 @@ export default function Landing() {
 
       {/* ── Hero ───────────────────────────────────── */}
       <section className={styles.hero}>
-        <div className={styles.heroInner}>
-          <div className={styles.heroContent}>
+        <div className={styles.heroContent}>
+          <div className={styles.heroBadge}>
+            <span className={styles.heroPulse} />
+            A vetted network of custom software builders
+          </div>
+          {/* ── Hero ───────────────────────────────────── */}
 
-            <h1 className={styles.heroH1}>
-              Your Recruiting Pipeline,{" "}
-              <em className={styles.heroEm}>Powered&nbsp;by&nbsp;AI</em>
-            </h1>
-            <p className={styles.heroSub}>
-              RYZE.ai turns every candidate call, resume, and job order into
-              searchable, actionable recruiting intelligence — automatically.
-            </p>
-            <div className={styles.heroCtas}>
-              <button
-                className={styles.heroCtaPrimary}
-                onClick={() =>
-                  waitlistRef.current?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                Get Early Access
-              </button>
-              <a href="/about" className={styles.heroCtaSecondary}>
-                Follow the Build →
-              </a>
+          <section className={styles.hero}>
+            <div className={styles.heroContent}>
+              <div className={styles.heroBadge}>
+                <span className={styles.heroPulse} />
+                A practical network of custom software builders
+              </div>
+
+              ```
+              <h1 className={styles.heroH1}>
+                Custom Software for{" "}
+                <em className={styles.heroEm}>Real&nbsp;Business&nbsp;Workflows</em>
+              </h1>
+
+              <p className={styles.heroSub}>
+                RYZE connects businesses with builders who can turn real operational
+                problems — AP automation, time tracking, custom integrations, reporting,
+                and internal tools — into working software.
+              </p>
+
+              <div className={styles.heroCtas}>
+                <button
+                  className={styles.heroCtaPrimary}
+                  onClick={() =>
+                    waitlistRef.current?.scrollIntoView({ behavior: "smooth" })
+                  }
+                >
+                  Start the Conversation
+                </button>
+
+                <a href="/about" className={styles.heroCtaSecondary}>
+                  Follow the Build →
+                </a>
+              </div>
+
+              <p className={styles.heroStack}>
+                Workflow Automation · Internal Tools · Integrations · Reporting
+              </p>
+              ```
+
             </div>
-            <p className={styles.heroStack}>
-              Python · FastAPI · pgvector · React · Claude API
-            </p>
-          </div>
+          </section>
 
-          <div className={styles.heroVisual}>
-            <DemoChat />
-          </div>
         </div>
+
       </section>
 
       {/* ── How It Works ───────────────────────────── */}
