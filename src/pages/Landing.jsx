@@ -290,57 +290,44 @@ export default function Landing() {
 
       {/* ── Hero ───────────────────────────────────── */}
       <section className={styles.hero}>
-        <div className={styles.heroContent}>
-          <div className={styles.heroBadge}>
-            <span className={styles.heroPulse} />
-            A vetted network of custom software builders
-          </div>
-          {/* ── Hero ───────────────────────────────────── */}
-
-          <section className={styles.hero}>
-            <div className={styles.heroContent}>
-              <div className={styles.heroBadge}>
-                <span className={styles.heroPulse} />
-                A practical network of custom software builders
-              </div>
-
-              ```
-              <h1 className={styles.heroH1}>
-                Custom Software for{" "}
-                <em className={styles.heroEm}>Real&nbsp;Business&nbsp;Workflows</em>
-              </h1>
-
-              <p className={styles.heroSub}>
-                RYZE connects businesses with builders who can turn real operational
-                problems — AP automation, time tracking, custom integrations, reporting,
-                and internal tools — into working software.
-              </p>
-
-              <div className={styles.heroCtas}>
-                <button
-                  className={styles.heroCtaPrimary}
-                  onClick={() =>
-                    waitlistRef.current?.scrollIntoView({ behavior: "smooth" })
-                  }
-                >
-                  Start the Conversation
-                </button>
-
-                <a href="/about" className={styles.heroCtaSecondary}>
-                  Follow the Build →
-                </a>
-              </div>
-
-              <p className={styles.heroStack}>
-                Workflow Automation · Internal Tools · Integrations · Reporting
-              </p>
-              ```
-
+        <div className={styles.heroInner}>
+          <div className={styles.heroContent}>
+            <div className={styles.heroBadge}>
+              <span className={styles.heroPulse} />
+              A practical network of custom software builders
             </div>
-          </section>
 
+            <h1 className={styles.heroH1}>
+              Custom Software for{" "}
+              <em className={styles.heroEm}>Real&nbsp;Business&nbsp;Workflows</em>
+            </h1>
+
+            <p className={styles.heroSub}>
+              RYZE connects businesses with builders who can turn real operational
+              problems — AP automation, time tracking, custom integrations, reporting,
+              and internal tools — into working software.
+            </p>
+
+            <div className={styles.heroCtas}>
+              <button
+                className={styles.heroCtaPrimary}
+                onClick={() =>
+                  waitlistRef.current?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
+                Start the Conversation
+              </button>
+
+              <a href="/about" className={styles.heroCtaSecondary}>
+                Follow the Build →
+              </a>
+            </div>
+
+            <p className={styles.heroStack}>
+              Workflow Automation · Internal Tools · Integrations · Reporting
+            </p>
+          </div>
         </div>
-
       </section>
 
       {/* ── How It Works ───────────────────────────── */}
