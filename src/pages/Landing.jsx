@@ -292,10 +292,7 @@ export default function Landing() {
       <section className={styles.hero}>
         <div className={styles.heroInner}>
           <div className={styles.heroContent}>
-            <div className={styles.heroBadge}>
-              <span className={styles.heroPulse} />
-              Built for Accounting &amp; Finance Recruiting
-            </div>
+
             <h1 className={styles.heroH1}>
               Your Recruiting Pipeline,{" "}
               <em className={styles.heroEm}>Powered&nbsp;by&nbsp;AI</em>
