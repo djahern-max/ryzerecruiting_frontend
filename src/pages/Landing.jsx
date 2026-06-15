@@ -2,112 +2,105 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { Building2, BriefcaseBusiness, Binoculars } from "lucide-react";
 import styles from "./Landing.module.css";
-import ryzeLogo from "../assets/RYZE_LOGO.svg";
 
-import timeIcon from "../assets/icons/calendar.svg";
-import apIcon from "../assets/icons/downloadV2.svg";
-import poIcon from "../assets/icons/confirmed.svg";
-import workflowIcon from "../assets/icons/change.svg";
-import dashboardIcon from "../assets/icons/indexed.svg";
+// Flaticon SVG icons
 import aiIcon from "../assets/icons/artificial-intelligence.svg";
-import buildIcon from "../assets/icons/edit.svg";
-import businessIcon from "../assets/icons/Portfolio_RYZE.png";
-import followIcon from "../assets/icons/happy_face.svg";
+import calendarIcon from "../assets/icons/calendar.svg";
+import zoomIcon from "../assets/icons/zoom.svg";
+import addCandidateIcon from "../assets/icons/add-candidate.svg";
+import enhanceIcon from "../assets/icons/enhance_profileV2.svg";
+import indexedIcon from "../assets/icons/indexed.svg";
+import downloadIcon from "../assets/icons/downloadV2.svg";
+import sendInviteIcon from "../assets/icons/send_invite.svg";
+import aiNotesIcon from "../assets/icons/ai_notes.svg";
+import ryzeLogo from "../assets/RYZE_LOGO.svg";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-// ── AI opportunities RYZE.ai is being shaped around ─────────────────────────
-const PROJECTS = [
+const DEMO_QUERIES = [
   {
-    tag: "Accounting AI",
-    title: "AP Automation Opportunity",
-    desc: "Invoices stuck in email, approvals happening in Slack, and coding happening after the fact. RYZE.ai helps turn that messy process into a scoped AI implementation opportunity.",
-    stack: ["Document AI", "FastAPI", "Postgres", "React"],
+    q: "Who are my best candidates for a Controller role?",
+    a: "3 strong matches: Sarah Chen (Big 4, CPA, 8 yrs), Marcus Webb (Manufacturing controller, $140K target), and Priya Nair (IPO experience, currently open).",
   },
   {
-    tag: "Operations AI",
-    title: "Time Tracking Workflow",
-    desc: "Crews, managers, payroll, and job costing all need clean time data. RYZE.ai helps identify where automation can reduce chasing, rework, and payroll friction.",
-    stack: ["Workflow Mapping", "FastAPI", "Postgres", "AI"],
+    q: "Which employers haven't heard from us in 30 days?",
+    a: "4 employers need a touchpoint: Harbor Financial, Apex Manufacturing, TechBridge Group, and Summit Capital. Last contact was 31–47 days ago.",
   },
   {
-    tag: "Purchasing AI",
-    title: "Purchase Order Control",
-    desc: "When purchasing happens through texts, emails, and verbal approvals, costs become hard to see. RYZE.ai helps scope PO workflows that bring approval and spend visibility into one place.",
-    stack: ["Approvals", "React", "Postgres", "Reporting"],
-  },
-  {
-    tag: "Business Intelligence",
-    title: "Internal Reporting Assistant",
-    desc: "Many companies have the data, but not the visibility. RYZE.ai helps identify reporting gaps and match them with builders who can create dashboards, admin tools, and AI-assisted summaries.",
-    stack: ["Dashboards", "Search", "Summaries", "AI"],
+    q: "What do we know about our Deloitte alumni candidates?",
+    a: "4 Deloitte alumni in your pipeline. Avg target: $130–160K. Top reason for leaving: better work-life balance.",
   },
 ];
 
-const SERVICES = [
+const STEPS = [
+  {
+    icon: addCandidateIcon,
+    num: "01",
+    title: "Add Candidates & Employers",
+    desc: "Paste a resume, upload a PDF, or copy a LinkedIn profile. RYZE parses everything into structured records automatically.",
+  },
+  {
+    icon: zoomIcon,
+    num: "02",
+    title: "Book & Run Zoom Calls",
+    desc: "Integrated booking with Zoom and Google Calendar. AI pre-call briefs generated automatically before every meeting.",
+  },
+  {
+    icon: aiNotesIcon,
+    num: "03",
+    title: "AI Captures Everything",
+    desc: "Post-call summaries written and saved automatically. Every conversation becomes queryable intelligence in your database.",
+  },
+  {
+    icon: indexedIcon,
+    num: "04",
+    title: "Match, Present & Export",
+    desc: "Semantic matching surfaces the right candidates. One-click branded PDFs ready to send to hiring managers.",
+  },
+];
+
+const FEATURES = [
+  {
+    icon: enhanceIcon,
+    title: "AI-Generated Profiles",
+    desc: "Claude writes candidate summaries, outreach messages, and recruiter notes from raw resume text — instantly.",
+  },
+  {
+    icon: calendarIcon,
+    title: "Smart Scheduling",
+    desc: "Four booking flows for every recruiter scenario. Auto-confirms, sends reminders, no manual follow-up required.",
+  },
+  {
+    icon: zoomIcon,
+    title: "Zoom + Calendar Sync",
+    desc: "Meetings create in Zoom and Google Calendar automatically. Links delivered by email and SMS.",
+  },
   {
     icon: aiIcon,
-    title: "AI Opportunity Discovery",
-    desc: "Find the places inside a business where AI can realistically save time: documents, approvals, reporting, admin work, search, and repetitive workflows.",
+    title: "Semantic Matching",
+    desc: "pgvector cosine similarity ranks candidates against job orders by meaning — not just keywords.",
   },
   {
-    icon: workflowIcon,
-    title: "Workflow Mapping",
-    desc: "Translate messy processes into clear implementation opportunities by understanding who touches the workflow, what breaks, and what needs to be improved.",
+    icon: downloadIcon,
+    title: "Branded PDF Exports",
+    desc: "One-click recruiter-grade PDFs for candidates and job orders. Mirrors the UI layout exactly.",
   },
   {
-    icon: businessIcon,
-    title: "Company Intelligence",
-    desc: "Build practical profiles of companies, industries, software stacks, pain points, and likely AI use cases so outreach is based on real business needs.",
-  },
-  {
-    icon: buildIcon,
-    title: "Builder Matching",
-    desc: "Match companies with candidates who can actually implement the solution — combining technical ability with business context and domain understanding.",
-  },
-  {
-    icon: dashboardIcon,
-    title: "Implementation Roadmaps",
-    desc: "Turn vague AI interest into scoped projects with clear workflows, deliverables, data needs, integrations, and the type of builder required.",
-  },
-  {
-    icon: apIcon,
-    title: "Practical AI Tools",
-    desc: "Focus on useful AI: document parsing, workflow automation, internal search, summaries, admin dashboards, and tools that reduce manual work.",
+    icon: sendInviteIcon,
+    title: "Multi-Tenant Platform",
+    desc: "Built for scale from day one. Each recruiting firm gets an isolated tenant environment with Stripe billing.",
   },
 ];
 
-const PROCESS = [
-  {
-    num: "01",
-    title: "Find the business pain",
-    desc: "RYZE.ai starts by identifying companies with real workflow problems — the kind of problems hiding in spreadsheets, inboxes, approvals, PDFs, and disconnected systems.",
-  },
-  {
-    num: "02",
-    title: "Turn it into an AI opportunity",
-    desc: "The problem gets translated into a practical use case: what should be automated, what data is needed, what the workflow should look like, and what outcome matters.",
-  },
-  {
-    num: "03",
-    title: "Match the right builder",
-    desc: "The platform looks for candidates with the right mix of technical skill, business understanding, and implementation ability — not just keyword matches on a resume.",
-  },
-  {
-    num: "04",
-    title: "Build, learn, and improve",
-    desc: "Once the project starts, real usage makes the workflow clearer. The software improves, the data gets cleaner, and the AI becomes more useful over time.",
-  },
+const INTENT_OPTIONS = [
+  { value: "solo", icon: BriefcaseBusiness, label: "Solo recruiter" },
+  { value: "firm", icon: Building2, label: "Recruiting firm" },
+  { value: "following", icon: Binoculars, label: "Just following along" },
 ];
 
-const INTENTS = [
-  { value: "employer", icon: businessIcon, label: "I want to implement AI" },
-  { value: "builder", icon: buildIcon, label: "I can build AI solutions" },
-  { value: "following", icon: followIcon, label: "I am following the build" },
-];
-
-// ── Inline RYZE logo SVG (footer) ───────────────────────────────────────────
+// ── Inline RYZE logo SVG ────────────────────────────────────────────────────
 function RyzeLogo({ size = 32, color = "#004aad" }) {
   return (
     <svg
@@ -126,51 +119,92 @@ function RyzeLogo({ size = 32, color = "#004aad" }) {
   );
 }
 
-// ── Hero opportunity showcase (cycling) ─────────────────────────────────────
-function ProjectShowcase() {
+// ── Animated intelligence demo widget ──────────────────────────────────────
+function DemoChat() {
   const [idx, setIdx] = useState(0);
+  const [phase, setPhase] = useState("typing");
+  const [displayQ, setDisplayQ] = useState("");
+  const [displayA, setDisplayA] = useState("");
 
   useEffect(() => {
-    const t = setInterval(() => setIdx((i) => (i + 1) % PROJECTS.length), 4200);
-    return () => clearInterval(t);
-  }, []);
+    const entry = DEMO_QUERIES[idx];
+    setDisplayQ("");
+    setDisplayA("");
+    setPhase("typing");
 
-  const p = PROJECTS[idx];
+    let qi = 0;
+    const typingTimer = setInterval(() => {
+      qi++;
+      setDisplayQ(entry.q.slice(0, qi));
+      if (qi >= entry.q.length) {
+        clearInterval(typingTimer);
+        setTimeout(() => {
+          setPhase("answering");
+          let ai = 0;
+          const ansTimer = setInterval(() => {
+            ai += 3;
+            setDisplayA(entry.a.slice(0, ai));
+            if (ai >= entry.a.length) {
+              setDisplayA(entry.a);
+              clearInterval(ansTimer);
+              setPhase("done");
+              setTimeout(() => {
+                setPhase("fading");
+                setTimeout(() => setIdx(i => (i + 1) % DEMO_QUERIES.length), 500);
+              }, 3500);
+            }
+          }, 16);
+        }, 500);
+      }
+    }, 35);
+    return () => clearInterval(typingTimer);
+  }, [idx]);
 
   return (
-    <div className={styles.showcase}>
-      <div className={styles.showcaseBar}>
-        <div className={styles.showcaseLights}>
+    <div className={`${styles.demo} ${phase === "fading" ? styles.demoFading : ""}`}>
+      <div className={styles.demoTitleBar}>
+        <div className={styles.demoTrafficLights}>
           <span style={{ background: "#ff5f57" }} />
           <span style={{ background: "#febc2e" }} />
           <span style={{ background: "#28c840" }} />
         </div>
-        <span className={styles.showcaseWindowTitle}>
-          <RyzeLogo size={12} color="#57a0d3" /> AI Opportunities
-        </span>
+        <span className={styles.demoWindowTitle}>RYZE Intelligence</span>
       </div>
-
-      <div className={styles.showcaseBody}>
-        <div key={idx} className={styles.showcaseCard}>
-          <span className={styles.showcaseTag}>{p.tag}</span>
-          <h3 className={styles.showcaseTitle}>{p.title}</h3>
-          <p className={styles.showcaseDesc}>{p.desc}</p>
-          <div className={styles.showcaseStack}>
-            {p.stack.map((s) => (
-              <span key={s} className={styles.stackChip}>
-                {s}
-              </span>
-            ))}
+      <div className={styles.demoMessages}>
+        {displayQ && (
+          <div className={styles.demoMsgUser}>
+            <div className={styles.demoMsgLabel}>You</div>
+            <div className={styles.demoMsgBubble}>
+              {displayQ}
+              {phase === "typing" && <span className={styles.cursor}>|</span>}
+            </div>
           </div>
-        </div>
+        )}
+        {phase === "answering" && !displayA && (
+          <div className={styles.demoMsgAi}>
+            <div className={styles.demoMsgLabel}>
+              <RyzeLogo size={12} color="#fff" /> RYZE
+            </div>
+            <div className={styles.demoThinking}>
+              <span /><span /><span />
+            </div>
+          </div>
+        )}
+        {displayA && (
+          <div className={styles.demoMsgAi}>
+            <div className={styles.demoMsgLabel}>
+              <RyzeLogo size={12} color="#fff" /> RYZE
+            </div>
+            <div className={styles.demoMsgAiBubble}>
+              {displayA}
+              {phase === "answering" && <span className={styles.cursor}>|</span>}
+            </div>
+          </div>
+        )}
       </div>
-
-      <div className={styles.showcasePips}>
-        {PROJECTS.map((_, i) => (
-          <span
-            key={i}
-            className={`${styles.pip} ${i === idx ? styles.pipActive : ""}`}
-          />
+      <div className={styles.demoPips}>
+        {DEMO_QUERIES.map((_, i) => (
+          <span key={i} className={`${styles.pip} ${i === idx ? styles.pipActive : ""}`} />
         ))}
       </div>
     </div>
@@ -181,11 +215,11 @@ function ProjectShowcase() {
 export default function Landing() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const contactRef = useRef(null);
+  const waitlistRef = useRef(null);
 
   const [email, setEmail] = useState("");
   const [intent, setIntent] = useState(null);
-  const [status, setStatus] = useState("idle");
+  const [wlStatus, setWlStatus] = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
   // Redirect authenticated users to their dashboard
@@ -197,17 +231,13 @@ export default function Landing() {
     }
   }, [user, navigate]);
 
-  function scrollToContact() {
-    contactRef.current?.scrollIntoView({ behavior: "smooth" });
-  }
-
-  async function handleSubmit() {
+  async function handleWaitlist() {
     setErrorMsg("");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setErrorMsg("Enter a valid email.");
+      setErrorMsg("Please enter a valid email address.");
       return;
     }
-    setStatus("loading");
+    setWlStatus("loading");
     try {
       const res = await fetch(`${API_BASE}/api/waitlist`, {
         method: "POST",
@@ -219,20 +249,21 @@ export default function Landing() {
         }),
       });
       if (res.ok || res.status === 409) {
-        setStatus("success");
+        setWlStatus("success");
       } else {
         const d = await res.json().catch(() => ({}));
-        setErrorMsg(d.detail || "Something went wrong. Try again.");
-        setStatus("idle");
+        setErrorMsg(d.detail || "Something went wrong. Please try again.");
+        setWlStatus("idle");
       }
     } catch {
-      setErrorMsg("Network error. Try again.");
-      setStatus("idle");
+      setErrorMsg("Network error. Please try again.");
+      setWlStatus("idle");
     }
   }
 
   return (
     <div className={styles.page}>
+
       {/* ── Navigation ─────────────────────────────── */}
       <header className={styles.nav}>
         <div className={styles.navInner}>
@@ -241,14 +272,17 @@ export default function Landing() {
             <span className={styles.navBrandName}>RYZE.ai</span>
           </div>
           <nav className={styles.navLinks}>
-            <a href="#services" className={styles.navLink}>AI Opportunities</a>
-            <a href="#process" className={styles.navLink}>Matching Model</a>
-            <a href="#work" className={styles.navLink}>Examples</a>
+            <a href="#how-it-works" className={styles.navLink}>How It Works</a>
+            <a href="#features" className={styles.navLink}>Features</a>
+            <a href="/about" className={styles.navLink}>About the Build</a>
           </nav>
           <div className={styles.navActions}>
             <a href="/auth" className={styles.navSignIn}>Sign In</a>
-            <button className={styles.navCta} onClick={scrollToContact}>
-              Get in Touch
+            <button
+              className={styles.navCta}
+              onClick={() => waitlistRef.current?.scrollIntoView({ behavior: "smooth" })}
+            >
+              Get Early Access
             </button>
           </div>
         </div>
@@ -260,138 +294,119 @@ export default function Landing() {
           <div className={styles.heroContent}>
             <div className={styles.heroBadge}>
               <span className={styles.heroPulse} />
-              AI opportunity discovery + builder matching
+              Built for Accounting &amp; Finance Recruiting
             </div>
             <h1 className={styles.heroH1}>
-              Find AI opportunities inside businesses — and match them with{" "}
-              <em className={styles.heroEm}>people who can build them.</em>
+              Your Recruiting Pipeline,{" "}
+              <em className={styles.heroEm}>Powered&nbsp;by&nbsp;AI</em>
             </h1>
             <p className={styles.heroSub}>
-              RYZE.ai helps identify practical AI use cases inside real companies —
-              from AP automation and reporting to time tracking, document workflows,
-              and internal tools — then connects those opportunities with builders who
-              can scope, build, and implement the solution.
+              RYZE.ai turns every candidate call, resume, and job order into
+              searchable, actionable recruiting intelligence — automatically.
             </p>
             <div className={styles.heroCtas}>
-              <button className={styles.heroCtaPrimary} onClick={scrollToContact}>
-                I Need AI Implemented
+              <button
+                className={styles.heroCtaPrimary}
+                onClick={() =>
+                  waitlistRef.current?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
+                Get Early Access
               </button>
-              <a href="#work" className={styles.heroCtaSecondary}>
-                See Example Opportunities →
+              <a href="/about" className={styles.heroCtaSecondary}>
+                Follow the Build →
               </a>
             </div>
             <p className={styles.heroStack}>
-              Company intelligence · Workflow mapping · AI tools · Builder matching
+              Python · FastAPI · pgvector · React · Claude API
             </p>
           </div>
 
           <div className={styles.heroVisual}>
-            <ProjectShowcase />
+            <DemoChat />
           </div>
         </div>
       </section>
 
-      {/* ── AI Opportunities ─────────────── */}
-      <section className={styles.servicesSection} id="services">
+      {/* ── How It Works ───────────────────────────── */}
+      <section className={styles.stepsSection} id="how-it-works">
         <div className={styles.container}>
-          <div className={styles.eyebrow}>AI Opportunities</div>
+          <div className={styles.eyebrow}>How It Works</div>
           <h2 className={styles.sectionH2}>
-            Most companies do not need AI hype.<br />
-            They need someone to find the workflow worth fixing.
+            From first call to placement,<br />
+            RYZE handles the intelligence layer.
           </h2>
 
-          <div className={styles.servicesGrid}>
-            {SERVICES.map((s) => (
-              <div key={s.title} className={styles.serviceCard}>
-                <div className={styles.serviceIconWrap}>
-                  <img src={s.icon} alt="" className={styles.serviceIconImg} />
+          <div className={styles.stepsGrid}>
+            {STEPS.map((step, i) => (
+              <div key={step.num} className={styles.stepCard}>
+                <div className={styles.stepIconWrap}>
+                  <img src={step.icon} alt="" className={styles.stepIcon} />
                 </div>
-                <h3 className={styles.serviceTitle}>{s.title}</h3>
-                <p className={styles.serviceDesc}>{s.desc}</p>
+                <h3 className={styles.stepTitle}>{step.title}</h3>
+                <p className={styles.stepDesc}>{step.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Matching Model ────────────────────────────────── */}
-      <section className={styles.processSection} id="process">
+      {/* ── Features ───────────────────────────────── */}
+      <section className={styles.featuresSection} id="features">
         <div className={styles.container}>
-          <div className={styles.eyebrow}>Matching Model</div>
+          <div className={styles.eyebrow}>The Platform</div>
           <h2 className={styles.sectionH2}>
-            Start with the business problem.<br />
-            Then match the builder to the work.
+            Everything you need to run<br />
+            a modern recruiting desk.
           </h2>
 
-          <div className={styles.processGrid}>
-            {PROCESS.map((step) => (
-              <div key={step.num} className={styles.processCard}>
-                <div className={styles.processNum}>{step.num}</div>
-                <h3 className={styles.processTitle}>{step.title}</h3>
-                <p className={styles.processDesc}>{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Work / example opportunities ──────────────────── */}
-      <section className={styles.workSection} id="work">
-        <div className={styles.container}>
-          <div className={styles.eyebrow}>Example Opportunities</div>
-          <h2 className={styles.sectionH2}>
-            Practical AI projects hiding inside everyday business operations.
-          </h2>
-
-          <div className={styles.workGrid}>
-            {PROJECTS.map((p) => (
-              <div key={p.title} className={styles.workCard}>
-                <span className={styles.workCardTag}>{p.tag}</span>
-                <h3 className={styles.workCardTitle}>{p.title}</h3>
-                <p className={styles.workCardDesc}>{p.desc}</p>
-                <div className={styles.workCardStack}>
-                  {p.stack.map((s) => (
-                    <span key={s} className={styles.stackChip}>
-                      {s}
-                    </span>
-                  ))}
+          <div className={styles.featuresGrid}>
+            {FEATURES.map((f) => (
+              <div key={f.title} className={styles.featureCard}>
+                <div className={styles.featureIconWrap}>
+                  <img src={f.icon} alt="" className={styles.featureIcon} />
                 </div>
+                <h3 className={styles.featureTitle}>{f.title}</h3>
+                <p className={styles.featureDesc}>{f.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Contact ────────────────────────────────── */}
-      <section className={styles.contactSection} ref={contactRef}>
-        <div className={styles.contactInner}>
-          <h2 className={styles.contactTitle}>Have a business problem that AI might solve?</h2>
-          <p className={styles.contactSub}>
-            Tell me what workflow is slowing the business down — invoices, approvals,
-            time tracking, reporting, document review, admin work, or anything else.
-            Or, if you build AI tools, tell me what kinds of problems you are good at solving.
+      {/* ── Waitlist ───────────────────────────────── */}
+      <section className={styles.waitlistSection} ref={waitlistRef}>
+        <div className={styles.waitlistInner}>
+          <h2 className={styles.waitlistTitle}>Built for recruiters. Early access open now.</h2>
+          <p className={styles.waitlistSub}>
+            Candidates and employers can already sign in. This waitlist is for
+            recruiting firms — solo desks to growing teams — who want early
+            access before the public launch.
           </p>
 
-          {status === "success" ? (
+          {wlStatus === "success" ? (
             <div className={styles.successState}>
               <div className={styles.successCheck}>✓</div>
               <div>
-                <p className={styles.successTitle}>Got it.</p>
-                <p className={styles.successSub}>I will review it and reply shortly.</p>
+                <p className={styles.successTitle}>You're on the list.</p>
+                <p className={styles.successSub}>
+                  We'll reach out when RYZE is ready for you.
+                </p>
               </div>
             </div>
           ) : (
-            <div className={styles.contactForm}>
+            <div className={styles.wlForm}>
               <div className={styles.intentRow}>
-                {INTENTS.map(({ value, icon, label }) => (
+                {INTENT_OPTIONS.map(({ value, icon: Icon, label }) => (
                   <button
                     key={value}
                     type="button"
-                    className={`${styles.intentBtn} ${intent === value ? styles.intentBtnOn : ""}`}
+                    className={`${styles.intentBtn} ${intent === value ? styles.intentBtnOn : ""
+                      }`}
                     onClick={() => setIntent((v) => (v === value ? null : value))}
-                    disabled={status === "loading"}
+                    disabled={wlStatus === "loading"}
                   >
-                    <img src={icon} alt="" className={styles.intentIconImg} />
+                    <Icon size={16} />
                     {label}
                   </button>
                 ))}
@@ -406,21 +421,26 @@ export default function Landing() {
                     setEmail(e.target.value);
                     setErrorMsg("");
                   }}
-                  className={`${styles.emailInput} ${errorMsg ? styles.emailInputErr : ""}`}
-                  disabled={status === "loading"}
-                  onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+                  className={`${styles.emailInput} ${errorMsg ? styles.emailInputErr : ""
+                    }`}
+                  disabled={wlStatus === "loading"}
+                  onKeyDown={(e) => e.key === "Enter" && handleWaitlist()}
                 />
                 <button
                   className={styles.notifyBtn}
-                  onClick={handleSubmit}
-                  disabled={status === "loading"}
+                  onClick={handleWaitlist}
+                  disabled={wlStatus === "loading"}
                 >
-                  {status === "loading" ? <span className={styles.spinner} /> : "Send"}
+                  {wlStatus === "loading" ? (
+                    <span className={styles.spinner} />
+                  ) : (
+                    "Notify Me"
+                  )}
                 </button>
               </div>
 
               {errorMsg && <p className={styles.errMsg}>{errorMsg}</p>}
-              <p className={styles.trustLine}>No spam, no AI buzzword funnel — just a real reply.</p>
+              <p className={styles.trustLine}>No spam. Unsubscribe any time.</p>
             </div>
           )}
         </div>
@@ -434,11 +454,16 @@ export default function Landing() {
             <span>RYZE.ai</span>
           </div>
           <div className={styles.footerLinks}>
-            <a href="#services">AI Opportunities</a>
-            <a href="#process">Matching Model</a>
-            <a href="#work">Examples</a>
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>
+            <a
+              href="https://www.linkedin.com/in/daneahern/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LinkedIn
+            </a>
+            <a href="/about">About the Build</a>
           </div>
           <p className={styles.footerCopy}>
             © 2026 RYZE GROUP, Inc. d/b/a RYZE.ai
