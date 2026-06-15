@@ -294,20 +294,16 @@ export default function Landing() {
           <div className={styles.heroContent}>
             <div className={styles.heroBadge}>
               <span className={styles.heroPulse} />
-              A practical network of custom software builders
+              Built for Accounting &amp; Finance Recruiting
             </div>
-
             <h1 className={styles.heroH1}>
-              Custom Software for{" "}
-              <em className={styles.heroEm}>Real&nbsp;Business&nbsp;Workflows</em>
+              Your Recruiting Pipeline,{" "}
+              <em className={styles.heroEm}>Powered&nbsp;by&nbsp;AI</em>
             </h1>
-
             <p className={styles.heroSub}>
-              RYZE connects businesses with builders who can turn real operational
-              problems — AP automation, time tracking, custom integrations, reporting,
-              and internal tools — into working software.
+              RYZE.ai turns every candidate call, resume, and job order into
+              searchable, actionable recruiting intelligence — automatically.
             </p>
-
             <div className={styles.heroCtas}>
               <button
                 className={styles.heroCtaPrimary}
@@ -315,16 +311,14 @@ export default function Landing() {
                   waitlistRef.current?.scrollIntoView({ behavior: "smooth" })
                 }
               >
-                Start the Conversation
+                Get Early Access
               </button>
-
               <a href="/about" className={styles.heroCtaSecondary}>
                 Follow the Build →
               </a>
             </div>
-
             <p className={styles.heroStack}>
-              Workflow Automation · Internal Tools · Integrations · Reporting
+              Python · FastAPI · pgvector · React · Claude API
             </p>
           </div>
 
