@@ -327,6 +327,10 @@ export default function Landing() {
               Workflow Automation · Internal Tools · Integrations · Reporting
             </p>
           </div>
+
+          <div className={styles.heroVisual}>
+            <DemoChat />
+          </div>
         </div>
       </section>
 
