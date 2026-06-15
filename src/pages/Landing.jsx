@@ -21,16 +21,16 @@ const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 const DEMO_QUERIES = [
   {
-    q: "Who are my best candidates for a Controller role?",
-    a: "3 strong matches: Sarah Chen (Big 4, CPA, 8 yrs), Marcus Webb (Manufacturing controller, $140K target), and Priya Nair (IPO experience, currently open).",
+    q: "Who can build AP automation for a QuickBooks user receiving 100 invoices a day through Gmail?",
+    a: "3 matches: Sarah Chen (QuickBooks + Gmail API, 6 integrations), Marcus Webb (invoice OCR & approval routing), Priya Nair (open now). Avg start: 2 weeks.",
   },
   {
-    q: "Which employers haven't heard from us in 30 days?",
-    a: "4 employers need a touchpoint: Harbor Financial, Apex Manufacturing, TechBridge Group, and Summit Capital. Last contact was 31–47 days ago.",
+    q: "Who can build a time-tracking app with geofencing and biometric login for remote construction crews?",
+    a: "2 strong matches: Devon Hale (two field-service apps, GPS geofencing) and Ana Reyes (biometric login + payroll integrations). Portfolios on file.",
   },
   {
-    q: "What do we know about our Deloitte alumni candidates?",
-    a: "4 Deloitte alumni in your pipeline. Avg target: $130–160K. Top reason for leaving: better work-life balance.",
+    q: "Who can build a PO system that gives a construction company visibility into equipment repair and maintenance schedules?",
+    a: "4 builders matched. Two have built PO + asset-tracking systems; one tied maintenance scheduling directly into QuickBooks. Avg start: 2–3 weeks.",
   },
 ];
 
@@ -292,10 +292,7 @@ export default function Landing() {
       <section className={styles.hero}>
         <div className={styles.heroInner}>
           <div className={styles.heroContent}>
-            <div className={styles.heroBadge}>
-              <span className={styles.heroPulse} />
-              Built for Accounting &amp; Finance Recruiting
-            </div>
+
             <h1 className={styles.heroH1}>
               Your Recruiting Pipeline,{" "}
               <em className={styles.heroEm}>Powered&nbsp;by&nbsp;AI</em>
