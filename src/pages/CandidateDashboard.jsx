@@ -228,6 +228,64 @@ export default function CandidateDashboard() {
           </div>
         </div>
 
+        {/* ── How It Works ── */}
+        {!hasProfile && (
+          <section className={styles.howItWorks}>
+            <div className={styles.howItWorksIntro}>
+              <span className={styles.howItWorksBadge}>How RYZE.ai works</span>
+              <h2 className={styles.howItWorksTitle}>
+                Your profile starts with a quick conversation.
+              </h2>
+              <p className={styles.howItWorksText}>
+                Schedule a short Zoom intro call so we can learn about your background,
+                goals, experience, and what kind of opportunity would actually be a good fit.
+              </p>
+              <p className={styles.howItWorksText}>
+                After the call, RYZE.ai uses the conversation notes to help build your
+                candidate profile. From there, matched opportunities can appear here as
+                relevant roles become available.
+              </p>
+            </div>
+
+            <div className={styles.howItWorksSteps}>
+              <div className={styles.howStep}>
+                <div className={styles.howStepIcon}>
+                  <i className="fi fi-rr-calendar" />
+                </div>
+                <div>
+                  <h4>1. Schedule a call</h4>
+                  <p>Pick a time for a quick intro Zoom call.</p>
+                </div>
+              </div>
+
+              <div className={styles.howStep}>
+                <div className={styles.howStepIcon}>
+                  <i className="fi fi-rr-user" />
+                </div>
+                <div>
+                  <h4>2. Build your profile</h4>
+                  <p>Your background and preferences are organized into a candidate profile.</p>
+                </div>
+              </div>
+
+              <div className={styles.howStep}>
+                <div className={styles.howStepIcon}>
+                  <i className="fi fi-rr-briefcase" />
+                </div>
+                <div>
+                  <h4>3. See matched roles</h4>
+                  <p>Relevant opportunities appear here when there is a potential fit.</p>
+                </div>
+              </div>
+            </div>
+
+            <button className={styles.scheduleBtn} onClick={() => setBookingOpen(true)}>
+              <i className="fi fi-rr-calendar" />
+              Schedule Intro Call
+            </button>
+          </section>
+        )}
+
         {/* ── My Scheduled Calls ── */}
         <section className={styles.section}>
           <div className={styles.sectionHeader}>

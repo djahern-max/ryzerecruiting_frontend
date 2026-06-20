@@ -595,6 +595,95 @@
   /* ← add this */
 }
 
+/* ── How It Works ───────────────────────────────────────────────────────── */
+
+.howItWorks {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 28px 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.howItWorksIntro {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.howItWorksBadge {
+  width: fit-content;
+  padding: 4px 12px;
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.howItWorksTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.howItWorksText {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #64748b;
+  margin: 0;
+  max-width: 720px;
+}
+
+.howItWorksSteps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.howStep {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.howStepIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  background: #eff6ff;
+  color: #2563eb;
+  border-radius: 10px;
+}
+
+.howStep h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 4px;
+}
+
+.howStep p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #64748b;
+  margin: 0;
+}
+
 /* ── Responsive ─────────────────────────────────────────────────────────── */
 
 @media (max-width: 640px) {
@@ -623,5 +712,17 @@
 
   .scoreBar {
     min-width: 100%;
+  }
+
+  .howItWorks {
+    padding: 24px;
+  }
+
+  .howItWorksSteps {
+    grid-template-columns: 1fr;
+  }
+
+  .howItWorksTitle {
+    font-size: 20px;
   }
 }
