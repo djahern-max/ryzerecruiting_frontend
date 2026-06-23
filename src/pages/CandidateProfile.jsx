@@ -511,10 +511,9 @@ export default function CandidateProfile() {
                 </div>
 
                 {/* RYZE footer */}
+
                 <div className={styles.profileFooter}>
                     <div className={styles.footerLeft}>
-                        <span className={styles.footerBrand}>RYZE.ai</span>
-                        <span className={styles.footerSep} />
                         <span className={styles.footerTagline}>Candidate Profile</span>
                     </div>
                     <div className={styles.footerRight}>
