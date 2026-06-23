@@ -68,15 +68,21 @@ function ProtectedRoute({ children, allowedRoles = null }) {
   return children;
 }
 
-/**
- * AdminRoute — requires ADMIN user_type AND is_superuser flag.
- * Separates admin auth from employer/candidate auth entirely.
- */
 function AdminRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading) return loadingScreen;
   if (!user) return <Navigate to="/admin/login" replace />;
-  if (user.user_type !== 'ADMIN' || !user.is_superuser) return <Navigate to="/" replace />;
+  if (user.user_type !== 'ADMIN') return <Navigate to="/" replace />;
+  return children;
+}
+
+function SuperAdminRoute({ children }) {
+  const { user, loading } = useAuth();
+  if (loading) return loadingScreen;
+  if (!user) return <Navigate to="/admin/login" replace />;
+  if (user.user_type !== 'ADMIN' || !user.is_superuser) {
+    return <Navigate to="/admin" replace />;
+  }
   return children;
 }
 
@@ -216,17 +222,17 @@ function App() {
           <Route
             path="/admin/db-explorer"
             element={
-              <AdminRoute>
+              <SuperAdminRoute>
                 <DBExplorer />
-              </AdminRoute>
+              </SuperAdminRoute>
             }
           />
           <Route
             path="/ryze/invite"
             element={
-              <AdminRoute>
+              <SuperAdminRoute>
                 <InviteForm />
-              </AdminRoute>
+              </SuperAdminRoute>
             }
           />
 
