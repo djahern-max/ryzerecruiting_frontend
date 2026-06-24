@@ -7,12 +7,13 @@ const PrivacyPolicy = () => {
         <div className={styles.container}>
             <div className={styles.content}>
                 <h1>Privacy Policy</h1>
-                <p className={styles.lastUpdated}>Last Updated: March 29, 2026</p>
+                <p className={styles.lastUpdated}>Last Updated: June 23, 2026</p>
 
                 <section>
                     <h2>1. Introduction</h2>
                     <p>
-                        Welcome to RYZE.ai, operated by RYZE GROUP, Inc. ("we," "our," or "us"). We are
+                        Welcome to RYZE.ai, operated by RYZE GROUP, Inc. (formerly 12X Inc.), d/b/a RYZE.ai
+                        ("we," "our," or "us"). We are
                         committed to protecting your personal information and your right to privacy. This
                         Privacy Policy explains how we collect, use, disclose, and safeguard your information
                         when you use our recruiting platform at ryze.ai.
@@ -55,9 +56,17 @@ const PrivacyPolicy = () => {
                         number and checking the SMS consent box on our booking form, you explicitly consent
                         to receive these transactional SMS messages from RYZE GROUP, Inc. (RYZE.ai).
                         Message and data rates may apply. You may opt out at any time by replying STOP to
-                        any message. For help, reply HELP. We do not share your phone number with third
-                        parties for marketing purposes. SMS communications are facilitated through
-                        Twilio, Inc., our SMS service provider.
+                        any message. For help, reply HELP.
+                    </p>
+                    <p>
+                        <strong>
+                            No mobile information will be shared with third parties or affiliates for
+                            marketing or promotional purposes. SMS opt-in data and consent are never sold,
+                            rented, or shared with any third parties or lead generators.
+                        </strong>{' '}
+                        SMS communications are facilitated through Twilio, Inc., our SMS service provider,
+                        which processes your phone number solely to deliver the messages you have consented
+                        to receive on our behalf.
                     </p>
                     <p>
                         Specifically regarding SMS:
@@ -66,10 +75,11 @@ const PrivacyPolicy = () => {
                         <li><strong>Sender:</strong> RYZE GROUP, Inc. d/b/a RYZE.ai</li>
                         <li><strong>Message types:</strong> Transactional only — booking confirmations, appointment reminders, and cancellation notices. No marketing or promotional messages.</li>
                         <li><strong>Message frequency:</strong> Varies based on booking activity. Typically 2–4 messages per scheduled call.</li>
-                        <li><strong>Opt-in:</strong> Consent is collected via an explicit checkbox on our booking form at the time your phone number is provided.</li>
+                        <li><strong>Opt-in:</strong> Consent is collected via an explicit, unchecked checkbox on our booking form at the time your phone number is provided.</li>
                         <li><strong>Opt-out:</strong> Reply STOP to any message to unsubscribe immediately. You will receive a one-time confirmation and no further messages will be sent.</li>
                         <li><strong>Help:</strong> Reply HELP to any message or contact us at <a href="mailto:dane@ryze.ai">dane@ryze.ai</a>.</li>
-                        <li><strong>Service provider:</strong> Twilio, Inc. Your phone number is not sold or shared with third parties for marketing purposes.</li>
+                        <li><strong>Data sharing:</strong> No mobile information or SMS opt-in data is sold or shared with third parties or affiliates for any marketing or promotional purpose, at any time.</li>
+                        <li><strong>Service provider:</strong> Twilio, Inc. acts solely as our messaging processor and does not use your phone number for its own purposes.</li>
                     </ul>
                 </section>
 
@@ -104,7 +114,11 @@ const PrivacyPolicy = () => {
                         We may share your information with third-party service providers who perform
                         services on our behalf, such as hosting, analytics, email delivery, SMS delivery
                         (Twilio, Inc.), and customer support. These providers are contractually obligated
-                        to use your information only for the purposes for which it was shared.
+                        to use your information only for the purposes for which it was shared. Your mobile
+                        phone number and SMS opt-in data are shared only with Twilio, Inc. for the sole
+                        purpose of delivering the transactional messages you have consented to receive, and
+                        are never shared with third parties or affiliates for marketing or promotional
+                        purposes.
                     </p>
 
                     <h3>4.3 Legal Requirements</h3>
@@ -192,7 +206,7 @@ const PrivacyPolicy = () => {
                     <h2>12. Contact Us</h2>
                     <p>If you have questions about this Privacy Policy, please contact us:</p>
                     <ul>
-                        <li>Company: RYZE GROUP, Inc. d/b/a RYZE.ai</li>
+                        <li>Company: RYZE GROUP, Inc. (formerly 12X Inc.), d/b/a RYZE.ai</li>
                         <li>Email: <a href="mailto:dane@ryze.ai">dane@ryze.ai</a></li>
                         <li>Website: <a href="https://ryze.ai">https://ryze.ai</a></li>
                     </ul>

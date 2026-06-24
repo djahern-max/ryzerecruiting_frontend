@@ -463,7 +463,7 @@ export default function Landing() {
             <a href="/about">About the Build</a>
           </div>
           <p className={styles.footerCopy}>
-            © 2026 RYZE GROUP, Inc. d/b/a RYZE.ai
+            © 2026 RYZE GROUP, Inc. (formerly 12X Inc.), d/b/a RYZE.ai
           </p>
         </div>
         <a href="/admin/login" className={styles.adminGhost}>

@@ -7,12 +7,15 @@ const TermsOfService = () => {
         <div className={styles.container}>
             <div className={styles.content}>
                 <h1>Terms of Service</h1>
-                <p className={styles.lastUpdated}>Last Updated: March 16, 2026</p>
+                <p className={styles.lastUpdated}>Last Updated: June 24, 2026</p>
 
                 <section>
                     <h2>1. Agreement to Terms</h2>
                     <p>
-                        By accessing or using RYZE.ai ("Platform"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use our Platform.
+                        By accessing or using RYZE.ai ("Platform"), operated by RYZE GROUP, Inc.
+                        (formerly 12X Inc.), d/b/a RYZE.ai ("we," "our," or "us"), you agree to be bound
+                        by these Terms of Service ("Terms"). If you do not agree to these Terms, please do
+                        not use our Platform.
                     </p>
                 </section>
 
@@ -108,18 +111,18 @@ const TermsOfService = () => {
                     <p>
                         By providing your phone number and checking the SMS consent box on our booking
                         form, you explicitly consent to receive transactional SMS notifications from
-                        RYZE GROUP, Inc. (RYZE.ai). These messages include booking confirmations, call
-                        reminders, and cancellation notices. No SMS messages are sent without this
-                        explicit opt-in.
+                        RYZE GROUP, Inc. (formerly 12X Inc.), d/b/a RYZE.ai. These messages include
+                        booking confirmations, call reminders, and cancellation notices. No SMS messages
+                        are sent without this explicit opt-in.
                     </p>
                     <ul>
-                        <li><strong>Sender:</strong> RYZE GROUP, Inc. d/b/a RYZE.ai</li>
+                        <li><strong>Sender:</strong> RYZE GROUP, Inc. (formerly 12X Inc.), d/b/a RYZE.ai</li>
                         <li><strong>Message Frequency:</strong> Message frequency varies based on your booking activity. You will typically receive 2–4 messages per scheduled call (confirmation, reminders, and any cancellation notice).</li>
                         <li><strong>Message &amp; Data Rates:</strong> Message and data rates may apply depending on your mobile carrier and plan.</li>
                         <li><strong>Opt-Out:</strong> <strong>Reply STOP</strong> to any message to unsubscribe. You will receive a one-time confirmation and no further messages will be sent.</li>
                         <li><strong>Help:</strong> <strong>Reply HELP</strong> for assistance or contact us at <a href="mailto:dane@ryze.ai">dane@ryze.ai</a>.</li>
                         <li><strong>No Marketing:</strong> We do not send marketing or promotional SMS messages. All messages are transactional only.</li>
-                        <li><strong>Third-Party Provider:</strong> SMS communications are facilitated through Twilio, Inc. Your phone number will not be shared with third parties for marketing purposes.</li>
+                        <li><strong>Third-Party Provider:</strong> SMS communications are facilitated through Twilio, Inc., which acts solely as our messaging processor to deliver the messages you have consented to receive. No mobile information or SMS opt-in data is sold or shared with third parties or affiliates for any marketing or promotional purpose.</li>
                     </ul>
                     <p>
                         For more information on how we handle your phone number, see our{' '}
@@ -203,6 +206,7 @@ const TermsOfService = () => {
                     <h2>18. Contact Information</h2>
                     <p>If you have questions about these Terms, please contact us:</p>
                     <ul>
+                        <li>Company: RYZE GROUP, Inc. (formerly 12X Inc.), d/b/a RYZE.ai</li>
                         <li>Email: <a href="mailto:dane@ryze.ai">dane@ryze.ai</a></li>
                         <li>Website: <a href="https://ryze.ai">https://ryze.ai</a></li>
                     </ul>
