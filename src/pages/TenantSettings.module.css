@@ -1,0 +1,237 @@
+/* src/pages/admin/TenantSettings.module.css */
+
+.page {
+    min-height: 100vh;
+    background: var(--bg-100, #f7f8fa);
+}
+
+.container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px 20px 64px;
+}
+
+.backBtn {
+    background: none;
+    border: none;
+    color: var(--text-500, #64748b);
+    font-size: 13px;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 0;
+    margin-bottom: 8px;
+    transition: color 120ms;
+}
+
+.backBtn:hover {
+    color: var(--text-900, #0f172a);
+}
+
+.card {
+    background: #ffffff;
+    border: 1px solid var(--border-200, #e5e7eb);
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.cardHeader {
+    padding: 28px 28px 20px;
+    border-bottom: 1px solid var(--border-200, #e5e7eb);
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-900, #0f172a);
+    letter-spacing: -0.4px;
+    margin: 0 0 6px;
+}
+
+.sub {
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--text-500, #64748b);
+    margin: 0;
+}
+
+.body {
+    padding: 24px 28px 28px;
+}
+
+/* ── Firm row ── */
+.firmRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--bg-100, #f7f8fa);
+    border: 1px solid var(--border-200, #e5e7eb);
+    border-radius: 9px;
+    margin-bottom: 24px;
+}
+
+.firmLabel {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-500, #64748b);
+}
+
+.firmName {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--brand-800, #1d4ed8);
+}
+
+/* ── Fields ── */
+.fieldGroup {
+    margin-bottom: 20px;
+}
+
+.label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-900, #0f172a);
+    margin-bottom: 6px;
+}
+
+.input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: var(--font-sans);
+    color: var(--text-900, #0f172a);
+    background: #ffffff;
+    border: 1px solid var(--border-200, #e5e7eb);
+    border-radius: 9px;
+    transition: border-color 120ms, box-shadow 120ms;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--brand-800, #1d4ed8);
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+}
+
+.input:disabled {
+    background: var(--bg-100, #f7f8fa);
+    color: var(--text-500, #64748b);
+}
+
+.input::placeholder {
+    color: #aab2c0;
+}
+
+.help {
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--text-500, #64748b);
+    margin: 6px 0 0;
+}
+
+/* ── Messages ── */
+.successMsg,
+.errorMsg {
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 14px;
+    border-radius: 9px;
+    margin-bottom: 18px;
+}
+
+.successMsg {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+.errorMsg {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+/* ── Save button ── */
+.saveBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: var(--font-sans);
+    color: #ffffff;
+    background: var(--brand-800, #1d4ed8);
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: background 140ms, opacity 140ms;
+}
+
+.saveBtn:hover:not(:disabled) {
+    background: var(--brand-900, #1e40af);
+}
+
+.saveBtn:disabled {
+    opacity: 0.7;
+    cursor: default;
+}
+
+/* ── Loading / empty states ── */
+.stateMsg {
+    padding: 40px 28px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-500, #64748b);
+}
+
+/* ── Spinner ── */
+.spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 700ms linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+    .cardHeader {
+        padding: 22px 18px 16px;
+    }
+
+    .body {
+        padding: 20px 18px 22px;
+    }
+
+    .title {
+        font-size: 1.3rem;
+    }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+    .spinner {
+        animation: none;
+    }
+
+    .input,
+    .saveBtn,
+    .backBtn {
+        transition: none;
+    }
+}
