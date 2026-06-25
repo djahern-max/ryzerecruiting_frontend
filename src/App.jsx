@@ -27,6 +27,7 @@ import CandidateSelfProfile from './pages/CandidateSelfProfile';
 import EmployerSelfProfile from './pages/EmployerSelfProfile';
 import JobOrderRoster from './pages/JobOrderRoster';
 import JobOrderDetail from './pages/JobOrderDetail';
+import TenantSettings from './pages/admin/TenantSettings';
 
 const loadingScreen = (
   <div style={{
@@ -216,6 +217,14 @@ function App() {
             element={
               <AdminRoute>
                 <ChatPage />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/branding"
+            element={
+              <AdminRoute>
+                <TenantSettings />
               </AdminRoute>
             }
           />
