@@ -67,3 +67,10 @@ Give me the exact commands for anything that touches the server — don't run de
 - I prefer **complete drop-in replacement files** for components/pages that have gotten complex, rather than partial diffs — I'll say so explicitly when I want that.
 - Small, clearly-scoped surgical edits are fine without asking first.
 - Match the CSS Modules + component-per-file pattern already in use — don't introduce a different state management library (Redux, Zustand, etc.) or CSS approach without discussing it first.
+
+## Session workflow — context/current-feature.md
+At the start of every session, read `context/current-feature.md` — it holds the active task's Status, Goals, Related Files, and Verification steps. Work from it, don't start unrelated work without checking it first.
+
+- When you finish a meaningful chunk of work (e.g. one file migrated and tested), add a dated line to its History section — earliest to latest.
+- When a task is fully done and verified, tell me — I'll move it to `context/CHANGELOG.md` and reset `current-feature.md` for the next task. Don't do that move yourself; flag it and wait for confirmation.
+- If I ask you to start something not reflected in `current-feature.md`, ask whether to update the file first before writing code, rather than silently working off-script.
