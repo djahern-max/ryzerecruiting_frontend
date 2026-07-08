@@ -17,7 +17,7 @@ Make `apiFetch` (in `services/api.js`) the single source of truth for authentica
 
 ## Related Files
 <!-- Files this touches -->
-- `src/services/api.js` — DONE — auto-attaches `Authorization` header from localStorage; NEXT — add the same `/upgrade`/`/billing` path guard the `AuthContext.jsx` axios interceptor already has, before migrating any more pages
+- `src/services/api.js` — DONE — auto-attaches `Authorization` header from localStorage; DONE — now skips the `/upgrade` redirect when already on `/upgrade` or `/billing`, matching the `AuthContext.jsx` axios interceptor
 - `src/pages/ChatPage.jsx` — NEXT (page migration)
 - `src/pages/AdminDashboard.jsx` — partial, finish remaining raw `fetch` calls
 - `src/pages/CandidatesPage.jsx`, `EmployerRoster.jsx`, `JobOrderRoster.jsx`
@@ -41,3 +41,4 @@ Per file: temporarily set a test tenant's `status` to `expired` in the DB, confi
 - 2026-07-07 — `apiFetch` updated to auto-attach `Authorization` header from localStorage. Diff reviewed, applied, committed.
 - 2026-07-07 — Confirmed production admin dashboard showing all-zero data is expected (no real users yet), not a bug. Cleared to continue verifying directly on production for now.
 - 2026-07-08 — Paused for a dead-code sweep (see `context/CHANGELOG.md`). Resumed same day: `RecruiterInviteModal.jsx` deleted (was dead), `EmployerSelfProfile.jsx` casing fixed and confirmed still on the migration list at step 4.
+- 2026-07-08 — Added the `/upgrade`/`/billing` path guard to `apiFetch` in `src/services/api.js`, matching the axios interceptor in `AuthContext.jsx`, so pages migrated from here on don't get caught in a redirect loop while already on those pages. Local `npm run build` passed, committed. `ChatPage.jsx` set as NEXT for the following session.
