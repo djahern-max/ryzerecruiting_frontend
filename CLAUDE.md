@@ -31,7 +31,7 @@ Goal: make `apiFetch` the single source of truth for authenticated calls (auto-a
 
 **Already fine — don't touch:**
 - Axios call sites: `BookingCard.jsx`, `RecruiterInviteModal.jsx`, `AuthContext.jsx`, `CompleteOAuthSignup.jsx` — share the axios instance, get the interceptor for free.
-- `apiFetch` call sites: `AdminDashboard.jsx`* (mixed), `CandidateDashboard.jsx`, `CandidateSelfProfile.jsx`* (mixed), `EmployerDashboard.jsx`, `EmployerSelfprofile.jsx`* (mixed), `admin/TenantSettings.jsx`. (*mixed = also has raw fetch, see migration list.)
+- `apiFetch` call sites: `AdminDashboard.jsx`* (mixed), `CandidateDashboard.jsx`, `CandidateSelfProfile.jsx`* (mixed), `EmployerDashboard.jsx`, `EmployerSelfProfile.jsx`* (mixed), `admin/TenantSettings.jsx`. (*mixed = also has raw fetch, see migration list.)
 - `OAuthCallback.jsx` — intentionally raw; validates a token before `AuthContext` state exists. Leave as-is.
 - `UpgradePage.jsx` — intentionally raw; it's the 402 redirect's own destination and is explicitly excluded from the interceptor's redirect logic. Migrating it risks fighting that exclusion. Leave as-is.
 
@@ -39,7 +39,7 @@ Goal: make `apiFetch` the single source of truth for authenticated calls (auto-a
 1. `ChatPage.jsx`, `AdminDashboard.jsx` (finish — already partially on `apiFetch`)
 2. `CandidatesPage.jsx`, `EmployerRoster.jsx`, `JobOrderRoster.jsx`
 3. `CandidateProfile.jsx`, `EmployerProfile.jsx`, `JobOrderDetail.jsx`
-4. `CandidateSelfProfile.jsx`, `EmployerSelfprofile.jsx` (finish — photo/banner upload calls)
+4. `CandidateSelfProfile.jsx`, `EmployerSelfProfile.jsx` (finish — photo/banner upload calls)
 5. `AdminHeader.jsx`, `CandidateModal.jsx`, `IntelligenceBrief.jsx`, `IntelligenceMessage.jsx`, `ChangePassword.jsx`, `admin/DBExplorer.jsx`, `admin/InviteForm.jsx`
 
 **Verification per file:** temporarily set a test tenant's `status` to `expired` in the DB, confirm the `/upgrade` redirect fires from that specific page, then flip it back. Don't consider a migration done until this is checked once.

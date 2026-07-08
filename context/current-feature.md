@@ -35,3 +35,4 @@ Per commit: `npm run build` locally, plus for commit 1 the real check is the **s
 ## History
 <!-- Keep this updated. Earliest to latest -->
 - 2026-07-08 — Started dead-code inventory task. apiFetch migration paused (was in progress, next file `ChatPage.jsx`, `src/services/api.js` already updated to auto-attach Authorization header).
+- 2026-07-08 — Commit 1/3: fixed the `EmployerSelfProfile` casing mismatch via two-step `git mv` (git index had `Employerselfprofile.jsx`, disk showed `EmployerSelfprofile.jsx`, import expected `EmployerSelfProfile.jsx` — now all three match). Updated CLAUDE.md's migration-list casing to match. Local `npm run build` passed. **Waiting on user to confirm server build + `/employer/profile` render before continuing to commit 2.**
