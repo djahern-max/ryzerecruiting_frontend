@@ -30,7 +30,7 @@ React frontend for RYZE.ai V2 — a multi-tenant ATS for recruiting firms. Talks
 Goal: make `apiFetch` the single source of truth for authenticated calls (auto-attach `Authorization` from localStorage + 402 handling), then migrate every raw-`fetch` call site onto it. One file per session, test + commit between each — don't batch multiple files in one change.
 
 **Already fine — don't touch:**
-- Axios call sites: `BookingCard.jsx`, `RecruiterInviteModal.jsx`, `AuthContext.jsx`, `CompleteOAuthSignup.jsx` — share the axios instance, get the interceptor for free.
+- Axios call sites: `BookingCard.jsx`, `AuthContext.jsx`, `CompleteOAuthSignup.jsx` — share the axios instance, get the interceptor for free.
 - `apiFetch` call sites: `AdminDashboard.jsx`* (mixed), `CandidateDashboard.jsx`, `CandidateSelfProfile.jsx`* (mixed), `EmployerDashboard.jsx`, `EmployerSelfProfile.jsx`* (mixed), `admin/TenantSettings.jsx`. (*mixed = also has raw fetch, see migration list.)
 - `OAuthCallback.jsx` — intentionally raw; validates a token before `AuthContext` state exists. Leave as-is.
 - `UpgradePage.jsx` — intentionally raw; it's the 402 redirect's own destination and is explicitly excluded from the interceptor's redirect logic. Migrating it risks fighting that exclusion. Leave as-is.
