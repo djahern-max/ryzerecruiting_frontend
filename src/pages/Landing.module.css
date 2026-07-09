@@ -143,28 +143,43 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 84px 1.5rem 0;
+  padding: 148px 1.5rem 0;
   position: relative;
   z-index: 0;
 }
 
-/* Faint RYZE.ai watermark — matches the treatment in Auth.jsx */
+/* Faint RYZE.ai watermark — rises from behind the headline to above it.
+   Thus the name. */
 .hero::before {
   content: 'RYZE.ai';
   position: absolute;
-  top: 10px;
+  top: 4px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, 150px);
   font-family: 'Bricolage Grotesque', 'DM Sans', sans-serif;
-  font-size: clamp(7rem, 16vw, 13rem);
+  font-size: clamp(5.5rem, 11vw, 8.5rem);
   font-weight: 800;
   letter-spacing: -0.04em;
-  color: rgba(0, 74, 173, 0.04);
+  color: rgba(0, 74, 173, 0.05);
   line-height: 1;
   white-space: nowrap;
   pointer-events: none;
   user-select: none;
   z-index: -1;
+  opacity: 0;
+  animation: ryzeUp 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+}
+
+@keyframes ryzeUp {
+  from {
+    transform: translate(-50%, 150px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
 }
 
 .heroH1 {
@@ -655,6 +670,12 @@
     transition: none;
   }
 
+  .hero::before {
+    animation: none;
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+
   .demoThinking span,
   .cursor,
   .spinner {
@@ -665,13 +686,13 @@
 /* ── Responsive ────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .hero {
-    padding-top: 56px;
+    padding-top: 104px;
   }
 
   .hero::before {
-    font-size: 5rem;
-    top: 8px;
-    color: rgba(0, 74, 173, 0.035);
+    font-size: 4rem;
+    top: 14px;
+    color: rgba(0, 74, 173, 0.045);
   }
 
   .emailRow {
