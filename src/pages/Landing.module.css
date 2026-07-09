@@ -152,14 +152,16 @@
 .hero::before {
   content: 'RYZE.ai';
   position: absolute;
-  top: -10px;
-  right: -70px;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
   font-family: 'Bricolage Grotesque', 'DM Sans', sans-serif;
   font-size: clamp(7rem, 16vw, 13rem);
   font-weight: 800;
   letter-spacing: -0.04em;
   color: rgba(0, 74, 173, 0.04);
   line-height: 1;
+  white-space: nowrap;
   pointer-events: none;
   user-select: none;
   z-index: -1;
@@ -667,9 +669,8 @@
   }
 
   .hero::before {
-    font-size: 6rem;
-    top: -6px;
-    right: -40px;
+    font-size: 5rem;
+    top: 8px;
     color: rgba(0, 74, 173, 0.035);
   }
 
