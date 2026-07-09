@@ -244,10 +244,7 @@ function Auth() {
           </p>
         </div>
 
-        {/* ── Admin ghost link ─────────────────────── */}
-        <div className={styles.adminAccess}>
-          <a href="/admin/login" className={styles.adminAccessLink}>Admin login</a>
-        </div>
+
 
       </div>
 
