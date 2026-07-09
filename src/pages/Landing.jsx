@@ -307,13 +307,7 @@ export default function Landing() {
             <span>© {new Date().getFullYear()}</span>
           </div>
           <div className={styles.footerLinks}>
-            <a
-              href="https://www.linkedin.com/in/daneahern/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              LinkedIn
-            </a>
+
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>
           </div>

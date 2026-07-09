@@ -2,7 +2,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { useEffect } from 'react';
-import SaasLanding from './pages/SaasLanding';
 import Landing from './pages/Landing';
 import Auth from './pages/Auth';
 import AdminLogin from './pages/AdminLogin';
@@ -99,7 +98,6 @@ function App() {
 
           {/* ── Public ─────────────────────────────────────────────── */}
           <Route path="/" element={<Landing />} />
-          <Route path="/about" element={<SaasLanding />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/auth/callback" element={<OAuthCallback />} />
           <Route path="/auth/complete-signup" element={<CompleteOAuthSignup />} />
