@@ -217,7 +217,7 @@ export default function Landing() {
       <header className={styles.nav}>
         <div className={styles.navInner}>
           <a href="/" className={styles.navBrand}>
-            <span className={styles.wordmark}>RYZE</span>
+            <span className={styles.wordmark}>AI</span>
             <TypewriterTag text="FOR RECRUITERS" />
           </a>
           <div className={styles.navActions}>
