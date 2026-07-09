@@ -245,7 +245,7 @@ export default function Landing() {
               <div className={styles.successCheck}>✓</div>
               <div>
                 <p className={styles.successTitle}>You're on the list.</p>
-                <p className={styles.successSub}>We'll reach out when RYZE is ready for you.</p>
+                <p className={styles.successSub}>We'll keep you posted on progress and launch.</p>
               </div>
             </div>
           ) : (
@@ -283,13 +283,13 @@ export default function Landing() {
                   onClick={handleWaitlist}
                   disabled={wlStatus === "loading"}
                 >
-                  {wlStatus === "loading" ? <span className={styles.spinner} /> : "Get early access"}
+                  {wlStatus === "loading" ? <span className={styles.spinner} /> : "Join the waitlist"}
                 </button>
               </div>
 
               {errorMsg && <p className={styles.errMsg}>{errorMsg}</p>}
               <p className={styles.trustLine}>
-                Early access for recruiting firms. No spam, ever.
+                Product updates and launch news. No spam, ever.
               </p>
             </>
           )}
