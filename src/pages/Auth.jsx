@@ -104,7 +104,7 @@ function Auth() {
         {/* ── Logo & heading ──────────────────────── */}
         <div className={styles.authHeader}>
           <div className={styles.logo}>
-            RYZE<span className={styles.logoAi}>.ai</span>
+            RYZE
             <TypewriterTag text="FOR RECRUITERS" />
           </div>
           <h1 className={styles.authTitle}>
