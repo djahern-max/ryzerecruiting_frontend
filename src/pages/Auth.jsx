@@ -1,5 +1,5 @@
 /* src/pages/Auth.jsx */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import styles from './Auth.module.css';
 
@@ -16,6 +16,26 @@ function EyeIcon({ open }) {
       <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zm10 4c4.2 0 7.1-3.7 8.3-5-1.2-1.3-4.1-5-8.3-5S4.9 9.7 3.7 11c1.2 1.3 4.1 5 8.3 5z" fill="currentColor" />
       <path d="M12 9a3 3 0 100 6 3 3 0 000-6z" fill="currentColor" />
     </svg>
+  );
+}
+
+function TypewriterTag({ text }) {
+  const [display, setDisplay] = useState('');
+  useEffect(() => {
+    let i = 0;
+    const timer = setInterval(() => {
+      i++;
+      setDisplay(text.slice(0, i));
+      if (i >= text.length) clearInterval(timer);
+    }, 70);
+    return () => clearInterval(timer);
+  }, [text]);
+
+  return (
+    <span className={styles.logoTag}>
+      {display}
+      {display.length < text.length && <span className={styles.tagCursor}>|</span>}
+    </span>
   );
 }
 
@@ -85,6 +105,7 @@ function Auth() {
         <div className={styles.authHeader}>
           <div className={styles.logo}>
             RYZE<span className={styles.logoAi}>.ai</span>
+            <TypewriterTag text="FOR RECRUITERS" />
           </div>
           <h1 className={styles.authTitle}>
             {isLogin ? 'Welcome' : 'Create Account'}

@@ -64,6 +64,38 @@
   color: #0a66c2;
 }
 
+.logoTag {
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--text-400, #94a3b8);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin-left: 10px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.tagCursor {
+  display: inline-block;
+  width: 1px;
+  margin-left: 1px;
+  color: var(--text-400, #94a3b8);
+  animation: blink 0.8s step-end infinite;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
 .authTitle {
   color: var(--text-900, #0f172a);
   font-size: 1.5rem;

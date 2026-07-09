@@ -51,6 +51,27 @@ const INTENT_OPTIONS = [
   { value: "following", icon: Binoculars, label: "Just following along" },
 ];
 
+// ── Typewriter tagline ──────────────────────────────────────────────────────
+function TypewriterTag({ text }) {
+  const [display, setDisplay] = useState("");
+  useEffect(() => {
+    let i = 0;
+    const timer = setInterval(() => {
+      i++;
+      setDisplay(text.slice(0, i));
+      if (i >= text.length) clearInterval(timer);
+    }, 70);
+    return () => clearInterval(timer);
+  }, [text]);
+
+  return (
+    <span className={styles.wordmarkTag}>
+      {display}
+      {display.length < text.length && <span className={styles.tagCursor}>|</span>}
+    </span>
+  );
+}
+
 // ── Animated intelligence demo (light theme) ────────────────────────────────
 function DemoChat() {
   const [idx, setIdx] = useState(0);
@@ -196,9 +217,8 @@ export default function Landing() {
       <header className={styles.nav}>
         <div className={styles.navInner}>
           <a href="/" className={styles.navBrand}>
-            <span className={styles.wordmark}>
-              RYZE
-            </span>
+            <span className={styles.wordmark}>RYZE</span>
+            <TypewriterTag text="FOR RECRUITERS" />
           </a>
           <div className={styles.navActions}>
 

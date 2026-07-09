@@ -62,6 +62,27 @@
   line-height: 1;
 }
 
+.wordmarkTag {
+  font-family: 'Bricolage Grotesque', 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #9db3c7;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin-left: 12px;
+  line-height: 1;
+  align-self: center;
+  white-space: nowrap;
+}
+
+.tagCursor {
+  display: inline-block;
+  width: 1px;
+  margin-left: 1px;
+  color: #9db3c7;
+  animation: blink 0.8s step-end infinite;
+}
+
 .wordmarkAi {
   color: var(--accent);
 }
