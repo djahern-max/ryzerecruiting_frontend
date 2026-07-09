@@ -1350,3 +1350,54 @@
   color: #64748b;
   margin: 0 0 20px;
 }
+
+/* ── Instant meeting — success link display ───────────────────────── */
+.instantSuccessMsg {
+  font-size: 13px;
+  color: var(--text-700);
+  line-height: 1.5;
+  margin: 0 0 14px;
+}
+
+.meetingLinkBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--bg-50);
+  border: 1.5px solid var(--border-200);
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.meetingLinkUrl {
+  font-size: 13px;
+  font-family: var(--font-mono, monospace);
+  color: var(--brand-800);
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+.copyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: var(--brand-800);
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: background 130ms;
+}
+
+.copyBtn:hover {
+  background: #004182;
+}
+
+.copyBtnCopied {
+  background: #16a34a;
+}

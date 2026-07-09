@@ -278,6 +278,270 @@ function SendInviteModal({ onClose, onSuccess }) {
 }
 
 // ---------------------------------------------------------------------------
+// Instant Meeting Modal — creates a CONFIRMED Zoom booking with NO email/SMS.
+// Surfaces the join link to copy/paste into Upwork/Fiverr chat.
+// ---------------------------------------------------------------------------
+
+function InstantMeetingModal({ onClose, onSuccess }) {
+  const [form, setForm] = useState({
+    invite_type: 'outbound_employer',
+    contact_name: '',
+    contact_email: '',
+    contact_phone: '',
+    company_name: '',
+    website_url: '',
+    date: '',
+    time_slot: '',
+    notes: '',
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [meetingUrl, setMeetingUrl] = useState(null);
+  const [copied, setCopied] = useState(false);
+
+  function formatPhoneInput(value) {
+    const digits = value.replace(/\D/g, '').slice(0, 10);
+    if (digits.length < 4) return digits;
+    if (digits.length < 7) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  }
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setForm(prev => {
+      const updated = {
+        ...prev,
+        [name]: name === 'contact_phone' ? formatPhoneInput(value) : value,
+      };
+      if (name === 'date') {
+        const available = getAvailableSlots(value);
+        if (prev.time_slot && !available.includes(prev.time_slot)) {
+          updated.time_slot = '';
+        }
+      }
+      return updated;
+    });
+  }
+
+  async function handleSubmit() {
+    setError(null);
+    // Email is intentionally NOT required — that's the whole point of this flow.
+    if (!form.contact_name || !form.date || !form.time_slot) {
+      setError('Name, date, and time are required.');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await apiFetch(`${API_BASE}/api/bookings/instant-meeting`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          invite_type: form.invite_type,
+          contact_name: form.contact_name,
+          contact_email: form.contact_email || null,
+          contact_phone: form.contact_phone || null,
+          company_name: form.company_name || null,
+          website_url: form.website_url || null,
+          date: form.date,
+          time_slot: form.time_slot,
+          notes: form.notes || null,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.detail || 'Failed to create meeting');
+      }
+      const booking = await res.json();
+      setMeetingUrl(booking.meeting_url);
+      onSuccess(booking); // append the confirmed booking to the dashboard list
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(meetingUrl);
+    } catch {
+      const el = document.createElement('textarea');
+      el.value = meetingUrl;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
+  // ── Success view: link + copy button (no auto-close) ───────────────────
+  if (meetingUrl) {
+    return (
+      <div className={styles.modalOverlay}>
+        <div className={styles.modal}>
+          <div className={styles.modalHeader}>
+            <h2 className={styles.modalTitle}>Meeting Created</h2>
+            <button className={styles.modalClose} onClick={onClose} aria-label="Close">
+              <img src={letterXIcon} alt="Close" className={styles.modalCloseIcon} />
+            </button>
+          </div>
+
+          <div className={styles.modalBody}>
+            <p className={styles.instantSuccessMsg}>
+              Confirmed for {form.contact_name} on {form.date} at {form.time_slot} EST.
+              No email was sent — paste this Zoom link into your Upwork/Fiverr chat:
+            </p>
+
+            <div className={styles.meetingLinkBox}>
+              <img src={zoomIcon} alt="" style={{ width: '18px', height: '18px', flexShrink: 0 }} />
+              <span className={styles.meetingLinkUrl}>{meetingUrl}</span>
+            </div>
+
+            <button
+              className={`${styles.copyBtn} ${copied ? styles.copyBtnCopied : ''}`}
+              onClick={handleCopy}
+            >
+              {copied ? 'Copied!' : 'Copy link'}
+            </button>
+          </div>
+
+          <div className={styles.modalFooter}>
+            <button className={styles.modalCancelBtn} onClick={onClose}>Done</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Form view ──────────────────────────────────────────────────────────
+  return (
+    <div className={styles.modalOverlay}>
+      <div className={styles.modal}>
+        <div className={styles.modalHeader}>
+          <h2 className={styles.modalTitle}>Create Instant Meeting</h2>
+          <button className={styles.modalClose} onClick={onClose} aria-label="Close">
+            <img src={letterXIcon} alt="Close" className={styles.modalCloseIcon} />
+          </button>
+        </div>
+
+        <div className={styles.modalBody}>
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>Meeting Type</label>
+            <div className={styles.toggleGroup}>
+              <button
+                type="button"
+                className={`${styles.toggleBtn} ${form.invite_type === 'outbound_employer' ? styles.toggleBtnActive : ''}`}
+                onClick={() => setForm(p => ({ ...p, invite_type: 'outbound_employer' }))}
+              >
+                <i className="fi fi-rr-building" style={{ marginRight: '6px' }}></i>Employer
+              </button>
+              <button
+                type="button"
+                className={`${styles.toggleBtn} ${form.invite_type === 'outbound_candidate' ? styles.toggleBtnActive : ''}`}
+                onClick={() => setForm(p => ({ ...p, invite_type: 'outbound_candidate' }))}
+              >
+                <i className="fi fi-rr-user" style={{ marginRight: '6px' }}></i>Candidate
+              </button>
+            </div>
+          </div>
+
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>Full Name <span className={styles.required}>*</span></label>
+            <input className={styles.fieldInput} type="text" name="contact_name" value={form.contact_name} onChange={handleChange} placeholder="Full name" />
+          </div>
+
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>
+              Email <span className={styles.fieldHint}>(optional — no invite is sent)</span>
+            </label>
+            <input className={styles.fieldInput} type="email" name="contact_email" value={form.contact_email} onChange={handleChange} placeholder="Optional" />
+          </div>
+
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>Phone</label>
+            <input className={styles.fieldInput} type="tel" name="contact_phone" value={form.contact_phone} onChange={handleChange} placeholder="(555) 000-0000" />
+          </div>
+
+          {form.invite_type === 'outbound_employer' && (
+            <>
+              <div className={styles.fieldGroup}>
+                <label className={styles.fieldLabel}>Company</label>
+                <input className={styles.fieldInput} type="text" name="company_name" value={form.company_name} onChange={handleChange} placeholder="Company name" />
+              </div>
+              <div className={styles.fieldGroup}>
+                <label className={styles.fieldLabel}>
+                  Website <span className={styles.fieldHint}>(used for AI brief)</span>
+                </label>
+                <input className={styles.fieldInput} type="text" name="website_url" value={form.website_url} onChange={handleChange} placeholder="https://company.com" />
+              </div>
+            </>
+          )}
+
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>Date <span className={styles.required}>*</span></label>
+            <input className={styles.fieldInput} type="date" name="date" value={form.date} onChange={handleChange} min={new Date().toISOString().split('T')[0]} />
+          </div>
+
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>Time (EST) <span className={styles.required}>*</span></label>
+            {form.date && getAvailableSlots(form.date).length === 0 ? (
+              <p className={styles.noSlots}>No remaining slots for today — please select a future date.</p>
+            ) : (
+              <div className={styles.timeGrid}>
+                {getAvailableSlots(form.date).map(slot => (
+                  <button
+                    key={slot}
+                    type="button"
+                    className={`${styles.timeSlotBtn} ${form.time_slot === slot ? styles.timeSlotBtnActive : ''}`}
+                    onClick={() => setForm(p => ({ ...p, time_slot: slot }))}
+                  >
+                    {slot}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>Notes</label>
+            <textarea
+              className={styles.fieldTextarea}
+              name="notes"
+              value={form.notes}
+              onChange={handleChange}
+              placeholder="Optional context — role they're hiring for, where the lead came from, etc."
+              rows={3}
+            />
+          </div>
+
+          {error && <div className={styles.modalError}>{error}</div>}
+        </div>
+
+        <div className={styles.modalFooter}>
+          <button className={styles.modalCancelBtn} onClick={onClose} disabled={submitting}>Cancel</button>
+          <button
+            className={`${styles.modalSubmitBtn} ${submitting ? styles.modalSubmitBtnLoading : ''}`}
+            onClick={handleSubmit}
+            disabled={submitting}
+          >
+            {submitting
+              ? <><i className="fi fi-rr-time" style={{ marginRight: '6px' }}></i>Creating…</>
+              : <><img src={zoomIcon} alt="" style={{ width: '16px', height: '16px', marginRight: '6px' }} />Generate link</>
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Booking Type Badge
 // ---------------------------------------------------------------------------
 function BookingTypeBadge({ type }) {
@@ -300,6 +564,7 @@ function AdminDashboard() {
   const [expandedBriefId, setExpandedBriefId] = useState(null);
   const [expandedSummaryId, setExpandedSummaryId] = useState(null);
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [showInstantModal, setShowInstantModal] = useState(false);
   const [candidatesOpen, setCandidatesOpen] = useState(true);
   const [employersOpen, setEmployersOpen] = useState(true);
   const navigate = useNavigate();
@@ -365,6 +630,11 @@ function AdminDashboard() {
   function handleInviteSuccess(newBooking) {
     setBookings(prev => [...prev, newBooking]);
     setShowInviteModal(false);
+  }
+
+  function handleInstantSuccess(newBooking) {
+    setBookings(prev => [...prev, newBooking]);
+    // modal stays open to surface the Zoom link; user closes it manually
   }
 
   function formatDate(dateStr) {
@@ -470,6 +740,9 @@ function AdminDashboard() {
             <p className={styles.pageSub}>Welcome back, {firstName}. Here's your pipeline.</p>
           </div>
           <div className={styles.pageTopRight}>
+            <button className={styles.inviteBtn} onClick={() => setShowInstantModal(true)} title="Create instant meeting link">
+              <img src={zoomIcon} alt="Instant meeting" style={{ width: '32px', height: '32px' }} />
+            </button>
             <button className={styles.inviteBtn} onClick={() => setShowInviteModal(true)} title="Send Invite">
               <img src={sendInviteIcon} alt="Send Invite" style={{ width: '32px', height: '32px' }} />
             </button>
@@ -907,6 +1180,13 @@ function AdminDashboard() {
         <SendInviteModal
           onClose={() => setShowInviteModal(false)}
           onSuccess={handleInviteSuccess}
+        />
+      )}
+
+      {showInstantModal && (
+        <InstantMeetingModal
+          onClose={() => setShowInstantModal(false)}
+          onSuccess={handleInstantSuccess}
         />
       )}
 
