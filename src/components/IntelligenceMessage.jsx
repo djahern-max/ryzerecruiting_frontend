@@ -5,6 +5,7 @@ import styles from "./IntelligenceMessage.module.css";
 import CandidateResultCard from "./CandidateResultCard";
 import EmployerResultCard from "./EmployerResultCard";
 import { useNavigate } from "react-router-dom";
+import TranscriptModal from "./TranscriptModal";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
@@ -14,6 +15,7 @@ export default function IntelligenceMessage({ message }) {
     const [fetchedCandidates, setFetchedCandidates] = useState(null);
     const [fetchedEmployers, setFetchedEmployers] = useState(null);
     const [loadingCards, setLoadingCards] = useState(false);
+    const [showTranscript, setShowTranscript] = useState(false);
     const navigate = useNavigate();
 
     const candidateIds = message.candidates || [];
@@ -94,6 +96,34 @@ export default function IntelligenceMessage({ message }) {
                 {message.content}
             </ReactMarkdown>
 
+            {/* ── Meetings ── */}
+            {!message.streaming && meetings.length > 0 && (
+                <div className={styles.meetingSection}>
+                    {meetings.map((m) => (
+                        <div key={m.id} className={styles.meetingRow}>
+                            <span className={styles.meetingName}>
+                                {m.candidate_name || m.employer_name}
+                            </span>
+                            <span className={styles.meetingDot}>·</span>
+                            <span className={styles.meetingTime}>
+                                {m.date}{m.time_slot ? ` at ${m.time_slot}` : ""}
+                            </span>
+                            {m.has_transcript && (
+                                <>
+                                    <span className={styles.meetingDot}>·</span>
+                                    <button
+                                        className={styles.transcriptLink}
+                                        onClick={() => setTranscriptBookingId(m.id)}
+                                    >
+                                        View transcript →
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            )}
+
             {/* ── Toggle ── */}
             {!message.streaming && hasCards && (
                 <button className={styles.seeMoreBtn} onClick={handleToggle}>
@@ -133,6 +163,12 @@ export default function IntelligenceMessage({ message }) {
                         </div>
                     )}
                 </div>
+            )}
+            {transcriptBookingId && (
+                <TranscriptModal
+                    bookingId={transcriptBookingId}
+                    onClose={() => setTranscriptBookingId(null)}
+                />
             )}
         </div>
     );
