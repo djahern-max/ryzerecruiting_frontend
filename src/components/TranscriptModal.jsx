@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { apiFetch } from "../services/api";
 import styles from "./TranscriptModal.module.css";
 
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
 export default function TranscriptModal({ bookingId, onClose }) {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
@@ -13,7 +15,7 @@ export default function TranscriptModal({ bookingId, onClose }) {
 
         async function load() {
             try {
-                const res = await apiFetch(`/api/bookings/${bookingId}/transcript`);
+                const res = await apiFetch(`${API_BASE}/api/bookings/${bookingId}/transcript`);
                 if (!res.ok) throw new Error("No transcript on record for this call.");
                 const json = await res.json();
                 if (!cancelled) setData(json);
