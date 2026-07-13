@@ -15,11 +15,12 @@ export default function IntelligenceMessage({ message }) {
     const [fetchedCandidates, setFetchedCandidates] = useState(null);
     const [fetchedEmployers, setFetchedEmployers] = useState(null);
     const [loadingCards, setLoadingCards] = useState(false);
-    const [showTranscript, setShowTranscript] = useState(false);
+    const [transcriptBookingId, setTranscriptBookingId] = useState(null);
     const navigate = useNavigate();
 
     const candidateIds = message.candidates || [];
     const employerIds = message.employers || [];
+    const meetings = message.meetings || [];
     const hasCards = candidateIds.length > 0 || employerIds.length > 0;
 
     async function handleToggle() {
