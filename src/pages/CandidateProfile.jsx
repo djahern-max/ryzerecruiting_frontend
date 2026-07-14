@@ -53,6 +53,17 @@ function parseToDisplayBullets(text, maxItems = 6) {
     return bullets.slice(0, maxItems);
 }
 
+function splitOn(text, delimiter) {
+    if (!text) return [];
+    return text.split(delimiter).map(s => s.trim()).filter(Boolean);
+}
+
+function formatCallDate(dateStr) {
+    if (!dateStr) return null;
+    const [year, month, day] = dateStr.split("-").map(Number);
+    return new Date(year, month - 1, day).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+}
+
 function formatPhone(phone) {
     if (!phone) return null;
     const digits = phone.replace(/\D/g, '');
@@ -209,6 +220,9 @@ export default function CandidateProfile() {
     const isStub = isFromCall && !candidate.ai_summary && !candidate.current_title;
     const experienceBullets = parseToDisplayBullets(candidate.ai_experience);
     const educationBullets = parseToDisplayBullets(candidate.ai_education, 4);
+    const callNextSteps = splitOn(candidate.call_next_steps, ';');
+    const callKeywords = splitOn(candidate.call_keywords, ',');
+    const callDateLabel = formatCallDate(candidate.call_date);
     const careerLevelLabel = { entry: 'Entry Level', mid: 'Mid Level', senior: 'Senior', executive: 'Executive' }[candidate.ai_career_level] || candidate.ai_career_level || null;
 
     const totalMainBullets = experienceBullets.length + educationBullets.length;
@@ -314,6 +328,36 @@ export default function CandidateProfile() {
                             </div>
                         )}
 
+                        {candidate.call_summary && (
+                            <div className={styles.bodyCard}>
+                                <div className={styles.bodyCardTitle}>
+                                    <div className={styles.callSummaryHeader}>
+                                        <span>Call Summary</span>
+                                        {callDateLabel && (
+                                            <span className={styles.callDateSubline}>From your call on {callDateLabel}</span>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className={styles.bodyCardBody}>
+                                    <p className={styles.summaryText}>{candidate.call_summary}</p>
+                                    {callNextSteps.length > 0 && (
+                                        <ul className={`${styles.bulletList} ${styles.callSummarySection}`}>
+                                            {callNextSteps.map((step, i) => (
+                                                <li key={i} className={styles.bulletItem}>{step}</li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                    {callKeywords.length > 0 && (
+                                        <div className={`${styles.skillsWrap} ${styles.callSummarySection}`}>
+                                            {callKeywords.map((kw, i) => (
+                                                <span key={i} className={styles.skillTag}>{kw}</span>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
                         {experienceBullets.length > 0 && (
                             <div className={styles.bodyCard}>
                                 <div className={styles.bodyCardTitle}>Experience</div>
@@ -362,20 +406,13 @@ export default function CandidateProfile() {
                             <div className={styles.bodyCard}>
                                 <div className={styles.bodyCardTitle}>Call Transcript</div>
                                 <div className={styles.bodyCardBody}>
-                                    <div className={styles.transcriptWrap}>
-                                        <pre className={styles.transcriptPre}>
-                                            {transcriptExpanded
-                                                ? candidate.meeting_transcript
-                                                : candidate.meeting_transcript.slice(0, 600) + (candidate.meeting_transcript.length > 600 ? "…" : "")}
-                                        </pre>
-                                        {candidate.meeting_transcript.length > 600 && !transcriptExpanded && (
-                                            <div className={styles.transcriptFade} />
-                                        )}
-                                    </div>
-                                    {candidate.meeting_transcript.length > 600 && (
-                                        <button className={styles.expandBtn} onClick={() => setTranscriptExpanded(p => !p)}>
-                                            {transcriptExpanded ? "Show less ↑" : "Show full transcript ↓"}
-                                        </button>
+                                    <button className={styles.expandBtn} onClick={() => setTranscriptExpanded(p => !p)}>
+                                        {transcriptExpanded ? "Hide transcript ↑" : "View full transcript ↓"}
+                                    </button>
+                                    {transcriptExpanded && (
+                                        <div className={styles.transcriptWrap}>
+                                            <pre className={styles.transcriptPre}>{candidate.meeting_transcript}</pre>
+                                        </div>
                                     )}
                                 </div>
                             </div>

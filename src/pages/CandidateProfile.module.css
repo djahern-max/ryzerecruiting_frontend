@@ -440,6 +440,24 @@
     line-height: 1.55;
 }
 
+.callSummaryHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.callDateSubline {
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: normal;
+    color: var(--muted);
+}
+
+.callSummarySection {
+    margin-top: 12px;
+}
+
 .expandBtn {
     background: none;
     border: none;
@@ -459,6 +477,7 @@
 .transcriptWrap {
     position: relative;
     overflow: hidden;
+    margin-top: 10px;
 }
 
 .transcriptPre {
@@ -473,16 +492,6 @@
     border: 1px solid var(--border);
     border-radius: 6px;
     padding: 12px 14px;
-}
-
-.transcriptFade {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 56px;
-    background: linear-gradient(to bottom, transparent, var(--card));
-    pointer-events: none;
 }
 
 .notesInternalBadge {
