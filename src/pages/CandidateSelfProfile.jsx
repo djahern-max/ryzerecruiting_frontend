@@ -331,6 +331,28 @@ export default function CandidateSelfProfile() {
                     </div>
 
                     <div className={styles.sideCol}>
+                        {(profile.email || profile.phone) && (
+                            <div className={styles.bodyCard}>
+                                <div className={styles.bodyCardTitle}>Contact</div>
+                                <div className={styles.bodyCardBody}>
+                                    <div className={styles.roGrid}>
+                                        {profile.email && (
+                                            <div className={styles.roField}>
+                                                <span className={styles.roLabel}>Email</span>
+                                                <span className={styles.roValue}>{profile.email}</span>
+                                            </div>
+                                        )}
+                                        {profile.phone && (
+                                            <div className={styles.roField}>
+                                                <span className={styles.roLabel}>Phone</span>
+                                                <span className={styles.roValue}>{formatPhone(profile.phone)}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         <div className={styles.bodyCard}>
                             <div className={styles.bodyCardTitle}>Basic Information</div>
                             <div className={styles.bodyCardBody}>
