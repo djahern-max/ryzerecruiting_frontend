@@ -1,98 +1,126 @@
 # current-feature.md
 
-## Feature: Header brand name from user object (candidate portal white-labeling — Phase 2 of 2, FRONTEND)
+## Feature: Brand-relationship copy + contact details (candidate portal white-labeling — Phase 3, FRONTEND)
 
-**Status:** Code change complete, build verified. Awaiting your live-browser check (Renata → "Green Path Recruiting", RYZE user → "RYZE.ai") and deploy.
+**Status:** Both commits done, build verified locally. Awaiting your live-browser check (Renata vs. RYZE user) and deploy.
 **Repo:** ryzerecruiting_frontend
-**Depends on:** Phase 1 (backend) — DEPLOYED & VERIFIED. `GET /api/auth/me` and
-the login response now carry `tenant_brand_name` and `tenant_id` on the user
-object. Confirmed live: Renata (green_path) → `tenant_brand_name:
-"Green Path Recruiting"`; RYZE users → `"RYZE.ai"`.
+**Depends on:** Phase 1 (backend) + Phase 2 (frontend) — both SHIPPED.
+`user.tenant_id` and `user.tenant_brand_name` are on the auth user object and
+flow through `AuthContext`; the Header already renders `tenant_brand_name`.
+
+### Context / the tenant model (important for the gate)
+`ryze` is NOT a recruiting firm — it is the platform's default signup / lead
+bucket where people who register directly on RYZE (no firm behind them) land.
+Real firms (e.g. `green_path_recruiting`) are their own tenants. Any recruiting
+business run later gets its own named tenant too. So:
+- **Firm tenant** (`tenant_id !== 'ryze'`) → show the firm relationship: firm
+  name + a quiet "powered by RYZE", "you're working with [firm]", "prepared for
+  you by [firm]".
+- **`ryze` tenant** → plain RYZE brand, NO "powered by RYZE" (redundant — it IS
+  RYZE), NO relationship copy. There's no firm to name.
 
 ### Goal
-Display the recruiting firm's brand name in the app Header instead of the
-hardcoded "RYZE.ai", so an authenticated candidate (e.g. Renata @ Green Path)
-sees their firm's name on every page. Because `Header` is shared across admin,
-employer, and candidate, and `tenant_brand_name` falls back to "RYZE.ai" for the
-`ryze` tenant, this single change brands the whole authenticated app per-tenant
-with no per-page forking — RYZE users still see "RYZE.ai".
+Make the authenticated candidate experience read as the firm they're working
+with — for firm tenants only — and surface the candidate's own contact details
+on their self-profile.
 
-**This is a pure display change. NO new API call.** The value already arrives on
-the `user` object via `AuthContext` (`/auth/me` on load, and the login response).
-Read it from `useAuth().user` — do NOT add an `apiFetch`, a new endpoint, or a
-new fetch of any kind.
+Two concerns, **two separate commits, one session:**
 
-### The core change
-In `src/components/Header.jsx`, `Header` already destructures `user` from
-`useAuth()`. Replace the hardcoded logo text:
+---
 
-```jsx
-<span className={styles.logo} onClick={handleLogoClick}>
-  RYZE.ai
-</span>
+### Concern 1 — brand-relationship copy (GATED on firm tenant) → commit 1
+
+Gate expression (get this exactly right — must be **false** while `user` is
+still loading or has no tenant):
+```js
+const isFirmTenant = Boolean(user?.tenant_id) && user.tenant_id !== 'ryze';
 ```
+Relationship copy renders only when `isFirmTenant` AND `user.tenant_brand_name`
+is present (never render "working with undefined").
 
-with:
+Three surfaces:
+1. **Header** (`src/components/Header.jsx`): keep the firm wordmark (already
+   done in Phase 2). Add small, muted "powered by RYZE" microcopy beside/under
+   it, rendered ONLY when `isFirmTenant`. Keep it genuinely small — the header
+   must not get busy.
+2. **Dashboard greeting** (the "Welcome back, {name}." component — likely
+   `src/pages/CandidateDashboard.jsx`): add a subtitle under the greeting reading
+   **"You're working with {tenant_brand_name}"**, ONLY when `isFirmTenant`.
+3. **Profile footer** (`src/pages/CandidateSelfProfile.jsx`): the footer tagline
+   currently reads "Your Candidate Profile". When `isFirmTenant`, replace it with
+   **"Prepared for you by {tenant_brand_name}"** (warm register — this exact
+   phrasing is the chosen copy). For `ryze` users, leave it as "Your Candidate
+   Profile".
 
-```jsx
-<span className={styles.logo} onClick={handleLogoClick}>
-  {user?.tenant_brand_name || 'RYZE.ai'}
-</span>
-```
+### Concern 2 — contact details (NOT gated, display-only) → commit 2
 
-The `|| 'RYZE.ai'` fallback covers the brief pre-load window where `user` is
-still null and any edge case where the field is missing.
+Add a **Contact** card/section to `src/pages/CandidateSelfProfile.jsx` showing
+the candidate's **email** and **phone**, read from the existing `/me` data
+(`profile.email`, `profile.phone` — already present, no new fetch, no backend
+change). Mirror the existing card pattern (ABOUT / EDUCATION / SKILLS) and its
+CSS-module styling. Display-only — no edit, no `apiFetch`. Hide any row whose
+value is null/empty rather than showing a blank label. This card is the
+candidate's own data, so it is **NOT** gated — show it for all tenants,
+including `ryze`.
 
-### Non-goals (keep scope tight)
-- **Do not touch pre-auth surfaces** (landing page, login, register). There is no
-  tenant context before authentication, so the platform brand "RYZE.ai" is
-  correct there. Leave them hardcoded.
-- **Do not change** `index.html` `<title>` or the favicon (`/RYZE_LOGO.png`) —
-  platform-level, out of scope for this phase.
-- No visual theming (firm logo image, brand colors) — name only. That's a
-  separate, later task.
-- No new API calls, no `AuthContext` changes (the field already flows through).
+---
+
+### Explicitly OUT of scope (do NOT touch)
+- The body-copy items flagged in the Phase 2 audit ("Intro call with RYZE.ai",
+  "how RYZE can help", "How RYZE.ai works", "RYZE.ai uses the conversation
+  notes…"). Several describe RYZE's AI processing and can't be mechanically
+  swapped to a firm name without becoming false — deferred to a dedicated copy
+  pass.
+- Platform terms: "the RYZE network", "RYZE Matched", "RYZE Intelligence" — stay
+  as-is.
+- `AdminHeader.jsx`, pre-auth pages (landing/login/register), `index.html`
+  title/favicon, legal/billing pages — all out of scope, same as Phase 2.
+- Firm logo image + brand colors (visual white-label) — a separate later phase;
+  no new tenant columns / migration in this task.
+- Making contact details editable — out of scope (would need a
+  `CandidateSelfUpdate` whitelist change). Display-only here.
 
 ### Kickoff prompt for Claude Code (audit-first)
 
 Workspace is rooted at this frontend repo. Before writing any code:
 
 **1. Audit — read and list, do not edit yet:**
-- `src/components/Header.jsx`: confirm it destructures `user` from `useAuth()`
-  and locate the exact hardcoded "RYZE.ai" node.
-- Grep the whole `src/` tree for other hardcoded brand strings — `RYZE.ai`,
-  `RYZE.AI`, `RYZE` — and list every hit, classifying each as:
-    - **In scope** (renders to an *authenticated* user and should be per-tenant),
-    - **Out of scope — pre-auth** (landing/login/register — platform brand,
-      leave as-is),
-    - **Out of scope — platform** (`index.html` title/favicon, CSS comments,
-      alt text on the RYZE logo asset).
-  Do NOT auto-fix anything beyond the Header. Present the list and let me decide
-  what, if anything, to fold in.
-- Specifically check `src/components/AdminHeader.jsx` if it exists: note whether
-  it hardcodes "RYZE.ai". Admins are always the RYZE tenant, so it resolves to
-  "RYZE.ai" either way — applying the same `user?.tenant_brand_name || 'RYZE.ai'`
-  fallback is harmless/future-proof, but it's optional. Flag it for my call; do
-  not change it without confirmation.
+- `Header.jsx` (post-Phase-2 state): where to place the "powered by RYZE"
+  microcopy; confirm `user.tenant_id` is available from `useAuth()`.
+- The dashboard component that renders "Welcome back, {name}." — locate the
+  greeting node and confirm access to `user` (tenant_id + tenant_brand_name).
+- `CandidateSelfProfile.jsx`: locate the footer tagline (the `{/* RYZE footer */}`
+  area / "Your Candidate Profile"); confirm `profile.email` and `profile.phone`
+  are on the object it already renders; identify the existing card component/
+  markup pattern to mirror for the Contact card.
+- The relevant `*.module.css` files (per repo convention, styles are CSS Modules
+  scoped per component — reuse existing tokens/classes, don't introduce new
+  styling approaches).
 
-**2. Propose a plan and wait for confirmation.** For the core change the plan is
-trivial (the one-line swap above); the substance of your plan is the audit
-findings — the categorized list of other brand-string hits and your
-recommendation on which (if any) belong in this task vs. a later pass.
+**2. Propose a plan and wait for confirmation.** Include: the exact
+`isFirmTenant` expression and where it's defined in each of the 3 components
+(recommend inlining the one-liner unless it's cleaner as a tiny shared helper);
+the exact microcopy / subtitle / footer wording; and the Contact card markup +
+which existing card it mirrors.
 
-**3. After confirmation, write.** Narrow surgical edit to `Header.jsx` only,
-unless I greenlight additional in-scope hits. One concern per change.
+**3. After confirmation, write — two commits:**
+- commit 1: brand-relationship copy (Header microcopy, dashboard subtitle,
+  footer), all gated.
+- commit 2: Contact card (ungated, display-only).
+Keep them as separate diffs — do not bundle.
 
-**4. Verify (frontend is build-and-look):**
-- `npm run build` succeeds.
-- Logged in as Renata (green_path) → Header reads "Green Path Recruiting".
-- Logged in as a RYZE user → Header reads "RYZE.ai".
-- No brief flash of the wrong brand on load beyond the acceptable null→value
-  swap (AuthContext gates authenticated routes on `loading`, so `user` should be
-  populated by the time Header renders).
+**4. Verify (`npm run build`, then look):**
+- As Renata (`green_path_recruiting`): Header shows the firm name + small
+  "powered by RYZE"; dashboard shows "You're working with Green Path Recruiting";
+  footer reads "Prepared for you by Green Path Recruiting"; Contact card shows
+  her email + phone.
+- As a `ryze` user: Header shows "RYZE.ai" with NO "powered by RYZE"; no
+  dashboard subtitle; footer reads "Your Candidate Profile"; Contact card still
+  shows (contact is ungated).
+- Confirm no wrong-brand flash while `user` loads (the `isFirmTenant` guard must
+  be false when `user`/`tenant_id` is absent).
 
-**5. Deploy is manual.** Hand me the exact commands; do not run them. Frontend
-deploy:
+**5. Deploy is manual.** Hand me the exact commands; do not run them:
 ```
 # on server
 git pull
@@ -100,18 +128,24 @@ npm run build
 ```
 
 ### History
-- 2026-07-16 — Task created. Phase 2 of candidate portal white-labeling. Phase 1
-  (backend) deployed and verified same day: `tenant_brand_name` / `tenant_id`
-  now on the auth user object, confirmed via Renata's `/api/auth/me` returning
-  "Green Path Recruiting". This phase surfaces that value in the shared Header.
-  Pure display change — no new API call; the field already flows through
-  `AuthContext`.
-- 2026-07-16 — Audit done (full grep of `RYZE`/`RYZE.ai` across `src/`, results
-  categorized in-conversation, not persisted here). Made the core edit:
-  `Header.jsx:27-29` now reads `{user?.tenant_brand_name || 'RYZE.ai'}` instead
-  of the hardcoded string. `npm run build` succeeds. `AdminHeader.jsx` and all
-  flagged/ambiguous brand-string hits (dashboards, profile footers, booking
-  copy, "RYZE Intelligence"/"RYZE network" platform terms) left untouched per
-  your call. Live-browser verification (Renata vs. RYZE user) not yet done —
-  no local dev server/backend running and no test credentials on hand; needs
-  your manual check before deploy.
+- 2026-07-16 — Task created. Phase 3 of candidate portal white-labeling, after
+  Phase 1 (backend brand fields) and Phase 2 (Header wordmark swap) shipped and
+  verified. Scoped to two frontend concerns: (1) firm-relationship copy on 3
+  surfaces, gated on `tenant_id !== 'ryze'` (ryze = platform signup bucket, not a
+  firm); (2) display-only contact-details card from existing `/me` data. PDF
+  download and visual logo/color theming were considered and deliberately
+  deferred; body-copy rewording left out because it needs per-line
+  platform-vs-firm judgment, not a mechanical swap.
+- 2026-07-16 — Audit done: confirmed `user` shape in Header/CandidateDashboard/
+  CandidateSelfProfile, found `.bannerSub` already existed unused in
+  CandidateDashboard.module.css (perfect fit for the subtitle), confirmed all
+  Contact-card CSS classes already exist. Flagged Phone duplication (Contact
+  vs. existing Basic Information card) — you chose to leave both, Contact
+  card first in sideCol, plain text (no mailto/tel links). Commit 1
+  (`a8d5d4b`): gated `isFirmTenant` copy in Header ("powered by RYZE"),
+  CandidateDashboard ("You're working with {firm}"), CandidateSelfProfile
+  footer ("Prepared for you by {firm}"). Commit 2 (`0cb350a`): ungated
+  Contact card (email + phone) on CandidateSelfProfile. `npm run build`
+  passes after each commit. Live-browser verification (Renata vs. RYZE user)
+  not yet done — no local dev server/backend running, no test credentials on
+  hand; needs your manual check before deploy.
