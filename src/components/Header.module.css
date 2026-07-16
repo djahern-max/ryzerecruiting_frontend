@@ -30,9 +30,9 @@
 
 .logoGroup {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  line-height: 1.1;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 6px;
   cursor: pointer;
 }
 
@@ -49,11 +49,10 @@
 }
 
 .poweredBy {
-  font-size: 9px;
-  font-weight: 600;
-  color: var(--text-400);
+  font-size: 11px;
+  font-weight: 500;
+  color: #94a3b8;
   letter-spacing: 0.02em;
-  margin-top: 1px;
 }
 
 .badge {

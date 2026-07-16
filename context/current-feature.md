@@ -149,3 +149,12 @@ npm run build
   passes after each commit. Live-browser verification (Renata vs. RYZE user)
   not yet done — no local dev server/backend running, no test credentials on
   hand; needs your manual check before deploy.
+- 2026-07-16 — Two polish fixes from your visual review: (1) `Header.module.css`
+  — `.logoGroup` switched from stacked column to inline row so "powered by
+  RYZE" sits beside the wordmark instead of under it; `.poweredBy` color fixed
+  from `var(--text-400)` (undefined in `theme.css` — was silently falling
+  back to inherited/dark text) to a real light grey (`#94a3b8`). (2)
+  `CandidateSelfProfile.module.css` — `.roValue` was missing `flex: 1` /
+  `min-width: 0` / wrap handling, so a long email in the fixed-245px Contact
+  card overflowed instead of wrapping; added `overflow-wrap: anywhere` fix,
+  applies to all `roField` rows. `npm run build` passes after both fixes.
