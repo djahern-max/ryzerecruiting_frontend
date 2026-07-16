@@ -96,6 +96,7 @@ export default function CandidateProfile() {
     const [photoUploading, setPhotoUploading] = useState(false);
     const [bannerUploading, setBannerUploading] = useState(false);
     const [pdfLoading, setPdfLoading] = useState(false);
+    const [copiedField, setCopiedField] = useState(null);
 
     useEffect(() => {
         async function fetchCandidate() {
@@ -166,6 +167,16 @@ export default function CandidateProfile() {
         } finally {
             setBannerUploading(false);
             if (bannerInputRef.current) bannerInputRef.current.value = "";
+        }
+    }
+
+    async function handleCopy(value, field) {
+        try {
+            await navigator.clipboard.writeText(value);
+            setCopiedField(field);
+            setTimeout(() => setCopiedField(null), 1500);
+        } catch {
+            // Clipboard API needs a secure context (HTTPS/localhost); no-op otherwise
         }
     }
 
@@ -439,13 +450,31 @@ export default function CandidateProfile() {
                                     {candidate.email && (
                                         <div className={styles.roField}>
                                             <span className={styles.roLabel}>Email</span>
-                                            <a href={`mailto:${candidate.email}`} className={styles.roLink}>{candidate.email}</a>
+                                            <button
+                                                type="button"
+                                                className={styles.copyValue}
+                                                onClick={() => handleCopy(candidate.email, 'email')}
+                                                title="Click to copy"
+                                            >
+                                                {copiedField === 'email'
+                                                    ? <span className={styles.copiedFlag}>Copied!</span>
+                                                    : candidate.email}
+                                            </button>
                                         </div>
                                     )}
                                     {candidate.phone && (
                                         <div className={styles.roField}>
                                             <span className={styles.roLabel}>Phone</span>
-                                            <a href={`tel:${candidate.phone}`} className={styles.roLink}>{formatPhone(candidate.phone)}</a>
+                                            <button
+                                                type="button"
+                                                className={styles.copyValue}
+                                                onClick={() => handleCopy(formatPhone(candidate.phone), 'phone')}
+                                                title="Click to copy"
+                                            >
+                                                {copiedField === 'phone'
+                                                    ? <span className={styles.copiedFlag}>Copied!</span>
+                                                    : formatPhone(candidate.phone)}
+                                            </button>
                                         </div>
                                     )}
                                     {candidate.linkedin_url && (

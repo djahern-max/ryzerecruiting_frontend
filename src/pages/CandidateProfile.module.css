@@ -220,7 +220,7 @@
     padding: 0 0 8px;
     font-size: 1.1rem;
     font-weight: 700;
-    color: #4b5563;
+    color: var(--muted);
     letter-spacing: -0.2px;
     align-self: flex-end;
     text-align: left;
@@ -555,6 +555,32 @@
 
 .roLink:hover {
     text-decoration: underline;
+}
+
+.copyValue {
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--blue);
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    line-height: 1.45;
+    cursor: pointer;
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.copyValue:hover {
+    text-decoration: underline;
+}
+
+.copiedFlag {
+    color: var(--green);
+    font-weight: 600;
 }
 
 /* Cert badges */
