@@ -45,6 +45,7 @@ function parseToDisplayBullets(text, maxItems = 6) {
 
 export default function CandidateSelfProfile() {
     const { user } = useAuth();
+    const isFirmTenant = Boolean(user?.tenant_id) && user.tenant_id !== 'ryze';
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
     const photoInputRef = useRef(null);
@@ -421,7 +422,11 @@ export default function CandidateSelfProfile() {
                 <div className={styles.profileFooter}>
                     <div className={styles.footerLeft}>
 
-                        <span className={styles.footerTagline}>Your Candidate Profile</span>
+                        <span className={styles.footerTagline}>
+                            {isFirmTenant && user.tenant_brand_name
+                                ? `Prepared for you by ${user.tenant_brand_name}`
+                                : 'Your Candidate Profile'}
+                        </span>
                     </div>
                 </div>
 

@@ -6,6 +6,7 @@ import styles from "./Header.module.css";
 function Header() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const isFirmTenant = Boolean(user?.tenant_id) && user.tenant_id !== 'ryze';
 
   const handleLogout = () => {
     logout();
@@ -24,9 +25,14 @@ function Header() {
       <div className={styles.headerContent}>
 
         <div className={styles.headerLeft}>
-          <span className={styles.logo} onClick={handleLogoClick}>
-            {user?.tenant_brand_name || 'RYZE.ai'}
-          </span>
+          <div className={styles.logoGroup} onClick={handleLogoClick}>
+            <span className={styles.logo}>
+              {user?.tenant_brand_name || 'RYZE.ai'}
+            </span>
+            {isFirmTenant && (
+              <span className={styles.poweredBy}>powered by RYZE</span>
+            )}
+          </div>
         </div>
 
         <div className={styles.headerRight}>

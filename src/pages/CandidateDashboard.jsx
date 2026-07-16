@@ -146,6 +146,7 @@ export default function CandidateDashboard() {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const firstName = user?.full_name?.split(' ')[0] || 'there';
+  const isFirmTenant = Boolean(user?.tenant_id) && user.tenant_id !== 'ryze';
 
   const [bookingOpen, setBookingOpen] = useState(false);
 
@@ -215,7 +216,9 @@ export default function CandidateDashboard() {
         <div className={styles.banner}>
           <div className={styles.bannerLeft}>
             <h1 className={styles.bannerTitle}>Welcome back, {firstName}.</h1>
-
+            {isFirmTenant && user.tenant_brand_name && (
+              <p className={styles.bannerSub}>You're working with {user.tenant_brand_name}</p>
+            )}
           </div>
           <div className={styles.bannerRight}>
             <button className={styles.profileBtn} onClick={() => navigate('/candidate/profile')}>

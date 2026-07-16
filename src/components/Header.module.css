@@ -28,17 +28,32 @@
   gap: 8px;
 }
 
+.logoGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.1;
+  cursor: pointer;
+}
+
 .logo {
   font-size: 1.2rem;
   font-weight: 900;
   color: var(--brand-800);
   letter-spacing: -0.5px;
-  cursor: pointer;
   transition: color 150ms;
 }
 
-.logo:hover {
+.logoGroup:hover .logo {
   color: var(--brand-700);
+}
+
+.poweredBy {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-400);
+  letter-spacing: 0.02em;
+  margin-top: 1px;
 }
 
 .badge {
