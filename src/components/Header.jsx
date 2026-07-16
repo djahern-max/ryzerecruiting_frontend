@@ -25,7 +25,7 @@ function Header() {
 
         <div className={styles.headerLeft}>
           <span className={styles.logo} onClick={handleLogoClick}>
-            RYZE.ai
+            {user?.tenant_brand_name || 'RYZE.ai'}
           </span>
         </div>
 

@@ -1,131 +1,117 @@
-# Current Feature
+# current-feature.md
 
-<!-- Feature/fix name -->
-Call Summary card on the candidate profile — surface call intelligence, demote the raw transcript
+## Feature: Header brand name from user object (candidate portal white-labeling — Phase 2 of 2, FRONTEND)
 
-## Status
-<!-- Not Started | In Progress | Completed -->
-Not Started
+**Status:** Code change complete, build verified. Awaiting your live-browser check (Renata → "Green Path Recruiting", RYZE user → "RYZE.ai") and deploy.
+**Repo:** ryzerecruiting_frontend
+**Depends on:** Phase 1 (backend) — DEPLOYED & VERIFIED. `GET /api/auth/me` and
+the login response now carry `tenant_brand_name` and `tenant_id` on the user
+object. Confirmed live: Renata (green_path) → `tenant_brand_name:
+"Green Path Recruiting"`; RYZE users → `"RYZE.ai"`.
 
-> **Note:** this preempts the in-flight **apiFetch migration** (next file was `ChatPage.jsx`), parked
-> at `context/parked-apifetch-migration.md`. Its plan of record still lives in `CLAUDE.md`. Restore
-> it here when this task moves to `CHANGELOG.md`.
+### Goal
+Display the recruiting firm's brand name in the app Header instead of the
+hardcoded "RYZE.ai", so an authenticated candidate (e.g. Renata @ Green Path)
+sees their firm's name on every page. Because `Header` is shared across admin,
+employer, and candidate, and `tenant_brand_name` falls back to "RYZE.ai" for the
+`ryze` tenant, this single change brands the whole authenticated app per-tenant
+with no per-page forking — RYZE users still see "RYZE.ai".
 
-## Goals
-<!-- Goals & requirements -->
-**The backend is live.** `GET /api/candidates/{id}` (admin endpoint) now returns five derived,
-read-only fields resolved from the candidate's most recent booking that has a summary. Verified
-against Renata Voss (`/api/candidates/2`, tenant `green_path_recruiting`) on 2026-07-14:
+**This is a pure display change. NO new API call.** The value already arrives on
+the `user` object via `AuthContext` (`/auth/me` on load, and the login response).
+Read it from `useAuth().user` — do NOT add an `apiFetch`, a new endpoint, or a
+new fetch of any kind.
 
-```json
-{
-  "call_booking_id": 4,
-  "call_date": "2026-07-10",
-  "call_summary":    "Dane reached out to Renata Voss, a landscape designer and NC State …",
-  "call_next_steps": "Renata to send her resume to Dane; Dane to build out her candidate …",
-  "call_keywords":   "landscape design, outdoor living spaces, patio design, planting plans, …"
-}
+### The core change
+In `src/components/Header.jsx`, `Header` already destructures `user` from
+`useAuth()`. Replace the hardcoded logo text:
+
+```jsx
+<span className={styles.logo} onClick={handleLogoClick}>
+  RYZE.ai
+</span>
 ```
 
-Note the shapes: `call_next_steps` is a **semicolon-delimited string**, not newline-delimited and
-not a list. `call_keywords` is comma-delimited. `call_date` is a plain `YYYY-MM-DD` date string.
-Don't assume — these came off the wire.
+with:
 
-**The problem this solves.** `CandidateProfile.jsx` currently renders the raw Zoom transcript as
-the primary artifact of a call. That's the least useful view of it. The AI summary, next steps, and
-keywords existed all along — they were written to the *booking* row, so they never reached this page.
+```jsx
+<span className={styles.logo} onClick={handleLogoClick}>
+  {user?.tenant_brand_name || 'RYZE.ai'}
+</span>
+```
 
-**Goal:** add a **"Call Summary"** card, above the transcript, and collapse the transcript beneath it.
+The `|| 'RYZE.ai'` fallback covers the brief pre-load window where `user` is
+still null and any edge case where the field is missing.
 
-**Naming discipline — this is the actual point of the task.** The UI currently has two different
-things a viewer will conflate:
+### Non-goals (keep scope tight)
+- **Do not touch pre-auth surfaces** (landing page, login, register). There is no
+  tenant context before authentication, so the platform brand "RYZE.ai" is
+  correct there. Leave them hardcoded.
+- **Do not change** `index.html` `<title>` or the favicon (`/RYZE_LOGO.png`) —
+  platform-level, out of scope for this phase.
+- No visual theming (firm logo image, brand colors) — name only. That's a
+  separate, later task.
+- No new API calls, no `AuthContext` changes (the field already flows through).
 
-| Card / column | Field | Source |
-|---|---|---|
-| "About" (profile) / "AI Summary" (roster) | `ai_summary` | resume / LinkedIn parse |
-| **"Call Summary" (new)** | `call_summary` | Claude, from the Zoom transcript |
+### Kickoff prompt for Claude Code (audit-first)
 
-These stay visually and verbally distinct. Do **not** label the new card "AI Summary". Do **not**
-fall back from one to the other when either is null — they answer different questions, and a blank
-one is meaningful information.
+Workspace is rooted at this frontend repo. Before writing any code:
 
-**Card contents, in order:**
-1. Header: `Call Summary` + muted subline — `From your call on {call_date}`. Match the date
-   formatting in `MeetingSummaryPanel.jsx`.
-2. `call_summary` — prose paragraph.
-3. `call_next_steps` — split on `;`, trim, render as `<ul>` using the existing `bulletList` /
-   `bulletItem` classes.
-4. `call_keywords` — split on `,`, trim, render with the existing skill-tag chip style.
+**1. Audit — read and list, do not edit yet:**
+- `src/components/Header.jsx`: confirm it destructures `user` from `useAuth()`
+  and locate the exact hardcoded "RYZE.ai" node.
+- Grep the whole `src/` tree for other hardcoded brand strings — `RYZE.ai`,
+  `RYZE.AI`, `RYZE` — and list every hit, classifying each as:
+    - **In scope** (renders to an *authenticated* user and should be per-tenant),
+    - **Out of scope — pre-auth** (landing/login/register — platform brand,
+      leave as-is),
+    - **Out of scope — platform** (`index.html` title/favicon, CSS comments,
+      alt text on the RYZE logo asset).
+  Do NOT auto-fix anything beyond the Header. Present the list and let me decide
+  what, if anything, to fold in.
+- Specifically check `src/components/AdminHeader.jsx` if it exists: note whether
+  it hardcodes "RYZE.ai". Admins are always the RYZE tenant, so it resolves to
+  "RYZE.ai" either way — applying the same `user?.tenant_brand_name || 'RYZE.ai'`
+  fallback is harmless/future-proof, but it's optional. Flag it for my call; do
+  not change it without confirmation.
 
-**Transcript demotion:** the `CALL TRANSCRIPT` card stays but is collapsed by default behind a
-`View full transcript` toggle. It's the receipt, not the headline.
+**2. Propose a plan and wait for confirmation.** For the core change the plan is
+trivial (the one-line swap above); the substance of your plan is the audit
+findings — the categorized list of other brand-string hits and your
+recommendation on which (if any) belong in this task vs. a later pass.
 
-**Empty states:** if `call_summary` is null, the whole card doesn't render — no skeleton, no
-"pending" placeholder. A manually-added candidate who never had a call should show no trace of it.
-Render sub-sections independently: a summary with no next steps still renders the card.
+**3. After confirmation, write.** Narrow surgical edit to `Header.jsx` only,
+unless I greenlight additional in-scope hits. One concern per change.
 
-## Related Files
-<!-- Files this touches -->
-- `src/pages/CandidateProfile.jsx` — new Call Summary card in `mainCol`, **below** the "About" card
-  and **above** the transcript card; transcript collapse toggle
-- `src/pages/CandidateProfile.module.css` — reuse `bodyCard` / `bodyCardTitle` / `bodyCardBody` /
-  `bulletList` / `bulletItem` / skill-tag styles. Add only what's genuinely new (header subline,
-  transcript toggle).
-- Reference only, do not change:
-  - `src/components/MeetingSummaryPanel.jsx` — the booking-side summary panel. Match its date
-    formatting and general shape for visual consistency.
-  - `src/pages/CandidatesPage.jsx` — the roster "AI Summary" column stays bound to `ai_summary`.
+**4. Verify (frontend is build-and-look):**
+- `npm run build` succeeds.
+- Logged in as Renata (green_path) → Header reads "Green Path Recruiting".
+- Logged in as a RYZE user → Header reads "RYZE.ai".
+- No brief flash of the wrong brand on load beyond the acceptable null→value
+  swap (AuthContext gates authenticated routes on `loading`, so `user` should be
+  populated by the time Header renders).
 
-**Explicitly out of scope:**
-- Migrating `CandidateProfile.jsx` to `apiFetch`. It's on the migration list — separate concern,
-  separate commit. Don't bundle it.
-- `CandidateSelfProfile.jsx` / `CandidateDashboard.jsx`. Those read `GET /api/candidates/me`, which
-  deliberately does **not** return `call_*` (recruiter-owned fields — see the backend task). Adding
-  the card there would be a privacy regression, not a feature.
-- The candidate PDF export.
-- The "Profile stub — resume not yet parsed" banner. It's correct and stays. Once the Call Summary
-  card is in, that banner reads as *intentional* ("we have the call, not the resume yet") rather
-  than looking like something's broken.
+**5. Deploy is manual.** Hand me the exact commands; do not run them. Frontend
+deploy:
+```
+# on server
+git pull
+npm run build
+```
 
-## Verification
-<!-- How we'll know it worked -->
-1. As a `green_path_recruiting` admin, open `/admin/candidates/2` (Renata Voss). The Call Summary
-   card renders above the transcript: summary prose, next steps as bullets, keywords as chips,
-   `From your call on July 10, 2026` in the subline.
-2. Transcript is collapsed by default, expands on click.
-3. The "About" card is **absent** — her `ai_summary` is still `null`. Confirms the two aren't
-   cross-wired.
-4. Open a candidate with no booking → no Call Summary card, no empty container, no console errors.
-   (Green Path only has Renata — create a throwaway candidate from the roster, check, delete.)
-5. Enrich Renata via **Enrich with Resume / LinkedIn**. The "About" card appears *and* Call Summary
-   remains. Both visible, clearly labeled, obviously different things.
-6. `npm run build` passes locally before push.
-
-## Notes
-<!-- Any extra notes -->
-- Backend shipped and verified 2026-07-14. This is unblocked.
-- Demo-blocking, not polish — the Renata Voss demo video can't honestly claim "Claude writes the
-  summary and pushes it into her profile" until it appears there.
-- Once this ships the demo narrative gets *better*, not just accurate: two AI passes from two
-  different sources (call → Call Summary; resume → About) landing on one profile.
-
-## History
-<!-- Keep this updated. Earliest to latest -->
-- 2026-07-14 — Task created while scripting the Renata Voss demo. The profile page showed a raw
-  transcript and no summary, and "AI Summary" in the roster turned out to be a *different* field
-  (`ai_summary`, resume-derived) than the one generated from the call (`booking.meeting_summary`).
-  Two things sharing one name was the real bug; the missing card was the symptom.
-- 2026-07-14 — Backend counterpart shipped and verified: `call_summary`, `call_next_steps`,
-  `call_keywords`, `call_date`, `call_booking_id` confirmed populated on `/api/candidates/2`,
-  `ai_summary` confirmed still `null`, tenant isolation confirmed intact. Frontend unblocked.
-- 2026-07-14 — `CandidateProfile.jsx` / `CandidateProfile.module.css` updated: Call Summary card
-  added in `mainCol`, immediately after the About card. Renders `call_summary` prose,
-  `call_next_steps` (split on `;`) as bullets, `call_keywords` (split on `,`) as skill-tag chips,
-  and a muted subline "From your call on {call_date}" (long-month format, no weekday). Card is
-  gated on `call_summary` alone so sub-sections render independently and a null `call_summary`
-  hides the whole card. Call Transcript card reworked: reuses the existing `transcriptExpanded`
-  state but now renders nothing until toggled ("View full transcript ↓" / "Hide transcript ↑"),
-  replacing the old 600-char truncation + fade; removed the now-dead `.transcriptFade` CSS class.
-  New CSS: `.callSummaryHeader`, `.callDateSubline`, `.callSummarySection`. `npm run build` passes
-  locally. Not yet manually verified in-browser against Renata Voss — do that before marking
-  Completed. `apiFetch` migration untouched, as scoped.
+### History
+- 2026-07-16 — Task created. Phase 2 of candidate portal white-labeling. Phase 1
+  (backend) deployed and verified same day: `tenant_brand_name` / `tenant_id`
+  now on the auth user object, confirmed via Renata's `/api/auth/me` returning
+  "Green Path Recruiting". This phase surfaces that value in the shared Header.
+  Pure display change — no new API call; the field already flows through
+  `AuthContext`.
+- 2026-07-16 — Audit done (full grep of `RYZE`/`RYZE.ai` across `src/`, results
+  categorized in-conversation, not persisted here). Made the core edit:
+  `Header.jsx:27-29` now reads `{user?.tenant_brand_name || 'RYZE.ai'}` instead
+  of the hardcoded string. `npm run build` succeeds. `AdminHeader.jsx` and all
+  flagged/ambiguous brand-string hits (dashboards, profile footers, booking
+  copy, "RYZE Intelligence"/"RYZE network" platform terms) left untouched per
+  your call. Live-browser verification (Renata vs. RYZE user) not yet done —
+  no local dev server/backend running and no test credentials on hand; needs
+  your manual check before deploy.
