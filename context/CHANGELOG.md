@@ -4,6 +4,42 @@ Completed features/fixes move here from `current-feature.md` once Status = Compl
 
 This file doubles as source material for the Build in Public series — each entry is close to script-ready: what the problem was, what changed, and the dated sequence of how it got fixed.
 
+## Brand-relationship copy + contact details (candidate portal white-labeling — Phase 3) (completed 2026-07-16)
+Made the authenticated candidate experience read as the firm the candidate is working with — Header "powered by RYZE" microcopy, dashboard "You're working with {firm}" subtitle, and profile footer "Prepared for you by {firm}" — all gated on `isFirmTenant` (`tenant_id` present and not the `ryze` platform signup bucket) so `ryze` users see plain RYZE branding. Also added an ungated, display-only Contact card (email + phone) to the candidate self-profile, sourced from existing `/me` data with no new fetch or backend change.
+
+History:
+- 2026-07-16 — Task created. Phase 3 of candidate portal white-labeling, after
+  Phase 1 (backend brand fields) and Phase 2 (Header wordmark swap) shipped and
+  verified. Scoped to two frontend concerns: (1) firm-relationship copy on 3
+  surfaces, gated on `tenant_id !== 'ryze'` (ryze = platform signup bucket, not a
+  firm); (2) display-only contact-details card from existing `/me` data. PDF
+  download and visual logo/color theming were considered and deliberately
+  deferred; body-copy rewording left out because it needs per-line
+  platform-vs-firm judgment, not a mechanical swap.
+- 2026-07-16 — Audit done: confirmed `user` shape in Header/CandidateDashboard/
+  CandidateSelfProfile, found `.bannerSub` already existed unused in
+  CandidateDashboard.module.css (perfect fit for the subtitle), confirmed all
+  Contact-card CSS classes already exist. Flagged Phone duplication (Contact
+  vs. existing Basic Information card) — you chose to leave both, Contact
+  card first in sideCol, plain text (no mailto/tel links). Commit 1
+  (`a8d5d4b`): gated `isFirmTenant` copy in Header ("powered by RYZE"),
+  CandidateDashboard ("You're working with {firm}"), CandidateSelfProfile
+  footer ("Prepared for you by {firm}"). Commit 2 (`0cb350a`): ungated
+  Contact card (email + phone) on CandidateSelfProfile. `npm run build`
+  passes after each commit. Live-browser verification (Renata vs. RYZE user)
+  not yet done — no local dev server/backend running, no test credentials on
+  hand; needs your manual check before deploy.
+- 2026-07-16 — Two polish fixes from your visual review: (1) `Header.module.css`
+  — `.logoGroup` switched from stacked column to inline row so "powered by
+  RYZE" sits beside the wordmark instead of under it; `.poweredBy` color fixed
+  from `var(--text-400)` (undefined in `theme.css` — was silently falling
+  back to inherited/dark text) to a real light grey (`#94a3b8`). (2)
+  `CandidateSelfProfile.module.css` — `.roValue` was missing `flex: 1` /
+  `min-width: 0` / wrap handling, so a long email in the fixed-245px Contact
+  card overflowed instead of wrapping; added `overflow-wrap: anywhere` fix,
+  applies to all `roField` rows. `npm run build` passes after both fixes.
+- 2026-07-21 — Live-browser verification and deploy confirmed done.
+
 ## Dead-code inventory, frontend (completed 2026-07-08)
 Produced a findings-only inventory of dead code in the frontend — unused files in `src/pages/` and `src/components/`, orphaned `.module.css` files, unused `src/utils/`/`src/services/`/`src/contexts/` files, unused assets in `src/assets/` and `public/`, and unused npm dependencies — cross-referenced against the CLAUDE.md apiFetch migration list, then acted on the findings in three separate, verified commits. Findings doc: `context/dead-code-audit.md`.
 

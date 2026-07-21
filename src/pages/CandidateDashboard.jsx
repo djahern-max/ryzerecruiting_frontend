@@ -63,14 +63,52 @@ function getScoreTier(score) {
 // ---------------------------------------------------------------------------
 
 const TRUNCATE = 220;
+const NOTE_MAX = 500;
 
-function JobMatchCard({ job, rank }) {
+function JobMatchCard({ job, rank, hasInterest, onInterestSent }) {
   const [expanded, setExpanded] = useState(false);
+  const [showNoteBox, setShowNoteBox] = useState(false);
+  const [note, setNote] = useState('');
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState(null);
   const isLong = job.requirements && job.requirements.length > TRUNCATE;
   const hasScore = job.match_score != null;
   const pct = hasScore ? getScorePercent(job.match_score) : null;
   const tier = hasScore ? getScoreTier(job.match_score) : null;
   const salary = formatSalary(job.salary_min, job.salary_max);
+
+  const token = localStorage.getItem('token');
+
+  const handleSend = () => {
+    setSending(true);
+    setError(null);
+    const trimmed = note.trim();
+
+    apiFetch(`${API_BASE}/api/job-orders/${job.id}/express-interest`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(trimmed ? { note: trimmed } : {}),
+    })
+      .then(r => {
+        if (r.status === 201 || r.status === 409) {
+          onInterestSent(job.id);
+          setShowNoteBox(false);
+          return;
+        }
+        throw new Error(`HTTP ${r.status}`);
+      })
+      .catch(() => setError("Couldn't send — try again."))
+      .finally(() => setSending(false));
+  };
+
+  const handleCancel = () => {
+    setShowNoteBox(false);
+    setNote('');
+    setError(null);
+  };
 
   return (
     <div className={`${styles.matchCard} ${hasScore ? styles[`tier_${tier}`] : ''}`}>
@@ -133,6 +171,43 @@ function JobMatchCard({ job, rank }) {
           </div>
         )}
 
+        <div className={styles.interestSection}>
+          {hasInterest ? (
+            <span className={styles.interestSentPill}>✓ Interest sent</span>
+          ) : !showNoteBox ? (
+            <button className={styles.interestBtn} onClick={() => setShowNoteBox(true)}>
+              I'm interested
+            </button>
+          ) : (
+            <div className={styles.interestBox}>
+              <textarea
+                className={styles.interestTextarea}
+                placeholder="Add a quick note — optional"
+                maxLength={NOTE_MAX}
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                disabled={sending}
+              />
+              {error && <p className={styles.interestError}>{error}</p>}
+              <div className={styles.interestActions}>
+                <button
+                  className={styles.interestSendBtn}
+                  onClick={handleSend}
+                  disabled={sending}
+                >
+                  {sending ? 'Sending…' : 'Send'}
+                </button>
+                <button
+                  className={styles.interestCancelBtn}
+                  onClick={handleCancel}
+                  disabled={sending}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
 
       </div>
     </div>
@@ -163,6 +238,13 @@ export default function CandidateDashboard() {
   const [matchedRoles, setMatchedRoles] = useState([]);
   const [rolesLoading, setRolesLoading] = useState(false);
 
+  // Expressed interests (job order ids)
+  const [interestedJobIds, setInterestedJobIds] = useState(new Set());
+
+  const markInterested = (jobId) => {
+    setInterestedJobIds(prev => new Set(prev).add(jobId));
+  };
+
   useEffect(() => {
     const headers = { Authorization: `Bearer ${token}`, 'Cache-Control': 'no-cache' };
 
@@ -182,6 +264,12 @@ export default function CandidateDashboard() {
       })
       .then(data => setCandidateProfile(data))
       .catch(() => setCandidateProfile(null));
+
+    // Expressed interests
+    apiFetch(`${API_BASE}/api/candidates/me/interests`, { headers, cache: 'no-store' })
+      .then(r => r.ok ? r.json() : [])
+      .then(data => setInterestedJobIds(new Set(data.map(i => i.job_order_id))))
+      .catch(() => { });
 
   }, [token]);
 
@@ -414,7 +502,13 @@ export default function CandidateDashboard() {
           ) : (
             <div className={styles.matchList}>
               {matchedRoles.map((job, idx) => (
-                <JobMatchCard key={job.id} job={job} rank={idx + 1} />
+                <JobMatchCard
+                  key={job.id}
+                  job={job}
+                  rank={idx + 1}
+                  hasInterest={interestedJobIds.has(job.id)}
+                  onInterestSent={markInterested}
+                />
               ))}
             </div>
           )}
