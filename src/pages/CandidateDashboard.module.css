@@ -122,13 +122,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   flex-shrink: 0;
-  background: #eff6ff;
-  color: #2563eb;
-  border-radius: 8px;
-  font-size: 14px;
+}
+
+.sectionIconImg {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
 }
 
 .sectionTitle {
@@ -436,7 +438,7 @@
 }
 
 .tier_mid {
-  border-left: 4px solid #2563eb;
+  border-left: 4px solid #84cc16;
 }
 
 .tier_low {
@@ -457,8 +459,8 @@
 }
 
 .scoreStrip_mid {
-  background: #eff6ff;
-  border-bottom: 1px solid #bfdbfe;
+  background: #f7fee7;
+  border-bottom: 1px solid #d9f99d;
 }
 
 .scoreStrip_low {
@@ -487,8 +489,8 @@
 }
 
 .scoreBadge_mid {
-  background: #dbeafe;
-  color: #1d4ed8;
+  background: #ecfccb;
+  color: #4d7c0f;
 }
 
 .scoreBadge_low {
@@ -502,7 +504,7 @@
   gap: 4px;
   font-size: 11px;
   font-weight: 600;
-  color: #d97706;
+  color: #e11d48;
 }
 
 .scoreBar {
@@ -524,7 +526,7 @@
 }
 
 .scoreBarFill_mid {
-  background: #2563eb;
+  background: #84cc16;
 }
 
 .scoreBarFill_low {

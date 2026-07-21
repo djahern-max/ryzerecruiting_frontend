@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import BookingModal from '../components/BookingModal';
 import zoomIcon from '../assets/icons/zoom.svg';
+import scheduledCallIcon from '../assets/icons/scheduled_call.svg';
+import matchedOpportunityIcon from '../assets/icons/matched_opportunity.svg';
 import styles from './CandidateDashboard.module.css';
 import { apiFetch } from '../services/api';
 import { useNavigate } from 'react-router-dom';
@@ -293,7 +295,7 @@ export default function CandidateDashboard() {
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
             <div className={styles.sectionTitleRow}>
-              <span className={styles.sectionIcon}><i className="fi fi-rr-calendar" /></span>
+              <span className={styles.sectionIcon}><img src={scheduledCallIcon} alt="" className={styles.sectionIconImg} /></span>
               <h3 className={styles.sectionTitle}>My Scheduled Calls</h3>
             </div>
           </div>
@@ -358,7 +360,7 @@ export default function CandidateDashboard() {
             <div className={styles.sectionHeaderTop}>
               <div>
                 <div className={styles.sectionTitleRow}>
-                  <span className={styles.sectionIcon}><i className="fi fi-rr-briefcase" /></span>
+                  <span className={styles.sectionIcon}><img src={matchedOpportunityIcon} alt="" className={styles.sectionIconImg} /></span>
                   <h3 className={styles.sectionTitle}>
                     {profileLoading
                       ? 'Opportunities'
