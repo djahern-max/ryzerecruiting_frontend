@@ -4,6 +4,29 @@ Completed features/fixes move here from `current-feature.md` once Status = Compl
 
 This file doubles as source material for the Build in Public series — each entry is close to script-ready: what the problem was, what changed, and the dated sequence of how it got fixed.
 
+## Candidate "I'm Interested" button on matched roles (completed 2026-07-21)
+Added a lightweight "I'm interested" action to each JobMatchCard on the candidate dashboard, as a low-friction alternative to "Schedule a Call": clicking reveals an optional short note + Send, which resolves to a disabled "✓ Interest sent" pill on success or on 409 (already sent). State is fetched from `GET /api/candidates/me/interests` alongside the existing dashboard fetches so it persists across refresh. POSTs go to `POST /api/job-orders/{job.id}/express-interest`.
+
+History:
+- 2026-07-21 — Task created, replacing the archived Phase 3 brand-copy task.
+  Depends on backend "I'm Interested" endpoints already shipped.
+- 2026-07-21 — Audit done: confirmed `JobMatchCard` is defined inline in
+  `CandidateDashboard.jsx` (no separate file), confirmed `job.id` (map key
+  for matched roles) is the same id as `job_order_id` used by the interest
+  endpoints, no existing pill class fit the "Interest sent" state so a new
+  `.interestSentPill` was added reusing the `.pill_confirmed` green tokens.
+  You chose: outlined-pill button style (`.scheduleBtnSm`-style, not a plain
+  text link) for the "I'm interested" trigger, and a Cancel link alongside
+  Send so the note box can be collapsed without sending.
+- 2026-07-21 — Implemented: added a 4th fetch
+  (`/api/candidates/me/interests`) into `interestedJobIds`, threaded
+  `hasInterest`/`onInterestSent` into `JobMatchCard`, added the button →
+  textarea → Send/Cancel flow (201 and 409 both resolve to the sent pill,
+  other errors show inline retry text), added matching CSS classes to
+  `CandidateDashboard.module.css`. `npm run build` passed locally. Committed
+  (`16b76ae`).
+- 2026-07-21 — Live-browser verification and deploy confirmed done.
+
 ## Brand-relationship copy + contact details (candidate portal white-labeling — Phase 3) (completed 2026-07-16)
 Made the authenticated candidate experience read as the firm the candidate is working with — Header "powered by RYZE" microcopy, dashboard "You're working with {firm}" subtitle, and profile footer "Prepared for you by {firm}" — all gated on `isFirmTenant` (`tenant_id` present and not the `ryze` platform signup bucket) so `ryze` users see plain RYZE branding. Also added an ungated, display-only Contact card (email + phone) to the candidate self-profile, sourced from existing `/me` data with no new fetch or backend change.
 

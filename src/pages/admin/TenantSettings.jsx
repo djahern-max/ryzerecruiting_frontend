@@ -18,13 +18,6 @@ const FIELDS = [
         type: 'text',
     },
     {
-        name: 'from_email',
-        label: 'Sender email',
-        help: 'The "from" address on outbound email. Requires a verified domain — leave blank until your domain is verified, and email sends from the shared address with your firm as the display name.',
-        placeholder: 'name@yourfirm.com',
-        type: 'email',
-    },
-    {
         name: 'reply_to_email',
         label: 'Reply-to email',
         help: 'Where replies land when a candidate or employer responds.',
@@ -74,7 +67,6 @@ export default function TenantSettings() {
                 if (data) {
                     setForm({
                         signature_name: data.signature_name || '',
-                        from_email: data.from_email || '',
                         reply_to_email: data.reply_to_email || '',
                         support_email: data.support_email || '',
                         admin_email: data.admin_email || '',
@@ -114,7 +106,6 @@ export default function TenantSettings() {
             setTenant(updated);
             setForm({
                 signature_name: updated.signature_name || '',
-                from_email: updated.from_email || '',
                 reply_to_email: updated.reply_to_email || '',
                 support_email: updated.support_email || '',
                 admin_email: updated.admin_email || '',
@@ -143,7 +134,9 @@ export default function TenantSettings() {
                         <h1 className={styles.title}>Branding</h1>
                         <p className={styles.sub}>
                             Control how your firm appears on outbound email and SMS.
-                            Leave a field blank to use the platform default.
+                            Leave a field blank to use the platform default. Emails are
+                            sent under your firm's name from RYZE's email service;
+                            replies go to your Reply-To address.
                         </p>
                     </div>
 
