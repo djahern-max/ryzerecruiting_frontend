@@ -292,7 +292,10 @@ export default function CandidateDashboard() {
         {/* ── My Scheduled Calls ── */}
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
-            <h3 className={styles.sectionTitle}>My Scheduled Calls</h3>
+            <div className={styles.sectionTitleRow}>
+              <span className={styles.sectionIcon}><i className="fi fi-rr-calendar" /></span>
+              <h3 className={styles.sectionTitle}>My Scheduled Calls</h3>
+            </div>
           </div>
 
           {bookingsLoading ? (
@@ -354,15 +357,18 @@ export default function CandidateDashboard() {
           <div className={styles.sectionHeader}>
             <div className={styles.sectionHeaderTop}>
               <div>
-                <h3 className={styles.sectionTitle}>
-                  {profileLoading
-                    ? 'Opportunities'
-                    : isRanked
-                      ? 'Matched Opportunities'
-                      : hasProfile
-                        ? 'Open Opportunities'
-                        : 'Set Up Your Profile'}
-                </h3>
+                <div className={styles.sectionTitleRow}>
+                  <span className={styles.sectionIcon}><i className="fi fi-rr-briefcase" /></span>
+                  <h3 className={styles.sectionTitle}>
+                    {profileLoading
+                      ? 'Opportunities'
+                      : isRanked
+                        ? 'Matched Opportunities'
+                        : hasProfile
+                          ? 'Open Opportunities'
+                          : 'Set Up Your Profile'}
+                  </h3>
+                </div>
 
                 {/* subtitle only when it actually says something true */}
                 {(profileLoading || rolesLoading || isRanked) && (
@@ -385,7 +391,9 @@ export default function CandidateDashboard() {
             </div>
           ) : !hasProfile ? (
             <div className={styles.rolesEmpty}>
-              <i className={`fi fi-rr-user-add ${styles.rolesEmptyIcon}`} />
+              <span className={styles.rolesEmptyIconWrap}>
+                <i className={`fi fi-rr-user-add ${styles.rolesEmptyIcon}`} />
+              </span>
               <p>Matched roles appear once your profile is set up.</p>
               <button className={styles.scheduleBtnSm} onClick={() => setBookingOpen(true)}>
                 Talk to a Recruiter
@@ -393,7 +401,9 @@ export default function CandidateDashboard() {
             </div>
           ) : matchedRoles.length === 0 ? (
             <div className={styles.rolesEmpty}>
-              <i className={`fi fi-rr-briefcase ${styles.rolesEmptyIcon}`} />
+              <span className={styles.rolesEmptyIconWrap}>
+                <i className={`fi fi-rr-briefcase ${styles.rolesEmptyIcon}`} />
+              </span>
               <p>No matched roles right now — check back soon.</p>
               <button className={styles.scheduleBtnSm} onClick={() => setBookingOpen(true)}>
                 Talk to a Recruiter

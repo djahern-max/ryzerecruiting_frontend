@@ -54,7 +54,7 @@
   font-family: 'DM Serif Display', serif;
   font-size: 28px;
   font-weight: 400;
-  color: #64748b;
+  color: #0f172a;
   margin: 0;
   line-height: 1.2;
 }
@@ -112,6 +112,25 @@
   gap: 16px;
 }
 
+.sectionTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sectionIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  background: #eff6ff;
+  color: #2563eb;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
 .sectionTitle {
   font-size: 18px;
   font-weight: 700;
@@ -123,6 +142,7 @@
   font-size: 13px;
   color: #64748b;
   margin: 0;
+  margin-left: 40px;
 }
 
 .aiRankedBadge {
@@ -357,9 +377,19 @@
   font-size: 14px;
 }
 
+.rolesEmptyIconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #f1f5f9;
+}
+
 .rolesEmptyIcon {
-  font-size: 32px;
-  color: #cbd5e1;
+  font-size: 28px;
+  color: #94a3b8;
 }
 
 .scheduleBtnSm {
@@ -402,6 +432,7 @@
 
 .tier_high {
   border-left: 4px solid #16a34a;
+  background: #fafffd;
 }
 
 .tier_mid {
