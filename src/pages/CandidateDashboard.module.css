@@ -433,16 +433,19 @@
 }
 
 .tier_high {
-  border-left: 4px solid #16a34a;
-  background: #fafffd;
+  border-left: 4px solid #0a66c2;
+  /* linkedin-blue */
+  background: #fafcff;
 }
 
 .tier_mid {
-  border-left: 4px solid #84cc16;
+  border-left: 4px solid #57a0d3;
+  /* accent-blue */
 }
 
 .tier_low {
   border-left: 4px solid #cbd5e1;
+  /* slate — unchanged */
 }
 
 /* Score strip */
@@ -454,13 +457,13 @@
 }
 
 .scoreStrip_high {
-  background: #f0fdf4;
-  border-bottom: 1px solid #bbf7d0;
+  background: #eff6ff;
+  border-bottom: 1px solid #bfdbfe;
 }
 
 .scoreStrip_mid {
-  background: #f7fee7;
-  border-bottom: 1px solid #d9f99d;
+  background: #f2f8fd;
+  border-bottom: 1px solid #d6e6f5;
 }
 
 .scoreStrip_low {
@@ -484,13 +487,14 @@
 }
 
 .scoreBadge_high {
-  background: #dcfce7;
-  color: #15803d;
+  background: #dbeafe;
+  color: #004182;
+  /* deep-blue for strong contrast */
 }
 
 .scoreBadge_mid {
-  background: #ecfccb;
-  color: #4d7c0f;
+  background: #e6f2fb;
+  color: #2b6cb0;
 }
 
 .scoreBadge_low {
@@ -522,11 +526,11 @@
 }
 
 .scoreBarFill_high {
-  background: #16a34a;
+  background: #0a66c2;
 }
 
 .scoreBarFill_mid {
-  background: #84cc16;
+  background: #57a0d3;
 }
 
 .scoreBarFill_low {
