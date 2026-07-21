@@ -6,6 +6,8 @@ import BookingModal from '../components/BookingModal';
 import zoomIcon from '../assets/icons/zoom.svg';
 import scheduledCallIcon from '../assets/icons/scheduled_call.svg';
 import matchedOpportunityIcon from '../assets/icons/matched_opportunity.svg';
+import scheduleCallIcon from '../assets/icons/candidate_schedule_call.svg';
+import viewProfileIcon from '../assets/icons/view_candidate_profile.svg';
 import styles from './CandidateDashboard.module.css';
 import { apiFetch } from '../services/api';
 import { useNavigate } from 'react-router-dom';
@@ -311,12 +313,21 @@ export default function CandidateDashboard() {
             )}
           </div>
           <div className={styles.bannerRight}>
-            <button className={styles.profileBtn} onClick={() => navigate('/candidate/profile')}>
-              <i className="fi fi-rr-user" /> My Profile
+            <button
+              className={styles.iconBtn}
+              onClick={() => navigate('/candidate/profile')}
+              aria-label="My Profile"
+              title="My Profile"
+            >
+              <img src={viewProfileIcon} alt="" className={styles.iconBtnImg} />
             </button>
-            <button className={styles.scheduleBtn} onClick={() => setBookingOpen(true)}>
-              <i className="fi fi-rr-calendar" />
-              Schedule a Call
+            <button
+              className={styles.iconBtn}
+              onClick={() => setBookingOpen(true)}
+              aria-label="Schedule a Call"
+              title="Schedule a Call"
+            >
+              <img src={scheduleCallIcon} alt="" className={styles.iconBtnImg} />
             </button>
           </div>
         </div>
