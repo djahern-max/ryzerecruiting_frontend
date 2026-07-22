@@ -497,7 +497,7 @@ export default function CandidateDashboard() {
               </span>
               <p>Matched roles appear once your profile is set up.</p>
               <button className={styles.scheduleBtnSm} onClick={() => setBookingOpen(true)}>
-                Talk to a Recruiter
+                Talk to your Recruiter
               </button>
             </div>
           ) : matchedRoles.length === 0 ? (
@@ -507,7 +507,7 @@ export default function CandidateDashboard() {
               </span>
               <p>No matched roles right now — check back soon.</p>
               <button className={styles.scheduleBtnSm} onClick={() => setBookingOpen(true)}>
-                Talk to a Recruiter
+                Talk to your Recruiter
               </button>
             </div>
           ) : (
