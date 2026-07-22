@@ -7,8 +7,8 @@ const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 const TABLES = [
     "bookings", "candidates", "employer_profiles",
-    "job_orders", "chat_sessions", "chat_messages",
-    "users", "waitlist", "contacts", "webhook_logs",
+    "job_orders", "job_interests", "chat_sessions", "chat_messages",
+    "users", "waitlist", "contacts", "tenants", "webhook_logs",
 ];
 
 const SUMMARY_COLS = {
@@ -22,6 +22,8 @@ const SUMMARY_COLS = {
     waitlist: ["id", "email", "intent", "source", "created_at"],
     contacts: ["id", "name", "email", "message"],
     webhook_logs: ["id", "event", "meeting_id", "booking_found", "result", "received_at"],
+    job_interests: ["id", "job_order_id", "candidate_id", "note", "created_at"],
+    tenants: ["id", "slug", "company_name", "status", "admin_email", "created_at"],
 };
 
 const EDITABLE_COLS = {
@@ -35,11 +37,14 @@ const EDITABLE_COLS = {
     chat_messages: [],
     contacts: [],
     webhook_logs: [],
+    job_interests: ["note"],
+    tenants: [],
 };
 
 const FK_MAP = {
     employer_profile_id: "employer_profiles",
     candidate_id: "candidates",
+    job_order_id: "job_orders",
     user_id: "users",
     session_id: "chat_sessions",
     employer_id: "users",
