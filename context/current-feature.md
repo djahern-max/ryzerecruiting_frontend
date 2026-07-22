@@ -1,55 +1,59 @@
 # current-feature.md
 
-## Feature: remove From Email from Branding settings (frontend)
+## Feature: DB Explorer — surface all current tables (`job_interests`, `tenants`)
 
 **Status:** Built, awaiting your verification and deploy.
 **Repo:** ryzerecruiting_frontend
-**Depends on:** Backend "notifications@ sender" task deployed —
-`from_email` is gone from the tenant settings GET response and ignored on
-PATCH.
+**Depends on:** Backend commit `4b60776` (`app/api/db_explorer.py`) already
+shipped in the backend repo — adds the same two tables to the API's config
+dicts. No endpoint-shape changes, so this frontend change is safe to deploy
+independently once built.
 
 ### Goal
-Tenant admins must not be able to set a from address — an unverified domain
-there silently breaks all their outbound email (hit live with Green Path).
-One concern, one commit:
+The DB Explorer hardcodes its table list separately from the backend
+(`TABLES`, `SUMMARY_COLS`, `EDITABLE_COLS`, `FK_MAP` in
+`src/pages/admin/DBExplorer.jsx`). Two real tables existed in the DB but were
+missing from the UI: `job_interests` (candidate "I'm Interested" feature) and
+`tenants` (superuser-global, read-only — no `tenant_id` column, `slug` is the
+identity).
 
-- `src/pages/admin/TenantSettings.jsx`: remove the From Email input, remove
-  `from_email` from the form state object, the GET hydration, and the PATCH
-  body.
-- While in there: add one line of helper text near the top of the form —
-  "Emails send from Green-Path-style branding on RYZE's verified address;
-  replies go to your Reply-To." (adjust wording to fit the existing sub
-  copy style — keep it to one sentence).
-- Remove any now-orphaned CSS for that field from the module if it had
-  dedicated classes; leave shared classes alone.
-
-### Explicitly OUT of scope
-- No other settings fields (reply_to, support, admin, signature all stay).
-- No backend calls beyond the existing GET/PATCH.
+### Changes made
+- `TABLES`: added `job_interests` (after `job_orders`) and `tenants` (before
+  `webhook_logs`).
+- `SUMMARY_COLS`: added row-summary columns for both.
+- `EDITABLE_COLS`: `job_interests: ["note"]` (note is the only editable
+  field); `tenants: []` (read-only — `slug` is the identity key referenced
+  by every other table's plain-string `tenant_id` with no FK, and
+  `status`/`trial_*`/`stripe_*` are platform-owned; tenant-editable branding
+  fields already live behind `/api/settings/tenant`, not this explorer).
+- `FK_MAP`: added `job_order_id → job_orders` (the first table to expose that
+  column; `candidate_id → candidates` already existed).
 
 ## Verification
 1. `npm run build` passes.
-2. As dane@greenpathrecruiting.com: Branding page renders without a From
-   Email field; editing Signature Name and saving succeeds (no 422).
-3. `SELECT from_email FROM tenants WHERE slug='green_path_recruiting';`
-   still NULL after a save.
+2. As a superuser: sidebar shows `job_interests` and `tenants` with correct
+   row counts.
+3. `job_interests`: browse, search on `note`, date filter on `created_at`,
+   CSV export, edit `note` (persists), delete all work.
+4. `tenants`: browse + CSV export work; no edit affordance shown (read-only);
+   `twilio_auth_token` absent from the columns.
+5. `job_order_id` on a `job_interests` row renders as a clickable FK and
+   navigates to `job_orders`.
 
 ## History
-- 2026-07-21 — Task created (replacing the archived "I'm Interested" task).
-  Audit done: `from_email` appears in exactly 3 places in
-  `TenantSettings.jsx` (the `FIELDS` entry, GET hydration, post-save
-  hydration) with no other frontend references anywhere (confirmed via
-  repo-wide grep). `EMPTY_FORM` derives from `FIELDS.reduce(...)` and the
-  PATCH body sends the whole `form` object directly, so removing the
-  `FIELDS` entry and the two hydration lines was sufficient — no separate
-  edits needed for those. `TenantSettings.module.css` has no CSS scoped to
-  `from_email` (all shared classes), so no CSS removal was needed.
-  You revised the helper-text wording for accuracy — "Emails are sent under
-  your firm's name from RYZE's email service; replies go to your Reply-To
-  address" (not "your verified RYZE address," since nothing is verified by
-  or belongs to the tenant).
-- 2026-07-21 — Implemented all 4 steps in `TenantSettings.jsx`: removed the
-  `from_email` FIELDS entry, GET hydration, and post-save hydration; updated
-  the `.sub` copy with the approved wording. `npm run build` passed locally.
-  Live verification (Branding page render, Signature Name save, DB check on
-  `from_email`) not yet done — needs your manual check before deploy.
+- 2026-07-21 — Backend spec written and implemented first (see backend
+  repo's `context/current-feature.md` / `CHANGELOG.md` for the full
+  cross-repo audit and design rationale — column lists were derived directly
+  from the `JobInterest`/`Tenant` SQLAlchemy models). Frontend changes
+  mirrored the backend's shipped `EDITABLE_COLS` exactly per user guard:
+  `tenants` stays fully read-only (no `slug`/`status`/`trial_*`/`stripe_*`),
+  `job_interests` editable = `note` only.
+- 2026-07-21 — Implemented: 4 edits to `DBExplorer.jsx` (`TABLES`,
+  `SUMMARY_COLS`, `EDITABLE_COLS`, `FK_MAP`). Committed as `0a510a0`. This
+  History entry was written after the fact, in the same session as the
+  backend's "doc must travel with the commit" lesson — the commit landed
+  before this file was updated to track it at all (it still held an
+  unrelated, separately-completed task). See backend CHANGELOG for the full
+  postmortem on that pattern.
+- Remaining: `npm run build` + live-browser verification checklist above not
+  yet run.

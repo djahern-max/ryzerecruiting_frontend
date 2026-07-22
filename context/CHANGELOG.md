@@ -4,6 +4,14 @@ Completed features/fixes move here from `current-feature.md` once Status = Compl
 
 This file doubles as source material for the Build in Public series — each entry is close to script-ready: what the problem was, what changed, and the dated sequence of how it got fixed.
 
+## Remove From Email from Branding settings (completed 2026-07-21)
+Tenant admins must not be able to set a from address — an unverified domain there silently breaks all of that tenant's outbound email (hit live with Green Path). Removed the From Email input from `src/pages/admin/TenantSettings.jsx` entirely: the `FIELDS` entry, GET hydration, and post-save hydration, plus one line of helper text explaining that mail sends from RYZE's service under the firm's name with replies routed to their Reply-To. No other settings fields touched (reply_to/support/admin/signature all stay); no CSS was scoped to the removed field. Companion piece to the backend's "notifications@ sender + lock down from_email" task (backend CHANGELOG), which independently stopped persisting `from_email` server-side (`0d2eb88`) regardless of what the frontend sends.
+
+History:
+- 2026-07-21 — Task created (replacing the archived "I'm Interested" task). Audit done: `from_email` appears in exactly 3 places in `TenantSettings.jsx` (the `FIELDS` entry, GET hydration, post-save hydration) with no other frontend references anywhere (confirmed via repo-wide grep). `EMPTY_FORM` derives from `FIELDS.reduce(...)` and the PATCH body sends the whole `form` object directly, so removing the `FIELDS` entry and the two hydration lines was sufficient — no separate edits needed for those. `TenantSettings.module.css` has no CSS scoped to `from_email` (all shared classes), so no CSS removal was needed. Helper-text wording revised for accuracy — "Emails are sent under your firm's name from RYZE's email service; replies go to your Reply-To address" (not "your verified RYZE address," since nothing is verified by or belongs to the tenant).
+- 2026-07-21 — Implemented all 4 steps in `TenantSettings.jsx`: removed the `from_email` FIELDS entry, GET hydration, and post-save hydration; updated the `.sub` copy with the approved wording. `npm run build` passed locally. Committed as `7c41ecc`.
+- 2026-07-21 — Live-browser verification confirmed: Branding page renders with no From Email field, helper text present, saving succeeds with no 422. Task confirmed complete.
+
 ## Candidate "I'm Interested" button on matched roles (completed 2026-07-21)
 Added a lightweight "I'm interested" action to each JobMatchCard on the candidate dashboard, as a low-friction alternative to "Schedule a Call": clicking reveals an optional short note + Send, which resolves to a disabled "✓ Interest sent" pill on success or on 409 (already sent). State is fetched from `GET /api/candidates/me/interests` alongside the existing dashboard fetches so it persists across refresh. POSTs go to `POST /api/job-orders/{job.id}/express-interest`.
 
