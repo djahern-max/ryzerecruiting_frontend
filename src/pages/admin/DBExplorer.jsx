@@ -12,17 +12,17 @@ const TABLES = [
 ];
 
 const SUMMARY_COLS = {
-    bookings: ["id", "booking_type", "status", "employer_name", "company_name", "date", "time_slot", "call_outcome"],
-    candidates: ["id", "name", "current_title", "current_company", "location", "ai_career_level", "ai_years_experience", "created_at"],
-    employer_profiles: ["id", "company_name", "website_url", "ai_industry", "primary_contact_email", "relationship_status", "created_at"],
-    job_orders: ["id", "title", "location", "status", "salary_min", "salary_max", "employer_profile_id", "created_at"],
+    bookings: ["id", "tenant_id", "booking_type", "status", "employer_name", "company_name", "date", "time_slot", "call_outcome"],
+    candidates: ["id", "tenant_id", "name", "current_title", "current_company", "location", "ai_career_level", "ai_years_experience", "created_at"],
+    employer_profiles: ["id", "tenant_id", "company_name", "website_url", "ai_industry", "primary_contact_email", "relationship_status", "created_at"],
+    job_orders: ["id", "tenant_id", "title", "location", "status", "salary_min", "salary_max", "employer_profile_id", "created_at"],
     chat_sessions: ["id", "user_id", "title", "created_at", "updated_at"],
     chat_messages: ["id", "session_id", "role", "content", "created_at"],
     users: ["id", "email", "full_name", "user_type", "oauth_provider", "tenant_id", "created_at"],
     waitlist: ["id", "email", "intent", "source", "created_at"],
     contacts: ["id", "name", "email", "message"],
     webhook_logs: ["id", "event", "meeting_id", "booking_found", "result", "received_at"],
-    job_interests: ["id", "job_order_id", "candidate_id", "note", "created_at"],
+    job_interests: ["id", "tenant_id", "job_order_id", "candidate_id", "note", "created_at"],
     tenants: ["id", "slug", "company_name", "status", "admin_email", "created_at"],
 };
 
