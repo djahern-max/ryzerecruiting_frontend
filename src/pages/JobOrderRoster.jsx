@@ -26,6 +26,33 @@ function formatSalary(min, max) {
     return `up to ${fmt(max)}`;
 }
 
+const EMPLOYMENT_TYPE_OPTIONS = [
+    { value: '', label: '— Select type —' },
+    { value: 'contract', label: 'Contract' },
+    { value: 'contract_to_hire', label: 'Contract-to-Hire' },
+    { value: 'direct_hire', label: 'Direct Hire' },
+];
+
+const EMPLOYMENT_TYPE_LABELS = {
+    contract: 'Contract',
+    contract_to_hire: 'Contract-to-Hire',
+    direct_hire: 'Direct Hire',
+};
+
+function formatHourly(min, max) {
+    if (!min && !max) return '—';
+    const fmt = (n) => `$${Number(n).toFixed(2)}/hr`;
+    if (min && max) return `${fmt(min)} – ${fmt(max)}`;
+    if (min) return `${fmt(min)}+`;
+    return `up to ${fmt(max)}`;
+}
+
+function formatComp(order) {
+    if (order.salary_min || order.salary_max) return formatSalary(order.salary_min, order.salary_max);
+    if (order.hourly_min || order.hourly_max) return formatHourly(order.hourly_min, order.hourly_max);
+    return '—';
+}
+
 function StatusBadge({ status }) {
     const s = STATUS_STYLES[status] || STATUS_STYLES.open;
     const label = status === 'on_hold' ? 'On Hold'
@@ -39,7 +66,8 @@ function StatusBadge({ status }) {
 function JobOrderDrawer({ isOpen, onClose, onSaved, editOrder, employers }) {
     const [form, setForm] = useState({
         title: '', employer_profile_id: '', location: '',
-        salary_min: '', salary_max: '', status: 'open',
+        salary_min: '', salary_max: '', hourly_min: '', hourly_max: '',
+        employment_type: '', status: 'open',
         requirements: '', notes: '',
     });
     const [parseText, setParseText] = useState('');
@@ -56,6 +84,9 @@ function JobOrderDrawer({ isOpen, onClose, onSaved, editOrder, employers }) {
                 location: editOrder.location || '',
                 salary_min: editOrder.salary_min || '',
                 salary_max: editOrder.salary_max || '',
+                hourly_min: editOrder.hourly_min || '',
+                hourly_max: editOrder.hourly_max || '',
+                employment_type: editOrder.employment_type || '',
                 status: editOrder.status || 'open',
                 requirements: editOrder.requirements || '',
                 notes: editOrder.notes || '',
@@ -63,7 +94,8 @@ function JobOrderDrawer({ isOpen, onClose, onSaved, editOrder, employers }) {
         } else {
             setForm({
                 title: '', employer_profile_id: '', location: '',
-                salary_min: '', salary_max: '', status: 'open',
+                salary_min: '', salary_max: '', hourly_min: '', hourly_max: '',
+                employment_type: '', status: 'open',
                 requirements: '', notes: '',
             });
         }
@@ -91,6 +123,9 @@ function JobOrderDrawer({ isOpen, onClose, onSaved, editOrder, employers }) {
                 location: data.location || prev.location,
                 salary_min: data.salary_min || prev.salary_min,
                 salary_max: data.salary_max || prev.salary_max,
+                hourly_min: data.hourly_min || prev.hourly_min,
+                hourly_max: data.hourly_max || prev.hourly_max,
+                employment_type: data.employment_type || prev.employment_type,
                 requirements: data.requirements || prev.requirements,
                 notes: data.notes || prev.notes,
             }));
@@ -114,6 +149,9 @@ function JobOrderDrawer({ isOpen, onClose, onSaved, editOrder, employers }) {
                 employer_profile_id: form.employer_profile_id ? Number(form.employer_profile_id) : null,
                 salary_min: form.salary_min ? Number(form.salary_min) : null,
                 salary_max: form.salary_max ? Number(form.salary_max) : null,
+                hourly_min: form.hourly_min ? Number(form.hourly_min) : null,
+                hourly_max: form.hourly_max ? Number(form.hourly_max) : null,
+                employment_type: form.employment_type || null,
             };
             const url = editOrder
                 ? `${API_BASE}/api/job-orders/${editOrder.id}`
@@ -185,7 +223,7 @@ function JobOrderDrawer({ isOpen, onClose, onSaved, editOrder, employers }) {
                                 className={styles.fieldInput}
                                 value={form.title}
                                 onChange={e => setForm(p => ({ ...p, title: e.target.value }))}
-                                placeholder="e.g. Senior Fund Accountant"
+                                placeholder="e.g. Operations Manager"
                             />
                         </div>
 
@@ -233,7 +271,7 @@ function JobOrderDrawer({ isOpen, onClose, onSaved, editOrder, employers }) {
                                 type="number"
                                 value={form.salary_min}
                                 onChange={e => setForm(p => ({ ...p, salary_min: e.target.value }))}
-                                placeholder="e.g. 90000"
+                                placeholder="e.g. 50000"
                             />
                         </div>
 
@@ -244,8 +282,45 @@ function JobOrderDrawer({ isOpen, onClose, onSaved, editOrder, employers }) {
                                 type="number"
                                 value={form.salary_max}
                                 onChange={e => setForm(p => ({ ...p, salary_max: e.target.value }))}
-                                placeholder="e.g. 120000"
+                                placeholder="e.g. 80000"
                             />
+                        </div>
+
+                        <div className={styles.fieldGroup}>
+                            <label className={styles.fieldLabel}>Hourly Min</label>
+                            <input
+                                className={styles.fieldInput}
+                                type="number"
+                                step="0.01"
+                                value={form.hourly_min}
+                                onChange={e => setForm(p => ({ ...p, hourly_min: e.target.value }))}
+                                placeholder="e.g. 25.00"
+                            />
+                        </div>
+
+                        <div className={styles.fieldGroup}>
+                            <label className={styles.fieldLabel}>Hourly Max</label>
+                            <input
+                                className={styles.fieldInput}
+                                type="number"
+                                step="0.01"
+                                value={form.hourly_max}
+                                onChange={e => setForm(p => ({ ...p, hourly_max: e.target.value }))}
+                                placeholder="e.g. 40.00"
+                            />
+                        </div>
+
+                        <div className={`${styles.fieldGroup} ${styles.fieldFull}`}>
+                            <label className={styles.fieldLabel}>Employment Type</label>
+                            <select
+                                className={styles.fieldSelect}
+                                value={form.employment_type}
+                                onChange={e => setForm(p => ({ ...p, employment_type: e.target.value }))}
+                            >
+                                {EMPLOYMENT_TYPE_OPTIONS.map(o => (
+                                    <option key={o.value} value={o.value}>{o.label}</option>
+                                ))}
+                            </select>
                         </div>
 
                         <div className={`${styles.fieldGroup} ${styles.fieldFull}`}>
@@ -438,7 +513,7 @@ export default function JobOrderRoster() {
                                     <th>Title</th>
                                     <th>Employer</th>
                                     <th>Location</th>
-                                    <th>Salary Range</th>
+                                    <th>Compensation</th>
                                     <th>Status</th>
                                     <th>Created</th>
                                     <th>Actions</th>
@@ -462,7 +537,7 @@ export default function JobOrderRoster() {
                                         </td>
                                         <td>{order.location || <span className={styles.empty}>—</span>}</td>
                                         <td className={styles.salaryCell}>
-                                            {formatSalary(order.salary_min, order.salary_max)}
+                                            {formatComp(order)}
                                         </td>
                                         <td><StatusBadge status={order.status} /></td>
                                         <td className={styles.dateCell}>
@@ -510,7 +585,7 @@ export default function JobOrderRoster() {
                     <div className={styles.cardList}>
                         {orders.map(order => {
                             const employerName = getEmployerName(order.employer_profile_id);
-                            const salary = formatSalary(order.salary_min, order.salary_max);
+                            const salary = formatComp(order);
                             return (
                                 <div key={order.id} className={styles.orderCard}>
                                     {/* Clickable main area */}

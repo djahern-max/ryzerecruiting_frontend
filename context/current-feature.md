@@ -1,94 +1,58 @@
 # Current Feature
 
-Employer Roster — profile link discoverability
+Job Orders — hourly rate range + employment type + industry-agnostic placeholders (frontend)
 
 ## Status
-Not Started
+In Progress — commit 1/2 (Roster) done, Detail commit pending
 
 ## Goals
-Make it obvious that the company name in the Employer Roster navigates to the
-employer profile page (`/admin/employers/{id}`). Today `.companyNameLink` is
-styled as plain dark text (`var(--text-900)`, no underline at rest) and only
-reveals itself as a link on hover — users don't realize it's clickable.
+Mirror the backend's new job order fields in the admin UI and make the form industry-agnostic:
 
-Numbered edit sites:
+1. **Industry-agnostic placeholders** — Job Title example changes from "Senior Fund Accountant" to a neutral role (use `e.g. Operations Manager`).
+2. **Lower salary examples** — Salary Min placeholder `e.g. 50000`, Salary Max placeholder `e.g. 80000`.
+3. **New form fields** — Hourly Min / Hourly Max (number inputs, `step="0.01"`, placeholders `e.g. 25.00` / `e.g. 40.00`) and an Employment Type select: `— Select type —` (empty), Contract (`contract`), Contract-to-Hire (`contract_to_hire`), Direct Hire (`direct_hire`).
+4. **Display** — roster table/mobile cards and the detail page surface hourly rates and employment type; AI parse auto-fill maps the new fields.
 
-1. **`EmployerRoster.module.css` — `.companyNameLink` resting color.**
-   Change resting `color` from `var(--text-900)` to `var(--brand-700)` so the
-   name reads as a link at rest, matching the existing `.websiteLink` /
-   `.emailLink` convention. Keep the hover underline behavior. Add
-   `text-decoration: none` at rest (needed for edit site 3's element swap).
+**Depends on the backend task** (backend repo `context/current-feature.md`, same feature name) being deployed first — the API must accept and return `hourly_min`, `hourly_max`, `employment_type` before this ships. The frontend changes are backward-safe either way (fields just come back undefined), but don't verify against a stale backend.
 
-2. **`EmployerRoster.jsx` (desktop `EmployerRow`) — arrow affordance.**
-   After the company name, inside the name element, add
-   `<span className={styles.linkArrow}>→</span>`. In the CSS: `.linkArrow` at
-   opacity ~0.35, 120ms opacity transition, 4px left margin, brought to full
-   opacity on `.row:hover .linkArrow`.
-
-3. **`EmployerRow` — convert `<button>` + `navigate()` to react-router `<Link>`.**
-   Replace the company-name `<button>` with
-   `<Link to={`/admin/employers/${profile.id}`}>` using the same
-   `.companyNameLink` class, so cmd+click / middle-click open a new tab and the
-   browser status bar shows the destination. Import `Link` from
-   `react-router-dom`. Verify the link renders visually identical to the button
-   (watch `font-family` inheritance — buttons don't inherit it by default,
-   anchors do).
-
-4. **Mobile `EmployerCard` — chevron affordance.**
-   Add an iOS-style `›` chevron on the right edge of the tappable `.cardMain`
-   area to signal that tapping navigates. Position with flexbox, color
-   `var(--text-300)`. Must not interfere with the existing `onClick`
-   navigation on `.cardMain` or the status select / Brief button in
-   `.cardFooter`.
-
-Out of scope — do NOT touch: the expand/Brief toggle, the relationship-status
-dropdown, notes editing, any navigation behavior or routes, or any other page.
-Match the existing CSS Modules conventions and design tokens already used in
-these files.
+### Numbered edit sites — `src/pages/JobOrderRoster.jsx` unless noted
+1. **Constants + formatters (top of file)** — add `EMPLOYMENT_TYPE_OPTIONS` (the four options above, empty value first) and `EMPLOYMENT_TYPE_LABELS`; add `formatHourly(min, max)` mirroring `formatSalary`'s shape but with 2-decimal `/hr` output (`$25.00/hr – $40.00/hr`, `+`, `up to`); add `formatComp(order)` that returns the salary string if present, else the hourly string, else `—`.
+2. **Drawer form state** — add `hourly_min: ''`, `hourly_max: ''`, `employment_type: ''` to the initial `useState`, the `editOrder` branch of the `useEffect` (`|| ''` pattern like the others), and the reset branch.
+3. **Placeholders** — Job Title → `e.g. Operations Manager`; Salary Min → `e.g. 50000`; Salary Max → `e.g. 80000`.
+4. **Form grid** — after the Salary Max field group: Hourly Min and Hourly Max field groups (same markup pattern as the salary inputs, `type="number" step="0.01"`), then a full-width Employment Type `<select>` using the existing `fieldSelect` class and mapping `EMPLOYMENT_TYPE_OPTIONS`.
+5. **`handleSave` payload** — `hourly_min: form.hourly_min ? Number(form.hourly_min) : null`, same for `hourly_max`, and `employment_type: form.employment_type || null`.
+6. **`handleParse` mapping** — extend the `setForm` merge with `hourly_min`, `hourly_max`, `employment_type` (`data.x || prev.x` pattern, matching the existing lines).
+7. **Roster display** — desktop table salary cell and the mobile card's salary line switch from `formatSalary(order.salary_min, order.salary_max)` to `formatComp(order)`. Column header "Salary Range" → "Compensation".
+8. **`src/pages/JobOrderDetail.jsx`** — compute `formatHourly` for the order (import/duplicate per this repo's existing convention — check whether formatters are shared or per-file, and match it); add two info rows next to the existing Salary row: "Hourly Rate" (render only if present) and "Type" (label via `EMPLOYMENT_TYPE_LABELS`, render only if set). If the detail page's edit path reuses `JobOrderDrawer`, it inherits the new fields for free — confirm this in the audit; if it has its own form, apply edit sites 2–6 there too.
 
 ## Related Files
-- `src/pages/EmployerRoster.jsx`
-- `src/pages/EmployerRoster.module.css`
+- `src/pages/JobOrderRoster.jsx`
+- `src/pages/JobOrderRoster.module.css` (only if the new fields need grid tweaks — expect none; reuse `fieldGroup` / `fieldFull`)
+- `src/pages/JobOrderDetail.jsx`
+- `src/pages/JobOrderDetail.module.css` (same caveat)
+
+## Decisions to flag in the audit
+- **Formatter sharing:** `formatSalary` currently appears in both `JobOrderRoster.jsx` and `JobOrderDetail.jsx`. State whether you'll duplicate `formatHourly`/labels into the detail page (matching the existing duplication) or extract a shared util — default to **duplicating** to match the current pattern; extraction is a separate refactor, not this task.
+- **Fetch pattern:** the apiFetch migration (parked task) has not reached these files uniformly. Use whatever call pattern each file currently uses — do **not** fold an apiFetch migration into this change.
+- **`formatComp` precedence:** spec says salary wins when both exist (roster column stays compact). If you think showing both is better in the table, flag it in the plan — the detail page already shows both as separate rows regardless.
 
 ## Verification
-- `npm run build` passes.
-- Desktop table: company name renders brand blue at rest; arrow visible at low
-  opacity and brightens on row hover; clicking the name still navigates to
-  `/admin/employers/{id}`; cmd+click (or middle-click) opens the profile in a
-  new tab.
-- Visual check: name link renders identically to the old button (font, weight,
-  size, alignment) — no layout shift in the company cell.
-- Mobile width (~380px): chevron visible on the right edge of each card; card
-  tap still navigates; status select and Brief button still work without
-  triggering navigation.
-- Expand/Brief panel, status dropdown, and notes editing all behave exactly as
-  before on both layouts.
+- [ ] New Job Order modal shows: neutral title placeholder, 50000/80000 salary placeholders, Hourly Min/Max inputs, Employment Type select
+- [ ] Create an hourly contract order (hourly only, type = Contract) → saves; roster row shows the hourly range in the Compensation column; detail page shows Hourly Rate row and Type: Contract
+- [ ] Create a salaried Direct Hire order → roster shows salary range; detail shows Salary + Type: Direct Hire, no Hourly row
+- [ ] Edit an existing pre-migration order → drawer opens with empty hourly/type fields, saving without touching them changes nothing
+- [ ] Paste an hourly temp-to-hire posting into the AI parser → hourly fields and Employment Type = Contract-to-Hire auto-fill; salary fields stay empty
+- [ ] Decimal hourly values (e.g. 32.50) round-trip through save → reload without truncation
+- [ ] Mobile card list renders the hourly range correctly (check at iPhone width per the media-query pass conventions)
+- [ ] PDF download for an hourly order shows the new chips (backend renders these — just confirm end-to-end)
 
 ## Notes
-Spec came from a discoverability review in Claude chat (2026-07-23): the name
-link was styled as plain `var(--text-900)` text and only revealed as a link on
-hover, so the path from roster → employer profile wasn't visible. Design
-rationale: brand-colored resting link + subtle arrow costs a few lines of CSS,
-requires no layout change, and matches the link language already established by
-`.websiteLink`. The button→Link swap is a bonus usability win (new-tab support,
-status-bar URL preview). No backend change expected.
-
-Candidate future task: `--text-300` is used repo-wide (this file's `.empty`/
-`.noStatus`, `CandidateModal`, `IntelligenceMessage`, `CandidateResultCard`,
-`ChatPage`, `JobOrderRoster`, etc.) but is never defined in `theme.css` —
-only `--text-900`/`--text-700`/`--text-500` exist there. Out of scope for
-this task; the new `.cardChevron` rule uses `var(--text-300, #cbd5e1)` with
-an inline fallback rather than touching the token or any other call site.
+- Values sent to the API are lowercase snake_case (`contract_to_hire`); labels are display-only. Keep them in sync with the backend's `EMPLOYMENT_TYPE_LABELS`.
+- No new CSS classes expected — the select and number inputs reuse existing module classes.
+- One concern per commit: Roster (sites 1–7) and Detail (site 8) can be separate commits.
+- **Known pre-existing gap (not fixed here):** `JobOrderDetail.jsx`'s Edit button navigates to `/admin/job-orders?edit={id}`, but `JobOrderRoster.jsx` has no `?edit=` / `useSearchParams` handling to auto-open the drawer for that order — the wiring is incomplete today, unrelated to this task. Verification consequence: the "edit a pre-existing order" check must be run by opening the drawer from the roster's own Edit button, not via the detail page's Edit button. Queue as its own task later.
 
 ## History
 <!-- Keep this updated. Earliest to latest -->
-- 2026-07-23 — Implemented all 4 edit sites in `EmployerRoster.jsx` /
-  `EmployerRoster.module.css`: (1) `.companyNameLink` resting color →
-  `var(--brand-700)` + `text-decoration: none`; (2) added `.linkArrow` span
-  + hover-opacity CSS; (3) swapped the company-name `<button>` for
-  react-router `<Link>`, imported `Link`, removed the now-unused `navigate`
-  from `EmployerRow` (left `EmployerCard`'s `navigate` untouched); (4) added
-  a `.cardMainText` flex wrapper (`flex: 1; min-width: 0`) around the
-  existing mobile card text plus a `.cardChevron` span using
-  `var(--text-300, #cbd5e1)` since the token isn't defined in `theme.css`
-  (see Notes above — flagged as a candidate future task, not fixed here).
+- 2026-07-23 — Audit done: confirmed `formatSalary` is duplicated (not shared) between `JobOrderRoster.jsx` and `JobOrderDetail.jsx`; confirmed both files use raw `fetch` (not `apiFetch`) throughout, matching the CLAUDE.md migration list — not touched. Confirmed `JobOrderDetail.jsx` has no separate edit form (its Edit button navigates to `/admin/job-orders?edit={id}`), so edit sites 2–6 do not need to expand into Detail — found and flagged the `?edit=` wiring gap above. Decisions confirmed: duplicate `formatHourly`/`EMPLOYMENT_TYPE_LABELS` into Detail (Roster's copy returns `'—'` when empty for `formatComp`, Detail's copy returns `null` to hide the row, matching each file's existing `formatSalary` convention); `formatComp` salary-wins precedence as spec'd. No local backend reachable to confirm `hourly_min`/`hourly_max`/`employment_type` are live yet — verification items stay unchecked until that GET check is done.
+- 2026-07-23 — Commit 1/2 (Roster, sites 1–7): added `EMPLOYMENT_TYPE_OPTIONS`/`EMPLOYMENT_TYPE_LABELS`/`formatHourly`/`formatComp`; added `hourly_min`/`hourly_max`/`employment_type` to drawer form state (initial, edit-hydration, reset), `handleSave` payload, and `handleParse` mapping; updated Job Title/Salary Min/Salary Max placeholders; added Hourly Min/Max inputs + Employment Type select to the form grid (existing `fieldGroup`/`fieldFull`/`fieldSelect` classes, no new CSS); switched roster desktop + mobile compensation display to `formatComp(order)`, renamed the column header to "Compensation". `npm run build` passed; `npx eslint` shows only 2 pre-existing unrelated errors (unused `err` in catch blocks, present before this change).
