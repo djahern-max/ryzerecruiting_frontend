@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import styles from './EmployerRoster.module.css';
 import AdminHeader from '../components/AdminHeader';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -41,7 +41,6 @@ function getHiringNeeds(profile) {
 // Table row (desktop)
 // ---------------------------------------------------------------------------
 function EmployerRow({ profile, onUpdate, defaultExpanded = false }) {
-    const navigate = useNavigate();
     const [expanded, setExpanded] = useState(defaultExpanded);
     const [notes, setNotes] = useState(profile.recruiter_notes || '');
     const [editingNotes, setEditingNotes] = useState(false);
@@ -89,9 +88,10 @@ function EmployerRow({ profile, onUpdate, defaultExpanded = false }) {
         <>
             <tr className={`${styles.row} ${expanded ? styles.rowExpanded : ''}`}>
                 <td className={styles.companyCell}>
-                    <button className={styles.companyNameLink} onClick={() => navigate(`/admin/employers/${profile.id}`)}>
+                    <Link to={`/admin/employers/${profile.id}`} className={styles.companyNameLink}>
                         {profile.company_name}
-                    </button>
+                        <span className={styles.linkArrow}>→</span>
+                    </Link>
                     {profile.website_url && (
                         <a
                             href={profile.website_url.startsWith('http') ? profile.website_url : `https://${profile.website_url}`}
@@ -270,19 +270,22 @@ function EmployerCard({ profile, onUpdate }) {
         <div className={styles.employerCard}>
             {/* Main tappable area */}
             <div className={styles.cardMain} onClick={() => navigate(`/admin/employers/${profile.id}`)}>
-                <div className={styles.cardCompanyName}>{profile.company_name}</div>
-                {profile.website_url && (
-                    <div className={styles.cardWebsite}>
-                        {profile.website_url.replace(/^https?:\/\//, '')}
-                    </div>
-                )}
-                <div className={styles.cardMeta}>
-                    {profile.ai_industry && <span>{profile.ai_industry}</span>}
-                    {profile.ai_industry && profile.ai_company_size && (
-                        <span className={styles.cardMetaDot}>·</span>
+                <div className={styles.cardMainText}>
+                    <div className={styles.cardCompanyName}>{profile.company_name}</div>
+                    {profile.website_url && (
+                        <div className={styles.cardWebsite}>
+                            {profile.website_url.replace(/^https?:\/\//, '')}
+                        </div>
                     )}
-                    {profile.ai_company_size && <span>{profile.ai_company_size}</span>}
+                    <div className={styles.cardMeta}>
+                        {profile.ai_industry && <span>{profile.ai_industry}</span>}
+                        {profile.ai_industry && profile.ai_company_size && (
+                            <span className={styles.cardMetaDot}>·</span>
+                        )}
+                        {profile.ai_company_size && <span>{profile.ai_company_size}</span>}
+                    </div>
                 </div>
+                <span className={styles.cardChevron}>›</span>
             </div>
 
             {/* Footer: status + brief toggle */}

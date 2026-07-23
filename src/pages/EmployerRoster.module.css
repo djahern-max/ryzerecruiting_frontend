@@ -106,7 +106,8 @@
     padding: 0;
     font-size: 0.875rem;
     font-weight: 700;
-    color: var(--text-900);
+    color: var(--brand-700);
+    text-decoration: none;
     cursor: pointer;
     font-family: var(--font-sans);
     text-align: left;
@@ -118,6 +119,17 @@
 .companyNameLink:hover {
     color: var(--brand-700);
     text-decoration: underline;
+}
+
+.linkArrow {
+    display: inline-block;
+    margin-left: 4px;
+    opacity: 0.35;
+    transition: opacity 120ms;
+}
+
+.row:hover .linkArrow {
+    opacity: 1;
 }
 
 .websiteLink {
@@ -413,6 +425,21 @@
 .cardMain {
     padding: 14px 16px 10px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.cardMainText {
+    flex: 1;
+    min-width: 0;
+}
+
+.cardChevron {
+    flex-shrink: 0;
+    font-size: 1.1rem;
+    color: var(--text-300, #cbd5e1);
 }
 
 .cardCompanyName {
