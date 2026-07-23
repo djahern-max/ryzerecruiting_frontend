@@ -26,6 +26,20 @@ function formatSalary(min, max) {
     return `up to ${fmt(max)}`;
 }
 
+const EMPLOYMENT_TYPE_LABELS = {
+    contract: 'Contract',
+    contract_to_hire: 'Contract-to-Hire',
+    direct_hire: 'Direct Hire',
+};
+
+function formatHourly(min, max) {
+    if (!min && !max) return null;
+    const fmt = (n) => `$${Number(n).toFixed(2)}/hr`;
+    if (min && max) return `${fmt(min)} – ${fmt(max)}`;
+    if (min) return `${fmt(min)}+`;
+    return `up to ${fmt(max)}`;
+}
+
 function StatusBadge({ status }) {
     const s = STATUS_STYLES[status] || STATUS_STYLES.open;
     const label = status === 'on_hold' ? 'On Hold'
@@ -194,6 +208,8 @@ export default function JobOrderDetail() {
     }
 
     const salary = formatSalary(order.salary_min, order.salary_max);
+    const hourly = formatHourly(order.hourly_min, order.hourly_max);
+    const employmentTypeLabel = EMPLOYMENT_TYPE_LABELS[order.employment_type] || null;
     const companyInitial = employer?.company_name?.charAt(0).toUpperCase() ?? '?';
 
     return (
@@ -383,6 +399,18 @@ export default function JobOrderDetail() {
                                         <div className={styles.infoRow}>
                                             <span className={styles.infoLabel}>Salary</span>
                                             <span className={styles.infoValue}>{salary}</span>
+                                        </div>
+                                    )}
+                                    {hourly && (
+                                        <div className={styles.infoRow}>
+                                            <span className={styles.infoLabel}>Hourly Rate</span>
+                                            <span className={styles.infoValue}>{hourly}</span>
+                                        </div>
+                                    )}
+                                    {employmentTypeLabel && (
+                                        <div className={styles.infoRow}>
+                                            <span className={styles.infoLabel}>Type</span>
+                                            <span className={styles.infoValue}>{employmentTypeLabel}</span>
                                         </div>
                                     )}
                                     <div className={styles.infoRow}>
