@@ -1,5 +1,6 @@
 // src/contexts/AuthContext.jsx
 import { createContext, useContext, useState, useEffect } from 'react';
+import posthog from 'posthog-js';
 import axios from 'axios';
 
 const AuthContext = createContext();
@@ -45,6 +46,19 @@ export function AuthProvider({ children }) {
       setLoading(false);
     }
   }, []);
+
+  // ── PostHog: identify the user once auth state resolves ─────────────────
+  useEffect(() => {
+    if (user) {
+      posthog.identify(String(user.id), {
+        email: user.email,
+        user_type: user.user_type,
+        tenant_id: user.tenant_id || 'ryze',
+        is_superuser: Boolean(user.is_superuser),
+      });
+    }
+  }, [user]);
+
 
   async function fetchUser(token, shouldRedirect = false) {
     try {
@@ -112,6 +126,7 @@ export function AuthProvider({ children }) {
   }
 
   function logout() {
+    posthog.reset();
     localStorage.removeItem('token');
     setUser(null);
     window.location.href = '/';
