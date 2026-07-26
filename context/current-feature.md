@@ -1,81 +1,41 @@
 # Current Feature
 
 <!-- Feature/fix name -->
-Feature 1 of 3 (frontend half) — Recruiter Signup Page, Demo Request Form, Landing Links, PostHog Events
+Landing page revision — remove waitlist, single 60-day-trial CTA, video placeholder
 
 ## Status
-In Progress
+Not Started
 
 ## Repo
-ryzerecruiting_frontend — FRONTEND ONLY. The backend endpoints are live in production and verified; do not propose backend work.
+ryzerecruiting_frontend — FRONTEND ONLY.
+
+## Context
+The live `/` route renders `src/pages/Landing.jsx` (confirmed via `App.jsx` — `<Route path="/" element={<Landing />} />`). Its hero still carries the pre-signup waitlist email-capture form (intent buttons + email input + "Join the waitlist" button, posting to `/api/waitlist`) from before self-serve signup existed. That's now redundant with the real `/signup` flow shipped in the prior task (nav already has a "Start free trial" → `/signup` CTA, footer already has "Request a demo" → `/demo`).
+
+Note: `src/pages/SaasLanding.jsx` also has a waitlist form and hero CTA, but it is **not routed anywhere** in `App.jsx` (grepped — zero references outside the file itself) — it's dead/orphaned code, not the live landing page. Out of scope for this task; do not touch it.
 
 ## Goals
-A recruiter landing on ryze.ai can sign up for a trial (and land in /admin logged in, trial badge showing) or request a demo — items 3–6 of the Feature 1 spec. Backend (items 1–2) is deployed and tested.
+1. **Remove the waitlist** — delete the hero email-capture block in `Landing.jsx` (intent buttons, email input, success state, `handleWaitlist`, and the `email`/`intent`/`wlStatus`/`errorMsg`/`formRef` state it uses) and any now-dead CSS in `Landing.module.css`.
+2. **Single 60-day-trial CTA** — replace it with one clear primary CTA in the hero driving to `/signup`, with copy that makes "60-day free trial" an explicit selling point (mirrors the same "60-day" positioning already added to `SignupFirm.jsx`'s subhead in the trial-length task). Nav's existing "Start free trial" link stays as-is unless you want its copy updated too — flagged as a decision below.
+3. **Video placeholder** — add a placeholder for a future product demo video. Where it sits relative to the existing `DemoChat` preview component (replace it, sit beside/below it, or something else) is a decision below, not assumed.
 
-### Backend API contracts (live — treat as fixed, do not redesign)
+## Open decisions — confirm before I write code
+- Does `DemoChat` (the animated chat preview, currently the hero's centerpiece) stay, or does the video placeholder replace it?
+- Exact CTA copy/label (e.g. "Start your free 60-day trial") and whether the nav CTA also gets updated to mention 60 days, or stays generic.
+- What the video placeholder should actually look like — static box with a play icon and "Demo video coming soon," an embed shell ready for a real video URL, or something else — and whether it needs its own CSS or can reuse an existing card/frame style from elsewhere in the page.
+- Confirm the `/api/waitlist` backend endpoint and `Waitlist` model stay untouched (frontend-only removal of the form, not a backend deprecation) — this matches the stated repo scope, but worth confirming explicitly since removing the only live caller of that endpoint is a meaningful side effect worth naming.
 
-**POST /api/auth/signup-firm** (public)
-- Request JSON: `company_name`, `full_name`, `email`, `password`, plus honeypot field `website` which must be present in the form as a hidden input and submitted EMPTY by real users.
-- Success 200/201 — same shape as /api/auth/login:
-  ```json
-  {
-    "access_token": "...",
-    "token_type": "bearer",
-    "user": {
-      "id": 5, "email": "...", "full_name": "...",
-      "user_type": "ADMIN", "is_superuser": false,
-      "tenant_id": "test_firm_alpha",
-      "tenant_brand_name": "Test Firm Alpha"
-    }
-  }
-  ```
-- Errors: 400 duplicate email ("Email already registered" detail), 400 generic "Unable to process request" (honeypot trip), 429 rate-limited.
-
-**POST /api/demo-request** (public)
-- Request JSON: `name`, `company`, `email`, `phone` (optional), `message` (optional), plus the same hidden honeypot field (`website`) submitted empty.
-- Success 201: the created row `{id, name, company, email, phone, message, created_at}`.
-- Errors: 429 rate-limited. (Honeypot trips return a fake success on this endpoint — the frontend never needs to know.)
-
-### Scope — IN
-1. **Signup page at `/signup`** (`src/pages/SignupFirm.jsx` + CSS Module, or per existing pages convention):
-   - Fields: company name, full name, email, password, confirm password. Client-side check: passwords match, all fields non-empty. No `<form>` tag — controlled inputs + explicit onClick handler per project convention.
-   - Hidden honeypot input (`website`): rendered but visually hidden via CSS (position absolute off-screen — NOT `display:none`, and NOT `type="hidden"`, since bots skip those; also set `autocomplete="off"` and `tabIndex={-1}` to reduce autofill false-positives). The field name "website" is autofill-prone, so these mitigations are load-bearing, not decorative.
-   - On success: store the token and user through the SAME path the existing login flow uses (audit AuthContext / login handling first — reuse it, do not invent a parallel storage path), then navigate to `/admin`. The trial badge must show without a refresh.
-   - Error states: duplicate email → inline "That email is already registered — log in instead" with a link to /auth; 429 → "Too many attempts — please try again in a few minutes"; generic 400/500 → "Unable to process request — please try again."
-2. **Demo request at `/demo`** (small page, not modal — simpler routing, shareable URL):
-   - Fields: name, company, email, phone (optional), message (optional). Same honeypot treatment.
-   - Success state replaces the form: "Thanks — we'll be in touch shortly."
-   - 429 → same friendly retry message.
-3. **Landing hookup:** two working links/buttons on the existing landing page to `/signup` and `/demo`. Minimal styling — do NOT redesign the hero (that's Feature 2). Just make the routes reachable.
-4. **Routes registered** in the router for `/signup` and `/demo` as public routes (no auth guard).
-5. **PostHog events:** `signup_started` (fired on submit click), `signup_completed` (fired on successful account creation, include `tenant_id` as a property), `demo_requested` (fired on successful demo submission).
-
-### Scope — OUT
-- Hero/landing visual redesign (Feature 2).
-- OAuth on the signup-firm page (email/password only).
-- Email verification UI.
-- Any backend change.
-
-## Audit first — do NOT write code yet
-1. Read the existing auth flow: AuthContext (or equivalent), the login page, and how token + user are stored after /api/auth/login — the signup success path must reuse this exactly. Report the mechanism.
-2. Confirm whether PostHog is already initialized in this repo (search for posthog imports/init). If it is NOT present, stop and report — installing/initializing PostHog is a decision point, not something to slip in silently.
-3. Confirm the routing setup (router file, public vs guarded route pattern) and the CSS Modules page conventions (pick an existing simple page as the styling template and name it).
-4. Confirm how existing pages call the API (apiFetch vs raw fetch). Note: these two endpoints are PUBLIC (no auth token), so if apiFetch assumes a token, say so and propose the right call pattern.
-5. Propose the plan mapped to the numbered scope items. One concern per commit — expected shape: signup page, demo page, landing links + routes, PostHog events (or fold events into each page's commit if cleaner — propose either explicitly). Wait for confirmation before writing code.
+## Related Files
+- `src/pages/Landing.jsx` (hero section, ~L230-303)
+- `src/pages/Landing.module.css` (hero form / intent / email-row / success-state classes, plus new CTA/video-placeholder styles)
 
 ## Verification
-- Incognito → /signup → create account → lands in /admin logged in with trial badge visible, no refresh needed.
-- Duplicate email shows the inline message with working login link.
-- /demo submits → success state → (Dane confirms email + DB row).
-- Honeypot field is invisible, untabbable, and not autofilled in Chrome + Safari.
-- 429 path renders the friendly message (Dane can trip it deliberately from one IP).
-- PostHog shows signup_started, signup_completed (with tenant_id), demo_requested — verified post-deploy against production; dev mode opts out of capture, so local testing can't confirm these.
-- Landing links navigate; no other landing changes in the diff.
-- Existing login flow still works (regression check).
+- `/` loads with no waitlist form anywhere in the hero, no console errors.
+- Single trial CTA is visible, styled consistently with the rest of the page, and navigates to `/signup`.
+- Video placeholder renders in its agreed position without layout shift or breaking mobile width.
+- No leftover references to `handleWaitlist`/`wlStatus`/waitlist state in `Landing.jsx` (grep confirms zero).
+- Regression: nav "Start free trial" / "Sign in" and footer "Request a demo" / Privacy / Terms links still work unchanged.
 
 ## History
-- 2026-07-26 — Task created. Backend half deployed and verified in production same day.
-- 2026-07-26 — Audit complete; decisions confirmed (honeypot field = `website`, `signupFirm()` added to AuthContext, raw fetch, 3-commit plan). Commit 1 done: `signupFirm()` in AuthContext (mirrors `login()` — token storage, `setUser`, redirect to `/admin`; fires `signup_completed` with `tenant_id`), `/signup` page (`SignupFirm.jsx` + CSS module) with honeypot field, client-side validation, and `signup_started` event; `/signup` route registered. Build verified; smoke-tested in a headless browser (layout, honeypot off-screen + untabbable, client-side validation states) — full signup flow against a live backend not yet tested locally (no local backend running).
-- 2026-07-26 — Fixed up commit 1 (amended, not yet pushed): `signup_completed` now fires with `{ send_instantly: true }` so it isn't dropped by the `window.location.href` redirect; added client-side password min-length (8 char) validation matching the backend constraint.
-- 2026-07-26 — Commit 2 done: `/demo` page (`DemoRequest.jsx` + CSS module) — name/company/email required, phone/message optional, same `website` honeypot treatment, success state replaces the form, 429 → friendly retry message, `demo_requested` fires on success (default batching is fine here — no navigation follows). `/demo` route registered. Build verified; smoke-tested in a headless browser (layout, honeypot off-screen + untabbable, empty-field validation) — live backend submission not yet tested locally.
-- 2026-07-26 — Commit 3 done: Landing hookup. Added "Start free trial" as a filled pill CTA next to "Sign in" in the nav (new `.navCta` class, matches existing `<a href>` pattern), and "Request a demo" as a third footer link alongside Privacy/Terms. No hero changes. Build verified; smoke-tested in a headless browser — both links navigate to `/signup` and `/demo`, no console errors, no visual regression on the untouched sections.
+<!-- Keep this updated. Earliest to latest -->
+- 2026-07-26: Task loaded. Confirmed via grep that the live landing page is `Landing.jsx` (routed at `/`), not `SaasLanding.jsx` (unrouted, out of scope). Located the current waitlist form, nav/footer CTAs, and `DemoChat` preview in `Landing.jsx` before writing this spec. Awaiting answers to the open decisions above before proposing an implementation plan.
