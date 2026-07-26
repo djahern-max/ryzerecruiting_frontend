@@ -83,7 +83,7 @@ export default function InviteForm() {
                     <div className={styles.cardHeader}>
                         <h1 className={styles.title}>Invite a Recruiting Firm</h1>
                         <p className={styles.sub}>
-                            Creates a new tenant account, starts their 30-day free trial,
+                            Creates a new tenant account, starts their 60-day free trial,
                             and sends a branded welcome email with login credentials.
                         </p>
                     </div>
@@ -197,7 +197,7 @@ export default function InviteForm() {
 
                             <p className={styles.hint}>
                                 A welcome email with login credentials and trial end date will be
-                                sent immediately. The firm's 30-day trial starts the moment this
+                                sent immediately. The firm's 60-day trial starts the moment this
                                 invite is sent.
                             </p>
                         </div>

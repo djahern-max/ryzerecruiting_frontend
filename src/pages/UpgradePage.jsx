@@ -54,7 +54,7 @@ export default function UpgradePage() {
 
                 <h1 className={styles.title}>Your trial has ended</h1>
                 <p className={styles.sub}>
-                    Hey {firstName} — your 30-day free trial has expired.
+                    Hey {firstName} — your 60-day free trial has expired.
                     Upgrade to keep full access to your pipeline, AI matching, and everything you've built.
                 </p>
 

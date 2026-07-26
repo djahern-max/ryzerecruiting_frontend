@@ -59,7 +59,7 @@ function SignupFirm() {
       <div className={styles.card}>
         <div className={styles.logo}>RYZE.ai</div>
         <h1 className={styles.title}>Start your free trial</h1>
-        <p className={styles.sub}>Set up your firm's account in under a minute.</p>
+        <p className={styles.sub}>60-day free trial. Set up your firm's account in under a minute.</p>
 
         {error && (
           <div className={styles.error}>
