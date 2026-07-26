@@ -307,6 +307,94 @@
   pointer-events: none;
 }
 
+/* ── Demo video (hero centerpiece) ─────────────────────────────── */
+.videoFrame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #0d2137;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow:
+    0 2px 6px rgba(13, 33, 55, 0.05),
+    0 24px 60px -12px rgba(0, 74, 173, 0.18);
+  overflow: hidden;
+}
+
+.video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.videoPlayButton {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.videoPlayButton svg {
+  width: 34px;
+  height: 34px;
+  color: #fff;
+  margin-left: 4px;
+}
+
+.videoPlayButton::before {
+  content: '';
+  position: absolute;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: rgba(0, 74, 173, 0.85);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  transition: transform 150ms, background 150ms;
+}
+
+.videoPlayButton:hover::before {
+  background: var(--accent);
+  transform: scale(1.06);
+}
+
+.videoPlayButton svg {
+  position: relative;
+}
+
+.videoPlayButton:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -4px;
+}
+
+/* ── Intelligence preview (below the fold) ─────────────────────── */
+.chatSection {
+  border-top: 1px solid var(--line);
+  background: var(--wash);
+  padding: 64px 1.5rem 88px;
+  text-align: center;
+}
+
+.chatSectionTitle {
+  font-family: 'Bricolage Grotesque', 'DM Sans', sans-serif;
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0;
+}
+
+.chatSection .previewWrap {
+  margin-top: 36px;
+}
+
 /* ── Demo window (light theme) ─────────────────────────────────── */
 .demo {
   position: relative;
@@ -615,6 +703,20 @@
 
   .demoMessages {
     height: 240px;
+  }
+
+  .videoPlayButton::before {
+    width: 60px;
+    height: 60px;
+  }
+
+  .videoPlayButton svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .chatSection {
+    padding: 48px 1.5rem 64px;
   }
 
   .proofGrid {

@@ -1,8 +1,14 @@
 /* src/pages/Landing.jsx */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import posthog from "posthog-js";
 import { useAuth } from "../contexts/AuthContext";
 import styles from "./Landing.module.css";
+
+const VIDEO_URL =
+  "https://ryzerecruiting.nyc3.cdn.digitaloceanspaces.com/Demo_Video/ryze-demo-v1.mp4";
+const POSTER_URL =
+  "https://ryzerecruiting.nyc3.cdn.digitaloceanspaces.com/Demo_Video/ryze-demo-poster.jpg";
 
 // Icons (existing assets)
 import aiIcon from "../assets/icons/artificial-intelligence.svg";
@@ -151,10 +157,50 @@ function DemoChat() {
   );
 }
 
-// Feature 2 drops the demo video in here — intentionally empty for now, so
-// visitors see nothing unfinished; swap the null return for real markup then.
+// ── Demo video (hero centerpiece) ───────────────────────────────────────────
 function VideoSection() {
-  return null;
+  const videoRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
+  const playedOnceRef = useRef(false);
+
+  const handlePlay = () => {
+    setPlaying(true);
+    if (!playedOnceRef.current) {
+      playedOnceRef.current = true;
+      posthog.capture("demo_video_played");
+    }
+  };
+
+  return (
+    <div className={styles.previewWrap}>
+      <div className={styles.previewGlow} aria-hidden="true" />
+      <div className={styles.videoFrame}>
+        <video
+          ref={videoRef}
+          className={styles.video}
+          controls={playing}
+          poster={POSTER_URL}
+          preload="metadata"
+          playsInline
+          onPlay={handlePlay}
+        >
+          <source src={VIDEO_URL} type="video/mp4" />
+        </video>
+        {!playing && (
+          <button
+            type="button"
+            className={styles.videoPlayButton}
+            aria-label="Play demo video"
+            onClick={() => videoRef.current?.play()}
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </button>
+        )}
+      </div>
+    </div>
+  );
 }
 
 // ── Main landing page ───────────────────────────────────────────────────────
@@ -207,12 +253,6 @@ export default function Landing() {
         </div>
 
         <VideoSection />
-
-        {/* ── App preview (the centerpiece) ────────── */}
-        <div className={styles.previewWrap}>
-          <div className={styles.previewGlow} aria-hidden="true" />
-          <DemoChat />
-        </div>
       </main>
 
       {/* ── Proof row ──────────────────────────────── */}
@@ -227,6 +267,15 @@ export default function Landing() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ── Intelligence preview (below the fold) ──── */}
+      <section className={styles.chatSection}>
+        <h2 className={styles.chatSectionTitle}>See RYZE Intelligence in action</h2>
+        <div className={styles.previewWrap}>
+          <div className={styles.previewGlow} aria-hidden="true" />
+          <DemoChat />
         </div>
       </section>
 
