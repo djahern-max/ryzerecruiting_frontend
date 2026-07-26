@@ -1,46 +1,74 @@
 # Current Feature
 
 <!-- Feature/fix name -->
-Landing page revision — remove waitlist, single 60-day-trial CTA, video placeholder
+Feature 2 of 3 — Demo Video Hero on the Landing Page
 
 ## Status
-In Progress — implemented, awaiting your manual verification
+Ready to implement — all prep complete, all decisions locked
 
 ## Repo
-ryzerecruiting_frontend — FRONTEND ONLY.
+ryzerecruiting_frontend — FRONTEND ONLY. No backend code in this feature.
 
-## Context
-The live `/` route renders `src/pages/Landing.jsx` (confirmed via `App.jsx` — `<Route path="/" element={<Landing />} />`). Its hero still carries the pre-signup waitlist email-capture form (intent buttons + email input + "Join the waitlist" button, posting to `/api/waitlist`) from before self-serve signup existed. That's now redundant with the real `/signup` flow shipped in the prior task (nav already has a "Start free trial" → `/signup` CTA, footer already has "Request a demo" → `/demo`).
+**Date:** 2026-07-26 · **Go-live day, feature 2 of 3** (after 1-self-serve-signup, before 3-usage-billing)
+**Depends on:** Feature 1 merged ✅ — hero CTAs already link to `/signup` and `/demo`.
 
-Note: `src/pages/SaasLanding.jsx` also has a waitlist form and hero CTA, but it is **not routed anywhere** in `App.jsx` (grepped — zero references outside the file itself) — it's dead/orphaned code, not the live landing page. Out of scope for this task; do not touch it.
+## Prep — DONE ✅ (completed outside the repo, 2026-07-26)
+- Source video re-encoded HEVC → H.264 (`libx264`, CRF 22, `preset slow`), AAC audio copied untouched, `+faststart` applied. Verified `codec_name=h264`/`aac` via ffprobe. 1920×1080 @ 30fps, ~12m38s.
+- Poster frame exported from frame zero (creator staged the opening frame as the intended thumbnail — poster matches the first frame of playback exactly, no visual swap on play).
+- Both uploaded to DO Spaces with public-read ACL, CDN endpoint confirmed live, versioned filename (`-v1`) used so any future replacement ships under a new name instead of fighting CDN cache.
 
-## Goals
-1. **Remove the waitlist** — delete the hero email-capture block in `Landing.jsx` (intent buttons, email input, success state, `handleWaitlist`, and the `email`/`intent`/`wlStatus`/`errorMsg`/`formRef` state it uses) and any now-dead CSS in `Landing.module.css`.
-2. **Single 60-day-trial CTA** — replace it with one clear primary CTA in the hero driving to `/signup`, with copy that makes "60-day free trial" an explicit selling point (mirrors the same "60-day" positioning already added to `SignupFirm.jsx`'s subhead in the trial-length task). Nav's existing "Start free trial" link stays as-is unless you want its copy updated too — flagged as a decision below.
-3. **Video placeholder** — add a placeholder for a future product demo video. Where it sits relative to the existing `DemoChat` preview component (replace it, sit beside/below it, or something else) is a decision below, not assumed.
+**Asset URLs (public, use these exact constants):**
+```
+VIDEO_URL  = "https://ryzerecruiting.nyc3.cdn.digitaloceanspaces.com/Demo_Video/ryze-demo-v1.mp4"
+POSTER_URL = "https://ryzerecruiting.nyc3.cdn.digitaloceanspaces.com/Demo_Video/ryze-demo-poster.jpg"
+```
 
-## Open decisions — confirm before I write code
-- Does `DemoChat` (the animated chat preview, currently the hero's centerpiece) stay, or does the video placeholder replace it?
-- Exact CTA copy/label (e.g. "Start your free 60-day trial") and whether the nav CTA also gets updated to mention 60 days, or stays generic.
-- What the video placeholder should actually look like — static box with a play icon and "Demo video coming soon," an embed shell ready for a real video URL, or something else — and whether it needs its own CSS or can reuse an existing card/frame style from elsewhere in the page.
-- Confirm the `/api/waitlist` backend endpoint and `Waitlist` model stay untouched (frontend-only removal of the form, not a backend deprecation) — this matches the stated repo scope, but worth confirming explicitly since removing the only live caller of that endpoint is a meaningful side effect worth naming.
+## Context — current state of the code
+- `src/pages/Landing.jsx` is the live `/` route. The prior task already left an empty `VideoSection` component (returns `null`) positioned between the hero CTA block and the `DemoChat` preview — this feature fills that slot and re-arranges around it.
+- Hero CTAs already exist and are correct: "Start Your 60-Day Free Trial" → `/signup` (primary), subline, "Request a demo" → `/demo` (secondary). Do not rebuild them; reposition only if the layout requires it.
+- PostHog is initialized app-wide via `PostHogProvider` in `main.jsx` (dev mode opts out of capture). Import `posthog` from `posthog-js` per the existing pattern in `DemoRequest.jsx`.
+- CSS Modules per convention (`Landing.module.css`).
 
-## Related Files
-- `src/pages/Landing.jsx` (hero section, ~L230-303)
-- `src/pages/Landing.module.css` (hero form / intent / email-row / success-state classes, plus new CTA/video-placeholder styles)
+## Objective
+The demo video becomes the visual centerpiece of the hero, replacing `DemoChat` in that position. `DemoChat` is NOT deleted — it moves below the fold (see decisions).
 
-## Verification
-- `/` loads with no waitlist form anywhere in the hero, no console errors.
-- Single trial CTA is visible, styled consistently with the rest of the page, and navigates to `/signup`.
-- Video placeholder renders in its agreed position without layout shift or breaking mobile width.
-- No leftover references to `handleWaitlist`/`wlStatus`/waitlist state in `Landing.jsx` (grep confirms zero).
-- Regression: nav "Start free trial" / "Sign in" and footer "Request a demo" / Privacy / Terms links still work unchanged.
+## Scope — IN
+1. **Fill `VideoSection`** in `Landing.jsx`:
+   - Native HTML5 `<video>` with `controls`, `poster={POSTER_URL}`, `preload="metadata"`, `playsInline`. Click-to-play behind the poster with a large play affordance. **No autoplay with sound.** (Muted autoplay loop only if it genuinely looks better — default to click-to-play.)
+   - `VIDEO_URL` / `POSTER_URL` as constants at the top of the component (they're public URLs — no env var needed).
+   - Video takes `DemoChat`'s current visual slot as the hero centerpiece — consider reusing/adapting the existing `.previewWrap` / `.previewGlow` framing so the video inherits the same polish, or build an equivalent framed treatment in the CSS module.
+2. **Move `DemoChat` below the fold** — relocate the `previewWrap`/`DemoChat` block to its own section below the hero (e.g., between the hero and the proof row, or after the proof row — implementer's call on which reads better). Component itself is untouched; only its placement moves. Light section framing/heading is fine, restructuring the sections themselves is not the goal.
+3. **PostHog:** fire `demo_video_played` on first play only — `onPlay` handler guarded by a played-once ref (`useRef(false)`), matching the app's existing analytics patterns.
+4. **Mobile pass:** hero + video verified at phone-width viewport; `playsInline` prevents iOS fullscreen hijack; video scales to container width without overflow or layout shift (poster and video share the same 16:9 aspect ratio — reserve the box with `aspect-ratio` CSS to prevent CLS).
+
+## Scope — OUT
+- Adaptive bitrate streaming (HLS/Mux/Cloudflare Stream) — overkill at current traffic; revisit if mobile complaints appear.
+- Multiple resolutions or a quality switcher.
+- Any backend work.
+- Deleting or modifying `DemoChat` internals — placement change only.
+- Restructuring landing sections below the fold beyond the DemoChat relocation (fine to lightly tidy, not the goal).
+- `SaasLanding.jsx` — still unrouted/orphaned, still out of scope, do not touch.
+
+## Decisions — LOCKED 2026-07-26
+- **DemoChat: moves below the fold** (not removed, not stacked in the hero with the video). One centerpiece per viewport.
+- Poster = frame zero of the video (deliberately staged by Dane as the thumbnail).
+- URLs as in-component constants, not env vars.
+- Click-to-play, no autoplay.
+
+## Acceptance criteria
+- Video plays from the CDN URL on desktop Chrome and iPhone Safari; seeking works before full download (faststart verified).
+- Page load stays fast: **the MP4 is not downloaded on initial page load** — only metadata fetched until play (verify in the Network tab; `preload="metadata"` should show a small ranged request, not the ~full file).
+- Both CTAs still navigate correctly (`/signup`, `/demo`).
+- `demo_video_played` fires exactly once per page load in PostHog, even across pause/resume (replay of the video after ending should NOT re-fire it).
+- DemoChat renders below the fold with no console errors and no visual regression to the component itself.
+- No layout shift when the poster loads or when play begins (aspect-ratio box reserved).
+- `npm run build` passes clean.
 
 ## Notes
-- Parked future cleanup: backend `/api/waitlist` endpoint, `Waitlist` model/table, and its `PUBLIC_PATTERNS` entry are now unused by any live frontend caller (this task removed the only one, `Landing.jsx`'s form) but were deliberately left untouched — a backend-repo task, not in scope here.
+- Parking lot (future enhancement): cut a 60–90s highlight for the hero and link the full ~12min demo below it — long demos are the right asset to host, short ones convert better as heroes.
+- If the video file is ever replaced, upload under a **new filename** (`-v2`, etc.) — the CDN caches aggressively and purging is slower than versioning.
+- Parked backend cleanup (unchanged from prior task): `/api/waitlist` endpoint + `Waitlist` model are now caller-less but deliberately untouched.
 
-## History
-<!-- Keep this updated. Earliest to latest -->
-- 2026-07-26: Task loaded. Confirmed via grep that the live landing page is `Landing.jsx` (routed at `/`), not `SaasLanding.jsx` (unrouted, out of scope). Located the current waitlist form, nav/footer CTAs, and `DemoChat` preview in `Landing.jsx` before writing this spec. Awaiting answers to the open decisions above before proposing an implementation plan.
-- 2026-07-26: Decisions confirmed — `DemoChat` stays untouched (hero redesign is Feature 2, not this task); primary CTA copy locked as "Start Your 60-Day Free Trial" + subline "60 days free · $20/month after · No credit card required."; "Request a demo" as a clearly secondary CTA near the primary; video placeholder is a fully invisible structural slot (`VideoSection` component returning `null`), not a visible "coming soon" box; `/api/waitlist` endpoint/model/table confirmed untouched, parked as a future backend cleanup (see Notes). Plan confirmed as a single commit (removal + replacement are inseparable — no sensible intermediate state).
-- 2026-07-26: Implemented and committed as `Landing.jsx`/`Landing.module.css` — waitlist state/handler/JSX fully removed (`handleWaitlist`, `email`/`intent`/`wlStatus`/`errorMsg`/`formRef`, `INTENT_OPTIONS`, unused `Building2`/`BriefcaseBusiness`/`Binoculars`/`API_BASE`/`useRef` imports); hero now shows the primary/secondary CTA pair plus an empty `VideoSection` component in the old form's position; `Landing.module.css` dead classes removed (`.heroForm`, `.intentRow`, `.intentBtn`, `.emailRow`, `.emailInput`, `.notifyBtn`, `.errMsg`, `.trustLine`, `.successState`/`Check`/`Title`/`Sub`, `.spinner`) and replaced with `.heroCtas`/`.ctaPrimary`/`.ctaSub`/`.ctaSecondary`, including the mobile and reduced-motion media-query references. `npm run build` passed clean; repo-wide grep across `src/` confirmed zero leftover references to the deleted class names, `API_BASE`, `INTENT_OPTIONS`, or `handleWaitlist` outside of unrelated files' own independently-scoped copies (mainly the out-of-scope `SaasLanding.jsx`/`.module.css`). Not yet manually verified in a browser — Verification checklist below still open.
+## Session log
+- 2026-07-26 — Prep completed outside the repo: HEVC source re-encoded to H.264/AAC with faststart, frame-zero poster exported, both uploaded to Spaces under `Demo_Video/` with versioned filenames, CDN URLs confirmed. DemoChat decision locked: moves below the fold. Spec finalized; ready for implementation session.
+- (append per session)
