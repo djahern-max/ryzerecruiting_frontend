@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { useEffect } from 'react';
 import Landing from './pages/Landing';
 import Auth from './pages/Auth';
+import SignupFirm from './pages/SignupFirm';
 import AdminLogin from './pages/AdminLogin';
 import OAuthCallback from './pages/OAuthCallback';
 import CompleteOAuthSignup from './pages/CompleteOAuthSignup';
@@ -99,6 +100,7 @@ function App() {
           {/* ── Public ─────────────────────────────────────────────── */}
           <Route path="/" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/signup" element={<SignupFirm />} />
           <Route path="/auth/callback" element={<OAuthCallback />} />
           <Route path="/auth/complete-signup" element={<CompleteOAuthSignup />} />
           <Route path="/admin/login" element={<AdminLogin />} />

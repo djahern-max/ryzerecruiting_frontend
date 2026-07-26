@@ -125,6 +125,30 @@ export function AuthProvider({ children }) {
     }
   }
 
+  async function signupFirm(payload) {
+    try {
+      const response = await axios.post(`${API_URL}/api/auth/signup-firm`, payload);
+
+      const { access_token, user: userData } = response.data;
+      localStorage.setItem('token', access_token);
+      setUser(userData);
+      posthog.capture(
+        'signup_completed',
+        { tenant_id: userData.tenant_id },
+        { send_instantly: true }
+      );
+      window.location.href = '/admin';
+
+      return { success: true };
+    } catch (error) {
+      return {
+        success: false,
+        status: error.response?.status,
+        detail: error.response?.data?.detail,
+      };
+    }
+  }
+
   function logout() {
     posthog.reset();
     localStorage.removeItem('token');
@@ -133,7 +157,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, register, signupFirm, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
