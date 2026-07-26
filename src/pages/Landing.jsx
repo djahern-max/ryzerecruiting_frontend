@@ -1,16 +1,13 @@
 /* src/pages/Landing.jsx */
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { Building2, BriefcaseBusiness, Binoculars } from "lucide-react";
 import styles from "./Landing.module.css";
 
 // Icons (existing assets)
 import aiIcon from "../assets/icons/artificial-intelligence.svg";
 import calendarIcon from "../assets/icons/calendar.svg";
 import downloadIcon from "../assets/icons/downloadV2.svg";
-
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 const DEMO_QUERIES = [
   {
@@ -43,12 +40,6 @@ const PROOF_POINTS = [
     title: "Branded PDFs",
     desc: "One-click exports ready to send to hiring managers.",
   },
-];
-
-const INTENT_OPTIONS = [
-  { value: "solo", icon: BriefcaseBusiness, label: "Solo recruiter" },
-  { value: "firm", icon: Building2, label: "Recruiting firm" },
-  { value: "following", icon: Binoculars, label: "Just following along" },
 ];
 
 // ── Typewriter tagline ──────────────────────────────────────────────────────
@@ -160,16 +151,16 @@ function DemoChat() {
   );
 }
 
+// Feature 2 drops the demo video in here — intentionally empty for now, so
+// visitors see nothing unfinished; swap the null return for real markup then.
+function VideoSection() {
+  return null;
+}
+
 // ── Main landing page ───────────────────────────────────────────────────────
 export default function Landing() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const formRef = useRef(null);
-
-  const [email, setEmail] = useState("");
-  const [intent, setIntent] = useState(null);
-  const [wlStatus, setWlStatus] = useState("idle");
-  const [errorMsg, setErrorMsg] = useState("");
 
   // Redirect authenticated users to their dashboard
   useEffect(() => {
@@ -179,36 +170,6 @@ export default function Landing() {
       else navigate("/candidate/dashboard");
     }
   }, [user, navigate]);
-
-  async function handleWaitlist() {
-    setErrorMsg("");
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setErrorMsg("Please enter a valid email address.");
-      return;
-    }
-    setWlStatus("loading");
-    try {
-      const res = await fetch(`${API_BASE}/api/waitlist`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: email.trim(),
-          intent: intent || "following",
-          source: "ryze_ai_landing",
-        }),
-      });
-      if (res.ok || res.status === 409) {
-        setWlStatus("success");
-      } else {
-        const d = await res.json().catch(() => ({}));
-        setErrorMsg(d.detail || "Something went wrong. Please try again.");
-        setWlStatus("idle");
-      }
-    } catch {
-      setErrorMsg("Network error. Please try again.");
-      setWlStatus("idle");
-    }
-  }
 
   return (
     <div className={styles.page}>
@@ -238,62 +199,14 @@ export default function Landing() {
           recruiting intelligence.
         </p>
 
-        {/* Email capture, right in the hero */}
-        <div className={styles.heroForm} ref={formRef}>
-          {wlStatus === "success" ? (
-            <div className={styles.successState}>
-              <div className={styles.successCheck}>✓</div>
-              <div>
-                <p className={styles.successTitle}>You're on the list.</p>
-                <p className={styles.successSub}>We'll keep you posted on progress and launch.</p>
-              </div>
-            </div>
-          ) : (
-            <>
-              <div className={styles.intentRow}>
-                {INTENT_OPTIONS.map(({ value, icon: Icon, label }) => (
-                  <button
-                    key={value}
-                    type="button"
-                    className={`${styles.intentBtn} ${intent === value ? styles.intentBtnOn : ""}`}
-                    onClick={() => setIntent((v) => (v === value ? null : value))}
-                    disabled={wlStatus === "loading"}
-                  >
-                    <Icon size={15} />
-                    {label}
-                  </button>
-                ))}
-              </div>
-
-              <div className={styles.emailRow}>
-                <input
-                  type="email"
-                  placeholder="you@company.com"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    setErrorMsg("");
-                  }}
-                  className={`${styles.emailInput} ${errorMsg ? styles.emailInputErr : ""}`}
-                  disabled={wlStatus === "loading"}
-                  onKeyDown={(e) => e.key === "Enter" && handleWaitlist()}
-                />
-                <button
-                  className={styles.notifyBtn}
-                  onClick={handleWaitlist}
-                  disabled={wlStatus === "loading"}
-                >
-                  {wlStatus === "loading" ? <span className={styles.spinner} /> : "Join the waitlist"}
-                </button>
-              </div>
-
-              {errorMsg && <p className={styles.errMsg}>{errorMsg}</p>}
-              <p className={styles.trustLine}>
-                Product updates and launch news. No spam, ever.
-              </p>
-            </>
-          )}
+        {/* ── Primary conversion CTA ────────────────── */}
+        <div className={styles.heroCtas}>
+          <a href="/signup" className={styles.ctaPrimary}>Start Your 60-Day Free Trial</a>
+          <p className={styles.ctaSub}>60 days free · $20/month after · No credit card required.</p>
+          <a href="/demo" className={styles.ctaSecondary}>Request a demo</a>
         </div>
+
+        <VideoSection />
 
         {/* ── App preview (the centerpiece) ────────── */}
         <div className={styles.previewWrap}>

@@ -4,7 +4,7 @@
 Landing page revision — remove waitlist, single 60-day-trial CTA, video placeholder
 
 ## Status
-Not Started
+In Progress — implemented, awaiting your manual verification
 
 ## Repo
 ryzerecruiting_frontend — FRONTEND ONLY.
@@ -36,6 +36,11 @@ Note: `src/pages/SaasLanding.jsx` also has a waitlist form and hero CTA, but it 
 - No leftover references to `handleWaitlist`/`wlStatus`/waitlist state in `Landing.jsx` (grep confirms zero).
 - Regression: nav "Start free trial" / "Sign in" and footer "Request a demo" / Privacy / Terms links still work unchanged.
 
+## Notes
+- Parked future cleanup: backend `/api/waitlist` endpoint, `Waitlist` model/table, and its `PUBLIC_PATTERNS` entry are now unused by any live frontend caller (this task removed the only one, `Landing.jsx`'s form) but were deliberately left untouched — a backend-repo task, not in scope here.
+
 ## History
 <!-- Keep this updated. Earliest to latest -->
 - 2026-07-26: Task loaded. Confirmed via grep that the live landing page is `Landing.jsx` (routed at `/`), not `SaasLanding.jsx` (unrouted, out of scope). Located the current waitlist form, nav/footer CTAs, and `DemoChat` preview in `Landing.jsx` before writing this spec. Awaiting answers to the open decisions above before proposing an implementation plan.
+- 2026-07-26: Decisions confirmed — `DemoChat` stays untouched (hero redesign is Feature 2, not this task); primary CTA copy locked as "Start Your 60-Day Free Trial" + subline "60 days free · $20/month after · No credit card required."; "Request a demo" as a clearly secondary CTA near the primary; video placeholder is a fully invisible structural slot (`VideoSection` component returning `null`), not a visible "coming soon" box; `/api/waitlist` endpoint/model/table confirmed untouched, parked as a future backend cleanup (see Notes). Plan confirmed as a single commit (removal + replacement are inseparable — no sensible intermediate state).
+- 2026-07-26: Implemented and committed as `Landing.jsx`/`Landing.module.css` — waitlist state/handler/JSX fully removed (`handleWaitlist`, `email`/`intent`/`wlStatus`/`errorMsg`/`formRef`, `INTENT_OPTIONS`, unused `Building2`/`BriefcaseBusiness`/`Binoculars`/`API_BASE`/`useRef` imports); hero now shows the primary/secondary CTA pair plus an empty `VideoSection` component in the old form's position; `Landing.module.css` dead classes removed (`.heroForm`, `.intentRow`, `.intentBtn`, `.emailRow`, `.emailInput`, `.notifyBtn`, `.errMsg`, `.trustLine`, `.successState`/`Check`/`Title`/`Sub`, `.spinner`) and replaced with `.heroCtas`/`.ctaPrimary`/`.ctaSub`/`.ctaSecondary`, including the mobile and reduced-motion media-query references. `npm run build` passed clean; repo-wide grep across `src/` confirmed zero leftover references to the deleted class names, `API_BASE`, `INTENT_OPTIONS`, or `handleWaitlist` outside of unrelated files' own independently-scoped copies (mainly the out-of-scope `SaasLanding.jsx`/`.module.css`). Not yet manually verified in a browser — Verification checklist below still open.
