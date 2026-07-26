@@ -221,8 +221,8 @@ export default function Landing() {
             <TypewriterTag text="FOR RECRUITERS" />
           </a>
           <div className={styles.navActions}>
-
             <a href="/auth" className={styles.navSignIn}>Sign in</a>
+            <a href="/signup" className={styles.navCta}>Start free trial</a>
           </div>
         </div>
       </header>
@@ -327,7 +327,7 @@ export default function Landing() {
             <span>© {new Date().getFullYear()}</span>
           </div>
           <div className={styles.footerLinks}>
-
+            <a href="/demo">Request a demo</a>
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>
           </div>

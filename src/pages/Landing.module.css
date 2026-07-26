@@ -136,6 +136,26 @@
   outline-offset: 3px;
 }
 
+.navCta {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent);
+  text-decoration: none;
+  border-radius: 100px;
+  padding: 0.42rem 1.2rem;
+  transition: background 150ms;
+}
+
+.navCta:hover {
+  background: #003b8a;
+}
+
+.navCta:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 /* ── Hero ──────────────────────────────────────────────────────── */
 .hero {
   flex: 1;
