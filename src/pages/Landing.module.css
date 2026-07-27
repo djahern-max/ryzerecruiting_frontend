@@ -661,6 +661,28 @@
   color: var(--accent);
 }
 
+/* base — desktop shows the AI + typewriter pair, mobile brand hidden */
+.brandDesktop {
+  display: flex;
+  align-items: center;
+}
+
+.brandMobile {
+  display: none;
+  font-family: 'Bricolage Grotesque', 'DM Sans', sans-serif;
+  font-weight: 800;
+  font-size: 1.35rem;
+  color: var(--ink);
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.brandMobileAi {
+  color: var(--accent);
+}
+
+
+
 /* ── Reduced motion ────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
 
@@ -734,8 +756,12 @@
     display: none;
   }
 
-  .wordmarkTag {
+  .brandDesktop {
     display: none;
+  }
+
+  .brandMobile {
+    display: inline-block;
   }
 
   .navActions {
