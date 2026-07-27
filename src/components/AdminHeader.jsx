@@ -47,7 +47,10 @@ export default function AdminHeader({ active }) {
         { key: "intelligence", label: "Intelligence", icon: "fi-rr-bolt", path: "/admin/chat" },
         { key: "branding", label: "Branding", icon: "fi-rr-palette", path: "/admin/branding" },
         ...(user?.is_superuser
-            ? [{ key: "db", label: "DB Explorer", icon: "fi-rr-database", path: "/admin/db-explorer" }]
+            ? [
+                { key: "db", label: "DB Explorer", icon: "fi-rr-database", path: "/admin/db-explorer" },
+                { key: "usage", label: "Usage", icon: "fi-rr-stats", path: "/admin/usage" },
+            ]
             : []),
     ];
 

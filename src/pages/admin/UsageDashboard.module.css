@@ -1,0 +1,164 @@
+/* src/pages/admin/UsageDashboard.module.css */
+
+.page {
+  min-height: 100vh;
+  background: var(--bg-50);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+.main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.pageTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.pageTitle {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #64748b;
+  margin: 0 0 5px;
+  letter-spacing: -0.6px;
+  line-height: 1.2;
+}
+
+.pageSub {
+  font-size: 0.825rem;
+  color: #94a3b8;
+  margin: 0;
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+.tableWrapper {
+  background: white;
+  border: 1px solid var(--border-200);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 640px;
+}
+
+.table thead tr {
+  background: #1e3a5f;
+  border-bottom: none;
+}
+
+.table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #93c5fd;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.row {
+  border-bottom: 1px solid var(--border-200);
+  transition: background 100ms;
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.row:hover {
+  background: #f8faff;
+}
+
+.table td {
+  padding: 13px 14px;
+  vertical-align: middle;
+  color: var(--text-700);
+}
+
+.nameCell {
+  font-weight: 600;
+  color: var(--text-900);
+  white-space: nowrap;
+}
+
+.percentCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 140px;
+}
+
+.barTrack {
+  flex: 1;
+  height: 6px;
+  border-radius: 4px;
+  background: var(--bg-100, #f1f5f9);
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 200ms ease;
+}
+
+.barNormal {
+  background: #16a34a;
+}
+
+.barAmber {
+  background: #d97706;
+}
+
+.barRed {
+  background: #dc2626;
+}
+
+.percentLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-500);
+  white-space: nowrap;
+}
+
+.totalRow td {
+  font-weight: 700;
+  color: var(--text-900);
+  border-top: 2px solid var(--border-200);
+  background: var(--bg-50);
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  color: var(--text-400);
+  font-size: 14px;
+  background: white;
+  border: 1px solid var(--border-200);
+  border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 1.25rem 1rem 3rem;
+  }
+}

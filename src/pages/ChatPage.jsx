@@ -427,7 +427,11 @@ export default function ChatPage() {
 
             if (!res.ok) {
                 const data = await res.json().catch(() => ({}));
-                throw new Error(data.detail || "Chat request failed");
+                if (data.detail?.code === "ai_usage_limit") {
+                    setMessages([...newMessages, { role: "assistant", content: data.detail.message }]);
+                    return;
+                }
+                throw new Error(typeof data.detail === "string" ? data.detail : "Chat request failed");
             }
 
             const reader = res.body.getReader();

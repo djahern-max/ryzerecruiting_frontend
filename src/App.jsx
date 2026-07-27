@@ -18,6 +18,7 @@ import EmployerRoster from './pages/EmployerRoster';
 import CandidatesPage from './pages/CandidatesPage';
 import ChatPage from './pages/ChatPage';
 import DBExplorer from './pages/admin/DBExplorer';
+import UsageDashboard from './pages/admin/UsageDashboard';
 import CandidateProfile from './pages/CandidateProfile';
 import EmployerProfile from './pages/EmployerProfile';
 import UpgradePage from './pages/UpgradePage';
@@ -235,6 +236,14 @@ function App() {
             element={
               <SuperAdminRoute>
                 <DBExplorer />
+              </SuperAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/usage"
+            element={
+              <SuperAdminRoute>
+                <UsageDashboard />
               </SuperAdminRoute>
             }
           />
