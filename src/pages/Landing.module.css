@@ -123,6 +123,7 @@
   border-radius: 100px;
   padding: 0.42rem 1.2rem;
   transition: background 150ms, color 150ms;
+  white-space: nowrap;
 }
 
 .navSignIn:hover {
@@ -145,6 +146,7 @@
   border-radius: 100px;
   padding: 0.42rem 1.2rem;
   transition: background 150ms;
+  white-space: nowrap;
 }
 
 .navCta:hover {
@@ -730,5 +732,19 @@
 
   .navLink {
     display: none;
+  }
+
+  .wordmarkTag {
+    display: none;
+  }
+
+  .navActions {
+    gap: 10px;
+  }
+
+  .navSignIn,
+  .navCta {
+    font-size: 0.82rem;
+    padding: 0.38rem 0.95rem;
   }
 }

@@ -83,4 +83,18 @@
   .content h3 {
     font-size: 1.1rem;
   }
+
+  .wordmarkTag {
+    display: none;
+  }
+
+  .navActions {
+    gap: 10px;
+  }
+
+  .navSignIn,
+  .navCta {
+    font-size: 0.82rem;
+    padding: 0.38rem 0.95rem;
+  }
 }
