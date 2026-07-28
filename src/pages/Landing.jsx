@@ -9,6 +9,8 @@ const VIDEO_URL =
   "https://ryzerecruiting.nyc3.cdn.digitaloceanspaces.com/Demo_Video/Commercial_2_V3.mp4";
 const POSTER_URL =
   "https://ryzerecruiting.nyc3.cdn.digitaloceanspaces.com/Demo_Video/image1.png";
+const FULL_VIDEO_URL =
+  "https://ryzerecruiting.nyc3.cdn.digitaloceanspaces.com/Demo_Video/THE_ABSOLUTE_FINAL_VERSION_New_Intro_Song.mp4";
 
 // Icons (existing assets)
 import aiIcon from "../assets/icons/artificial-intelligence.svg";
@@ -198,6 +200,17 @@ function VideoSection() {
             </svg>
           </button>
         )}
+      </div>
+      <div>
+        <a
+          href={FULL_VIDEO_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.fullDemoLink}
+          onClick={() => posthog.capture("full_demo_video_clicked")}
+        >
+          Prefer the full walkthrough? Watch the extended demo →
+        </a>
       </div>
     </div>
   );
