@@ -65,7 +65,7 @@ export default function UpgradePage() {
 
                     </div>
                     <div className={styles.planPrice}>
-                        <span className={styles.planAmount}>$99</span>
+                        <span className={styles.planAmount}>$20</span>
                         <span className={styles.planPer}>/month</span>
                     </div>
                     <ul className={styles.planFeatures}>
@@ -86,7 +86,7 @@ export default function UpgradePage() {
                 >
                     {loading
                         ? <><i className="fi fi-rr-time" style={{ marginRight: '8px' }}></i>Redirecting to Stripe…</>
-                        : <><i className="fi fi-rr-credit-card" style={{ marginRight: '8px' }}></i>Upgrade for $99/month</>
+                        : <><i className="fi fi-rr-credit-card" style={{ marginRight: '8px' }}></i>Upgrade for $20/month</>
                     }
                 </button>
 
