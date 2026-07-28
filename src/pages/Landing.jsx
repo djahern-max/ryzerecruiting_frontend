@@ -6,9 +6,9 @@ import { useAuth } from "../contexts/AuthContext";
 import styles from "./Landing.module.css";
 
 const VIDEO_URL =
-  "https://ryzerecruiting.nyc3.cdn.digitaloceanspaces.com/Demo_Video/THE_ABSOLUTE_FINAL_VERSION_New_Intro_Song.mp4";
+  "https://ryzerecruiting.nyc3.cdn.digitaloceanspaces.com/Demo_Video/Commercial_2_V3.mp4";
 const POSTER_URL =
-  "https://ryzerecruiting.nyc3.cdn.digitaloceanspaces.com/Demo_Video/ryze-demo-poster.jpg";
+  "https://ryzerecruiting.nyc3.cdn.digitaloceanspaces.com/Demo_Video/image1.png";
 
 // Icons (existing assets)
 import aiIcon from "../assets/icons/artificial-intelligence.svg";
