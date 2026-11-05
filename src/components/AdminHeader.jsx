@@ -74,7 +74,7 @@ export default function AdminHeader({ active }) {
             <div className={styles.headerContent}>
 
                 <div className={styles.headerLeft}>
-                    <span className={styles.logo} onClick={() => navigate("/admin")}>RYZE.ai</span>
+                    <span className={styles.logo} onClick={() => navigate("/admin")}>niceATS</span>
                     <span className={styles.adminBadge}>ADMIN</span>
                 </div>
 

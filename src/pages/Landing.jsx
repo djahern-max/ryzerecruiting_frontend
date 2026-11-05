@@ -1,4 +1,16 @@
 /* src/pages/Landing.jsx */
+//
+// Nice ATS landing page. Design/layout unchanged from the RYZE.ai version;
+// copy reframed away from "AI product" toward "the ATS recruiting firms use."
+//
+// The headline is the big faint "hey, nice ATS" (styled by .heroH1 in the CSS);
+// it is a real <h1> so screen readers and search engines still get a heading.
+//
+// TODO (rebrand task): VIDEO_URL / POSTER_URL / FULL_VIDEO_URL still point at
+// the RYZE commercial in the old `ryzerecruiting` DO Spaces bucket. Replace with
+// the new "Hey, nice ATS" spot when it exists; until then the section renders the
+// old video.
+
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import posthog from "posthog-js";
@@ -13,40 +25,41 @@ const FULL_VIDEO_URL =
   "https://ryzerecruiting.nyc3.cdn.digitaloceanspaces.com/Demo_Video/THE_ABSOLUTE_FINAL_VERSION_New_Intro_Song.mp4";
 
 // Icons (existing assets)
-import aiIcon from "../assets/icons/artificial-intelligence.svg";
+import matchIcon from "../assets/icons/matched_opportunity.svg";
 import calendarIcon from "../assets/icons/calendar.svg";
 import downloadIcon from "../assets/icons/downloadV2.svg";
 
+// Questions a recruiter at a firm actually asks their pipeline.
 const DEMO_QUERIES = [
   {
-    q: "Who can build AP automation for a QuickBooks user receiving 100 invoices a day through Gmail?",
-    a: "3 matches: Sarah Chen (QuickBooks + Gmail API, 6 integrations), Marcus Webb (invoice OCR & approval routing), Priya Nair (open now). Avg start: 2 weeks.",
+    q: "Who do we have for the senior accountant role at Harbor Marine?",
+    a: "3 matches: Dana Okafor (CPA, 7 yrs, manufacturing), Luis Carvalho (month-end close + NetSuite), Priya Nair (open now). Two have talked to us in the last 30 days.",
   },
   {
-    q: "Who can build a time-tracking app with geofencing and biometric login for remote construction crews?",
-    a: "2 strong matches: Devon Hale (two field-service apps, GPS geofencing) and Ana Reyes (biometric login + payroll integrations). Portfolios on file.",
+    q: "What did Mark at Harbor Marine say on last week's call about salary range?",
+    a: "From the Oct 28 call: budget is $85–95K, flexible to $100K for a CPA. He wants someone in-seat before the January close.",
   },
   {
-    q: "Who can build a PO system that gives a construction company visibility into equipment repair and maintenance schedules?",
-    a: "4 builders matched. Two have built PO + asset-tracking systems; one tied maintenance scheduling directly into QuickBooks. Avg start: 2–3 weeks.",
+    q: "Which candidates haven't been contacted in over 60 days?",
+    a: "14 candidates. 6 were in process for roles that closed. Want me to draft a check-in note for the 8 who were active?",
   },
 ];
 
 const PROOF_POINTS = [
   {
-    icon: aiIcon,
-    title: "Semantic matching",
-    desc: "Candidates ranked against job orders by meaning, not keywords.",
+    icon: matchIcon,
+    title: "Matching that reads the resume",
+    desc: "Candidates ranked against the job order by what it actually asks for, not keyword hits.",
   },
   {
     icon: calendarIcon,
     title: "Scheduling built in",
-    desc: "Zoom + Google Calendar booking with automatic reminders.",
+    desc: "Zoom + Google Calendar booking for candidates and clients, with automatic reminders.",
   },
   {
     icon: downloadIcon,
-    title: "Branded PDFs",
-    desc: "One-click exports ready to send to hiring managers.",
+    title: "Submittals in one click",
+    desc: "Branded candidate PDFs ready to send to the hiring manager.",
   },
 ];
 
@@ -71,7 +84,7 @@ function TypewriterTag({ text }) {
   );
 }
 
-// ── Animated intelligence demo (light theme) ────────────────────────────────
+// ── Animated pipeline-search demo (light theme) ─────────────────────────────
 function DemoChat() {
   const [idx, setIdx] = useState(0);
   const [phase, setPhase] = useState("typing");
@@ -120,7 +133,7 @@ function DemoChat() {
           <span style={{ background: "#febc2e" }} />
           <span style={{ background: "#28c840" }} />
         </div>
-        <span className={styles.demoWindowTitle}>RYZE Intelligence</span>
+        <span className={styles.demoWindowTitle}>Ask your pipeline</span>
       </div>
       <div className={styles.demoMessages}>
         {displayQ && (
@@ -134,7 +147,7 @@ function DemoChat() {
         )}
         {phase === "answering" && !displayA && (
           <div className={styles.demoMsgAi}>
-            <div className={styles.demoMsgLabel}>RYZE</div>
+            <div className={styles.demoMsgLabel}>Nice</div>
             <div className={styles.demoThinking}>
               <span /><span /><span />
             </div>
@@ -142,7 +155,7 @@ function DemoChat() {
         )}
         {displayA && (
           <div className={styles.demoMsgAi}>
-            <div className={styles.demoMsgLabel}>RYZE</div>
+            <div className={styles.demoMsgLabel}>Nice</div>
             <div className={styles.demoMsgAiBubble}>
               {displayA}
               {phase === "answering" && <span className={styles.cursor}>|</span>}
@@ -238,11 +251,11 @@ export default function Landing() {
         <div className={styles.navInner}>
           <a href="/" className={styles.navBrand}>
             <span className={styles.brandDesktop}>
-              <span className={styles.wordmark}>AI</span>
-              <TypewriterTag text="FOR RECRUITERS" />
+              <span className={styles.wordmark}>nice</span>
+              <TypewriterTag text="APPLICANT TRACKING SYSTEM" />
             </span>
             <span className={styles.brandMobile}>
-              RYZE<span className={styles.brandMobileAi}>.ai</span>
+              nice<span className={styles.brandMobileAi}>ATS</span>
             </span>
           </a>
           <div className={styles.navActions}>
@@ -254,13 +267,11 @@ export default function Landing() {
 
       {/* ── Hero ───────────────────────────────────── */}
       <main className={styles.hero}>
-        <h1 className={styles.heroH1}>
-          Recruiting, with the busywork
-          <span className={styles.heroAccent}> handled by AI.</span>
-        </h1>
+        <h1 className={styles.heroH1}>hey, nice ATS</h1>
+
         <p className={styles.heroSub}>
-          Turn every call, resume, and job order into searchable
-          recruiting intelligence.
+          Candidates, clients, job orders, and every call you've had with them,
+          in one place. The ATS built for recruiting firms.
         </p>
 
         {/* ── Primary conversion CTA ────────────────── */}
@@ -288,9 +299,12 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Intelligence preview (below the fold) ──── */}
+      {/* ── Pipeline search preview (below the fold) ─ */}
       <section className={styles.chatSection}>
-        <h2 className={styles.chatSectionTitle}>See RYZE Intelligence in action</h2>
+        <h2 className={styles.chatSectionTitle}>Ask your pipeline a question</h2>
+        <p className={styles.chatSectionSub}>
+          Every resume, job order, and call transcript is searchable. Ask in plain English.
+        </p>
         <div className={styles.previewWrap}>
           <div className={styles.previewGlow} aria-hidden="true" />
           <DemoChat />
@@ -302,7 +316,7 @@ export default function Landing() {
         <div className={styles.footerInner}>
           <div className={styles.footerBrand}>
             <span className={styles.wordmarkSm}>
-              RYZE
+              nice<span className={styles.wordmarkSmAccent}>ATS</span>
             </span>
             <span>© {new Date().getFullYear()}</span>
           </div>

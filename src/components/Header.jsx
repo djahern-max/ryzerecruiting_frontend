@@ -27,10 +27,10 @@ function Header() {
         <div className={styles.headerLeft}>
           <div className={styles.logoGroup} onClick={handleLogoClick}>
             <span className={styles.logo}>
-              {user?.tenant_brand_name || 'RYZE.ai'}
+              {user?.tenant_brand_name || 'niceATS'}
             </span>
             {isFirmTenant && (
-              <span className={styles.poweredBy}>powered by RYZE</span>
+              <span className={styles.poweredBy}>powered by niceATS</span>
             )}
           </div>
         </div>

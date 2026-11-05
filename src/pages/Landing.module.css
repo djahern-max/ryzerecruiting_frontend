@@ -36,7 +36,7 @@
 }
 
 .navInner {
-  max-width: 1060px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 1.5rem;
   height: 68px;
@@ -94,6 +94,10 @@
   color: var(--ink);
   letter-spacing: -0.3px;
   line-height: 1;
+}
+
+.wordmarkSmAccent {
+  color: var(--accent);
 }
 
 .navActions {
@@ -165,54 +169,39 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 148px 1.5rem 0;
+  padding: 96px 1.5rem 0;
   position: relative;
   z-index: 0;
 }
 
-/* Faint RYZE.ai watermark — rises from behind the headline to above it.
-   Thus the name. */
-.hero::before {
-  content: 'RYZE.ai';
-  position: absolute;
-  top: 4px;
-  left: 50%;
-  transform: translate(-50%, 150px);
+/* The headline is the big faint word — the old RYZE.ai watermark promoted to a
+   real <h1>, so screen readers and search engines still get a heading. It rises
+   into place on load. Opacity is the readability knob; keep it >= 0.12. */
+.heroH1 {
   font-family: 'Bricolage Grotesque', 'DM Sans', sans-serif;
-  font-size: clamp(5.5rem, 11vw, 8.5rem);
+  font-size: clamp(4.5rem, 11vw, 8.5rem);
   font-weight: 800;
   letter-spacing: -0.04em;
-  color: rgba(0, 74, 173, 0.05);
   line-height: 1;
+  color: rgba(0, 74, 173, 0.16);
   white-space: nowrap;
-  pointer-events: none;
   user-select: none;
-  z-index: -1;
+  margin: 0 0 28px;
   opacity: 0;
-  animation: ryzeUp 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+  transform: translateY(40px);
+  animation: riseUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
 }
 
-@keyframes ryzeUp {
+@keyframes riseUp {
   from {
-    transform: translate(-50%, 150px);
+    transform: translateY(40px);
     opacity: 0;
   }
 
   to {
-    transform: translate(-50%, 0);
+    transform: translateY(0);
     opacity: 1;
   }
-}
-
-.heroH1 {
-  font-family: 'Bricolage Grotesque', 'DM Sans', sans-serif;
-  font-size: clamp(2.4rem, 6vw, 4.2rem);
-  font-weight: 800;
-  line-height: 1.06;
-  letter-spacing: -0.03em;
-  color: var(--ink);
-  max-width: 780px;
-  margin: 0 0 22px;
 }
 
 .heroAccent {
@@ -224,7 +213,7 @@
   line-height: 1.6;
   color: var(--muted);
   max-width: 540px;
-  margin: 0 0 40px;
+  margin: 0 0 36px;
 }
 
 /* ── Hero CTA ──────────────────────────────────────────────────── */
@@ -294,8 +283,8 @@
   position: relative;
   width: 100%;
   max-width: 680px;
-  margin: 72px auto 0;
-  padding-bottom: 88px;
+  margin: 56px auto 0;
+  padding-bottom: 72px;
 }
 
 .previewGlow {
@@ -393,8 +382,16 @@
   margin: 0;
 }
 
+.chatSectionSub {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 480px;
+  margin: 12px auto 0;
+}
+
 .chatSection .previewWrap {
-  margin-top: 36px;
+  margin-top: 40px;
 }
 
 /* ── Demo window (light theme) ─────────────────────────────────── */
@@ -584,7 +581,7 @@
 }
 
 .proofGrid {
-  max-width: 960px;
+  max-width: 1000px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -627,7 +624,7 @@
 }
 
 .footerInner {
-  max-width: 1060px;
+  max-width: 1000px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -714,9 +711,9 @@
     transition: none;
   }
 
-  .hero::before {
+  .heroH1 {
     animation: none;
-    transform: translate(-50%, 0);
+    transform: none;
     opacity: 1;
   }
 
@@ -729,13 +726,12 @@
 /* ── Responsive ────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .hero {
-    padding-top: 104px;
+    padding-top: 84px;
   }
 
-  .hero::before {
-    font-size: 4rem;
-    top: 14px;
-    color: rgba(0, 74, 173, 0.045);
+  .heroH1 {
+    font-size: 3.4rem;
+    margin-bottom: 22px;
   }
 
   .ctaPrimary {
